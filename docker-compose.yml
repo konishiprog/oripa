@@ -1,0 +1,39 @@
+version: "3.9"
+
+services:
+  db:
+    image: postgres:15
+    container_name: oripa-db
+    restart: always
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: pass
+      POSTGRES_DB: oripa
+    ports:
+      - "5433:5432"
+    volumes:
+      - db-data:/var/lib/postgresql/data
+
+  server:
+    build: ./server
+    container_name: oripa-server
+    ports:
+      - "3001:3000"
+    depends_on:
+      - db
+    environment:
+      DB_HOST: db
+      DB_USER: user
+      DB_PASS: pass
+      DB_NAME: oripa
+
+  client:
+    build: ./client
+    container_name: oripa-client
+    ports:
+      - "4300:4200"
+    depends_on:
+      - server
+
+volumes:
+  db-data:

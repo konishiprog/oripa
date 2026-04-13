@@ -1,0 +1,951 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Console - ボックス管理</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Hiragino Sans", "Hiragino Kaku Gothic ProN", "Noto Sans JP", sans-serif;
+      background-color: #f7f8fa;
+      color: #1a202c;
+      min-height: 100vh;
+      display: flex;
+    }
+
+    /* ===== Sidebar ===== */
+    .sidebar {
+      width: 240px;
+      min-height: 100vh;
+      background-color: #ffffff;
+      border-right: 1px solid #e2e8f0;
+      display: flex;
+      flex-direction: column;
+      flex-shrink: 0;
+      position: fixed;
+      top: 0;
+      left: 0;
+      bottom: 0;
+    }
+
+    .sidebar-logo {
+      padding: 20px 20px 16px;
+      border-bottom: 1px solid #e2e8f0;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .sidebar-logo-icon {
+      width: 36px;
+      height: 36px;
+      background: linear-gradient(135deg, #805ad5, #6b46c1);
+      border-radius: 9px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .sidebar-logo-icon svg {
+      width: 18px;
+      height: 18px;
+      fill: #fff;
+    }
+
+    .sidebar-logo-text {
+      font-size: 15px;
+      font-weight: 700;
+      color: #1a202c;
+    }
+
+    .sidebar-section {
+      padding: 16px 12px 8px;
+    }
+
+    .sidebar-section-label {
+      font-size: 10px;
+      font-weight: 600;
+      color: #a0aec0;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      padding: 0 8px;
+      margin-bottom: 6px;
+    }
+
+    .nav-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 9px 10px;
+      border-radius: 8px;
+      font-size: 13.5px;
+      color: #718096;
+      cursor: pointer;
+      text-decoration: none;
+      transition: background 0.15s, color 0.15s;
+      margin-bottom: 2px;
+    }
+
+    .nav-item:hover {
+      background-color: #f7f8fa;
+      color: #1a202c;
+    }
+
+    .nav-item.active {
+      background-color: rgba(128, 90, 213, 0.1);
+      color: #6b46c1;
+    }
+
+    .nav-item svg {
+      width: 16px;
+      height: 16px;
+      flex-shrink: 0;
+      stroke: currentColor;
+      fill: none;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .sidebar-footer {
+      margin-top: auto;
+      padding: 16px 12px;
+      border-top: 1px solid #e2e8f0;
+    }
+
+    .user-info {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 10px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+
+    .user-info:hover {
+      background-color: #f7f8fa;
+    }
+
+    .avatar {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #805ad5, #3182ce);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 13px;
+      font-weight: 600;
+      color: #fff;
+      flex-shrink: 0;
+    }
+
+    .user-meta {
+      overflow: hidden;
+    }
+
+    .user-name {
+      font-size: 13px;
+      font-weight: 500;
+      color: #1a202c;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .user-role {
+      font-size: 11px;
+      color: #a0aec0;
+    }
+
+    /* ===== Main ===== */
+    .main {
+      margin-left: 240px;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Header */
+    .topbar {
+      height: 60px;
+      background-color: #ffffff;
+      border-bottom: 1px solid #e2e8f0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 28px;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+
+    .breadcrumb {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 13px;
+      color: #a0aec0;
+    }
+
+    .breadcrumb-sep { color: #cbd5e0; }
+    .breadcrumb-current { color: #1a202c; font-weight: 500; }
+
+    .topbar-right {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .icon-btn {
+      width: 34px;
+      height: 34px;
+      background: none;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      color: #a0aec0;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.15s, color 0.15s;
+    }
+
+    .icon-btn:hover {
+      background-color: #f7f8fa;
+      color: #4a5568;
+    }
+
+    .icon-btn svg {
+      width: 16px;
+      height: 16px;
+      stroke: currentColor;
+      fill: none;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    /* Content */
+    .content {
+      padding: 28px;
+      flex: 1;
+    }
+
+    .page-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      margin-bottom: 24px;
+    }
+
+    .page-title {
+      font-size: 20px;
+      font-weight: 700;
+      color: #1a202c;
+    }
+
+    .page-desc {
+      font-size: 13px;
+      color: #718096;
+      margin-top: 4px;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 9px 16px;
+      border-radius: 8px;
+      font-size: 13.5px;
+      font-weight: 500;
+      cursor: pointer;
+      border: none;
+      transition: opacity 0.15s;
+      white-space: nowrap;
+    }
+
+    .btn:hover { opacity: 0.88; }
+
+    .btn svg {
+      width: 15px;
+      height: 15px;
+      stroke: currentColor;
+      fill: none;
+      stroke-width: 2.2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #805ad5, #6b46c1);
+      color: #fff;
+    }
+
+    .btn-secondary {
+      background-color: #edf2f7;
+      color: #4a5568;
+      border: 1px solid #e2e8f0;
+    }
+
+    .btn-danger {
+      background-color: #fff5f5;
+      color: #c53030;
+      border: 1px solid #fed7d7;
+    }
+
+    .btn-sm {
+      padding: 5px 11px;
+      font-size: 12.5px;
+    }
+
+    /* Stats */
+    .stats-row {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+
+    .stat-card {
+      background-color: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 18px 20px;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+    }
+
+    .stat-label {
+      font-size: 12px;
+      color: #718096;
+      margin-bottom: 8px;
+    }
+
+    .stat-value {
+      font-size: 24px;
+      font-weight: 700;
+      color: #1a202c;
+    }
+
+    .stat-sub {
+      font-size: 12px;
+      color: #68d391;
+      margin-top: 4px;
+    }
+
+    /* Filter bar */
+    .filter-bar {
+      background-color: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 16px 20px;
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .search-input-wrap {
+      position: relative;
+      flex: 1;
+      min-width: 200px;
+    }
+
+    .search-icon {
+      position: absolute;
+      left: 11px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #4a5568;
+      pointer-events: none;
+    }
+
+    .search-icon svg {
+      width: 15px;
+      height: 15px;
+      stroke: currentColor;
+      fill: none;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .search-input {
+      width: 100%;
+      background-color: #f7f8fa;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 8px 12px 8px 34px;
+      font-size: 13.5px;
+      color: #1a202c;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    .search-input::placeholder { color: #a0aec0; }
+    .search-input:focus { border-color: #805ad5; background-color: #fff; }
+
+    .filter-select {
+      background-color: #f7f8fa;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 8px 32px 8px 12px;
+      font-size: 13.5px;
+      color: #4a5568;
+      outline: none;
+      cursor: pointer;
+      appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23a0aec0' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 10px center;
+      min-width: 130px;
+    }
+
+    /* Table */
+    .table-card {
+      background-color: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+    }
+
+    .table-scroll {
+      overflow-x: auto;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    thead {
+      background-color: #f7f8fa;
+    }
+
+    th {
+      padding: 12px 16px;
+      text-align: left;
+      font-size: 11.5px;
+      font-weight: 600;
+      color: #a0aec0;
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+      border-bottom: 1px solid #e2e8f0;
+      white-space: nowrap;
+    }
+
+    td {
+      padding: 13px 16px;
+      font-size: 13.5px;
+      color: #2d3748;
+      border-bottom: 1px solid #f0f4f8;
+      vertical-align: middle;
+    }
+
+    tr:last-child td { border-bottom: none; }
+
+    tbody tr:hover td {
+      background-color: #f7f8fa;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 3px 9px;
+      border-radius: 99px;
+      font-size: 11.5px;
+      font-weight: 500;
+    }
+
+    .badge-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+    }
+
+    .badge-active {
+      background-color: rgba(104, 211, 145, 0.15);
+      color: #68d391;
+    }
+
+    .badge-active .badge-dot { background-color: #68d391; }
+
+    .badge-inactive {
+      background-color: rgba(160, 174, 192, 0.12);
+      color: #a0aec0;
+    }
+
+    .badge-inactive .badge-dot { background-color: #718096; }
+
+    .badge-draft {
+      background-color: rgba(246, 173, 85, 0.15);
+      color: #f6ad55;
+    }
+
+    .badge-draft .badge-dot { background-color: #f6ad55; }
+
+    .box-img {
+      width: 40px;
+      height: 40px;
+      border-radius: 8px;
+      object-fit: cover;
+      background-color: #edf2f7;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      flex-shrink: 0;
+    }
+
+    .box-name-wrap {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .box-name {
+      font-weight: 500;
+      color: #1a202c;
+    }
+
+    .box-id {
+      font-size: 11px;
+      color: #a0aec0;
+      margin-top: 2px;
+    }
+
+    .actions {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .checkbox-cell {
+      width: 40px;
+    }
+
+    .checkbox {
+      width: 16px;
+      height: 16px;
+      accent-color: #805ad5;
+      cursor: pointer;
+    }
+
+    /* Pagination */
+    .pagination {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 20px;
+      border-top: 1px solid #e2e8f0;
+    }
+
+    .pagination-info {
+      font-size: 13px;
+      color: #a0aec0;
+    }
+
+    .pagination-btns {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .page-btn {
+      width: 32px;
+      height: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 7px;
+      border: 1px solid #e2e8f0;
+      background: none;
+      color: #718096;
+      font-size: 13px;
+      cursor: pointer;
+      transition: background 0.15s, color 0.15s;
+    }
+
+    .page-btn:hover:not(:disabled) {
+      background-color: #f7f8fa;
+      color: #1a202c;
+    }
+
+    .page-btn.active {
+      background-color: #805ad5;
+      border-color: #805ad5;
+      color: #fff;
+      font-weight: 600;
+    }
+
+    .page-btn:disabled {
+      opacity: 0.35;
+      cursor: not-allowed;
+    }
+
+    .page-btn svg {
+      width: 14px;
+      height: 14px;
+      stroke: currentColor;
+      fill: none;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <div class="sidebar-logo">
+      <div class="sidebar-logo-icon">
+        <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14H9V8h2v8zm4 0h-2V8h2v8z"/></svg>
+      </div>
+      <span class="sidebar-logo-text">net-oripa</span>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">メイン</div>
+      <a href="#" class="nav-item">
+        <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+        ダッシュボード
+      </a>
+      <a href="#" class="nav-item">
+        <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        ユーザー管理
+      </a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">コンテンツ</div>
+      <a href="#" class="nav-item active">
+        <svg viewBox="0 0 24 24"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
+        ボックス管理
+      </a>
+      <a href="#" class="nav-item">
+        <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+        カード管理
+      </a>
+      <a href="#" class="nav-item">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        ガチャ設定
+      </a>
+      <a href="#" class="nav-item">
+        <svg viewBox="0 0 24 24"><path d="M20 12V22H4V12"/><path d="M22 7H2v5h20V7z"/><path d="M12 22V7"/><path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"/><path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"/></svg>
+        クーポン管理
+      </a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">ログ</div>
+      <a href="#" class="nav-item">
+        <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+        購入ログ
+      </a>
+      <a href="#" class="nav-item">
+        <svg viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+        ポイント履歴
+      </a>
+    </div>
+
+    <div class="sidebar-footer">
+      <div class="user-info">
+        <div class="avatar">管</div>
+        <div class="user-meta">
+          <div class="user-name">admin@oripa.com</div>
+          <div class="user-role">管理者</div>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Main -->
+  <div class="main">
+    <header class="topbar">
+      <div class="breadcrumb">
+        <span>Console</span>
+        <span class="breadcrumb-sep">/</span>
+        <span class="breadcrumb-current">ボックス管理</span>
+      </div>
+      <div class="topbar-right">
+        <button class="icon-btn">
+          <svg viewBox="0 0 24 24"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+        </button>
+        <button class="icon-btn">
+          <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        </button>
+      </div>
+    </header>
+
+    <div class="content">
+      <!-- Page header -->
+      <div class="page-header">
+        <div>
+          <div class="page-title">ボックス管理</div>
+          <div class="page-desc">オリパボックスの作成・編集・公開管理を行います。</div>
+        </div>
+        <button class="btn btn-primary">
+          <svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          新規ボックス作成
+        </button>
+      </div>
+
+      <!-- Stats -->
+      <div class="stats-row">
+        <div class="stat-card">
+          <div class="stat-label">総ボックス数</div>
+          <div class="stat-value">100</div>
+          <div class="stat-sub">▲ 8 今月追加</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">公開中</div>
+          <div class="stat-value">72</div>
+          <div class="stat-sub" style="color:#38a169;">稼働中</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">下書き</div>
+          <div class="stat-value">11</div>
+          <div class="stat-sub" style="color:#d69e2e;">未公開</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">今月の売上</div>
+          <div class="stat-value">¥2.4M</div>
+          <div class="stat-sub">▲ 8.3% 先月比</div>
+        </div>
+      </div>
+
+      <!-- Filter bar -->
+      <div class="filter-bar">
+        <div class="search-input-wrap">
+          <span class="search-icon">
+            <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          </span>
+          <input type="text" class="search-input" placeholder="ボックス名・IDで検索..." />
+        </div>
+        <select class="filter-select">
+          <option value="">ステータス：全て</option>
+          <option value="active">公開中</option>
+          <option value="draft">下書き</option>
+          <option value="inactive">非公開</option>
+        </select>
+        <select class="filter-select">
+          <option value="">シリーズ：全て</option>
+          <option value="sv">スカーレット&amp;バイオレット</option>
+          <option value="swsh">ソード&amp;シールド</option>
+          <option value="classic">クラシック</option>
+        </select>
+        <select class="filter-select">
+          <option value="20">20件/ページ</option>
+          <option value="50">50件/ページ</option>
+          <option value="100">100件/ページ</option>
+        </select>
+        <button class="btn btn-secondary">
+          <svg viewBox="0 0 24 24" style="width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-3.5"/></svg>
+          リセット
+        </button>
+      </div>
+
+      <!-- Table -->
+      <div class="table-card">
+        <div class="table-scroll">
+          <table>
+            <thead>
+              <tr>
+                <th class="checkbox-cell"><input type="checkbox" class="checkbox" /></th>
+                <th>ボックス名</th>
+                <th>価格</th>
+                <th>カード枚数</th>
+                <th>残り在庫</th>
+                <th>ステータス</th>
+                <th>作成日</th>
+                <th>操作</th>
+              </tr>
+            </thead>
+            <tbody id="tableBody">
+            </tbody>
+          </table>
+        </div>
+
+        <div class="pagination">
+          <div class="pagination-info" id="pageInfo">全 100件中 1〜20件を表示</div>
+          <div class="pagination-btns" id="pageBtns"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const boxes = [
+      { id: "BX-001", name: "ポケモンSV シャイニートレジャーex", emoji: "✨", price: "¥500", cards: 20, stock: 142, status: "active", date: "2024-03-15" },
+      { id: "BX-002", name: "ポケモン 黒炎の支配者", emoji: "🔥", price: "¥700", cards: 28, stock: 31, status: "active", date: "2024-03-12" },
+      { id: "BX-003", name: "ポケモン 151 プレミアムBOX", emoji: "🎴", price: "¥1,500", cards: 40, stock: 5, status: "active", date: "2024-03-10" },
+      { id: "BX-004", name: "ポケモン スカーレット＆バイオレット", emoji: "🟣", price: "¥400", cards: 20, stock: 91, status: "active", date: "2024-03-08" },
+      { id: "BX-005", name: "ポケモン 白熱のアルカナ", emoji: "🌙", price: "¥600", cards: 24, stock: 0, status: "inactive", date: "2024-03-07" },
+      { id: "BX-006", name: "ポケモン レイジングサーフ", emoji: "🌊", price: "¥450", cards: 22, stock: 200, status: "active", date: "2024-03-06" },
+      { id: "BX-007", name: "ポケモン 変幻の仮面", emoji: "🎭", price: "¥800", cards: 30, stock: 74, status: "active", date: "2024-03-05" },
+      { id: "BX-008", name: "ポケモン ナイトワンダラー", emoji: "🦇", price: "¥600", cards: 25, stock: 0, status: "draft", date: "2024-03-04" },
+      { id: "BX-009", name: "ポケモン ステラミラクル", emoji: "⭐", price: "¥700", cards: 28, stock: 108, status: "active", date: "2024-03-03" },
+      { id: "BX-010", name: "ポケモン 楽園の頂", emoji: "🏔️", price: "¥1,200", cards: 35, stock: 47, status: "active", date: "2024-03-02" },
+      { id: "BX-011", name: "ポケモン 熱血の階段 限定版", emoji: "🔴", price: "¥900", cards: 32, stock: 15, status: "active", date: "2024-02-28" },
+      { id: "BX-012", name: "ポケモン 超電ブレイカー", emoji: "⚡", price: "¥500", cards: 20, stock: 0, status: "inactive", date: "2024-02-25" },
+      { id: "BX-013", name: "ポケモン テラスタルフェスex", emoji: "💎", price: "¥1,000", cards: 30, stock: 300, status: "active", date: "2024-02-20" },
+      { id: "BX-014", name: "ポケモン 最強のエメラルドBOX", emoji: "💚", price: "¥3,000", cards: 8, stock: 3, status: "draft", date: "2024-02-18" },
+      { id: "BX-015", name: "ポケモン みんなのプロモカードpack", emoji: "🎁", price: "¥200", cards: 10, stock: 500, status: "active", date: "2024-02-15" },
+      { id: "BX-016", name: "ポケモン VSTAR ユニバース", emoji: "🌟", price: "¥2,000", cards: 50, stock: 22, status: "active", date: "2024-02-12" },
+      { id: "BX-017", name: "ポケモン スノーハザード", emoji: "❄️", price: "¥350", cards: 14, stock: 0, status: "inactive", date: "2024-02-10" },
+      { id: "BX-018", name: "ポケモン クレイバースト", emoji: "🌋", price: "¥400", cards: 18, stock: 77, status: "active", date: "2024-02-08" },
+      { id: "BX-019", name: "ポケモン トリプレットビート", emoji: "🎵", price: "¥300", cards: 15, stock: 62, status: "active", date: "2024-02-05" },
+      { id: "BX-020", name: "ポケモン スカーレットex シークレット", emoji: "🔮", price: "¥5,000", cards: 5, stock: 1, status: "active", date: "2024-02-01" },
+      { id: "BX-021", name: "ポケモン バイオレットex シークレット", emoji: "🟪", price: "¥5,000", cards: 5, stock: 2, status: "active", date: "2024-01-30" },
+      { id: "BX-022", name: "ポケモン ソード＆シールド ハイクラス", emoji: "⚔️", price: "¥1,800", cards: 45, stock: 0, status: "inactive", date: "2024-01-28" },
+      { id: "BX-023", name: "ポケモン フュージョンアーツ", emoji: "🔗", price: "¥600", cards: 24, stock: 38, status: "active", date: "2024-01-25" },
+      { id: "BX-024", name: "ポケモン エボリューションスカイ", emoji: "🌤️", price: "¥450", cards: 20, stock: 115, status: "active", date: "2024-01-22" },
+      { id: "BX-025", name: "ポケモン イーブイヒーローズ プレミアム", emoji: "🦊", price: "¥2,500", cards: 10, stock: 4, status: "draft", date: "2024-01-20" },
+      { id: "BX-026", name: "ポケモン ダークファンタズマ", emoji: "👻", price: "¥500", cards: 22, stock: 67, status: "active", date: "2024-01-18" },
+      { id: "BX-027", name: "ポケモン タイムゲイザー", emoji: "⏰", price: "¥550", cards: 22, stock: 43, status: "active", date: "2024-01-15" },
+      { id: "BX-028", name: "ポケモン スペースジャグラー", emoji: "🚀", price: "¥550", cards: 22, stock: 29, status: "active", date: "2024-01-12" },
+      { id: "BX-029", name: "ポケモン ロストアビス", emoji: "🌀", price: "¥600", cards: 25, stock: 0, status: "inactive", date: "2024-01-10" },
+      { id: "BX-030", name: "ポケモン Pokémon GO コラボ", emoji: "📱", price: "¥800", cards: 30, stock: 18, status: "active", date: "2024-01-08" },
+      { id: "BX-031", name: "ポケモン バトルリージョン", emoji: "🛡️", price: "¥450", cards: 20, stock: 85, status: "active", date: "2024-01-05" },
+      { id: "BX-032", name: "ポケモン VMAX クライマックス", emoji: "🏆", price: "¥3,500", cards: 8, stock: 0, status: "inactive", date: "2024-01-03" },
+      { id: "BX-033", name: "ポケモン フュージョンストライク", emoji: "💥", price: "¥700", cards: 28, stock: 52, status: "active", date: "2023-12-28" },
+      { id: "BX-034", name: "ポケモン 白銀のランス", emoji: "🤍", price: "¥500", cards: 20, stock: 33, status: "active", date: "2023-12-25" },
+      { id: "BX-035", name: "ポケモン 漆黒のガイスト", emoji: "🖤", price: "¥500", cards: 20, stock: 27, status: "active", date: "2023-12-22" },
+      { id: "BX-036", name: "ポケモン 双璧のファイター プレミアム", emoji: "🥊", price: "¥1,500", cards: 40, stock: 9, status: "active", date: "2023-12-20" },
+      { id: "BX-037", name: "ポケモン 摩天パーフェクト", emoji: "🏙️", price: "¥600", cards: 24, stock: 0, status: "draft", date: "2023-12-18" },
+      { id: "BX-038", name: "ポケモン 一撃マスター", emoji: "👊", price: "¥550", cards: 22, stock: 41, status: "active", date: "2023-12-15" },
+      { id: "BX-039", name: "ポケモン 連撃マスター", emoji: "🌊", price: "¥550", cards: 22, stock: 36, status: "active", date: "2023-12-12" },
+      { id: "BX-040", name: "ポケモン シャイニースターV", emoji: "🌠", price: "¥4,000", cards: 5, stock: 1, status: "active", date: "2023-12-10" },
+      { id: "BX-041", name: "ポケモン ビビッドボルテージ", emoji: "⚡", price: "¥450", cards: 20, stock: 60, status: "active", date: "2023-12-08" },
+      { id: "BX-042", name: "ポケモン 仰天のボルテッカー", emoji: "🔆", price: "¥400", cards: 18, stock: 0, status: "inactive", date: "2023-12-05" },
+      { id: "BX-043", name: "ポケモン 伝説の鼓動", emoji: "🥁", price: "¥700", cards: 28, stock: 25, status: "active", date: "2023-12-01" },
+      { id: "BX-044", name: "ポケモン 爆炎ウォーカー", emoji: "💨", price: "¥400", cards: 18, stock: 70, status: "active", date: "2023-11-28" },
+      { id: "BX-045", name: "ポケモン ムゲンゾーン", emoji: "∞", price: "¥350", cards: 15, stock: 0, status: "inactive", date: "2023-11-25" },
+      { id: "BX-046", name: "ポケモン 反撃の刃", emoji: "⚔️", price: "¥350", cards: 15, stock: 48, status: "active", date: "2023-11-22" },
+      { id: "BX-047", name: "ポケモン 超爆インパクト", emoji: "💢", price: "¥400", cards: 18, stock: 33, status: "active", date: "2023-11-20" },
+      { id: "BX-048", name: "ポケモン ドラゴンストーム", emoji: "🐲", price: "¥500", cards: 20, stock: 14, status: "active", date: "2023-11-18" },
+      { id: "BX-049", name: "ポケモン 裂空のカリスマ", emoji: "🦅", price: "¥450", cards: 20, stock: 0, status: "draft", date: "2023-11-15" },
+      { id: "BX-050", name: "ポケモン 強化拡張パック 151 特別版", emoji: "🔢", price: "¥2,000", cards: 50, stock: 7, status: "active", date: "2023-11-12" },
+      { id: "BX-051", name: "ポケモン ネオジェネシス復刻BOX", emoji: "🌿", price: "¥8,000", cards: 3, stock: 0, status: "inactive", date: "2023-11-10" },
+      { id: "BX-052", name: "ポケモン ピカチュウ大量発生!BOX", emoji: "⚡", price: "¥1,000", cards: 35, stock: 120, status: "active", date: "2023-11-08" },
+      { id: "BX-053", name: "ポケモン リザードン特集BOX", emoji: "🦎", price: "¥3,000", cards: 10, stock: 2, status: "active", date: "2023-11-05" },
+      { id: "BX-054", name: "ポケモン ミュウツーex プレミアム", emoji: "🔬", price: "¥2,500", cards: 8, stock: 5, status: "active", date: "2023-11-02" },
+      { id: "BX-055", name: "ポケモン ルギアVSTARコレクション", emoji: "🌬️", price: "¥1,800", cards: 12, stock: 0, status: "inactive", date: "2023-10-30" },
+      { id: "BX-056", name: "ポケモン ホウオウVSTARコレクション", emoji: "🦜", price: "¥1,800", cards: 12, stock: 8, status: "active", date: "2023-10-28" },
+      { id: "BX-057", name: "ポケモン カビゴンV-UNION", emoji: "😴", price: "¥600", cards: 24, stock: 45, status: "active", date: "2023-10-25" },
+      { id: "BX-058", name: "ポケモン ゲンガーVMAX スペシャル", emoji: "👻", price: "¥1,200", cards: 15, stock: 3, status: "draft", date: "2023-10-22" },
+      { id: "BX-059", name: "ポケモン エーフィVMAX プレミアム", emoji: "🔮", price: "¥1,500", cards: 15, stock: 7, status: "active", date: "2023-10-20" },
+      { id: "BX-060", name: "ポケモン サンダーバードex BOX", emoji: "⛈️", price: "¥900", cards: 30, stock: 22, status: "active", date: "2023-10-18" },
+      { id: "BX-061", name: "ポケモン フリーザーex BOX", emoji: "🧊", price: "¥900", cards: 30, stock: 18, status: "active", date: "2023-10-15" },
+      { id: "BX-062", name: "ポケモン ファイヤーex BOX", emoji: "🔥", price: "¥900", cards: 30, stock: 14, status: "active", date: "2023-10-12" },
+      { id: "BX-063", name: "ポケモン ディアルガex プレミアム", emoji: "💠", price: "¥2,200", cards: 10, stock: 0, status: "inactive", date: "2023-10-10" },
+      { id: "BX-064", name: "ポケモン パルキアex プレミアム", emoji: "🔵", price: "¥2,200", cards: 10, stock: 4, status: "active", date: "2023-10-08" },
+      { id: "BX-065", name: "ポケモン ギラティナVSTARコレクション", emoji: "🌑", price: "¥2,000", cards: 12, stock: 1, status: "active", date: "2023-10-05" },
+      { id: "BX-066", name: "ポケモン レシラムBOX", emoji: "🐉", price: "¥1,000", cards: 30, stock: 39, status: "active", date: "2023-10-02" },
+      { id: "BX-067", name: "ポケモン ゼクロムBOX", emoji: "⚡", price: "¥1,000", cards: 30, stock: 28, status: "active", date: "2023-09-30" },
+      { id: "BX-068", name: "ポケモン キュレムVMAX スペシャル", emoji: "❄️", price: "¥1,500", cards: 15, stock: 0, status: "inactive", date: "2023-09-28" },
+      { id: "BX-069", name: "ポケモン ゼルネアスGX BOX", emoji: "🦌", price: "¥800", cards: 28, stock: 55, status: "active", date: "2023-09-25" },
+      { id: "BX-070", name: "ポケモン イベルタルGX BOX", emoji: "🦅", price: "¥800", cards: 28, stock: 40, status: "active", date: "2023-09-22" },
+      { id: "BX-071", name: "ポケモン ジガルデGX プレミアム", emoji: "🐍", price: "¥1,200", cards: 15, stock: 6, status: "active", date: "2023-09-20" },
+      { id: "BX-072", name: "ポケモン ソルガレオGX BOX", emoji: "☀️", price: "¥900", cards: 30, stock: 0, status: "inactive", date: "2023-09-18" },
+      { id: "BX-073", name: "ポケモン ルナアーラGX BOX", emoji: "🌙", price: "¥900", cards: 30, stock: 13, status: "active", date: "2023-09-15" },
+      { id: "BX-074", name: "ポケモン ネクロズマGX スペシャル", emoji: "🌈", price: "¥1,500", cards: 12, stock: 2, status: "active", date: "2023-09-12" },
+      { id: "BX-075", name: "ポケモン グレイシアVMAX プレミアム", emoji: "💙", price: "¥1,800", cards: 10, stock: 4, status: "draft", date: "2023-09-10" },
+      { id: "BX-076", name: "ポケモン ブラッキーVMAX プレミアム", emoji: "🖤", price: "¥2,000", cards: 10, stock: 3, status: "active", date: "2023-09-08" },
+      { id: "BX-077", name: "ポケモン ハピナスVSTARコレクション", emoji: "🥚", price: "¥700", cards: 24, stock: 67, status: "active", date: "2023-09-05" },
+      { id: "BX-078", name: "ポケモン ミミッキュVSTARコレクション", emoji: "🎃", price: "¥800", cards: 24, stock: 31, status: "active", date: "2023-09-02" },
+      { id: "BX-079", name: "ポケモン カプ・テテフGX BOX", emoji: "🌺", price: "¥900", cards: 28, stock: 0, status: "inactive", date: "2023-08-30" },
+      { id: "BX-080", name: "ポケモン ガオガエンGX プレミアム", emoji: "🔥", price: "¥1,100", cards: 15, stock: 9, status: "active", date: "2023-08-28" },
+      { id: "BX-081", name: "ポケモン ゾロアークGX スペシャル", emoji: "🦊", price: "¥1,300", cards: 12, stock: 5, status: "active", date: "2023-08-25" },
+      { id: "BX-082", name: "ポケモン バンギラスex BOX", emoji: "🦖", price: "¥700", cards: 26, stock: 42, status: "active", date: "2023-08-22" },
+      { id: "BX-083", name: "ポケモン ガブリアスex プレミアム", emoji: "🦈", price: "¥1,000", cards: 15, stock: 8, status: "active", date: "2023-08-20" },
+      { id: "BX-084", name: "ポケモン ドラパルトex BOX", emoji: "👻", price: "¥800", cards: 28, stock: 19, status: "active", date: "2023-08-18" },
+      { id: "BX-085", name: "ポケモン コライドンex プレミアム", emoji: "🦁", price: "¥2,000", cards: 10, stock: 0, status: "draft", date: "2023-08-15" },
+      { id: "BX-086", name: "ポケモン ミライドンex プレミアム", emoji: "🤖", price: "¥2,000", cards: 10, stock: 6, status: "active", date: "2023-08-12" },
+      { id: "BX-087", name: "ポケモン テツノイサハex BOX", emoji: "🗡️", price: "¥700", cards: 26, stock: 34, status: "active", date: "2023-08-10" },
+      { id: "BX-088", name: "ポケモン テツノカシラex BOX", emoji: "🏰", price: "¥700", cards: 26, stock: 28, status: "active", date: "2023-08-08" },
+      { id: "BX-089", name: "ポケモン チオンジュエex コレクション", emoji: "🧿", price: "¥900", cards: 20, stock: 0, status: "inactive", date: "2023-08-05" },
+      { id: "BX-090", name: "ポケモン パオジアンex コレクション", emoji: "🐻‍❄️", price: "¥1,000", cards: 20, stock: 11, status: "active", date: "2023-08-02" },
+      { id: "BX-091", name: "ポケモン カイナex スペシャル", emoji: "💪", price: "¥800", cards: 24, stock: 47, status: "active", date: "2023-07-30" },
+      { id: "BX-092", name: "ポケモン ハバタクカミex プレミアム", emoji: "🧚", price: "¥1,500", cards: 12, stock: 3, status: "active", date: "2023-07-28" },
+      { id: "BX-093", name: "ポケモン イダイナキバex BOX", emoji: "🦣", price: "¥700", cards: 26, stock: 22, status: "active", date: "2023-07-25" },
+      { id: "BX-094", name: "ポケモン サーフゴーex プレミアム", emoji: "💰", price: "¥1,200", cards: 15, stock: 0, status: "inactive", date: "2023-07-22" },
+      { id: "BX-095", name: "ポケモン キチキギスex BOX", emoji: "🪽", price: "¥600", cards: 22, stock: 58, status: "active", date: "2023-07-20" },
+      { id: "BX-096", name: "ポケモン ウネルミナモex コレクション", emoji: "🌊", price: "¥900", cards: 20, stock: 15, status: "active", date: "2023-07-18" },
+      { id: "BX-097", name: "ポケモン テラパゴスex スペシャル", emoji: "🐢", price: "¥2,500", cards: 8, stock: 2, status: "draft", date: "2023-07-15" },
+      { id: "BX-098", name: "ポケモン オーガポンex プレミアム", emoji: "🎋", price: "¥1,800", cards: 12, stock: 4, status: "active", date: "2023-07-12" },
+      { id: "BX-099", name: "ポケモン ブリジュラスex BOX", emoji: "🦕", price: "¥800", cards: 26, stock: 37, status: "active", date: "2023-07-10" },
+      { id: "BX-100", name: "ポケモン スタッフプロモ限定BOX", emoji: "🏅", price: "¥10,000", cards: 3, stock: 0, status: "inactive", date: "2023-07-08" },
+    ];
+
+    const statusMap = {
+      active: { label: "公開中", cls: "badge-active" },
+      inactive: { label: "非公開", cls: "badge-inactive" },
+      draft: { label: "下書き", cls: "badge-draft" },
+    };
+
+    function renderTable() {
+      const tbody = document.getElementById("tableBody");
+      tbody.innerHTML = boxes.map(b => {
+        const s = statusMap[b.status];
+        const stockColor = b.stock === 0 ? "#fc8181" : b.stock < 10 ? "#f6ad55" : "#e2e8f0";
+        return `<tr>
+          <td class="checkbox-cell"><input type="checkbox" class="checkbox" /></td>
+          <td>
+            <div class="box-name-wrap">
+              <div class="box-img">${b.emoji}</div>
+              <div>
+                <div class="box-name">${b.name}</div>
+                <div class="box-id">${b.id}</div>
+              </div>
+            </div>
+          </td>
+          <td>${b.price}</td>
+          <td>${b.cards}枚</td>
+          <td style="color:${stockColor}">${b.stock > 0 ? b.stock + '個' : '在庫切れ'}</td>
+          <td>
+            <span class="badge ${s.cls}">
+              <span class="badge-dot"></span>
+              ${s.label}
+            </span>
+          </td>
+          <td style="color:#718096;font-size:13px;">${b.date}</td>
+          <td>
+            <div class="actions">
+              <button class="btn btn-sm btn-secondary">編集</button>
+              <button class="btn btn-sm btn-danger">削除</button>
+            </div>
+          </td>
+        </tr>`;
+      }).join("");
+    }
+
+    function renderPagination() {
+      const total = 5;
+      const current = 1;
+      const btns = document.getElementById("pageBtns");
+      let html = `<button class="page-btn" disabled><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg></button>`;
+      for (let i = 1; i <= total; i++) {
+        if (i === 1 || i === total || (i >= current - 1 && i <= current + 1)) {
+          html += `<button class="page-btn${i === current ? ' active' : ''}">${i}</button>`;
+        } else if (i === current - 2 || i === current + 2) {
+          html += `<button class="page-btn" disabled style="border:none;background:none;">…</button>`;
+        }
+      }
+      html += `<button class="page-btn"><svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></button>`;
+      btns.innerHTML = html;
+    }
+
+    renderTable();
+    renderPagination();
+  </script>
+</body>
+</html>
