@@ -1,0 +1,23 @@
+{
+  "development": {
+    "username": "user",
+    "password": "pass",
+    "database": "oripa",
+    "host": "db",
+    "dialect": "postgres"
+  },
+  "test": {
+    "username": "user",
+    "password": "pass",
+    "database": "oripa_test",
+    "host": "db",
+    "dialect": "postgres"
+  },
+  "production": {
+    "username": "user",
+    "password": "pass",
+    "database": "oripa_prod",
+    "host": "db",
+    "dialect": "postgres"
+  }
+}
