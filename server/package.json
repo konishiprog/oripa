@@ -1,9 +1,10 @@
 {
   "name": "server",
   "version": "1.0.0",
-  "main": "runtime/app.js",
+  "main": "runtime/app.ts",
   "scripts": {
-    "start": "node runtime/app.js",
+    "start": "ts-node -P tsconfig.json main.ts",
+    "dev": "ts-node -P tsconfig.json --watch main.ts",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
@@ -11,12 +12,15 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
+    "cors": "^2.8.5",
     "express": "^4.18.2",
     "pg": "^8.20.0",
     "pg-hstore": "^2.3.4",
     "sequelize": "^6.37.8"
   },
   "devDependencies": {
+    "@types/cors": "^2.8.17",
+    "@types/express": "^5.0.6",
     "@types/node": "^25.6.0",
     "sequelize-cli": "^6.6.5",
     "ts-node": "^10.9.2",

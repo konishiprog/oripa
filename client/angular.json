@@ -19,16 +19,16 @@
               {
                 "glob": "**/*",
                 "input": "public"
+              },
+              {
+                "glob": "**/*",
+                "input": "src/app/assets",
+                "output": "/assets"
               }
             ],
             "styles": [
               "src/styles.css"
-            ],
-            "server": "src/main.server.ts",
-            "outputMode": "server",
-            "ssr": {
-              "entry": "src/server.ts"
-            }
+            ]
           },
           "configurations": {
             "production": {
@@ -77,6 +77,11 @@
               {
                 "glob": "**/*",
                 "input": "public"
+              },
+              {
+                "glob": "**/*",
+                "input": "src/app/assets",
+                "output": "/assets"
               }
             ],
             "styles": [
@@ -86,5 +91,8 @@
         }
       }
     }
+  },
+  "cli": {
+    "analytics": "1d1b58cf-6c28-4013-ab6c-d7e0409cd178"
   }
 }
