@@ -1,0 +1,12 @@
+{
+  "admin-create": {
+    "title": "管理者登録",
+    "email": "メールアドレス",
+    "password": "パスワード",
+    "submit": "登録",
+    "success": "登録が完了しました",
+    "error": "登録に失敗しました",
+    "error-email": "メールアドレスに@を含める必要があります",
+    "error-password": "パスワードは5文字以上にしてください"
+  }
+}

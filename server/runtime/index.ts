@@ -1,0 +1,82 @@
+"use strict";
+
+import express, { Request, Response } from "express";
+import cors from "cors";
+import db from "../models";
+
+const admin = require("./admin");
+const adminApi = require("../api/admin");
+
+let app: any;
+const PORT = 3000;
+
+/**
+ * Initialize runtime with database and modules
+ * @param {*} _db - Database instance
+ */
+async function init(_db?: any) {
+  const database = _db || db;
+
+  // Initialize Express app
+  app = express();
+  app.use(cors({
+    origin: "http://localhost:4200",
+    credentials: true
+  }));
+  app.use(express.json());
+
+  // Health check endpoint
+  app.get("/health", (_req: Request, res: Response) => {
+    res.json({ status: "ok", timestamp: new Date().toISOString() });
+  });
+
+  // Test endpoint
+  app.get("/api/test", (_req: Request, res: Response) => {
+    res.json({ message: "Server is running!" });
+  });
+
+  // Initialize modules
+  admin.init(database);
+  adminApi.init({ admin });
+
+  // Register routes
+  app.use("/api/admin", adminApi.app());
+}
+
+/**
+ * Start the server
+ * @returns {Promise<void>}
+ */
+function start() {
+  return new Promise<void>(async (resolve, reject) => {
+    await db.sequelize.sync();
+
+    app.listen(PORT, "0.0.0.0", () => {
+      console.log(`Server is running on port ${PORT}`);
+      resolve();
+    });
+
+    app.on("error", (err: NodeJS.ErrnoException) => {
+      if (err.code === "EADDRINUSE") {
+        console.error(`Port ${PORT} is already in use`);
+      } else {
+        console.error("Server error:", err);
+      }
+      reject(err);
+    });
+  });
+}
+
+const runtime = {
+  init,
+  start,
+  admin,
+  get db() {
+    return db;
+  },
+  get app() {
+    return app;
+  },
+};
+
+export { runtime };
