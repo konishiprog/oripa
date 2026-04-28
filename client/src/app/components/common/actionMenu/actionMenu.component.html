@@ -1,0 +1,11 @@
+<button class="action-button" [matMenuTriggerFor]="menu" aria-label="actions">
+  <mat-icon svgIcon="more-options"></mat-icon>
+</button>
+<mat-menu #menu="matMenu">
+  <button mat-menu-item (click)="onEdit()">
+    {{ "common.actions.edit" | translate }}
+  </button>
+  <button mat-menu-item (click)="onDelete()">
+    {{ "common.actions.delete" | translate }}
+  </button>
+</mat-menu>

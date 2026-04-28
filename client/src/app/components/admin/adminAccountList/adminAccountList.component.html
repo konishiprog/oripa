@@ -1,0 +1,73 @@
+<div class="container" *ngIf="!isLoading">
+  <div class="content">
+    <div class="table">
+      <div class="table-header">
+        <div
+          class="header-td email-header"
+          data-cy="admin-account-table-email-label"
+        >
+          {{ "admin-account.page.table.header.email" | translate }}
+        </div>
+        <div
+          class="header-td password-header"
+          data-cy="admin-account-table-password-label"
+        >
+          {{ "admin-account.page.table.header.password" | translate }}
+        </div>
+        <div class="header-td action-header"></div>
+      </div>
+
+      <div class="table-content">
+        <div class="tabl-data">
+          <div class="no-data" *ngIf="!adminAccounts.length">
+            {{ "admin-account.page.no-data-message" | translate }}
+          </div>
+          <div
+            class="table-row"
+            *ngFor="let account of adminAccounts; let index = index"
+            [attr.data-cy]="'admin-account-row-' + index"
+          >
+            <div class="row-content">
+              <div class="row-cell email-cell">
+                {{ account.email }}
+              </div>
+              <div class="row-cell password-cell">
+                {{ account.password }}
+              </div>
+              <div class="row-cell action-cell">
+                <app-action-menu
+                  [attr.data-cy]="'admin-account-action-' + index"
+                  (edit)="openEditDialog(account)"
+                  (delete)="deleteAccount(account)"
+                ></app-action-menu>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="footer-container">
+          <div
+            class="add-button"
+            (click)="openCreateDialog()"
+            [class.disable]="adminAccounts.length >= maxAdminAccounts"
+          >
+            {{ "admin-account.page.footer.add" | translate }}
+          </div>
+          <div class="count-text">
+            {{
+              "admin-account.page.account-count-text"
+                | translate
+                  : {
+                      count: adminAccounts.length,
+                      count_max: maxAdminAccounts,
+                    }
+            }}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div *ngIf="isLoading" class="loading-container">
+  <mat-spinner diameter="80" strokeWidth="3"></mat-spinner>
+</div>

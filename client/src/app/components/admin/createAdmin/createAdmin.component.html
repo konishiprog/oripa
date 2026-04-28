@@ -1,6 +1,11 @@
 <div class="container">
   <div class="form-wrapper">
-    <h1>{{ "admin-create.title" | translate }}</h1>
+    <h1>
+      {{
+        (isEditMode ? "admin-create.title-edit" : "admin-create.title")
+          | translate
+      }}
+    </h1>
 
     <div class="success-message" *ngIf="successMessage">
       {{ successMessage }}
@@ -42,9 +47,22 @@
         </div>
       </div>
 
-      <button type="submit" [disabled]="isLoading">
-        {{ "admin-create.submit" | translate }}
-      </button>
+      <div class="button-group">
+        <button
+          type="button"
+          (click)="onClose()"
+          [disabled]="isLoading"
+          class="close-btn"
+        >
+          {{ "admin-create.close" | translate }}
+        </button>
+        <button type="submit" [disabled]="isLoading" class="submit-btn">
+          {{
+            (isEditMode ? "admin-create.submit-edit" : "admin-create.submit")
+              | translate
+          }}
+        </button>
+      </div>
     </form>
   </div>
 </div>

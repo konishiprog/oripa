@@ -20,7 +20,13 @@ async function init(_db?: any) {
   // Initialize Express app
   app = express();
   app.use(cors({
-    origin: "http://localhost:4200",
+    origin: (origin: any, callback: any) => {
+      if (!origin || /^http:\/\/localhost(:\d+)?$/.test(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
     credentials: true
   }));
   app.use(express.json());

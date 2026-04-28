@@ -24,6 +24,7 @@ export class AppComponent {
     const icons: [string, string][] = [
       ['visible', pathIcons + 'visible.svg'],
       ['invisible', pathIcons + 'invisible.svg'],
+      ['more-options', pathIcons + 'more-options.svg'],
     ];
 
     for (let i = 0; i < icons.length; i++) {

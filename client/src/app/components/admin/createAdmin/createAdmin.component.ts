@@ -1,10 +1,25 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ChangeDetectorRef, Inject, OnInit, Optional } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { AdminService } from '../../../service/admin.service';
+
+export enum AdminFormMode {
+  Create = 'create',
+  Edit = 'edit',
+}
+
+export interface CreateAdminDialogData {
+  mode: AdminFormMode;
+  account?: {
+    id: string;
+    email: string;
+    password: string;
+  };
+}
 
 /**
  * Create Admin Component
- * Manages admin user creation form and submission
+ * Manages admin user creation and editing form
  */
 @Component({
   selector: 'app-create-admin',
@@ -19,21 +34,39 @@ export class CreateAdminComponent implements OnInit {
   errorMessage: string = '';
   isLoading: boolean = false;
   passwordVisible: boolean = false;
+  mode: AdminFormMode = AdminFormMode.Create;
+  private editingId: string | null = null;
   private readonly MIN_PASSWORD_LENGTH = 5;
 
   constructor(
     private adminService: AdminService,
     private translateService: TranslateService,
+    private cdr: ChangeDetectorRef,
+    @Optional() private dialogRef: MatDialogRef<CreateAdminComponent>,
+    @Optional() @Inject(MAT_DIALOG_DATA) private data: CreateAdminDialogData,
   ) {}
 
   ngOnInit(): void {
     this.translateService.setDefaultLang('ja');
     this.translateService.use('ja');
+
+    if (this.data?.mode === AdminFormMode.Edit && this.data.account) {
+      this.mode = AdminFormMode.Edit;
+      this.editingId = this.data.account.id;
+      this.email = this.data.account.email;
+      this.password = this.data.account.password;
+    }
+  }
+
+  get isEditMode(): boolean {
+    return this.mode === AdminFormMode.Edit;
   }
 
   async onSubmit(): Promise<void> {
     if (!this.email || !this.password) {
-      this.showError('admin-create.error');
+      this.showError(
+        this.isEditMode ? 'admin-create.error-edit' : 'admin-create.error',
+      );
       return;
     }
 
@@ -52,12 +85,32 @@ export class CreateAdminComponent implements OnInit {
     this.errorMessage = '';
 
     try {
-      await this.adminService.createAdmin(this.email, this.password);
-      this.showSuccess('admin-create.success');
-      this.email = '';
-      this.password = '';
-    } catch (error) {
-      this.showError('admin-create.error');
+      if (this.isEditMode && this.editingId) {
+        const updated = await this.adminService.updateAdmin(
+          this.editingId,
+          this.email,
+          this.password,
+        );
+        this.showSuccess('admin-create.success-edit');
+        this.dialogRef?.close({ mode: 'edit', data: updated.data });
+      } else {
+        const created = await this.adminService.createAdmin(
+          this.email,
+          this.password,
+        );
+        this.showSuccess('admin-create.success');
+        this.email = '';
+        this.password = '';
+        this.dialogRef?.close({ mode: 'create', data: created.data });
+      }
+    } catch (error: any) {
+      if (error?.status === 409) {
+        this.showError('admin-create.error-email-exists');
+      } else {
+        this.showError(
+          this.isEditMode ? 'admin-create.error-edit' : 'admin-create.error',
+        );
+      }
     } finally {
       this.isLoading = false;
     }
@@ -77,9 +130,14 @@ export class CreateAdminComponent implements OnInit {
 
   private showError(key: string): void {
     this.errorMessage = this.translateService.instant(key);
+    this.cdr.detectChanges();
   }
 
   togglePasswordVisibility(): void {
     this.passwordVisible = !this.passwordVisible;
+  }
+
+  onClose(): void {
+    this.dialogRef?.close();
   }
 }
