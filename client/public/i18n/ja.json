@@ -1,12 +1,43 @@
 {
   "admin-create": {
     "title": "管理者登録",
+    "title-edit": "管理者編集",
     "email": "メールアドレス",
     "password": "パスワード",
+    "close": "閉じる",
     "submit": "登録",
+    "submit-edit": "更新",
     "success": "登録が完了しました",
+    "success-edit": "更新が完了しました",
     "error": "登録に失敗しました",
+    "error-edit": "更新に失敗しました",
     "error-email": "メールアドレスに@を含める必要があります",
-    "error-password": "パスワードは5文字以上にしてください"
+    "error-password": "パスワードは5文字以上にしてください",
+    "error-email-exists": "このメールアドレスは既に登録されています"
+  },
+
+  "admin-account": {
+    "page": {
+      "no-data-message": "管理者アカウントはありません",
+      "table": {
+        "header": {
+          "email": "メールアドレス",
+          "password": "パスワード"
+        }
+      },
+      "footer": {
+        "add": "+ 追加"
+      },
+      "account-count-text": "{{count}} / {{count_max}}",
+      "delete-confirm": "このアカウント ({{email}}) を削除してもよろしいですか？",
+      "delete-error-last-account": "最後の1つのアカウントは削除できません。最低でも1つの管理者アカウントが必要です。"
+    }
+  },
+
+  "common": {
+    "actions": {
+      "edit": "編集",
+      "delete": "削除"
+    }
   }
 }

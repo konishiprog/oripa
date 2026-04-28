@@ -41,6 +41,41 @@ async function getByEmail(email: string) {
 }
 
 /**
+ * Update an existing admin user
+ * @param {string} id - Admin id
+ * @param {string} email - Admin email address
+ * @param {string} password - Admin password
+ * @returns {Promise<any>} - Updated admin object
+ */
+async function update(id: string, email: string, password: string) {
+  const admin = await db.Admin.findOne({ where: { id } });
+  if (!admin) {
+    throw new Error("Admin not found");
+  }
+
+  const duplicate = await db.Admin.findOne({ where: { email } });
+  if (duplicate && duplicate.id !== id) {
+    throw new Error("Email already exists");
+  }
+
+  await admin.update({ email, password });
+  return admin.get({ plain: true });
+}
+
+/**
+ * Delete an admin user
+ * @param {string} id - Admin id
+ * @returns {Promise<number>} - Number of rows deleted
+ */
+async function deleteAdmin(id: string) {
+  const admin = await db.Admin.findOne({ where: { id } });
+  if (!admin) {
+    throw new Error("Admin not found");
+  }
+  return await db.Admin.destroy({ where: { id } });
+}
+
+/**
  * Get all admins
  * @returns {Promise<any[]>} - Array of admin objects
  */
@@ -51,6 +86,8 @@ async function getAll() {
 module.exports = {
   init,
   create,
+  update,
+  deleteAdmin,
   getByEmail,
   getAll,
 };

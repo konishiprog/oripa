@@ -1,0 +1,202 @@
+* {
+  box-sizing: border-box;
+}
+
+.container {
+  padding: 16px;
+  background-color: #fff;
+  display: flex;
+  gap: 16px;
+  flex-direction: column;
+  width: 800px;
+  margin: 0 auto;
+}
+
+.content {
+  margin-top: 10px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  border-radius: 8px;
+  border: solid 1px #dee3e5;
+  overflow: visible;
+}
+
+.button {
+  color: var(--primay-dark-variant);
+  padding: 8px;
+  border-radius: 4px;
+  background-color: #fff;
+  border: solid 1px var(--primay-dark-variant);
+  font-family: "NotoSans-SemiBold";
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.button.disable {
+  color: #64d9e74c;
+  cursor: not-allowed;
+  pointer-events: none;
+  border: solid 1px #64d9e74c;
+}
+
+.table-header {
+  display: grid;
+  grid-template-columns: 1fr 1fr 48px;
+  width: 100%;
+  border-bottom: 1px solid #dee3e5;
+  align-items: center;
+  background-color: #f7f8fa;
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
+  height: 44px;
+}
+
+.table-content {
+  width: 100%;
+}
+
+.no-data {
+  font-family: "NotoSans";
+  font-size: 14px;
+  color: #37474f;
+  padding: 12px;
+}
+
+.header-td {
+  font-size: 14px;
+  padding: 12px;
+  color: #37474f;
+}
+
+.tabl-data {
+  width: 100%;
+}
+
+.table-row {
+  display: block;
+  width: 100%;
+  border-bottom: 1px solid #f0f0f0;
+  transition: background-color 0.2s;
+}
+
+.table-row:hover {
+  background-color: #fafafa;
+}
+
+.row-content {
+  display: grid;
+  grid-template-columns: 1fr 1fr 48px;
+  width: 100%;
+  align-items: center;
+  padding: 12px;
+  gap: 8px;
+}
+
+.row-cell {
+  font-family: "NotoSans";
+  font-size: 14px;
+  color: #37474f;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.email-cell {
+  word-break: break-all;
+  white-space: normal;
+}
+
+.password-cell {
+  word-break: break-all;
+  white-space: normal;
+}
+
+.action-cell {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  visibility: hidden;
+}
+
+.table-row:hover .action-cell,
+.action-cell:has(button[aria-expanded="true"]) {
+  visibility: visible;
+}
+
+.loading-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 9999;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.7);
+}
+
+.footer-container {
+  display: flex;
+  flex-direction: row;
+  gap: 12px;
+  align-items: center;
+  padding: 12px;
+  background-color: #f7f8fa;
+  font-size: 14px;
+  border-bottom-left-radius: 8px;
+  border-bottom-right-radius: 8px;
+}
+
+.add-button {
+  font-family: NotoSans-SemiBold;
+  color: #1f6873;
+  cursor: pointer;
+  user-select: none;
+  transition: opacity 0.2s;
+}
+
+.add-button:hover:not(.disable) {
+  opacity: 0.7;
+}
+
+.add-button.disable {
+  color: #64d9e74c;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.count-text {
+  font-family: NotoSans;
+  font-size: 14px;
+  color: rgba(0, 0, 0, 0.3);
+  margin-left: auto;
+}
+
+/* Material overrides */
+::ng-deep .mdc-checkbox__background {
+  border: solid #37474f 2px !important;
+  border-radius: 2px !important;
+}
+
+::ng-deep
+  .mdc-checkbox__native-control:focus:focus:checked
+  ~ .mdc-checkbox__background {
+  background-color: #1f6873 !important;
+}
+
+::ng-deep
+  .mdc-checkbox__native-control:enabled:checked
+  ~ .mdc-checkbox__background {
+  background-color: #1f6873 !important;
+}
+
+::ng-deep
+  .mat-mdc-checkbox
+  .mdc-checkbox
+  .mdc-checkbox__native-control:enabled
+  ~ .mdc-checkbox__background
+  .mdc-checkbox__checkmark {
+  color: #fff !important;
+}
