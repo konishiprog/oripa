@@ -3,19 +3,18 @@
  */
 
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { lastValueFrom } from 'rxjs';
+import { ApiConfigService } from './api-config.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class LoginService {
-  private domain = 'http://localhost:3000';
-  private headers = new HttpHeaders({
-    'Content-Type': 'application/json',
-  });
-
-  constructor(private http: HttpClient) {}
+  constructor(
+    private http: HttpClient,
+    private apiConfig: ApiConfigService,
+  ) {}
 
   /**
    * Login with email and password
@@ -26,9 +25,9 @@ export class LoginService {
   async login(email: string, password: string) {
     return await lastValueFrom(
       this.http.post<any>(
-        `${this.domain}/api/admin/login`,
+        `${this.apiConfig.domain}/api/admin/login`,
         { email, password },
-        { headers: this.headers },
+        { headers: this.apiConfig.headers },
       ),
     );
   }

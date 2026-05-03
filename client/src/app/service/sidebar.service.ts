@@ -3,20 +3,20 @@
  */
 
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { lastValueFrom } from 'rxjs';
+import { ApiConfigService } from './api-config.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class SidebarService {
-  private domain = 'http://localhost:3000';
-  private headers = new HttpHeaders({
-    'Content-Type': 'application/json',
-  });
   private readonly STORAGE_KEY = 'adminId';
 
-  constructor(private http: HttpClient) {}
+  constructor(
+    private http: HttpClient,
+    private apiConfig: ApiConfigService,
+  ) {}
 
   /**
    * Save the logged-in admin id to local storage
@@ -52,8 +52,8 @@ export class SidebarService {
     }
     const response = await lastValueFrom(
       this.http.get<{ message: string; data: any }>(
-        `${this.domain}/api/admin/${id}`,
-        { headers: this.headers },
+        `${this.apiConfig.domain}/api/admin/${id}`,
+        { headers: this.apiConfig.headers },
       ),
     );
     return response.data || null;
