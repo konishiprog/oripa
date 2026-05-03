@@ -3,19 +3,18 @@
  */
 
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { lastValueFrom } from 'rxjs';
+import { ApiConfigService } from './api-config.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AdminService {
-  private domain = 'http://localhost:3000';
-  private headers = new HttpHeaders({
-    'Content-Type': 'application/json',
-  });
-
-  constructor(private http: HttpClient) {}
+  constructor(
+    private http: HttpClient,
+    private apiConfig: ApiConfigService,
+  ) {}
 
   /**
    * Create a new admin user
@@ -26,9 +25,9 @@ export class AdminService {
   async createAdmin(email: string, password: string) {
     return await lastValueFrom(
       this.http.post<any>(
-        `${this.domain}/api/admin`,
+        `${this.apiConfig.domain}/api/admin`,
         { email, password },
-        { headers: this.headers },
+        { headers: this.apiConfig.headers },
       ),
     );
   }
@@ -43,9 +42,9 @@ export class AdminService {
   async updateAdmin(id: string, email: string, password: string) {
     return await lastValueFrom(
       this.http.put<any>(
-        `${this.domain}/api/admin/${id}`,
+        `${this.apiConfig.domain}/api/admin/${id}`,
         { email, password },
-        { headers: this.headers },
+        { headers: this.apiConfig.headers },
       ),
     );
   }
@@ -58,8 +57,8 @@ export class AdminService {
   async deleteAdmin(id: string) {
     return await lastValueFrom(
       this.http.delete<any>(
-        `${this.domain}/api/admin/${id}`,
-        { headers: this.headers },
+        `${this.apiConfig.domain}/api/admin/${id}`,
+        { headers: this.apiConfig.headers },
       ),
     );
   }
@@ -71,8 +70,8 @@ export class AdminService {
   async getAdminAccounts(): Promise<any[]> {
     const response = await lastValueFrom(
       this.http.get<{ message: string; data: any[] }>(
-        `${this.domain}/api/admin`,
-        { headers: this.headers },
+        `${this.apiConfig.domain}/api/admin`,
+        { headers: this.apiConfig.headers },
       ),
     );
     return response.data || [];

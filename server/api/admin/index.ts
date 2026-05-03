@@ -4,8 +4,32 @@
 export {};
 
 import express, { Request, Response, Router } from "express";
+const messages = require("../../constants/messages.json");
 
 let runtime: any;
+
+const validateCredentials = (req: Request, res: Response): boolean => {
+  const { email, password } = req.body;
+  if (!email || !password) {
+    res.status(400).json({ error: messages.errors.EMAIL_PASSWORD_REQUIRED });
+    return false;
+  }
+  return true;
+};
+
+const handleError = (
+  error: any,
+  context: string,
+): { status: number; message: string } => {
+  console.error(`${context} error:`, error);
+  if (error.message === messages.errors.EMAIL_ALREADY_EXISTS) {
+    return { status: 409, message: messages.errors.EMAIL_ALREADY_EXISTS };
+  }
+  if (error.message === messages.errors.ADMIN_NOT_FOUND) {
+    return { status: 404, message: messages.errors.ADMIN_NOT_FOUND };
+  }
+  return { status: 500, message: error.message };
+};
 
 module.exports = {
   /**
@@ -24,83 +48,45 @@ module.exports = {
     const router: Router = express.Router();
 
     /**
+     * Login admin user
+     * POST /api/admin/login
+     */
+    router.post("/login", async (req: Request, res: Response) => {
+      if (!validateCredentials(req, res)) return;
+
+      try {
+        const { email, password } = req.body;
+        const admin = await runtime.admin.verifyCredentials(email, password);
+        if (!admin) {
+          return res.status(401).json({ error: messages.errors.INVALID_CREDENTIALS });
+        }
+        return res.status(200).json({
+          message: messages.success.LOGIN_SUCCESSFUL,
+          data: admin,
+        });
+      } catch (error: any) {
+        const { status, message } = handleError(error, "Login");
+        return res.status(status).json({ error: message });
+      }
+    });
+
+    /**
      * Create a new admin user
      * POST /api/admin
      */
     router.post("/", async (req: Request, res: Response) => {
+      if (!validateCredentials(req, res)) return;
+
       try {
         const { email, password } = req.body;
-
-        if (!email || !password) {
-          return res
-            .status(400)
-            .json({ error: "Email and password are required" });
-        }
-
         const admin = await runtime.admin.create(email, password);
         return res.status(201).json({
-          message: "Admin created successfully",
+          message: messages.success.ADMIN_CREATED,
           data: admin,
         });
       } catch (error: any) {
-        console.error("Admin creation error:", error);
-        if (error.message === "Email already exists") {
-          return res.status(409).json({ error: "Email already exists" });
-        }
-        return res.status(500).json({ error: error.message });
-      }
-    });
-
-    /**
-     * Update an existing admin user
-     * PUT /api/admin/:id
-     */
-    router.put("/:id", async (req: Request, res: Response) => {
-      try {
-        const { id } = req.params;
-        const { email, password } = req.body;
-
-        if (!email || !password) {
-          return res
-            .status(400)
-            .json({ error: "Email and password are required" });
-        }
-
-        const admin = await runtime.admin.update(id, email, password);
-        return res.status(200).json({
-          message: "Admin updated successfully",
-          data: admin,
-        });
-      } catch (error: any) {
-        console.error("Admin update error:", error);
-        if (error.message === "Email already exists") {
-          return res.status(409).json({ error: "Email already exists" });
-        }
-        if (error.message === "Admin not found") {
-          return res.status(404).json({ error: "Admin not found" });
-        }
-        return res.status(500).json({ error: error.message });
-      }
-    });
-
-    /**
-     * Delete an admin user
-     * DELETE /api/admin/:id
-     */
-    router.delete("/:id", async (req: Request, res: Response) => {
-      try {
-        const { id } = req.params;
-
-        await runtime.admin.deleteAdmin(id);
-        return res.status(200).json({
-          message: "Admin deleted successfully",
-        });
-      } catch (error: any) {
-        console.error("Admin delete error:", error);
-        if (error.message === "Admin not found") {
-          return res.status(404).json({ error: "Admin not found" });
-        }
-        return res.status(500).json({ error: error.message });
+        const { status, message } = handleError(error, "Admin creation");
+        return res.status(status).json({ error: message });
       }
     });
 
@@ -113,12 +99,12 @@ module.exports = {
         const admins = await runtime.admin.getAll();
         const data = admins.map((admin: any) => admin.get({ plain: true }));
         return res.status(200).json({
-          message: "Admins retrieved successfully",
+          message: messages.success.ADMINS_RETRIEVED,
           data,
         });
       } catch (error: any) {
-        console.error("Admin retrieval error:", error);
-        return res.status(500).json({ error: error.message });
+        const { status, message } = handleError(error, "Admin retrieval");
+        return res.status(status).json({ error: message });
       }
     });
 
@@ -129,47 +115,56 @@ module.exports = {
     router.get("/:id", async (req: Request, res: Response) => {
       try {
         const { id } = req.params;
-
-        const admin = await runtime.admin.getById(id);
+        const admins = await runtime.admin.getAll();
+        const admin = admins.find((a: any) => a.id === id);
         if (!admin) {
-          return res.status(404).json({ error: "Admin not found" });
+          return res.status(404).json({ error: messages.errors.ADMIN_NOT_FOUND });
         }
         return res.status(200).json({
-          message: "Admin retrieved successfully",
+          message: messages.success.ADMIN_RETRIEVED,
           data: admin,
         });
       } catch (error: any) {
-        console.error("Admin retrieval error:", error);
-        return res.status(500).json({ error: error.message });
+        const { status, message } = handleError(error, "Admin retrieval");
+        return res.status(status).json({ error: message });
       }
     });
 
     /**
-     * Login admin user
-     * POST /api/admin/login
+     * Update an existing admin user
+     * PUT /api/admin/:id
      */
-    router.post("/login", async (req: Request, res: Response) => {
+    router.put("/:id", async (req: Request, res: Response) => {
+      if (!validateCredentials(req, res)) return;
+
       try {
+        const { id } = req.params;
         const { email, password } = req.body;
-
-        if (!email || !password) {
-          return res
-            .status(400)
-            .json({ error: "Email and password are required" });
-        }
-
-        const admin = await runtime.admin.verifyCredentials(email, password);
-        if (!admin) {
-          return res.status(401).json({ error: "Invalid credentials" });
-        }
-
+        const admin = await runtime.admin.update(id, email, password);
         return res.status(200).json({
-          message: "Login successful",
+          message: messages.success.ADMIN_UPDATED,
           data: admin,
         });
       } catch (error: any) {
-        console.error("Login error:", error);
-        return res.status(500).json({ error: error.message });
+        const { status, message } = handleError(error, "Admin update");
+        return res.status(status).json({ error: message });
+      }
+    });
+
+    /**
+     * Delete an admin user
+     * DELETE /api/admin/:id
+     */
+    router.delete("/:id", async (req: Request, res: Response) => {
+      try {
+        const { id } = req.params;
+        await runtime.admin.deleteAdmin(id);
+        return res.status(200).json({
+          message: messages.success.ADMIN_DELETED,
+        });
+      } catch (error: any) {
+        const { status, message } = handleError(error, "Admin delete");
+        return res.status(status).json({ error: message });
       }
     });
 

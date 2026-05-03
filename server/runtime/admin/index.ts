@@ -3,15 +3,32 @@
 export {};
 
 const { v4: uuidv4 } = require("uuid");
+const messages = require("../../constants/messages.json");
 
 let db: any;
+let adminCache: Map<string, any> = new Map();
+
+const toPlain = (admin: any) => admin?.get({ plain: true }) || null;
 
 /**
  * Initialize admin module with database connection
  * @param {*} _db - Sequelize database instance
  */
-function init(_db: any) {
+async function init(_db: any) {
   db = _db;
+  await refreshCache();
+}
+
+/**
+ * Refresh admin cache from database
+ */
+async function refreshCache() {
+  const admins = await db.Admin.findAll();
+  adminCache.clear();
+  admins.forEach((admin: any) => {
+    const plainAdmin = toPlain(admin);
+    adminCache.set(admin.id, plainAdmin);
+  });
 }
 
 /**
@@ -21,53 +38,29 @@ function init(_db: any) {
  * @returns {Promise<any>} - Created admin object
  */
 async function create(email: string, password: string) {
-  const existingAdmin = await db.Admin.findOne({ where: { email } });
-  if (existingAdmin) {
-    throw new Error("Email already exists");
+  if (Array.from(adminCache.values()).some((admin: any) => admin.email === email)) {
+    throw new Error(messages.errors.EMAIL_ALREADY_EXISTS);
   }
 
   const id = uuidv4();
   const admin = await db.Admin.create({ id, email, password });
-  return admin.get({ plain: true });
+  const plainAdmin = toPlain(admin);
+  adminCache.set(id, plainAdmin);
+  return plainAdmin;
 }
 
 /**
- * Get admin by email
- * @param {string} email - Admin email address
- * @returns {Promise<any>} - Admin object or null
- */
-async function getByEmail(email: string) {
-  return await db.Admin.findOne({ where: { email } });
-}
-
-/**
- * Get admin by id
- * @param {string} id - Admin id
- * @returns {Promise<any>} - Admin object or null
- */
-async function getById(id: string) {
-  const admin = await db.Admin.findOne({ where: { id } });
-  if (!admin) {
-    return null;
-  }
-  return admin.get({ plain: true });
-}
-
-/**
- * Verify admin credentials
+ * Verify admin credentials from cache
  * @param {string} email - Admin email address
  * @param {string} password - Admin password
  * @returns {Promise<any>} - Admin object if credentials are valid, null otherwise
  */
 async function verifyCredentials(email: string, password: string) {
-  const admin = await db.Admin.findOne({ where: { email } });
-  if (!admin) {
+  const admin = Array.from(adminCache.values()).find((admin: any) => admin.email === email);
+  if (!admin || admin.password !== password) {
     return null;
   }
-  if (admin.password !== password) {
-    return null;
-  }
-  return admin.get({ plain: true });
+  return admin;
 }
 
 /**
@@ -78,18 +71,22 @@ async function verifyCredentials(email: string, password: string) {
  * @returns {Promise<any>} - Updated admin object
  */
 async function update(id: string, email: string, password: string) {
-  const admin = await db.Admin.findOne({ where: { id } });
+  const admin = adminCache.get(id);
   if (!admin) {
-    throw new Error("Admin not found");
+    throw new Error(messages.errors.ADMIN_NOT_FOUND);
   }
 
-  const duplicate = await db.Admin.findOne({ where: { email } });
-  if (duplicate && duplicate.id !== id) {
-    throw new Error("Email already exists");
+  if (email !== admin.email) {
+    const duplicate = Array.from(adminCache.values()).some((a: any) => a.email === email);
+    if (duplicate) {
+      throw new Error(messages.errors.EMAIL_ALREADY_EXISTS);
+    }
   }
 
-  await admin.update({ email, password });
-  return admin.get({ plain: true });
+  await db.Admin.update({ email, password }, { where: { id } });
+  const updatedAdmin = { ...admin, email, password };
+  adminCache.set(id, updatedAdmin);
+  return updatedAdmin;
 }
 
 /**
@@ -98,19 +95,21 @@ async function update(id: string, email: string, password: string) {
  * @returns {Promise<number>} - Number of rows deleted
  */
 async function deleteAdmin(id: string) {
-  const admin = await db.Admin.findOne({ where: { id } });
-  if (!admin) {
-    throw new Error("Admin not found");
+  if (!adminCache.has(id)) {
+    throw new Error(messages.errors.ADMIN_NOT_FOUND);
   }
-  return await db.Admin.destroy({ where: { id } });
+
+  const result = await db.Admin.destroy({ where: { id } });
+  adminCache.delete(id);
+  return result;
 }
 
 /**
- * Get all admins
+ * Get all admins from cache
  * @returns {Promise<any[]>} - Array of admin objects
  */
 async function getAll() {
-  return await db.Admin.findAll();
+  return Array.from(adminCache.values());
 }
 
 module.exports = {
@@ -118,8 +117,6 @@ module.exports = {
   create,
   update,
   deleteAdmin,
-  getByEmail,
-  getById,
   getAll,
   verifyCredentials,
 };

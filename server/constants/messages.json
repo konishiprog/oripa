@@ -1,0 +1,16 @@
+{
+  "errors": {
+    "EMAIL_ALREADY_EXISTS": "Email already exists",
+    "EMAIL_PASSWORD_REQUIRED": "Email and password are required",
+    "INVALID_CREDENTIALS": "Invalid credentials",
+    "ADMIN_NOT_FOUND": "Admin not found"
+  },
+  "success": {
+    "ADMIN_CREATED": "Admin created successfully",
+    "ADMIN_UPDATED": "Admin updated successfully",
+    "ADMIN_DELETED": "Admin deleted successfully",
+    "ADMINS_RETRIEVED": "Admins retrieved successfully",
+    "ADMIN_RETRIEVED": "Admin retrieved successfully",
+    "LOGIN_SUCCESSFUL": "Login successful"
+  }
+}
