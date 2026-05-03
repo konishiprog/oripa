@@ -3,6 +3,7 @@
 export {};
 
 const { v4: uuidv4 } = require("uuid");
+const messages = require("../../constants/messages.json");
 
 let db: any;
 let adminCache: Map<string, any> = new Map();
@@ -38,7 +39,7 @@ async function refreshCache() {
  */
 async function create(email: string, password: string) {
   if (Array.from(adminCache.values()).some((admin: any) => admin.email === email)) {
-    throw new Error("Email already exists");
+    throw new Error(messages.errors.EMAIL_ALREADY_EXISTS);
   }
 
   const id = uuidv4();
@@ -72,13 +73,13 @@ async function verifyCredentials(email: string, password: string) {
 async function update(id: string, email: string, password: string) {
   const admin = adminCache.get(id);
   if (!admin) {
-    throw new Error("Admin not found");
+    throw new Error(messages.errors.ADMIN_NOT_FOUND);
   }
 
   if (email !== admin.email) {
     const duplicate = Array.from(adminCache.values()).some((a: any) => a.email === email);
     if (duplicate) {
-      throw new Error("Email already exists");
+      throw new Error(messages.errors.EMAIL_ALREADY_EXISTS);
     }
   }
 
@@ -95,7 +96,7 @@ async function update(id: string, email: string, password: string) {
  */
 async function deleteAdmin(id: string) {
   if (!adminCache.has(id)) {
-    throw new Error("Admin not found");
+    throw new Error(messages.errors.ADMIN_NOT_FOUND);
   }
 
   const result = await db.Admin.destroy({ where: { id } });

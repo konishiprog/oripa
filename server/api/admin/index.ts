@@ -4,13 +4,14 @@
 export {};
 
 import express, { Request, Response, Router } from "express";
+const messages = require("../../constants/messages.json");
 
 let runtime: any;
 
 const validateCredentials = (req: Request, res: Response): boolean => {
   const { email, password } = req.body;
   if (!email || !password) {
-    res.status(400).json({ error: "Email and password are required" });
+    res.status(400).json({ error: messages.errors.EMAIL_PASSWORD_REQUIRED });
     return false;
   }
   return true;
@@ -21,11 +22,11 @@ const handleError = (
   context: string,
 ): { status: number; message: string } => {
   console.error(`${context} error:`, error);
-  if (error.message === "Email already exists") {
-    return { status: 409, message: "Email already exists" };
+  if (error.message === messages.errors.EMAIL_ALREADY_EXISTS) {
+    return { status: 409, message: messages.errors.EMAIL_ALREADY_EXISTS };
   }
-  if (error.message === "Admin not found") {
-    return { status: 404, message: "Admin not found" };
+  if (error.message === messages.errors.ADMIN_NOT_FOUND) {
+    return { status: 404, message: messages.errors.ADMIN_NOT_FOUND };
   }
   return { status: 500, message: error.message };
 };
@@ -57,10 +58,10 @@ module.exports = {
         const { email, password } = req.body;
         const admin = await runtime.admin.verifyCredentials(email, password);
         if (!admin) {
-          return res.status(401).json({ error: "Invalid credentials" });
+          return res.status(401).json({ error: messages.errors.INVALID_CREDENTIALS });
         }
         return res.status(200).json({
-          message: "Login successful",
+          message: messages.success.LOGIN_SUCCESSFUL,
           data: admin,
         });
       } catch (error: any) {
@@ -80,7 +81,7 @@ module.exports = {
         const { email, password } = req.body;
         const admin = await runtime.admin.create(email, password);
         return res.status(201).json({
-          message: "Admin created successfully",
+          message: messages.success.ADMIN_CREATED,
           data: admin,
         });
       } catch (error: any) {
@@ -98,7 +99,7 @@ module.exports = {
         const admins = await runtime.admin.getAll();
         const data = admins.map((admin: any) => admin.get({ plain: true }));
         return res.status(200).json({
-          message: "Admins retrieved successfully",
+          message: messages.success.ADMINS_RETRIEVED,
           data,
         });
       } catch (error: any) {
@@ -117,10 +118,10 @@ module.exports = {
         const admins = await runtime.admin.getAll();
         const admin = admins.find((a: any) => a.id === id);
         if (!admin) {
-          return res.status(404).json({ error: "Admin not found" });
+          return res.status(404).json({ error: messages.errors.ADMIN_NOT_FOUND });
         }
         return res.status(200).json({
-          message: "Admin retrieved successfully",
+          message: messages.success.ADMIN_RETRIEVED,
           data: admin,
         });
       } catch (error: any) {
@@ -141,7 +142,7 @@ module.exports = {
         const { email, password } = req.body;
         const admin = await runtime.admin.update(id, email, password);
         return res.status(200).json({
-          message: "Admin updated successfully",
+          message: messages.success.ADMIN_UPDATED,
           data: admin,
         });
       } catch (error: any) {
@@ -159,7 +160,7 @@ module.exports = {
         const { id } = req.params;
         await runtime.admin.deleteAdmin(id);
         return res.status(200).json({
-          message: "Admin deleted successfully",
+          message: messages.success.ADMIN_DELETED,
         });
       } catch (error: any) {
         const { status, message } = handleError(error, "Admin delete");
