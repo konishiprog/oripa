@@ -1,4 +1,38 @@
 {
+  "login": {
+    "title": "ログイン",
+    "email": "メールアドレス",
+    "password": "パスワード",
+    "submit": "ログイン",
+    "success": "ログインが完了しました",
+    "error": "ログインに失敗しました",
+    "error-email": "メールアドレスに@を含める必要があります",
+    "error-password": "パスワードは5文字以上にしてください",
+    "error-invalid-credentials": "メールアドレスまたはパスワードが正しくありません"
+  },
+
+  "sidebar": {
+    "dashboard": "ダッシュボード",
+    "user-management": "ユーザー管理",
+    "main": "メイン",
+    "content": "コンテンツ",
+    "logs": "ログ",
+    "box-management": "ボックス管理",
+    "card-management": "カード管理",
+    "gacha-settings": "ガチャ設定",
+    "coupon-management": "クーポン管理",
+    "purchase-log": "購入ログ",
+    "point-history": "ポイント履歴",
+    "user": {
+      "avatar": "管",
+      "role": "管理者"
+    }
+  },
+
+  "dashboard": {
+    "title": "net-oripa"
+  },
+
   "admin-create": {
     "title": "管理者登録",
     "title-edit": "管理者編集",

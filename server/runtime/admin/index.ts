@@ -41,6 +41,36 @@ async function getByEmail(email: string) {
 }
 
 /**
+ * Get admin by id
+ * @param {string} id - Admin id
+ * @returns {Promise<any>} - Admin object or null
+ */
+async function getById(id: string) {
+  const admin = await db.Admin.findOne({ where: { id } });
+  if (!admin) {
+    return null;
+  }
+  return admin.get({ plain: true });
+}
+
+/**
+ * Verify admin credentials
+ * @param {string} email - Admin email address
+ * @param {string} password - Admin password
+ * @returns {Promise<any>} - Admin object if credentials are valid, null otherwise
+ */
+async function verifyCredentials(email: string, password: string) {
+  const admin = await db.Admin.findOne({ where: { email } });
+  if (!admin) {
+    return null;
+  }
+  if (admin.password !== password) {
+    return null;
+  }
+  return admin.get({ plain: true });
+}
+
+/**
  * Update an existing admin user
  * @param {string} id - Admin id
  * @param {string} email - Admin email address
@@ -89,5 +119,7 @@ module.exports = {
   update,
   deleteAdmin,
   getByEmail,
+  getById,
   getAll,
+  verifyCredentials,
 };

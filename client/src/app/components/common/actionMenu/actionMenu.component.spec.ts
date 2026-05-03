@@ -31,25 +31,25 @@ describe('ActionMenuComponent', () => {
   });
 
   it('should emit edit event when onEdit is called', () => {
-    spyOn(component.edit, 'emit');
+    jest.spyOn(component.edit, 'emit');
     component.onEdit();
     expect(component.edit.emit).toHaveBeenCalled();
   });
 
   it('should emit delete event when onDelete is called', () => {
-    spyOn(component.delete, 'emit');
+    jest.spyOn(component.delete, 'emit');
     component.onDelete();
     expect(component.delete.emit).toHaveBeenCalled();
   });
 
   it('should not emit delete when onEdit is called', () => {
-    spyOn(component.delete, 'emit');
+    jest.spyOn(component.delete, 'emit');
     component.onEdit();
     expect(component.delete.emit).not.toHaveBeenCalled();
   });
 
   it('should not emit edit when onDelete is called', () => {
-    spyOn(component.edit, 'emit');
+    jest.spyOn(component.edit, 'emit');
     component.onDelete();
     expect(component.edit.emit).not.toHaveBeenCalled();
   });
