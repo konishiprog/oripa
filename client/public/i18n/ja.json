@@ -52,6 +52,8 @@
 
   "admin-account": {
     "page": {
+      "title": "管理者アカウント",
+      "desc": "管理者アカウントを管理します。",
       "no-data-message": "管理者アカウントはありません",
       "table": {
         "header": {

@@ -4,8 +4,9 @@
 
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { CreateAdminComponent } from './components/admin/createAdmin/createAdmin.component';
-import { AdminAccountListComponent } from './components/admin/adminAccountList/adminAccountList.component';
+import { CreateAdminComponent } from './components/createAdmin/createAdmin.component';
+import { AdminAccountListComponent } from './components/adminAccountList/adminAccountList.component';
+import { AdminPanelComponent } from './components/adminPanel/adminPanel.component';
 import { LoginComponent } from './components/login/login.component';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
 
@@ -20,16 +21,27 @@ const routes: Routes = [
     component: LoginComponent,
   },
   {
-    path: 'dashboard',
-    component: DashboardComponent,
-  },
-  {
-    path: 'admin/createAdmin',
-    component: CreateAdminComponent,
-  },
-  {
-    path: 'admin/adminAccountList',
-    component: AdminAccountListComponent,
+    path: 'adminPanel',
+    component: AdminPanelComponent,
+    children: [
+      {
+        path: '',
+        redirectTo: 'dashboard',
+        pathMatch: 'full',
+      },
+      {
+        path: 'dashboard',
+        component: DashboardComponent,
+      },
+      {
+        path: 'adminAccountList',
+        component: AdminAccountListComponent,
+      },
+      {
+        path: 'createAdmin',
+        component: CreateAdminComponent,
+      },
+    ],
   },
 ];
 

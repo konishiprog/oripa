@@ -21,7 +21,7 @@
   </div>
 
   <div class="sidebar-footer">
-    <div class="user-info">
+    <div class="user-info" (click)="navigateToAdminAccountList()" [class.active]="isAdminAccountActive">
       <div class="avatar">{{ "sidebar.user.avatar" | translate }}</div>
       <div class="user-meta">
         <div class="user-name">{{ adminEmail }}</div>

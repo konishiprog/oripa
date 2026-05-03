@@ -158,7 +158,7 @@ describe('LoginComponent', () => {
 
     jest.advanceTimersByTime(1500);
 
-    expect(mockRouter.navigate).toHaveBeenCalledWith(['/dashboard']);
+    expect(mockRouter.navigate).toHaveBeenCalledWith(['/adminPanel']);
 
     jest.useRealTimers();
   });

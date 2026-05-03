@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { Router, NavigationEnd } from '@angular/router';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { TranslateService } from '@ngx-translate/core';
+import { filter } from 'rxjs/operators';
 import { SidebarService } from '../../service/sidebar.service';
 import { SIDEBAR_MENU, MenuSection, MenuItem } from '../../config/sidebar-menu.config';
 
@@ -16,21 +18,33 @@ export class SidebarComponent implements OnInit {
   adminEmail: string = '';
   menuSections: MenuSection[] = SIDEBAR_MENU;
   iconCache: Map<string, SafeHtml> = new Map();
+  isAdminAccountActive: boolean = false;
 
   constructor(
     private http: HttpClient,
+    private router: Router,
     private sanitizer: DomSanitizer,
     private translateService: TranslateService,
     private sidebarService: SidebarService,
   ) {}
 
 
-  ngOnInit(): void {
+  async ngOnInit(): Promise<void> {
     this.translateService.setDefaultLang('ja');
     this.translateService.use('ja');
     this.loadLogo();
     this.loadIcons();
-    this.loadAdminEmail();
+    await this.loadAdminEmail();
+    this.checkAdminAccountRoute();
+    this.router.events
+      .pipe(filter((event) => event instanceof NavigationEnd))
+      .subscribe(() => {
+        this.checkAdminAccountRoute();
+      });
+  }
+
+  private checkAdminAccountRoute(): void {
+    this.isAdminAccountActive = this.router.url === '/adminPanel/adminAccountList';
   }
 
   private async loadAdminEmail(): Promise<void> {
@@ -75,5 +89,9 @@ export class SidebarComponent implements OnInit {
 
   getIcon(iconPath: string): SafeHtml {
     return this.iconCache.get(iconPath) || '';
+  }
+
+  navigateToAdminAccountList(): void {
+    this.router.navigate(['/adminPanel/adminAccountList']);
   }
 }

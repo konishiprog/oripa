@@ -63,7 +63,7 @@ export class LoginComponent implements OnInit {
       }
       this.showSuccess('login.success');
       setTimeout(() => {
-        this.router.navigate(['/dashboard']);
+        this.router.navigate(['/adminPanel']);
       }, 1500);
     } catch (error: any) {
       if (error?.status === 401) {

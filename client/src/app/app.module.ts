@@ -18,8 +18,9 @@ import { DragDropModule } from '@angular/cdk/drag-drop';
 
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
-import { CreateAdminComponent } from './components/admin/createAdmin/createAdmin.component';
-import { AdminAccountListComponent } from './components/admin/adminAccountList/adminAccountList.component';
+import { CreateAdminComponent } from './components/createAdmin/createAdmin.component';
+import { AdminAccountListComponent } from './components/adminAccountList/adminAccountList.component';
+import { AdminPanelComponent } from './components/adminPanel/adminPanel.component';
 import { ActionMenuComponent } from './components/common/actionMenu/actionMenu.component';
 import { LoginComponent } from './components/login/login.component';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
@@ -30,6 +31,7 @@ import { SidebarComponent } from './components/sidebar/sidebar.component';
     AppComponent,
     CreateAdminComponent,
     AdminAccountListComponent,
+    AdminPanelComponent,
     ActionMenuComponent,
     LoginComponent,
     DashboardComponent,

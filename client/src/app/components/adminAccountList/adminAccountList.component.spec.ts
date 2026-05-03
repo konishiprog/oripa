@@ -4,7 +4,8 @@ import {
   AdminAccountListComponent,
   AdminAccount,
 } from './adminAccountList.component';
-import { AdminService } from '../../../service/admin.service';
+import { AdminFormMode, CreateAdminComponent } from '../createAdmin/createAdmin.component';
+import { AdminService } from '../../service/admin.service';
 import { TranslateService } from '@ngx-translate/core';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { MatIconTestingModule } from '@angular/material/icon/testing';
@@ -43,7 +44,7 @@ describe('AdminAccountListComponent', () => {
     };
 
     await TestBed.configureTestingModule({
-      declarations: [AdminAccountListComponent],
+      declarations: [AdminAccountListComponent, CreateAdminComponent],
       imports: [MatIconTestingModule],
       providers: [
         { provide: AdminService, useValue: mockAdminService },
@@ -88,9 +89,9 @@ describe('AdminAccountListComponent', () => {
   it('should open create dialog with correct data', () => {
     component.openCreateDialog();
 
-    expect(mockMatDialog.open).toHaveBeenCalledWith(expect.any(Function), {
+    expect(mockMatDialog.open).toHaveBeenCalledWith(CreateAdminComponent, {
       width: '500px',
-      data: { mode: 'create' },
+      data: { mode: AdminFormMode.Create },
     });
   });
 
@@ -98,9 +99,9 @@ describe('AdminAccountListComponent', () => {
     const account = mockAccounts[0];
     component.openEditDialog(account);
 
-    expect(mockMatDialog.open).toHaveBeenCalledWith(expect.any(Function), {
+    expect(mockMatDialog.open).toHaveBeenCalledWith(CreateAdminComponent, {
       width: '500px',
-      data: { mode: 'edit', account },
+      data: { mode: AdminFormMode.Edit, account },
     });
   });
 

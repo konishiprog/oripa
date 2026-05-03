@@ -1,7 +1,7 @@
 import { Component, ChangeDetectorRef, Inject, OnInit, Optional } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { AdminService } from '../../../service/admin.service';
+import { AdminService } from '../../service/admin.service';
 
 export enum AdminFormMode {
   Create = 'create',
