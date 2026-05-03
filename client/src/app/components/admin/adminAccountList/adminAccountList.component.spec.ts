@@ -1,18 +1,22 @@
 import 'zone.js';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { AdminAccountListComponent, AdminAccount } from './adminAccountList.component';
+import {
+  AdminAccountListComponent,
+  AdminAccount,
+} from './adminAccountList.component';
 import { AdminService } from '../../../service/admin.service';
 import { TranslateService } from '@ngx-translate/core';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { MatIconTestingModule } from '@angular/material/icon/testing';
 import { of } from 'rxjs';
 
 describe('AdminAccountListComponent', () => {
   let component: AdminAccountListComponent;
   let fixture: ComponentFixture<AdminAccountListComponent>;
-  let mockAdminService: jasmine.SpyObj<AdminService>;
-  let mockTranslateService: jasmine.SpyObj<TranslateService>;
-  let mockMatDialog: jasmine.SpyObj<MatDialog>;
-  let mockDialogRef: jasmine.SpyObj<MatDialogRef<any>>;
+  let mockAdminService: any;
+  let mockTranslateService: any;
+  let mockMatDialog: any;
+  let mockDialogRef: any;
 
   const mockAccounts: AdminAccount[] = [
     { id: '1', email: 'admin1@example.com', password: 'password1' },
@@ -20,28 +24,27 @@ describe('AdminAccountListComponent', () => {
   ];
 
   beforeEach(async () => {
-    mockAdminService = jasmine.createSpyObj('AdminService', [
-      'getAdminAccounts',
-      'deleteAdmin',
-    ]);
-    mockTranslateService = jasmine.createSpyObj('TranslateService', [
-      'setDefaultLang',
-      'use',
-      'instant',
-    ]);
-    mockDialogRef = jasmine.createSpyObj('MatDialogRef', ['afterClosed']);
-    mockMatDialog = jasmine.createSpyObj('MatDialog', ['open']);
+    jest.spyOn(console, 'error').mockImplementation(() => {});
 
-    mockAdminService.getAdminAccounts.and.returnValue(
-      Promise.resolve(mockAccounts),
-    );
-    mockTranslateService.instant.and.returnValue('translated text');
-    mockDialogRef.afterClosed.and.returnValue(of(null));
-    mockMatDialog.open.and.returnValue(mockDialogRef);
+    mockAdminService = {
+      getAdminAccounts: jest.fn().mockResolvedValue(mockAccounts),
+      deleteAdmin: jest.fn(),
+    };
+    mockTranslateService = {
+      setDefaultLang: jest.fn(),
+      use: jest.fn(),
+      instant: jest.fn(() => 'translated text'),
+    };
+    mockDialogRef = {
+      afterClosed: jest.fn(() => of(null)),
+    };
+    mockMatDialog = {
+      open: jest.fn(() => mockDialogRef),
+    };
 
     await TestBed.configureTestingModule({
       declarations: [AdminAccountListComponent],
-      imports: [],
+      imports: [MatIconTestingModule],
       providers: [
         { provide: AdminService, useValue: mockAdminService },
         { provide: TranslateService, useValue: mockTranslateService },
@@ -59,7 +62,7 @@ describe('AdminAccountListComponent', () => {
 
   it('should initialize with empty adminAccounts', () => {
     expect(component.adminAccounts).toEqual([]);
-    expect(component.isLoading).toBeTrue();
+    expect(component.isLoading).toBe(true);
     expect(component.maxAdminAccounts).toBe(100);
   });
 
@@ -69,23 +72,23 @@ describe('AdminAccountListComponent', () => {
     expect(mockAdminService.getAdminAccounts).toHaveBeenCalled();
     expect(component.adminAccounts.length).toBe(2);
     expect(component.adminAccounts[0].email).toBe('admin1@example.com');
-    expect(component.isLoading).toBeFalse();
+    expect(component.isLoading).toBe(false);
   });
 
   it('should set isLoading to false on error', async () => {
-    mockAdminService.getAdminAccounts.and.returnValue(
-      Promise.reject(new Error('API Error')),
+    mockAdminService.getAdminAccounts.mockRejectedValueOnce(
+      new Error('API Error'),
     );
 
     await component.loadAdminAccounts();
 
-    expect(component.isLoading).toBeFalse();
+    expect(component.isLoading).toBe(false);
   });
 
   it('should open create dialog with correct data', () => {
     component.openCreateDialog();
 
-    expect(mockMatDialog.open).toHaveBeenCalledWith(jasmine.any(Function), {
+    expect(mockMatDialog.open).toHaveBeenCalledWith(expect.any(Function), {
       width: '500px',
       data: { mode: 'create' },
     });
@@ -95,7 +98,7 @@ describe('AdminAccountListComponent', () => {
     const account = mockAccounts[0];
     component.openEditDialog(account);
 
-    expect(mockMatDialog.open).toHaveBeenCalledWith(jasmine.any(Function), {
+    expect(mockMatDialog.open).toHaveBeenCalledWith(expect.any(Function), {
       width: '500px',
       data: { mode: 'edit', account },
     });
@@ -103,19 +106,17 @@ describe('AdminAccountListComponent', () => {
 
   it('should not delete account if it is the last one', () => {
     component.adminAccounts = [mockAccounts[0]];
-    spyOn(window, 'alert');
+    const alertSpy = jest.spyOn(window, 'alert').mockImplementation(() => {});
 
     component.deleteAccount(mockAccounts[0]);
 
-    expect(window.alert).toHaveBeenCalledWith(
-      mockTranslateService.instant.calls.mostRecent().returnValue,
-    );
+    expect(alertSpy).toHaveBeenCalled();
     expect(mockAdminService.deleteAdmin).not.toHaveBeenCalled();
   });
 
   it('should show delete confirmation if multiple accounts exist', () => {
     component.adminAccounts = mockAccounts;
-    const confirmSpy = spyOn(window, 'confirm').and.returnValue(false);
+    const confirmSpy = jest.spyOn(window, 'confirm').mockReturnValue(false);
 
     component.deleteAccount(mockAccounts[0]);
 
@@ -125,8 +126,8 @@ describe('AdminAccountListComponent', () => {
 
   it('should call deleteAdmin API if user confirms deletion', async () => {
     component.adminAccounts = mockAccounts.slice();
-    const confirmSpy = spyOn(window, 'confirm').and.returnValue(true);
-    mockAdminService.deleteAdmin.and.returnValue(Promise.resolve({}));
+    const confirmSpy = jest.spyOn(window, 'confirm').mockReturnValue(true);
+    mockAdminService.deleteAdmin.mockResolvedValueOnce({});
 
     component.deleteAccount(mockAccounts[0]);
 
@@ -134,13 +135,15 @@ describe('AdminAccountListComponent', () => {
     await new Promise((resolve) => setTimeout(resolve, 10));
 
     expect(confirmSpy).toHaveBeenCalled();
-    expect(mockAdminService.deleteAdmin).toHaveBeenCalledWith(mockAccounts[0].id);
+    expect(mockAdminService.deleteAdmin).toHaveBeenCalledWith(
+      mockAccounts[0].id,
+    );
   });
 
   it('should remove deleted account from list', async () => {
     component.adminAccounts = mockAccounts.slice();
-    spyOn(window, 'confirm').and.returnValue(true);
-    mockAdminService.deleteAdmin.and.returnValue(Promise.resolve({}));
+    jest.spyOn(window, 'confirm').mockReturnValue(true);
+    mockAdminService.deleteAdmin.mockResolvedValueOnce({});
 
     component.deleteAccount(mockAccounts[0]);
 

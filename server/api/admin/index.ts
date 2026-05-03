@@ -122,6 +122,57 @@ module.exports = {
       }
     });
 
+    /**
+     * Get an admin user by id
+     * GET /api/admin/:id
+     */
+    router.get("/:id", async (req: Request, res: Response) => {
+      try {
+        const { id } = req.params;
+
+        const admin = await runtime.admin.getById(id);
+        if (!admin) {
+          return res.status(404).json({ error: "Admin not found" });
+        }
+        return res.status(200).json({
+          message: "Admin retrieved successfully",
+          data: admin,
+        });
+      } catch (error: any) {
+        console.error("Admin retrieval error:", error);
+        return res.status(500).json({ error: error.message });
+      }
+    });
+
+    /**
+     * Login admin user
+     * POST /api/admin/login
+     */
+    router.post("/login", async (req: Request, res: Response) => {
+      try {
+        const { email, password } = req.body;
+
+        if (!email || !password) {
+          return res
+            .status(400)
+            .json({ error: "Email and password are required" });
+        }
+
+        const admin = await runtime.admin.verifyCredentials(email, password);
+        if (!admin) {
+          return res.status(401).json({ error: "Invalid credentials" });
+        }
+
+        return res.status(200).json({
+          message: "Login successful",
+          data: admin,
+        });
+      } catch (error: any) {
+        console.error("Login error:", error);
+        return res.status(500).json({ error: error.message });
+      }
+    });
+
     return router;
   },
 };

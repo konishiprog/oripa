@@ -21,6 +21,9 @@ import { AppRoutingModule } from './app-routing.module';
 import { CreateAdminComponent } from './components/admin/createAdmin/createAdmin.component';
 import { AdminAccountListComponent } from './components/admin/adminAccountList/adminAccountList.component';
 import { ActionMenuComponent } from './components/common/actionMenu/actionMenu.component';
+import { LoginComponent } from './components/login/login.component';
+import { DashboardComponent } from './components/dashboard/dashboard.component';
+import { SidebarComponent } from './components/sidebar/sidebar.component';
 
 @NgModule({
   declarations: [
@@ -28,6 +31,9 @@ import { ActionMenuComponent } from './components/common/actionMenu/actionMenu.c
     CreateAdminComponent,
     AdminAccountListComponent,
     ActionMenuComponent,
+    LoginComponent,
+    DashboardComponent,
+    SidebarComponent,
   ],
   imports: [
     BrowserModule,

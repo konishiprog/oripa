@@ -13,7 +13,9 @@ describe('CreateAdminComponent', () => {
   let adminService: AdminService;
 
   beforeEach(async () => {
-    const httpClientSpy = jasmine.createSpyObj('HttpClient', ['post']);
+    const httpClientSpy = {
+      post: jest.fn(),
+    };
 
     await TestBed.configureTestingModule({
       declarations: [CreateAdminComponent],
@@ -44,8 +46,8 @@ describe('CreateAdminComponent', () => {
   });
 
   it('should call adminService.createAdmin with email and password on submit', async () => {
-    spyOn(adminService, 'createAdmin').and.returnValue(
-      Promise.resolve({ message: 'success' })
+    jest.spyOn(adminService, 'createAdmin').mockResolvedValueOnce(
+      { message: 'success' }
     );
 
     component.email = 'test@example.com';
