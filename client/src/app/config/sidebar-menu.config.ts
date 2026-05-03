@@ -13,7 +13,7 @@ export const SIDEBAR_MENU: MenuSection[] = [
   {
     title: 'sidebar.main',
     items: [
-      { label: 'sidebar.dashboard', icon: 'assets/icons/dashboard.svg', route: '/dashboard' },
+      { label: 'sidebar.dashboard', icon: 'assets/icons/dashboard.svg', route: '/adminPanel/dashboard' },
       { label: 'sidebar.user-management', icon: 'assets/icons/user-management.svg' },
     ],
   },

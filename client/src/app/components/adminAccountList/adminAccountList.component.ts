@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { AdminService } from '../../../service/admin.service';
+import { AdminService } from '../../service/admin.service';
 import { TranslateService } from '@ngx-translate/core';
 import { MatDialog } from '@angular/material/dialog';
 import { AdminFormMode, CreateAdminComponent } from '../createAdmin/createAdmin.component';

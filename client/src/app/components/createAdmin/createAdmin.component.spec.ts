@@ -1,7 +1,7 @@
 import 'zone.js';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { CreateAdminComponent } from './createAdmin.component';
-import { AdminService } from '../../../service/admin.service';
+import { AdminService } from '../../service/admin.service';
 import { TranslateModule } from '@ngx-translate/core';
 import { HttpClient } from '@angular/common/http';
 import { MatIconModule } from '@angular/material/icon';

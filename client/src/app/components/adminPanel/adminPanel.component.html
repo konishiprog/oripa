@@ -1,0 +1,25 @@
+<div class="container">
+  <app-sidebar></app-sidebar>
+
+  <div class="main">
+    <header class="topbar">
+      <div class="breadcrumb">
+        <span>Console</span>
+        <span class="breadcrumb-sep">/</span>
+        <span class="breadcrumb-current">{{ breadcrumbTitle }}</span>
+      </div>
+      <div class="topbar-right">
+        <button class="icon-btn">
+          <span [innerHTML]="notificationIcon"></span>
+        </button>
+        <button class="icon-btn">
+          <span [innerHTML]="searchIcon"></span>
+        </button>
+      </div>
+    </header>
+
+    <div class="content">
+      <router-outlet></router-outlet>
+    </div>
+  </div>
+</div>
