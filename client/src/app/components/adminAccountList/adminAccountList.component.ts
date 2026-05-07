@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { AdminService } from '../../service/admin.service';
 import { TranslateService } from '@ngx-translate/core';
 import { MatDialog } from '@angular/material/dialog';
@@ -25,6 +25,7 @@ export class AdminAccountListComponent implements OnInit {
     private adminService: AdminService,
     private translateService: TranslateService,
     private dialog: MatDialog,
+    private cdr: ChangeDetectorRef,
   ) {}
 
   ngOnInit(): void {
@@ -34,7 +35,6 @@ export class AdminAccountListComponent implements OnInit {
   }
 
   async loadAdminAccounts(): Promise<void> {
-    await new Promise<void>((resolve) => setTimeout(resolve, 0));
     this.isLoading = true;
     try {
       const accounts = await this.adminService.getAdminAccounts();
@@ -47,6 +47,7 @@ export class AdminAccountListComponent implements OnInit {
       console.error('Failed to load admin accounts:', error);
     } finally {
       this.isLoading = false;
+      this.cdr.markForCheck();
     }
   }
 
