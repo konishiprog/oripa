@@ -97,10 +97,9 @@ module.exports = {
     router.get("/", async (_req: Request, res: Response) => {
       try {
         const admins = await runtime.admin.getAll();
-        const data = admins.map((admin: any) => admin.get({ plain: true }));
         return res.status(200).json({
           message: messages.success.ADMINS_RETRIEVED,
-          data,
+          data: admins,
         });
       } catch (error: any) {
         const { status, message } = handleError(error, "Admin retrieval");
