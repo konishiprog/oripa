@@ -2,7 +2,10 @@ import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { AdminService } from '../../service/admin.service';
 import { TranslateService } from '@ngx-translate/core';
 import { MatDialog } from '@angular/material/dialog';
-import { AdminFormMode, CreateAdminComponent } from '../createAdmin/createAdmin.component';
+import {
+  AdminFormMode,
+  CreateAdminComponent,
+} from '../createAdmin/createAdmin.component';
 
 export interface AdminAccount {
   id: string;
@@ -59,9 +62,8 @@ export class AdminAccountListComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe((result) => {
       if (result?.mode === 'create' && result?.data) {
-        setTimeout(() => {
-          this.adminAccounts.push(result.data);
-        }, 0);
+        this.adminAccounts.push(result.data);
+        this.cdr.markForCheck();
       }
     });
   }
@@ -74,12 +76,13 @@ export class AdminAccountListComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe((result) => {
       if (result?.mode === 'edit' && result?.data) {
-        setTimeout(() => {
-          const index = this.adminAccounts.findIndex((a) => a.id === result.data.id);
-          if (index !== -1) {
-            this.adminAccounts[index] = result.data;
-          }
-        }, 0);
+        const index = this.adminAccounts.findIndex(
+          (a) => a.id === result.data.id,
+        );
+        if (index !== -1) {
+          this.adminAccounts[index] = result.data;
+          this.cdr.markForCheck();
+        }
       }
     });
   }
@@ -106,12 +109,11 @@ export class AdminAccountListComponent implements OnInit {
   private async performDelete(account: AdminAccount): Promise<void> {
     try {
       await this.adminService.deleteAdmin(account.id);
-      setTimeout(() => {
-        const index = this.adminAccounts.findIndex((a) => a.id === account.id);
-        if (index !== -1) {
-          this.adminAccounts.splice(index, 1);
-        }
-      }, 0);
+      const index = this.adminAccounts.findIndex((a) => a.id === account.id);
+      if (index !== -1) {
+        this.adminAccounts.splice(index, 1);
+        this.cdr.markForCheck();
+      }
     } catch (error) {
       console.error('Failed to delete admin account:', error);
     }
