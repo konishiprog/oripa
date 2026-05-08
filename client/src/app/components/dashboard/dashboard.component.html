@@ -1,88 +1,52 @@
 <div class="page-header">
   <div>
-    <div class="page-title">ダッシュボード</div>
-    <div class="page-desc">システムの概要と統計情報を表示します。</div>
+    <div class="page-title">{{ "dashboard.page-title" | translate }}</div>
+    <div class="page-desc">{{ "dashboard.desc" | translate }}</div>
   </div>
-  <button class="btn btn-primary" (click)="createNewBox()">
-    <svg viewBox="0 0 24 24">
-      <line x1="12" y1="5" x2="12" y2="19" />
-      <line x1="5" y1="12" x2="19" y2="12" />
-    </svg>
-    新規ボックス作成
+  <button class="btn btn-primary" (click)="createNewGacha()">
+    {{ "dashboard.create-box" | translate }}
   </button>
 </div>
 
-<!-- Stats -->
 <div class="stats-row">
   <div class="stat-card">
-    <div class="stat-label">総ボックス数</div>
-    <div class="stat-value">{{ getTotalBoxCount() }}</div>
+    <div class="stat-label">{{ "dashboard.total-boxes" | translate }}</div>
+    <div class="stat-value">{{ getTotalGachaCount() }}</div>
   </div>
   <div class="stat-card">
-    <div class="stat-label">公開中</div>
-    <div class="stat-value">{{ getActiveBoxCount() }}</div>
+    <div class="stat-label">{{ "dashboard.active" | translate }}</div>
+    <div class="stat-value">{{ getPublicGachaCount() }}</div>
   </div>
 </div>
 
-<!-- Filter bar -->
 <div class="filter-bar">
-  <div class="search-input-wrap">
-    <span class="search-icon">
-      <svg viewBox="0 0 24 24">
-        <circle cx="11" cy="11" r="8" />
-        <line x1="21" y1="21" x2="16.65" y2="16.65" />
-      </svg>
-    </span>
-    <input
-      type="text"
-      class="search-input"
-      placeholder="ボックス名・IDで検索..."
-      [(ngModel)]="searchQuery"
-      (input)="applyFilters()"
-    />
+  <div class="filter-bar-left">
+    <div class="search-input-wrap">
+      <span class="search-icon" [innerHTML]="searchIcon"></span>
+      <input
+        type="text"
+        class="search-input"
+        [placeholder]="'dashboard.search-placeholder' | translate"
+        [(ngModel)]="searchQuery"
+        (input)="applyFilters()"
+      />
+    </div>
   </div>
-  <select
-    class="filter-select"
-    [(ngModel)]="statusFilter"
-    (change)="applyFilters()"
-  >
-    <option value="">ステータス：全て</option>
-    <option value="active">公開中</option>
-    <option value="draft">下書き</option>
-    <option value="inactive">非公開</option>
-  </select>
-  <select class="filter-select">
-    <option value="">シリーズ：全て</option>
-    <option value="sv">スカーレット&バイオレット</option>
-    <option value="swsh">ソード&シールド</option>
-    <option value="classic">クラシック</option>
-  </select>
-  <select class="filter-select">
-    <option value="20">20件/ページ</option>
-    <option value="50">50件/ページ</option>
-    <option value="100">100件/ページ</option>
-  </select>
-  <button class="btn btn-secondary" (click)="resetFilters()">
-    <svg
-      viewBox="0 0 24 24"
-      style="
-        width: 14px;
-        height: 14px;
-        stroke: currentColor;
-        fill: none;
-        stroke-width: 2;
-        stroke-linecap: round;
-        stroke-linejoin: round;
-      "
-    >
-      <polyline points="1 4 1 10 7 10" />
-      <path d="M3.51 15a9 9 0 1 0 .49-3.5" />
-    </svg>
-    リセット
-  </button>
+  <div class="filter-bar-right">
+    <select class="filter-select">
+      <option value="20">
+        {{ "dashboard.filter.pagination-20" | translate }}
+      </option>
+      <option value="50">
+        {{ "dashboard.filter.pagination-50" | translate }}
+      </option>
+      <option value="100">
+        {{ "dashboard.filter.pagination-100" | translate }}
+      </option>
+    </select>
+  </div>
 </div>
 
-<!-- Table -->
 <div class="table-card">
   <div class="table-scroll">
     <table>
@@ -91,52 +55,51 @@
           <th class="checkbox-cell">
             <input type="checkbox" class="checkbox" />
           </th>
-          <th>ボックス名</th>
-          <th>価格</th>
-          <th>カード枚数</th>
-          <th>残り在庫</th>
-          <th>ステータス</th>
-          <th>作成日</th>
-          <th>操作</th>
+          <th>{{ "dashboard.table.name" | translate }}</th>
+          <th>{{ "dashboard.table.consumption-type" | translate }}</th>
+          <th>{{ "dashboard.table.cost" | translate }}</th>
+          <th>{{ "dashboard.table.cards" | translate }}</th>
+          <th>{{ "dashboard.table.is-public" | translate }}</th>
+          <th>{{ "dashboard.table.publish-start" | translate }}</th>
+          <th>{{ "dashboard.table.publish-end" | translate }}</th>
+          <th>{{ "dashboard.table.actions" | translate }}</th>
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let box of getDisplayedBoxes()">
+        <tr *ngFor="let gacha of getDisplayedGachas()">
           <td class="checkbox-cell">
             <input type="checkbox" class="checkbox" />
           </td>
+          <td>{{ gacha.name }}</td>
+          <td>{{ gacha.consumptionType }}</td>
+          <td>{{ gacha.cost }}</td>
+          <td>{{ gacha.cards }}枚</td>
           <td>
-            <div class="box-name-wrap">
-              <div class="box-img">{{ box.emoji }}</div>
-              <div>
-                <div class="box-name">{{ box.name }}</div>
-                <div class="box-id">{{ box.id }}</div>
-              </div>
-            </div>
-          </td>
-          <td>{{ box.price }}</td>
-          <td>{{ box.cards }}枚</td>
-          <td [style.color]="getStockColor(box.stock)">
-            {{ box.stock > 0 ? box.stock + "個" : "在庫切れ" }}
-          </td>
-          <td>
-            <span class="badge" [ngClass]="statusMap[box.status].cls">
+            <span
+              class="badge"
+              [ngClass]="gacha.isPublic ? 'badge-active' : 'badge-inactive'"
+            >
               <span class="badge-dot"></span>
-              {{ statusMap[box.status].label }}
+              {{ gacha.isPublic ? "公開中" : "非公開" }}
             </span>
           </td>
-          <td style="color: #718096; font-size: 13px">{{ box.date }}</td>
+          <td style="color: #718096; font-size: 13px">
+            {{ gacha.publishStart }}
+          </td>
+          <td style="color: #718096; font-size: 13px">
+            {{ gacha.publishEnd || "-" }}
+          </td>
           <td>
             <div class="actions">
               <button
                 class="btn btn-sm btn-secondary"
-                (click)="editBox(box)"
+                (click)="editGacha(gacha)"
               >
                 編集
               </button>
               <button
                 class="btn btn-sm btn-danger"
-                (click)="deleteBox(box)"
+                (click)="deleteGacha(gacha)"
               >
                 削除
               </button>
@@ -149,9 +112,9 @@
 
   <div class="pagination">
     <div class="pagination-info">
-      全 {{ filteredBoxes.length }}件中
+      全 {{ filteredGachas.length }}件中
       {{ (currentPage - 1) * itemsPerPage + 1 }}〜{{
-        Math.min(currentPage * itemsPerPage, filteredBoxes.length)
+        Math.min(currentPage * itemsPerPage, filteredGachas.length)
       }}件を表示
     </div>
     <div class="pagination-btns">
@@ -160,9 +123,7 @@
         (click)="previousPage()"
         [disabled]="currentPage === 1"
       >
-        <svg viewBox="0 0 24 24">
-          <polyline points="15 18 9 12 15 6" />
-        </svg>
+        <span class="page-btn-icon" [innerHTML]="chevronLeftIcon"></span>
       </button>
       <button
         *ngFor="let page of getPageNumbers()"
@@ -178,9 +139,7 @@
         (click)="nextPage()"
         [disabled]="currentPage === getTotalPages()"
       >
-        <svg viewBox="0 0 24 24">
-          <polyline points="9 18 15 12 9 6" />
-        </svg>
+        <span class="page-btn-icon" [innerHTML]="chevronRightIcon"></span>
       </button>
     </div>
   </div>
