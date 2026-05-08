@@ -2,7 +2,7 @@
 <aside class="sidebar">
   <div class="sidebar-logo">
     <div class="sidebar-logo-icon" [innerHTML]="logoSvg"></div>
-    <span class="sidebar-logo-text">{{ "dashboard.title" | translate }}</span>
+    <span class="sidebar-logo-text">{{ "sidebar.title" | translate }}</span>
   </div>
 
   <div class="sidebar-section" *ngFor="let section of menuSections">
@@ -21,7 +21,11 @@
   </div>
 
   <div class="sidebar-footer">
-    <div class="user-info" (click)="navigateToAdminAccountList()" [class.active]="isAdminAccountActive">
+    <div
+      class="user-info"
+      (click)="navigateToAdminAccountList()"
+      [class.active]="isAdminAccountActive"
+    >
       <div class="avatar">{{ "sidebar.user.avatar" | translate }}</div>
       <div class="user-meta">
         <div class="user-name">{{ adminEmail }}</div>

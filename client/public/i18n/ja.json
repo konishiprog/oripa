@@ -12,6 +12,7 @@
   },
 
   "sidebar": {
+    "title": "net-oripa",
     "dashboard": "ダッシュボード",
     "user-management": "ユーザー管理",
     "main": "メイン",
@@ -30,7 +31,33 @@
   },
 
   "dashboard": {
-    "title": "net-oripa"
+    "page-title": "ダッシュボード",
+    "desc": "システムの概要と統計情報を表示",
+    "create-box": "+ 新規ボックス作成",
+    "total-boxes": "総ボックス数",
+    "active": "公開中",
+
+    "search-placeholder": "ボックス名",
+    "filter": {
+      "status-label": "ステータス：全て",
+      "status-active": "公開中",
+      "status-draft": "下書き",
+      "status-inactive": "非公開",
+      "pagination-20": "20件/ページ",
+      "pagination-50": "50件/ページ",
+      "pagination-100": "100件/ページ"
+    },
+    "table": {
+      "box-name": "ボックス名",
+      "name": "名前",
+      "consumption-type": "消費タイプ",
+      "cost": "価格",
+      "cards": "カード枚数",
+      "is-public": "公開",
+      "publish-start": "開始日",
+      "publish-end": "終了日",
+      "actions": "操作"
+    }
   },
 
   "admin-create": {
@@ -71,6 +98,7 @@
   },
 
   "common": {
+    "console": "Console",
     "actions": {
       "edit": "編集",
       "delete": "削除"
