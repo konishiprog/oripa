@@ -1,0 +1,162 @@
+<div class="container">
+  <div class="form-wrapper">
+    <h1>
+      {{
+        (isEditMode ? "gacha-create.title-edit" : "gacha-create.title")
+          | translate
+      }}
+    </h1>
+
+    <div class="success-message" *ngIf="successMessage">
+      {{ successMessage }}
+    </div>
+
+    <div class="error-message" *ngIf="errorMessage">
+      {{ errorMessage }}
+    </div>
+
+    <form (ngSubmit)="onSubmit()">
+      <div class="form-group">
+        <label for="name">{{ "gacha-create.name" | translate }}</label>
+        <input
+          id="name"
+          type="text"
+          [(ngModel)]="name"
+          name="name"
+          required
+          [disabled]="isLoading"
+        />
+      </div>
+
+      <div class="form-group">
+        <label for="headerImage">{{
+          "gacha-create.header-image" | translate
+        }}</label>
+        <div class="image-input-wrapper">
+          <input
+            #fileInput
+            id="headerImage"
+            type="file"
+            accept="image/*"
+            name="headerImage"
+            (change)="onFileSelected($event)"
+            [disabled]="isLoading"
+            style="display: none"
+          />
+          <button
+            type="button"
+            class="file-select-btn"
+            (click)="fileInput.click()"
+            [disabled]="isLoading"
+          >
+            {{
+              (headerImageFile
+                ? "gacha-create.image-change"
+                : "gacha-create.image-select"
+              ) | translate
+            }}
+          </button>
+          <span class="file-name" *ngIf="headerImageFile">
+            {{ headerImageFile.name }}
+          </span>
+        </div>
+        <img
+          *ngIf="headerImagePreview"
+          [src]="headerImagePreview"
+          class="image-preview"
+          alt="Preview"
+        />
+      </div>
+
+      <div class="form-group">
+        <label for="cost">{{ "gacha-create.cost" | translate }}</label>
+        <input
+          id="cost"
+          type="number"
+          min="0"
+          [(ngModel)]="cost"
+          name="cost"
+          required
+          [disabled]="isLoading"
+        />
+      </div>
+
+      <div class="form-group">
+        <label for="publishStart">{{
+          "gacha-create.publish-start" | translate
+        }}</label>
+        <input
+          id="publishStart"
+          type="date"
+          [(ngModel)]="publishStart"
+          name="publishStart"
+          required
+          [disabled]="isLoading"
+        />
+      </div>
+
+      <div class="form-group">
+        <label for="publishEnd">{{
+          "gacha-create.publish-end" | translate
+        }}</label>
+        <input
+          id="publishEnd"
+          type="date"
+          [(ngModel)]="publishEnd"
+          name="publishEnd"
+          required
+          [disabled]="isLoading"
+        />
+      </div>
+
+      <div class="form-group">
+        <label>{{ "gacha-create.is-public" | translate }}</label>
+        <div class="radio-group">
+          <div class="radio-option">
+            <input
+              type="radio"
+              id="isPublicYes"
+              name="isPublic"
+              [value]="true"
+              [(ngModel)]="isPublic"
+              [disabled]="isLoading"
+            />
+            <label for="isPublicYes">{{
+              "gacha-create.is-public-yes" | translate
+            }}</label>
+          </div>
+          <div class="radio-option">
+            <input
+              type="radio"
+              id="isPublicNo"
+              name="isPublic"
+              [value]="false"
+              [(ngModel)]="isPublic"
+              [disabled]="isLoading"
+            />
+            <label for="isPublicNo">{{
+              "gacha-create.is-public-no" | translate
+            }}</label>
+          </div>
+        </div>
+      </div>
+
+      <div class="button-group">
+        <button
+          type="button"
+          (click)="onClose()"
+          [disabled]="isLoading"
+          class="close-btn"
+        >
+          {{ "gacha-create.close" | translate }}
+        </button>
+        <button type="submit" [disabled]="isLoading" class="submit-btn">
+          {{
+            (isEditMode ? "gacha-create.submit-edit" : "gacha-create.submit")
+              | translate
+          }}
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

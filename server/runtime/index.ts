@@ -2,10 +2,13 @@
 
 import express, { Request, Response } from "express";
 import cors from "cors";
+import path from "path";
 import db from "../models";
 
 const admin = require("./admin");
 const adminApi = require("../api/admin");
+const gacha = require("./gacha");
+const gachaApi = require("../api/gacha");
 
 let app: any;
 const PORT = 3000;
@@ -30,6 +33,7 @@ async function init(_db?: any) {
     credentials: true
   }));
   app.use(express.json());
+  app.use("/uploads", express.static(path.join(__dirname, "../uploads")));
 
   // Health check endpoint
   app.get("/health", (_req: Request, res: Response) => {
@@ -44,9 +48,12 @@ async function init(_db?: any) {
   // Initialize modules
   admin.init(database);
   adminApi.init({ admin });
+  await gacha.init(database);
+  gachaApi.init({ gacha });
 
   // Register routes
   app.use("/api/admin", adminApi.app());
+  app.use("/api/gacha", gachaApi.app());
 }
 
 /**
@@ -77,6 +84,7 @@ const runtime = {
   init,
   start,
   admin,
+  gacha,
   get db() {
     return db;
   },
