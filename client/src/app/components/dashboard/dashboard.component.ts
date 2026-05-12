@@ -1,6 +1,13 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
+import { MatDialog } from '@angular/material/dialog';
+import { TranslateService } from '@ngx-translate/core';
+import {
+  CreateGachaComponent,
+  GachaFormMode,
+} from '../createGacha/createGacha.component';
+import { GachaService } from '../../service/gacha.service';
 
 interface Gacha {
   id: number;
@@ -35,12 +42,36 @@ export class DashboardComponent implements OnInit {
   constructor(
     private http: HttpClient,
     private sanitizer: DomSanitizer,
+    private dialog: MatDialog,
+    private gachaService: GachaService,
+    private cdr: ChangeDetectorRef,
+    private translateService: TranslateService,
   ) {}
 
   ngOnInit(): void {
-    this.initializeGachas();
-    this.applyFilters();
+    this.loadGachas();
     this.loadIcons();
+  }
+
+  async loadGachas(): Promise<void> {
+    try {
+      const data = await this.gachaService.getGachas();
+      this.gachas = data.map((gacha: any) => ({
+        id: gacha.id,
+        name: gacha.name,
+        headerImage: gacha.headerImage,
+        consumptionType: gacha.consumptionType ?? '',
+        cost: gacha.cost,
+        isPublic: gacha.isPublic ?? false,
+        publishStart: gacha.publishStart,
+        publishEnd: gacha.publishEnd,
+        cards: gacha.cardsCount ?? 0,
+      }));
+      this.applyFilters();
+      this.cdr.markForCheck();
+    } catch (error) {
+      console.error('Failed to load gachas:', error);
+    }
   }
 
   private loadIcons(): void {
@@ -65,66 +96,6 @@ export class DashboardComponent implements OnInit {
         console.error(`Failed to load icon ${path}:`, error);
       },
     });
-  }
-
-  private initializeGachas(): void {
-    this.gachas = [
-      {
-        id: 1,
-        name: 'レアガチャ',
-        headerImage: 'header1.jpg',
-        consumptionType: 'gem',
-        cost: 300,
-        isPublic: true,
-        publishStart: '2024-03-01',
-        publishEnd: '2024-03-31',
-        cards: 10,
-      },
-      {
-        id: 2,
-        name: 'スーパーレアガチャ',
-        headerImage: 'header2.jpg',
-        consumptionType: 'premium',
-        cost: 500,
-        isPublic: true,
-        publishStart: '2024-03-05',
-        publishEnd: '2024-04-05',
-        cards: 10,
-      },
-      {
-        id: 3,
-        name: 'ウルトラレアガチャ',
-        headerImage: 'header3.jpg',
-        consumptionType: 'premium',
-        cost: 1000,
-        isPublic: false,
-        publishStart: '2024-03-10',
-        publishEnd: '2024-03-20',
-        cards: 10,
-      },
-      {
-        id: 4,
-        name: '通常ガチャ',
-        headerImage: 'header4.jpg',
-        consumptionType: 'coin',
-        cost: 100,
-        isPublic: true,
-        publishStart: '2024-01-01',
-        publishEnd: null,
-        cards: 10,
-      },
-      {
-        id: 5,
-        name: 'シーズンガチャ',
-        headerImage: 'header5.jpg',
-        consumptionType: 'gem',
-        cost: 250,
-        isPublic: true,
-        publishStart: '2024-03-15',
-        publishEnd: '2024-06-15',
-        cards: 10,
-      },
-    ];
   }
 
   applyFilters(): void {
@@ -200,22 +171,97 @@ export class DashboardComponent implements OnInit {
   }
 
   getPublicGachaCount(): number {
-    return this.gachas.filter((g) => g.isPublic).length;
+    return this.gachas.filter((gacha) => gacha.isPublic).length;
   }
 
   editGacha(gacha: Gacha): void {
-    console.log('Edit gacha:', gacha);
+    const dialogRef = this.dialog.open(CreateGachaComponent, {
+      width: '500px',
+      data: {
+        mode: GachaFormMode.Edit,
+        gacha: {
+          id: gacha.id,
+          name: gacha.name,
+          headerImage: gacha.headerImage,
+          cost: gacha.cost,
+          isPublic: gacha.isPublic,
+          publishStart: gacha.publishStart,
+          publishEnd: gacha.publishEnd,
+        },
+      },
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result?.mode === 'edit' && result?.data) {
+        const index = this.gachas.findIndex(
+          (target) => target.id === result.data.id,
+        );
+        if (index > -1) {
+          this.gachas[index] = {
+            id: result.data.id,
+            name: result.data.name,
+            headerImage: result.data.headerImage,
+            consumptionType: result.data.consumptionType ?? '',
+            cost: result.data.cost,
+            isPublic: result.data.isPublic ?? false,
+            publishStart: result.data.publishStart,
+            publishEnd: result.data.publishEnd,
+            cards: result.data.cardsCount ?? 0,
+          };
+          this.applyFilters();
+          this.cdr.markForCheck();
+        }
+      }
+    });
   }
 
-  deleteGacha(gacha: Gacha): void {
-    const index = this.gachas.findIndex((g) => g.id === gacha.id);
-    if (index > -1) {
-      this.gachas.splice(index, 1);
-      this.applyFilters();
+  async deleteGacha(gacha: Gacha): Promise<void> {
+    const message = this.translateService.instant(
+      'dashboard.delete-confirm',
+      { name: gacha.name },
+    );
+    if (!confirm(message)) {
+      return;
+    }
+
+    try {
+      await this.gachaService.deleteGacha(gacha.id);
+      const index = this.gachas.findIndex((target) => target.id === gacha.id);
+      if (index > -1) {
+        this.gachas.splice(index, 1);
+        this.applyFilters();
+        this.cdr.markForCheck();
+      }
+    } catch (error) {
+      console.error('Failed to delete gacha:', error);
+      alert(this.translateService.instant('dashboard.delete-error'));
     }
   }
 
   createNewGacha(): void {
-    console.log('Create new gacha');
+    const dialogRef = this.dialog.open(CreateGachaComponent, {
+      width: '500px',
+      data: { mode: GachaFormMode.Create },
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result?.mode === 'create' && result?.data) {
+        setTimeout(() => {
+          this.gachas.push({
+            id: result.data.id,
+            name: result.data.name,
+            headerImage: result.data.headerImage,
+            consumptionType: result.data.consumptionType ?? '',
+            cost: result.data.cost,
+            isPublic: result.data.isPublic ?? false,
+            publishStart: result.data.publishStart,
+            publishEnd: result.data.publishEnd,
+            cards: result.data.cardsCount ?? 0,
+          });
+          this.applyFilters();
+          this.cdr.markForCheck();
+        });
+      }
+    });
   }
 }

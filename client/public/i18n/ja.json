@@ -33,9 +33,11 @@
   "dashboard": {
     "page-title": "ダッシュボード",
     "desc": "システムの概要と統計情報を表示",
-    "create-box": "+ 新規ボックス作成",
+    "create-box": "+ 新規ガチャ作成",
     "total-boxes": "総ボックス数",
     "active": "公開中",
+    "delete-confirm": "このガチャ ({{name}}) を削除してもよろしいですか？",
+    "delete-error": "削除に失敗しました",
 
     "search-placeholder": "ボックス名",
     "filter": {
@@ -58,6 +60,32 @@
       "publish-end": "終了日",
       "actions": "操作"
     }
+  },
+
+  "gacha-create": {
+    "title": "ガチャ作成",
+    "title-edit": "ガチャ編集",
+    "name": "ガチャ名",
+    "header-image": "ヘッダー画像",
+    "image-select": "画像を選択",
+    "image-change": "画像を変更",
+    "cost": "値段",
+    "publish-start": "公開日",
+    "publish-end": "終了日",
+    "is-public": "公開状況",
+    "is-public-yes": "公開",
+    "is-public-no": "非公開",
+    "close": "閉じる",
+    "submit": "登録",
+    "submit-edit": "更新",
+    "success": "登録が完了しました",
+    "success-edit": "更新が完了しました",
+    "error": "登録に失敗しました",
+    "error-required": "全ての項目を入力してください",
+    "error-cost": "値段は0以上の数値を入力してください",
+    "error-date-range": "終了日は公開日以降の日付を指定してください",
+    "error-invalid-image": "画像ファイルを選択してください",
+    "error-name-exists": "この名前のガチャは既に存在しています"
   },
 
   "admin-create": {

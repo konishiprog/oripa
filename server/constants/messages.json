@@ -3,7 +3,12 @@
     "EMAIL_ALREADY_EXISTS": "Email already exists",
     "EMAIL_PASSWORD_REQUIRED": "Email and password are required",
     "INVALID_CREDENTIALS": "Invalid credentials",
-    "ADMIN_NOT_FOUND": "Admin not found"
+    "ADMIN_NOT_FOUND": "Admin not found",
+    "GACHA_FIELDS_REQUIRED": "Name, header image, cost, publish start and publish end are required",
+    "GACHA_UPDATE_FIELDS_REQUIRED": "Name, cost, publish start and publish end are required",
+    "INVALID_IMAGE_FORMAT": "Header image must be a valid image file",
+    "GACHA_NAME_EXISTS": "A gacha with this name already exists",
+    "GACHA_NOT_FOUND": "Gacha not found"
   },
   "success": {
     "ADMIN_CREATED": "Admin created successfully",
@@ -11,6 +16,10 @@
     "ADMIN_DELETED": "Admin deleted successfully",
     "ADMINS_RETRIEVED": "Admins retrieved successfully",
     "ADMIN_RETRIEVED": "Admin retrieved successfully",
-    "LOGIN_SUCCESSFUL": "Login successful"
+    "LOGIN_SUCCESSFUL": "Login successful",
+    "GACHA_CREATED": "Gacha created successfully",
+    "GACHA_UPDATED": "Gacha updated successfully",
+    "GACHA_DELETED": "Gacha deleted successfully",
+    "GACHAS_RETRIEVED": "Gachas retrieved successfully"
   }
 }
