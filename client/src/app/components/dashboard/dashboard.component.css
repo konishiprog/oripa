@@ -335,17 +335,6 @@ tbody tr:hover td {
   gap: 6px;
 }
 
-.checkbox-cell {
-  width: 40px;
-}
-
-.checkbox {
-  width: 16px;
-  height: 16px;
-  accent-color: #805ad5;
-  cursor: pointer;
-}
-
 /* Pagination */
 .pagination {
   display: flex;
