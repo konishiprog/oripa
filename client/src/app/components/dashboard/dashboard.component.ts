@@ -99,12 +99,12 @@ export class DashboardComponent implements OnInit {
   }
 
   applyFilters(): void {
-    this.filteredGachas = this.gachas.filter((gacha) => {
-      const matchesSearch =
-        gacha.name.toLowerCase().includes(this.searchQuery.toLowerCase()) ||
-        gacha.id.toString().includes(this.searchQuery);
-      return matchesSearch;
-    });
+    const query = this.searchQuery.trim().toLowerCase();
+    this.filteredGachas = query
+      ? this.gachas.filter((gacha) =>
+          gacha.name.toLowerCase().includes(query),
+        )
+      : [...this.gachas];
     this.currentPage = 1;
   }
 

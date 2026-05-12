@@ -52,9 +52,6 @@
     <table>
       <thead>
         <tr>
-          <th class="checkbox-cell">
-            <input type="checkbox" class="checkbox" />
-          </th>
           <th>{{ "dashboard.table.name" | translate }}</th>
           <th>{{ "dashboard.table.consumption-type" | translate }}</th>
           <th>{{ "dashboard.table.cost" | translate }}</th>
@@ -67,9 +64,6 @@
       </thead>
       <tbody>
         <tr *ngFor="let gacha of getDisplayedGachas()">
-          <td class="checkbox-cell">
-            <input type="checkbox" class="checkbox" />
-          </td>
           <td>{{ gacha.name }}</td>
           <td>{{ gacha.consumptionType }}</td>
           <td>{{ gacha.cost }}</td>
