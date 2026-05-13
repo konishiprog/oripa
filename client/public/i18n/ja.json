@@ -16,12 +16,7 @@
     "dashboard": "ダッシュボード",
     "user-management": "ユーザー管理",
     "main": "メイン",
-    "content": "コンテンツ",
     "logs": "ログ",
-    "box-management": "ボックス管理",
-    "card-management": "カード管理",
-    "gacha-settings": "ガチャ設定",
-    "coupon-management": "クーポン管理",
     "purchase-log": "購入ログ",
     "point-history": "ポイント履歴",
     "user": {

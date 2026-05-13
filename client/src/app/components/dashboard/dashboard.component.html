@@ -59,7 +59,7 @@
           <th>{{ "dashboard.table.is-public" | translate }}</th>
           <th>{{ "dashboard.table.publish-start" | translate }}</th>
           <th>{{ "dashboard.table.publish-end" | translate }}</th>
-          <th>{{ "dashboard.table.actions" | translate }}</th>
+          <th style="width: 50px"></th>
         </tr>
       </thead>
       <tbody>
@@ -83,21 +83,11 @@
           <td style="color: #718096; font-size: 13px">
             {{ gacha.publishEnd || "-" }}
           </td>
-          <td>
-            <div class="actions">
-              <button
-                class="btn btn-sm btn-secondary"
-                (click)="editGacha(gacha)"
-              >
-                編集
-              </button>
-              <button
-                class="btn btn-sm btn-danger"
-                (click)="deleteGacha(gacha)"
-              >
-                削除
-              </button>
-            </div>
+          <td style="width: 50px; text-align: center">
+            <app-action-menu
+              (edit)="editGacha(gacha)"
+              (delete)="deleteGacha(gacha)"
+            ></app-action-menu>
           </td>
         </tr>
       </tbody>
