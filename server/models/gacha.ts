@@ -20,7 +20,7 @@ module.exports = (sequelize: any, DataTypes: any) => {
         autoIncrement: true,
       },
       headerImage: {
-        type: DataTypes.STRING,
+        type: DataTypes.TEXT,
       },
       name: {
         type: DataTypes.STRING,

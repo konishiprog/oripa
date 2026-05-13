@@ -2,25 +2,12 @@
 
 export {};
 
-import fs from "fs";
-import path from "path";
-
-const { v4: uuidv4 } = require("uuid");
 const messages = require("../../constants/messages.json");
 
 let db: any;
 let gachaCache: Map<number, any> = new Map();
 
-const UPLOAD_DIR = path.join(__dirname, "../../uploads");
-const RELATIVE_PATH = "/uploads";
-
 const toPlain = (gacha: any) => gacha?.get({ plain: true }) || null;
-
-const ensureUploadDir = () => {
-  if (!fs.existsSync(UPLOAD_DIR)) {
-    fs.mkdirSync(UPLOAD_DIR, { recursive: true });
-  }
-};
 
 /**
  * Initialize gacha module with database connection
@@ -66,21 +53,14 @@ async function create(payload: {
     throw new Error(messages.errors.GACHA_NAME_EXISTS);
   }
 
-  ensureUploadDir();
-
-  let headerImageUrl = "";
+  let headerImageBase64 = "";
   if (payload.headerImageFile) {
-    const filename = `${uuidv4()}-${Date.now()}${path.extname(
-      payload.headerImageFile.originalname,
-    )}`;
-    const filepath = path.join(UPLOAD_DIR, filename);
-    await fs.promises.writeFile(filepath, payload.headerImageFile.buffer);
-    headerImageUrl = `${RELATIVE_PATH}/${filename}`;
+    headerImageBase64 = `data:${payload.headerImageFile.mimetype};base64,${payload.headerImageFile.buffer.toString("base64")}`;
   }
 
   const gacha = await db.Gacha.create({
     name: payload.name,
-    headerImage: headerImageUrl,
+    headerImage: headerImageBase64,
     cost: payload.cost,
     publishStart: payload.publishStart,
     publishEnd: payload.publishEnd,
@@ -132,20 +112,14 @@ async function update(
     throw new Error(messages.errors.GACHA_NAME_EXISTS);
   }
 
-  let headerImageUrl = gacha.headerImage;
+  let headerImageBase64 = gacha.headerImage;
   if (payload.headerImageFile) {
-    ensureUploadDir();
-    const filename = `${uuidv4()}-${Date.now()}${path.extname(
-      payload.headerImageFile.originalname,
-    )}`;
-    const filepath = path.join(UPLOAD_DIR, filename);
-    await fs.promises.writeFile(filepath, payload.headerImageFile.buffer);
-    headerImageUrl = `${RELATIVE_PATH}/${filename}`;
+    headerImageBase64 = `data:${payload.headerImageFile.mimetype};base64,${payload.headerImageFile.buffer.toString("base64")}`;
   }
 
   await gacha.update({
     name: payload.name,
-    headerImage: headerImageUrl,
+    headerImage: headerImageBase64,
     cost: payload.cost,
     publishStart: payload.publishStart,
     publishEnd: payload.publishEnd,
