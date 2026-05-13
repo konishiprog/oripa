@@ -7,6 +7,7 @@ import {
   CreateGachaComponent,
   GachaFormMode,
 } from '../createGacha/createGacha.component';
+import { CreateCardComponent } from '../createCard/createCard.component';
 import { GachaService } from '../../service/gacha.service';
 
 interface Gacha {
@@ -101,9 +102,7 @@ export class DashboardComponent implements OnInit {
   applyFilters(): void {
     const query = this.searchQuery.trim().toLowerCase();
     this.filteredGachas = query
-      ? this.gachas.filter((gacha) =>
-          gacha.name.toLowerCase().includes(query),
-        )
+      ? this.gachas.filter((gacha) => gacha.name.toLowerCase().includes(query))
       : [...this.gachas];
     this.currentPage = 1;
   }
@@ -216,10 +215,9 @@ export class DashboardComponent implements OnInit {
   }
 
   async deleteGacha(gacha: Gacha): Promise<void> {
-    const message = this.translateService.instant(
-      'dashboard.delete-confirm',
-      { name: gacha.name },
-    );
+    const message = this.translateService.instant('dashboard.delete-confirm', {
+      name: gacha.name,
+    });
     if (!confirm(message)) {
       return;
     }
@@ -262,6 +260,16 @@ export class DashboardComponent implements OnInit {
           this.cdr.markForCheck();
         });
       }
+    });
+  }
+
+  openCardRegistration(gacha: Gacha): void {
+    this.dialog.open(CreateCardComponent, {
+      width: '500px',
+      data: {
+        gachaId: gacha.id,
+        gachaName: gacha.name,
+      },
     });
   }
 }

@@ -257,6 +257,15 @@ tbody tr:hover td {
   background-color: #f7f8fa;
 }
 
+.table-row-clickable {
+  cursor: pointer;
+  transition: background-color 0.15s;
+}
+
+.table-row-clickable:hover td {
+  background-color: #ede9fe !important;
+}
+
 .badge {
   display: inline-flex;
   align-items: center;

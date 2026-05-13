@@ -1,0 +1,160 @@
+<div class="container">
+  <div class="form-wrapper">
+    <h1>
+      {{ "card-create.title" | translate: { name: data.gachaName } }}
+    </h1>
+
+    <div class="success-message" *ngIf="successMessage">
+      {{ successMessage }}
+    </div>
+
+    <div class="error-message" *ngIf="errorMessage">
+      {{ errorMessage }}
+    </div>
+
+    <form (ngSubmit)="onSubmit()">
+      <div class="form-group">
+        <label for="name">{{ "card-create.name" | translate }}</label>
+        <input
+          id="name"
+          type="text"
+          [(ngModel)]="name"
+          name="name"
+          required
+          [disabled]="isLoading"
+        />
+      </div>
+
+      <div class="form-group">
+        <label for="imageFront">{{
+          "card-create.image-front" | translate
+        }}</label>
+        <div class="image-input-wrapper">
+          <input
+            #fileInputFront
+            id="imageFront"
+            type="file"
+            accept="image/*"
+            name="imageFront"
+            (change)="onImageFrontSelected($event)"
+            [disabled]="isLoading"
+            style="display: none"
+          />
+          <button
+            type="button"
+            class="file-select-btn"
+            (click)="fileInputFront.click()"
+            [disabled]="isLoading"
+          >
+            {{
+              (imageFrontFile
+                ? "card-create.image-change"
+                : "card-create.image-select"
+              ) | translate
+            }}
+          </button>
+          <span class="file-name" *ngIf="imageFrontFile">
+            {{ imageFrontFile.name }}
+          </span>
+        </div>
+        <img
+          *ngIf="imageFrontPreview"
+          [src]="imageFrontPreview"
+          class="image-preview"
+          alt="Image Front Preview"
+        />
+      </div>
+
+      <div class="form-group">
+        <label for="imageBack">{{
+          "card-create.image-back" | translate
+        }}</label>
+        <div class="image-input-wrapper">
+          <input
+            #fileInputBack
+            id="imageBack"
+            type="file"
+            accept="image/*"
+            name="imageBack"
+            (change)="onImageBackSelected($event)"
+            [disabled]="isLoading"
+            style="display: none"
+          />
+          <button
+            type="button"
+            class="file-select-btn"
+            (click)="fileInputBack.click()"
+            [disabled]="isLoading"
+          >
+            {{
+              (imageBackFile
+                ? "card-create.image-change"
+                : "card-create.image-select"
+              ) | translate
+            }}
+          </button>
+          <span class="file-name" *ngIf="imageBackFile">
+            {{ imageBackFile.name }}
+          </span>
+        </div>
+        <img
+          *ngIf="imageBackPreview"
+          [src]="imageBackPreview"
+          class="image-preview"
+          alt="Image Back Preview"
+        />
+      </div>
+
+      <div class="form-group">
+        <label for="cardType">{{ "card-create.card-type" | translate }}</label>
+        <select
+          id="cardType"
+          [(ngModel)]="cardType"
+          name="cardType"
+          required
+          [disabled]="isLoading"
+          class="card-type-select"
+        >
+          <option *ngFor="let type of cardTypes" [value]="type.value">
+            {{ type.value }} : {{ type.labelKey | translate }}
+          </option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="exchangeType">{{
+          "card-create.exchange-type" | translate
+        }}</label>
+        <select
+          id="exchangeType"
+          [(ngModel)]="exchangeType"
+          name="exchangeType"
+          required
+          [disabled]="isLoading"
+          class="card-type-select"
+        >
+          <option
+            *ngFor="let exchangeType of exchangeTypes"
+            [value]="exchangeType.value"
+          >
+            {{ exchangeType.labelKey | translate }}
+          </option>
+        </select>
+      </div>
+
+      <div class="button-group">
+        <button
+          type="button"
+          (click)="onClose()"
+          [disabled]="isLoading"
+          class="close-btn"
+        >
+          {{ "card-create.close" | translate }}
+        </button>
+        <button type="submit" [disabled]="isLoading" class="submit-btn">
+          {{ "card-create.submit" | translate }}
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

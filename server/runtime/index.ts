@@ -9,6 +9,8 @@ const admin = require("./admin");
 const adminApi = require("../api/admin");
 const gacha = require("./gacha");
 const gachaApi = require("../api/gacha");
+const card = require("./card");
+const cardApi = require("../api/card");
 
 let app: any;
 const PORT = 3000;
@@ -50,10 +52,13 @@ async function init(_db?: any) {
   adminApi.init({ admin });
   await gacha.init(database);
   gachaApi.init({ gacha });
+  await card.init(database);
+  cardApi.init({ card });
 
   // Register routes
   app.use("/api/admin", adminApi.app());
   app.use("/api/gacha", gachaApi.app());
+  app.use("/api/card", cardApi.app());
 }
 
 /**
@@ -85,6 +90,7 @@ const runtime = {
   start,
   admin,
   gacha,
+  card,
   get db() {
     return db;
   },

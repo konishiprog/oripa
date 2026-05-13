@@ -54,7 +54,32 @@
       "publish-start": "開始日",
       "publish-end": "終了日",
       "actions": "操作"
-    }
+    },
+    "card-registration": "{{name}} のカード登録"
+  },
+
+  "card-create": {
+    "title": "{{name}} のカード登録",
+    "name": "カード名",
+    "image-front": "画像（表）",
+    "image-back": "画像（裏）",
+    "image-select": "画像を選択",
+    "image-change": "画像を変更",
+    "card-type": "カードタイプ",
+    "card-type-ssr": "大当たり",
+    "card-type-sr": "あたり",
+    "card-type-r": "普通",
+    "card-type-n": "ハズレ",
+    "card-type-last": "ラストワン賞",
+    "exchange-type": "交換タイプ",
+    "exchange-type-shipping-only": "発送のみ",
+    "exchange-type-both": "コイン返還/発送",
+    "close": "閉じる",
+    "submit": "登録",
+    "success": "カードを登録しました",
+    "error": "カードの登録に失敗しました",
+    "error-required": "全ての項目を入力してください",
+    "error-invalid-image": "画像ファイルを選択してください"
   },
 
   "gacha-create": {
