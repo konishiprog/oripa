@@ -91,9 +91,14 @@ export class CreateGachaComponent implements OnInit {
     this.publishEnd = toDateInputValue(gacha.publishEnd);
     this.isPublic = gacha.isPublic;
     if (gacha.headerImage) {
-      const url = gacha.headerImage.startsWith('http')
-        ? gacha.headerImage
-        : `${this.apiConfig.domain}${gacha.headerImage}`;
+      let url = gacha.headerImage;
+      if (gacha.headerImage.startsWith('data:')) {
+        url = gacha.headerImage;
+      } else if (gacha.headerImage.startsWith('http')) {
+        url = gacha.headerImage;
+      } else {
+        url = `${this.apiConfig.domain}${gacha.headerImage}`;
+      }
       this.headerImagePreview = this.sanitizer.bypassSecurityTrustUrl(url);
     }
   }
