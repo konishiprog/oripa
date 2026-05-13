@@ -63,8 +63,19 @@
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let gacha of getDisplayedGachas()">
-          <td>{{ gacha.name }}</td>
+        <tr
+          *ngFor="let gacha of getDisplayedGachas()"
+          class="table-row-clickable"
+          (click)="openCardRegistration(gacha)"
+        >
+          <td
+            [matTooltip]="
+              'dashboard.card-registration' | translate: { name: gacha.name }
+            "
+            matTooltipPosition="above"
+          >
+            {{ gacha.name }}
+          </td>
           <td>{{ gacha.consumptionType }}</td>
           <td>{{ gacha.cost }}</td>
           <td>{{ gacha.cards }}枚</td>
@@ -83,7 +94,10 @@
           <td style="color: #718096; font-size: 13px">
             {{ gacha.publishEnd || "-" }}
           </td>
-          <td style="width: 50px; text-align: center">
+          <td
+            style="width: 50px; text-align: center"
+            (click)="$event.stopPropagation()"
+          >
             <app-action-menu
               (edit)="editGacha(gacha)"
               (delete)="deleteGacha(gacha)"

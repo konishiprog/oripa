@@ -27,12 +27,15 @@ module.exports = (sequelize: any, DataTypes: any) => {
         type: DataTypes.STRING,
       },
       imageFront: {
-        type: DataTypes.STRING,
+        type: DataTypes.TEXT,
       },
       imageBack: {
-        type: DataTypes.STRING,
+        type: DataTypes.TEXT,
       },
       cardType: {
+        type: DataTypes.STRING,
+      },
+      exchangeType: {
         type: DataTypes.STRING,
       },
       isDrawn: {
@@ -43,6 +46,7 @@ module.exports = (sequelize: any, DataTypes: any) => {
     {
       sequelize,
       modelName: 'Card',
+      timestamps: false,
     }
   );
 

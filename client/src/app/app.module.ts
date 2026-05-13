@@ -14,12 +14,14 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatButtonModule } from '@angular/material/button';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 import { CreateAdminComponent } from './components/createAdmin/createAdmin.component';
 import { CreateGachaComponent } from './components/createGacha/createGacha.component';
+import { CreateCardComponent } from './components/createCard/createCard.component';
 import { AdminAccountListComponent } from './components/adminAccountList/adminAccountList.component';
 import { AdminPanelComponent } from './components/adminPanel/adminPanel.component';
 import { ActionMenuComponent } from './components/common/actionMenu/actionMenu.component';
@@ -32,6 +34,7 @@ import { SidebarComponent } from './components/sidebar/sidebar.component';
     AppComponent,
     CreateAdminComponent,
     CreateGachaComponent,
+    CreateCardComponent,
     AdminAccountListComponent,
     AdminPanelComponent,
     ActionMenuComponent,
@@ -50,6 +53,7 @@ import { SidebarComponent } from './components/sidebar/sidebar.component';
     MatProgressSpinnerModule,
     MatMenuModule,
     MatButtonModule,
+    MatTooltipModule,
     DragDropModule,
   ],
   providers: [
