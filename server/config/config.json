@@ -15,10 +15,14 @@
     "dialect": "postgres"
   },
   "production": {
-    "username": "user",
-    "password": "pass",
-    "database": "oripa_prod",
-    "host": "db",
-    "dialect": "postgres"
+    "use_env_variable": "DATABASE_URL",
+    "dialect": "postgres",
+    "ssl": true,
+    "dialectOptions": {
+      "ssl": {
+        "require": true,
+        "rejectUnauthorized": false
+      }
+    }
   }
 }

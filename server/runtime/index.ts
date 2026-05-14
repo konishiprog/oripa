@@ -24,9 +24,11 @@ async function init(_db?: any) {
 
   // Initialize Express app
   app = express();
+  const allowedOrigins = process.env.ALLOWED_ORIGINS?.split(',') || ['http://localhost:4200'];
+
   app.use(cors({
     origin: (origin: any, callback: any) => {
-      if (!origin || /^http:\/\/localhost(:\d+)?$/.test(origin)) {
+      if (!origin || allowedOrigins.includes(origin)) {
         callback(null, true);
       } else {
         callback(new Error("Not allowed by CORS"));
