@@ -11,10 +11,5 @@
       "src": "/(.*)",
       "dest": "main.ts"
     }
-  ],
-  "env": {
-    "NODE_ENV": "production",
-    "DATABASE_URL": "@database_url",
-    "ALLOWED_ORIGINS": "@allowed_origins"
-  }
+  ]
 }
