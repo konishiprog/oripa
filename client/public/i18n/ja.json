@@ -74,12 +74,14 @@
     "exchange-type": "交換タイプ",
     "exchange-type-shipping-only": "発送のみ",
     "exchange-type-both": "コイン返還/発送",
+    "exchange-points": "返還ポイント数",
     "close": "閉じる",
     "submit": "登録",
     "success": "カードを登録しました",
     "error": "カードの登録に失敗しました",
     "error-required": "全ての項目を入力してください",
-    "error-invalid-image": "画像ファイルを選択してください"
+    "error-invalid-image": "画像ファイルを選択してください",
+    "error-exchange-points": "返還ポイント数は1以上の整数を入力してください"
   },
 
   "gacha-create": {

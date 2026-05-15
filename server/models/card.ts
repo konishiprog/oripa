@@ -38,6 +38,10 @@ module.exports = (sequelize: any, DataTypes: any) => {
       exchangeType: {
         type: DataTypes.STRING,
       },
+      exchangePoints: {
+        type: DataTypes.INTEGER,
+        allowNull: true,
+      },
       isDrawn: {
         type: DataTypes.BOOLEAN,
         defaultValue: false,

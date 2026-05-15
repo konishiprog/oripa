@@ -131,6 +131,7 @@
           name="exchangeType"
           required
           [disabled]="isLoading"
+          (ngModelChange)="onExchangeTypeChange()"
           class="card-type-select"
         >
           <option
@@ -140,6 +141,22 @@
             {{ exchangeType.labelKey | translate }}
           </option>
         </select>
+      </div>
+
+      <div class="form-group" *ngIf="isPointExchangeable">
+        <label for="exchangePoints">{{
+          "card-create.exchange-points" | translate
+        }}</label>
+        <input
+          id="exchangePoints"
+          type="number"
+          [min]="minExchangePoints"
+          [step]="stepExchangePoints"
+          [(ngModel)]="exchangePoints"
+          name="exchangePoints"
+          required
+          [disabled]="isLoading"
+        />
       </div>
 
       <div class="button-group">

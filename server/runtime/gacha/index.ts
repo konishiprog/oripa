@@ -145,10 +145,23 @@ async function deleteById(id: number) {
   gachaCache.delete(id);
 }
 
+/**
+ * Append a newly created card into the gacha cache so cardsCount stays current
+ * @param {number} gachaId - Target gacha id
+ * @param {*} card - Plain card object
+ */
+function addCardToCache(gachaId: number, card: any) {
+  const cached = gachaCache.get(gachaId);
+  if (!cached) return;
+  cached.cards = [...(cached.cards ?? []), card];
+  gachaCache.set(gachaId, cached);
+}
+
 module.exports = {
   init,
   create,
   getAll,
   update,
   deleteById,
+  addCardToCache,
 };

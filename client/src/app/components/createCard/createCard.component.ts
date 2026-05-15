@@ -38,6 +38,7 @@ export class CreateCardComponent implements OnInit {
   name: string = '';
   cardType: string = 'SSR';
   exchangeType: string = 'SHIPPING_ONLY';
+  exchangePoints: number | null = null;
   imageFrontFile: File | null = null;
   imageFrontPreview: SafeUrl | null = null;
   imageBackFile: File | null = null;
@@ -47,6 +48,19 @@ export class CreateCardComponent implements OnInit {
   isLoading: boolean = false;
   cardTypes = CARD_TYPES;
   exchangeTypes = EXCHANGE_TYPES;
+
+  readonly minExchangePoints = 1;
+  readonly stepExchangePoints = 1;
+
+  get isPointExchangeable(): boolean {
+    return this.exchangeType === 'BOTH';
+  }
+
+  onExchangeTypeChange(): void {
+    if (!this.isPointExchangeable) {
+      this.exchangePoints = null;
+    }
+  }
 
   constructor(
     private cardService: CardService,
@@ -124,6 +138,16 @@ export class CreateCardComponent implements OnInit {
       return;
     }
 
+    if (
+      this.isPointExchangeable &&
+      (this.exchangePoints === null ||
+        !Number.isInteger(this.exchangePoints) ||
+        this.exchangePoints < this.minExchangePoints)
+    ) {
+      this.showError('card-create.error-exchange-points');
+      return;
+    }
+
     this.isLoading = true;
     this.successMessage = '';
     this.errorMessage = '';
@@ -134,6 +158,7 @@ export class CreateCardComponent implements OnInit {
         name: this.name,
         cardType: this.cardType,
         exchangeType: this.exchangeType,
+        exchangePoints: this.isPointExchangeable ? this.exchangePoints : null,
         imageFrontFile: this.imageFrontFile,
         imageBackFile: this.imageBackFile,
       });
