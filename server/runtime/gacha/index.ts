@@ -141,6 +141,7 @@ async function deleteById(id: number) {
   if (!gacha) {
     throw new Error(messages.errors.GACHA_NOT_FOUND);
   }
+  await db.Card.destroy({ where: { gachaId: id } });
   await gacha.destroy();
   gachaCache.delete(id);
 }

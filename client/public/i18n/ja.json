@@ -31,7 +31,7 @@
     "create-box": "+ 新規ガチャ作成",
     "total-boxes": "総ボックス数",
     "active": "公開中",
-    "delete-confirm": "このガチャ ({{name}}) を削除してもよろしいですか？",
+    "delete-confirm": "このガチャ ({{name}}) を削除してもよろしいですか？\nこのガチャを削除するとそれに紐づけられているカードも消えてしまいます",
     "delete-confirm-card": "このカード ({{name}}) を削除してもよろしいですか？",
     "delete-error": "削除に失敗しました",
 

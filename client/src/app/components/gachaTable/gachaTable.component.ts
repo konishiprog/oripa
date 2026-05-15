@@ -90,6 +90,7 @@ export class GachaTableComponent implements OnInit, OnChanges {
   searchIcon: SafeHtml = '';
   chevronLeftIcon: SafeHtml = '';
   chevronRightIcon: SafeHtml = '';
+  isComposing: boolean = false;
 
   constructor(
     private http: HttpClient,
@@ -107,6 +108,26 @@ export class GachaTableComponent implements OnInit, OnChanges {
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['gachas']) {
+      this.applyFilters();
+    }
+  }
+
+  onSearchInput(): void {
+    if (!this.isComposing) {
+      this.applyFilters();
+    }
+  }
+
+  onCompositionStart(): void {
+    this.isComposing = true;
+  }
+
+  onCompositionEnd(): void {
+    this.isComposing = false;
+  }
+
+  onSearchKeydown(event: KeyboardEvent): void {
+    if (event.key === 'Enter') {
       this.applyFilters();
     }
   }

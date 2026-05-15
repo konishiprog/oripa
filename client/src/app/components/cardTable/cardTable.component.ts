@@ -82,6 +82,7 @@ export class CardTableComponent implements OnInit, OnChanges {
   searchIcon: SafeHtml = '';
   chevronLeftIcon: SafeHtml = '';
   chevronRightIcon: SafeHtml = '';
+  isComposing: boolean = false;
 
   private readonly cardTypeLabelMap = new Map(
     CARD_TYPES.map((cardType) => [cardType.value, cardType.labelKey]),
@@ -109,6 +110,26 @@ export class CardTableComponent implements OnInit, OnChanges {
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['cards']) {
+      this.applyFilters();
+    }
+  }
+
+  onSearchInput(): void {
+    if (!this.isComposing) {
+      this.applyFilters();
+    }
+  }
+
+  onCompositionStart(): void {
+    this.isComposing = true;
+  }
+
+  onCompositionEnd(): void {
+    this.isComposing = false;
+  }
+
+  onSearchKeydown(event: KeyboardEvent): void {
+    if (event.key === 'Enter') {
       this.applyFilters();
     }
   }
