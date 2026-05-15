@@ -8,6 +8,7 @@ module.exports = (sequelize: any, DataTypes: any) => {
       Gacha.hasMany(models.Card, {
         foreignKey: "gachaId",
         as: "cards",
+        onDelete: "CASCADE",
       });
     }
   }
