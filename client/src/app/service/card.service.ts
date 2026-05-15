@@ -17,6 +17,15 @@ export interface CreateCardPayload {
   imageBackFile: File;
 }
 
+export interface UpdateCardPayload {
+  name: string;
+  cardType: string;
+  exchangeType: string;
+  exchangePoints: number | null;
+  imageFrontFile?: File | null;
+  imageBackFile?: File | null;
+}
+
 @Injectable({
   providedIn: 'root',
 })
@@ -47,6 +56,48 @@ export class CardService {
     return await lastValueFrom(
       this.http.post<any>(`${this.apiConfig.domain}/api/card`, formData, {
         headers,
+      }),
+    );
+  }
+
+  /**
+   * Update an existing card (images are optional — kept if not provided)
+   * @param {number} id - Card id to update
+   * @param {UpdateCardPayload} payload - Card attributes with optional image files
+   * @returns {Promise<any>} - Updated card object
+   */
+  async updateCard(id: number, payload: UpdateCardPayload) {
+    const formData = new FormData();
+    formData.append('name', payload.name);
+    formData.append('cardType', payload.cardType);
+    formData.append('exchangeType', payload.exchangeType);
+    if (payload.exchangePoints !== null) {
+      formData.append('exchangePoints', payload.exchangePoints.toString());
+    }
+    if (payload.imageFrontFile) {
+      formData.append('imageFront', payload.imageFrontFile);
+    }
+    if (payload.imageBackFile) {
+      formData.append('imageBack', payload.imageBackFile);
+    }
+
+    const headers = new HttpHeaders();
+    return await lastValueFrom(
+      this.http.put<any>(`${this.apiConfig.domain}/api/card/${id}`, formData, {
+        headers,
+      }),
+    );
+  }
+
+  /**
+   * Delete an existing card
+   * @param {number} id - Card id to delete
+   * @returns {Promise<any>}
+   */
+  async deleteCard(id: number) {
+    return await lastValueFrom(
+      this.http.delete<any>(`${this.apiConfig.domain}/api/card/${id}`, {
+        headers: this.apiConfig.headers,
       }),
     );
   }

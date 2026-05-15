@@ -1,0 +1,9 @@
+<select
+  class="filter-select"
+  [value]="itemsPerPage"
+  (change)="onItemsPerPageChange($event)"
+>
+  <option *ngFor="let option of options" [value]="option">
+    {{ getOptionLabel(option) }}
+  </option>
+</select>

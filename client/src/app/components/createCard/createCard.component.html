@@ -1,7 +1,10 @@
 <div class="container">
   <div class="form-wrapper">
     <h1>
-      {{ "card-create.title" | translate: { name: data.gachaName } }}
+      {{
+        (isEditMode ? "card-create.title-edit" : "card-create.title")
+          | translate: { name: data.gachaName }
+      }}
     </h1>
 
     <div class="success-message" *ngIf="successMessage">
@@ -169,7 +172,10 @@
           {{ "card-create.close" | translate }}
         </button>
         <button type="submit" [disabled]="isLoading" class="submit-btn">
-          {{ "card-create.submit" | translate }}
+          {{
+            (isEditMode ? "card-create.submit-edit" : "card-create.submit")
+              | translate
+          }}
         </button>
       </div>
     </form>

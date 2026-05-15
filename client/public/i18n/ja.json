@@ -32,34 +32,56 @@
     "total-boxes": "総ボックス数",
     "active": "公開中",
     "delete-confirm": "このガチャ ({{name}}) を削除してもよろしいですか？",
+    "delete-confirm-card": "このカード ({{name}}) を削除してもよろしいですか？",
     "delete-error": "削除に失敗しました",
 
     "search-placeholder": "ボックス名",
+    "search-placeholder-card": "カード名",
+    "view-toggle": {
+      "gacha": "ガチャ一覧",
+      "card": "カード一覧"
+    },
     "filter": {
       "status-label": "ステータス：全て",
       "status-active": "公開中",
       "status-draft": "下書き",
       "status-inactive": "非公開",
-      "pagination-20": "20件/ページ",
-      "pagination-50": "50件/ページ",
-      "pagination-100": "100件/ページ"
+      "pagination-option": "{{page_count}}件/ページ"
     },
-    "table": {
-      "box-name": "ボックス名",
+    "gacha-table": {
       "name": "名前",
       "consumption-type": "消費タイプ",
       "cost": "価格",
       "cards": "カード枚数",
       "is-public": "公開",
       "publish-start": "開始日",
-      "publish-end": "終了日",
-      "actions": "操作"
+      "publish-end": "終了日"
     },
-    "card-registration": "{{name}} のカード登録"
+    "card-table": {
+      "gacha-name": "ガチャ名",
+      "card-name": "カード名",
+      "card-type": "カードタイプ",
+      "exchange-type": "交換タイプ",
+      "exchange-points": "交換コイン"
+    },
+    "card-registration": "{{name}} のカード登録",
+    "gacha": {
+      "badge-active": "公開中",
+      "badge-inactive": "非公開",
+      "unit-cards": "{{count}}枚",
+      "no-end-date": "-"
+    },
+    "card": {
+      "no-exchange-points": "-"
+    },
+    "pagination": {
+      "info": "全 {{total}}件中{{start}}〜{{end}}件を表示"
+    }
   },
 
   "card-create": {
     "title": "{{name}} のカード登録",
+    "title-edit": "{{name}} のカード編集",
     "name": "カード名",
     "image-front": "画像（表）",
     "image-back": "画像（裏）",
@@ -77,7 +99,9 @@
     "exchange-points": "返還ポイント数",
     "close": "閉じる",
     "submit": "登録",
+    "submit-edit": "更新",
     "success": "カードを登録しました",
+    "success-edit": "カードを更新しました",
     "error": "カードの登録に失敗しました",
     "error-required": "全ての項目を入力してください",
     "error-invalid-image": "画像ファイルを選択してください",

@@ -248,6 +248,7 @@ describe('CreateCardComponent', () => {
     component.name = 'Test Card';
     component.cardType = 'SSR';
     component.exchangeType = 'SHIPPING_ONLY';
+    component.exchangePoints = null;
     component.imageFrontFile = frontFile;
     component.imageBackFile = backFile;
 
@@ -258,6 +259,7 @@ describe('CreateCardComponent', () => {
       name: 'Test Card',
       cardType: 'SSR',
       exchangeType: 'SHIPPING_ONLY',
+      exchangePoints: null,
       imageFrontFile: frontFile,
       imageBackFile: backFile,
     });

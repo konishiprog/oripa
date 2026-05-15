@@ -9,7 +9,9 @@
     "INVALID_IMAGE_FORMAT": "Header image must be a valid image file",
     "GACHA_NAME_EXISTS": "A gacha with this name already exists",
     "GACHA_NOT_FOUND": "Gacha not found",
-    "CARD_FIELDS_REQUIRED": "Name, card type, image front and image back are required"
+    "CARD_FIELDS_REQUIRED": "Name, card type, image front and image back are required",
+    "CARD_UPDATE_FIELDS_REQUIRED": "Name, card type and exchange type are required",
+    "CARD_NOT_FOUND": "Card not found"
   },
   "success": {
     "ADMIN_CREATED": "Admin created successfully",
@@ -23,6 +25,8 @@
     "GACHA_DELETED": "Gacha deleted successfully",
     "GACHAS_RETRIEVED": "Gachas retrieved successfully",
     "CARD_CREATED": "Card created successfully",
+    "CARD_UPDATED": "Card updated successfully",
+    "CARD_DELETED": "Card deleted successfully",
     "CARDS_RETRIEVED": "Cards retrieved successfully"
   }
 }

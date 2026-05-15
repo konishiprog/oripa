@@ -9,10 +9,28 @@ import { TranslateService } from '@ngx-translate/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { CardService } from '../../service/card.service';
+import { ApiConfigService } from '../../service/api-config.service';
+
+export enum CardFormMode {
+  Create = 'create',
+  Edit = 'edit',
+}
+
+export interface CardDialogPayload {
+  id: number;
+  name: string;
+  cardType: string;
+  exchangeType: string;
+  exchangePoints: number | null;
+  imageFront: string;
+  imageBack: string;
+}
 
 export interface CreateCardDialogData {
   gachaId: number;
   gachaName: string;
+  mode?: CardFormMode;
+  card?: CardDialogPayload;
 }
 
 export const CARD_TYPES = [
@@ -48,12 +66,18 @@ export class CreateCardComponent implements OnInit {
   isLoading: boolean = false;
   cardTypes = CARD_TYPES;
   exchangeTypes = EXCHANGE_TYPES;
+  mode: CardFormMode = CardFormMode.Create;
+  private editingCardId: number | null = null;
 
   readonly minExchangePoints = 1;
   readonly stepExchangePoints = 1;
 
   get isPointExchangeable(): boolean {
     return this.exchangeType === 'BOTH';
+  }
+
+  get isEditMode(): boolean {
+    return this.mode === CardFormMode.Edit;
   }
 
   onExchangeTypeChange(): void {
@@ -67,6 +91,7 @@ export class CreateCardComponent implements OnInit {
     private translateService: TranslateService,
     private cdr: ChangeDetectorRef,
     private sanitizer: DomSanitizer,
+    private apiConfig: ApiConfigService,
     @Optional() private dialogRef: MatDialogRef<CreateCardComponent>,
     @Optional() @Inject(MAT_DIALOG_DATA) public data: CreateCardDialogData,
   ) {}
@@ -74,6 +99,33 @@ export class CreateCardComponent implements OnInit {
   ngOnInit(): void {
     this.translateService.setDefaultLang('ja');
     this.translateService.use('ja');
+
+    if (this.data?.mode) {
+      this.mode = this.data.mode;
+    }
+
+    if (this.isEditMode && this.data?.card) {
+      this.prefillFromCard(this.data.card);
+    }
+  }
+
+  private prefillFromCard(card: CardDialogPayload): void {
+    this.editingCardId = card.id;
+    this.name = card.name;
+    this.cardType = card.cardType;
+    this.exchangeType = card.exchangeType;
+    this.exchangePoints = card.exchangePoints;
+    this.imageFrontPreview = this.buildImagePreview(card.imageFront);
+    this.imageBackPreview = this.buildImagePreview(card.imageBack);
+  }
+
+  private buildImagePreview(source: string | null | undefined): SafeUrl | null {
+    if (!source) return null;
+    let url = source;
+    if (!source.startsWith('data:') && !source.startsWith('http')) {
+      url = `${this.apiConfig.domain}${source}`;
+    }
+    return this.sanitizer.bypassSecurityTrustUrl(url);
   }
 
   onImageFrontSelected(event: any): void {
@@ -92,9 +144,9 @@ export class CreateCardComponent implements OnInit {
 
     this.imageFrontFile = file;
     const reader = new FileReader();
-    reader.onload = (e) => {
+    reader.onload = (event) => {
       this.imageFrontPreview = this.sanitizer.bypassSecurityTrustUrl(
-        e.target?.result as string,
+        event.target?.result as string,
       );
       this.cdr.detectChanges();
     };
@@ -117,9 +169,9 @@ export class CreateCardComponent implements OnInit {
 
     this.imageBackFile = file;
     const reader = new FileReader();
-    reader.onload = (e) => {
+    reader.onload = (event) => {
       this.imageBackPreview = this.sanitizer.bypassSecurityTrustUrl(
-        e.target?.result as string,
+        event.target?.result as string,
       );
       this.cdr.detectChanges();
     };
@@ -127,12 +179,12 @@ export class CreateCardComponent implements OnInit {
   }
 
   async onSubmit(): Promise<void> {
+    const requiresNewImages = !this.isEditMode;
     if (
       !this.name ||
       !this.cardType ||
       !this.exchangeType ||
-      !this.imageFrontFile ||
-      !this.imageBackFile
+      (requiresNewImages && (!this.imageFrontFile || !this.imageBackFile))
     ) {
       this.showError('card-create.error-required');
       return;
@@ -153,17 +205,34 @@ export class CreateCardComponent implements OnInit {
     this.errorMessage = '';
 
     try {
-      const created = await this.cardService.createCard({
-        gachaId: this.data.gachaId,
-        name: this.name,
-        cardType: this.cardType,
-        exchangeType: this.exchangeType,
-        exchangePoints: this.isPointExchangeable ? this.exchangePoints : null,
-        imageFrontFile: this.imageFrontFile,
-        imageBackFile: this.imageBackFile,
-      });
-      this.showSuccess('card-create.success');
-      this.dialogRef?.close({ mode: 'create', data: created.data });
+      if (this.isEditMode) {
+        if (this.editingCardId === null) {
+          this.showError('card-create.error');
+          return;
+        }
+        const updated = await this.cardService.updateCard(this.editingCardId, {
+          name: this.name,
+          cardType: this.cardType,
+          exchangeType: this.exchangeType,
+          exchangePoints: this.isPointExchangeable ? this.exchangePoints : null,
+          imageFrontFile: this.imageFrontFile,
+          imageBackFile: this.imageBackFile,
+        });
+        this.showSuccess('card-create.success-edit');
+        this.dialogRef?.close({ mode: 'edit', data: updated.data });
+      } else {
+        const created = await this.cardService.createCard({
+          gachaId: this.data.gachaId,
+          name: this.name,
+          cardType: this.cardType,
+          exchangeType: this.exchangeType,
+          exchangePoints: this.isPointExchangeable ? this.exchangePoints : null,
+          imageFrontFile: this.imageFrontFile!,
+          imageBackFile: this.imageBackFile!,
+        });
+        this.showSuccess('card-create.success');
+        this.dialogRef?.close({ mode: 'create', data: created.data });
+      }
     } catch (error: any) {
       this.showError('card-create.error');
     } finally {

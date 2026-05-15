@@ -48,6 +48,41 @@ const validateCardPayload = (req: Request, res: Response): boolean => {
   return true;
 };
 
+const validateCardUpdatePayload = (req: Request, res: Response): boolean => {
+  const { name, cardType, exchangeType, exchangePoints } = req.body;
+  const files = (req as any).files;
+  const imageFrontFile = files?.imageFront?.[0];
+  const imageBackFile = files?.imageBack?.[0];
+
+  if (!name || !cardType || !exchangeType) {
+    res
+      .status(400)
+      .json({ error: messages.errors.CARD_UPDATE_FIELDS_REQUIRED });
+    return false;
+  }
+
+  if (imageFrontFile && !imageFrontFile.mimetype.startsWith("image/")) {
+    res.status(400).json({ error: messages.errors.INVALID_IMAGE_FORMAT });
+    return false;
+  }
+  if (imageBackFile && !imageBackFile.mimetype.startsWith("image/")) {
+    res.status(400).json({ error: messages.errors.INVALID_IMAGE_FORMAT });
+    return false;
+  }
+
+  if (exchangeType === "BOTH") {
+    const points = Number(exchangePoints);
+    if (!Number.isInteger(points) || points <= 0) {
+      res
+        .status(400)
+        .json({ error: messages.errors.CARD_UPDATE_FIELDS_REQUIRED });
+      return false;
+    }
+  }
+
+  return true;
+};
+
 const handleError = (
   error: any,
   context: string,
@@ -55,6 +90,9 @@ const handleError = (
   console.error(`${context} error:`, error);
   if (error.message === messages.errors.GACHA_NOT_FOUND) {
     return { status: 404, message: messages.errors.GACHA_NOT_FOUND };
+  }
+  if (error.message === messages.errors.CARD_NOT_FOUND) {
+    return { status: 404, message: messages.errors.CARD_NOT_FOUND };
   }
   return { status: 500, message: error.message };
 };
@@ -115,6 +153,71 @@ module.exports = {
         }
       },
     );
+
+    /**
+     * Update an existing card
+     * PUT /api/card/:id
+     */
+    router.put(
+      "/:id",
+      upload.fields([
+        { name: "imageFront", maxCount: 1 },
+        { name: "imageBack", maxCount: 1 },
+      ]),
+      async (req: Request, res: Response) => {
+        if (!validateCardUpdatePayload(req, res)) return;
+
+        const id = Number(req.params.id);
+        if (!Number.isInteger(id) || id <= 0) {
+          return res.status(400).json({ error: messages.errors.CARD_NOT_FOUND });
+        }
+
+        try {
+          const { name, cardType, exchangeType, exchangePoints } = req.body;
+          const files = (req as any).files;
+          const imageFrontFile = files?.imageFront?.[0];
+          const imageBackFile = files?.imageBack?.[0];
+
+          const card = await runtime.card.update(id, {
+            name,
+            cardType,
+            exchangeType,
+            exchangePoints:
+              exchangeType === "BOTH" ? Number(exchangePoints) : null,
+            imageFrontFile,
+            imageBackFile,
+          });
+          return res.status(200).json({
+            message: messages.success.CARD_UPDATED,
+            data: card,
+          });
+        } catch (error: any) {
+          const { status, message } = handleError(error, "Card update");
+          return res.status(status).json({ error: message });
+        }
+      },
+    );
+
+    /**
+     * Delete an existing card
+     * DELETE /api/card/:id
+     */
+    router.delete("/:id", async (req: Request, res: Response) => {
+      const id = Number(req.params.id);
+      if (!Number.isInteger(id) || id <= 0) {
+        return res.status(400).json({ error: messages.errors.CARD_NOT_FOUND });
+      }
+
+      try {
+        await runtime.card.deleteById(id);
+        return res.status(200).json({
+          message: messages.success.CARD_DELETED,
+        });
+      } catch (error: any) {
+        const { status, message } = handleError(error, "Card deletion");
+        return res.status(status).json({ error: message });
+      }
+    });
 
     /**
      * Get all cards for a specific gacha
