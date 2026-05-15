@@ -12,7 +12,7 @@ let runtime: any;
 const upload = multer({ storage: multer.memoryStorage() });
 
 const validateCardPayload = (req: Request, res: Response): boolean => {
-  const { gachaId, name, cardType, exchangeType } = req.body;
+  const { gachaId, name, cardType, exchangeType, exchangePoints } = req.body;
   const files = (req as any).files;
   const imageFrontFile = files?.imageFront?.[0];
   const imageBackFile = files?.imageBack?.[0];
@@ -35,6 +35,14 @@ const validateCardPayload = (req: Request, res: Response): boolean => {
   ) {
     res.status(400).json({ error: messages.errors.INVALID_IMAGE_FORMAT });
     return false;
+  }
+
+  if (exchangeType === "BOTH") {
+    const points = Number(exchangePoints);
+    if (!Number.isInteger(points) || points <= 0) {
+      res.status(400).json({ error: messages.errors.CARD_FIELDS_REQUIRED });
+      return false;
+    }
   }
 
   return true;
@@ -81,7 +89,8 @@ module.exports = {
         if (!validateCardPayload(req, res)) return;
 
         try {
-          const { gachaId, name, cardType, exchangeType } = req.body;
+          const { gachaId, name, cardType, exchangeType, exchangePoints } =
+            req.body;
           const files = (req as any).files;
           const imageFrontFile = files.imageFront[0];
           const imageBackFile = files.imageBack[0];
@@ -91,6 +100,8 @@ module.exports = {
             name,
             cardType,
             exchangeType,
+            exchangePoints:
+              exchangeType === "BOTH" ? Number(exchangePoints) : null,
             imageFrontFile,
             imageBackFile,
           });

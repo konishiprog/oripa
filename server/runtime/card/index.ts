@@ -3,6 +3,7 @@
 export {};
 
 const messages = require("../../constants/messages.json");
+const gachaRuntime = require("../gacha");
 
 let db: any;
 
@@ -37,6 +38,7 @@ async function create(payload: {
   name: string;
   cardType: string;
   exchangeType: string;
+  exchangePoints?: number | null;
   imageFrontFile?: any;
   imageBackFile?: any;
 }) {
@@ -63,12 +65,16 @@ async function create(payload: {
     name: payload.name,
     cardType: payload.cardType,
     exchangeType: payload.exchangeType,
+    exchangePoints:
+      payload.exchangeType === "BOTH" ? (payload.exchangePoints ?? null) : null,
     imageFront: imageFrontBase64,
     imageBack: imageBackBase64,
     isDrawn: false,
   });
 
-  return toPlain(card);
+  const plainCard = toPlain(card);
+  gachaRuntime.addCardToCache(payload.gachaId, plainCard);
+  return plainCard;
 }
 
 /**

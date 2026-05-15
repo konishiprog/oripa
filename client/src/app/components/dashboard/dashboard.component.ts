@@ -9,6 +9,7 @@ import {
 } from '../createGacha/createGacha.component';
 import { CreateCardComponent } from '../createCard/createCard.component';
 import { GachaService } from '../../service/gacha.service';
+import { CardService } from '../../service/card.service';
 
 interface Gacha {
   id: number;
@@ -45,6 +46,7 @@ export class DashboardComponent implements OnInit {
     private sanitizer: DomSanitizer,
     private dialog: MatDialog,
     private gachaService: GachaService,
+    private cardService: CardService,
     private cdr: ChangeDetectorRef,
     private translateService: TranslateService,
   ) {}
@@ -264,12 +266,32 @@ export class DashboardComponent implements OnInit {
   }
 
   openCardRegistration(gacha: Gacha): void {
-    this.dialog.open(CreateCardComponent, {
+    const dialogRef = this.dialog.open(CreateCardComponent, {
       width: '500px',
       data: {
         gachaId: gacha.id,
         gachaName: gacha.name,
       },
     });
+
+    dialogRef.afterClosed().subscribe(async (result) => {
+      if (result?.mode === 'create' && result?.data) {
+        await this.refreshCardsCount(gacha.id);
+      }
+    });
+  }
+
+  private async refreshCardsCount(gachaId: number): Promise<void> {
+    try {
+      const cards = await this.cardService.getCardsByGachaId(gachaId);
+      const targetGacha = this.gachas.find((gacha) => gacha.id === gachaId);
+      if (targetGacha) {
+        targetGacha.cards = cards.length;
+        this.applyFilters();
+        this.cdr.markForCheck();
+      }
+    } catch (error) {
+      console.error('Failed to refresh cards count:', error);
+    }
   }
 }

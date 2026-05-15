@@ -12,6 +12,7 @@ export interface CreateCardPayload {
   name: string;
   cardType: string;
   exchangeType: string;
+  exchangePoints: number | null;
   imageFrontFile: File;
   imageBackFile: File;
 }
@@ -36,6 +37,9 @@ export class CardService {
     formData.append('name', payload.name);
     formData.append('cardType', payload.cardType);
     formData.append('exchangeType', payload.exchangeType);
+    if (payload.exchangePoints !== null) {
+      formData.append('exchangePoints', payload.exchangePoints.toString());
+    }
     formData.append('imageFront', payload.imageFrontFile);
     formData.append('imageBack', payload.imageBackFile);
 
