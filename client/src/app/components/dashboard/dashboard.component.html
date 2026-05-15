@@ -19,126 +19,38 @@
   </div>
 </div>
 
-<div class="filter-bar">
-  <div class="filter-bar-left">
-    <div class="search-input-wrap">
-      <span class="search-icon" [innerHTML]="searchIcon"></span>
-      <input
-        type="text"
-        class="search-input"
-        [placeholder]="'dashboard.search-placeholder' | translate"
-        [(ngModel)]="searchQuery"
-        (input)="applyFilters()"
-      />
-    </div>
-  </div>
-  <div class="filter-bar-right">
-    <select class="filter-select">
-      <option value="20">
-        {{ "dashboard.filter.pagination-20" | translate }}
-      </option>
-      <option value="50">
-        {{ "dashboard.filter.pagination-50" | translate }}
-      </option>
-      <option value="100">
-        {{ "dashboard.filter.pagination-100" | translate }}
-      </option>
-    </select>
-  </div>
+<div class="view-toggle" role="tablist">
+  <button
+    type="button"
+    role="tab"
+    class="view-toggle-btn"
+    [class.active]="viewMode === ViewMode.Gacha"
+    [attr.aria-selected]="viewMode === ViewMode.Gacha"
+    (click)="setViewMode(ViewMode.Gacha)"
+  >
+    {{ "dashboard.view-toggle.gacha" | translate }}
+  </button>
+  <button
+    type="button"
+    role="tab"
+    class="view-toggle-btn"
+    [class.active]="viewMode === ViewMode.Card"
+    [attr.aria-selected]="viewMode === ViewMode.Card"
+    (click)="setViewMode(ViewMode.Card)"
+  >
+    {{ "dashboard.view-toggle.card" | translate }}
+  </button>
 </div>
 
-<div class="table-card">
-  <div class="table-scroll">
-    <table>
-      <thead>
-        <tr>
-          <th>{{ "dashboard.table.name" | translate }}</th>
-          <th>{{ "dashboard.table.consumption-type" | translate }}</th>
-          <th>{{ "dashboard.table.cost" | translate }}</th>
-          <th>{{ "dashboard.table.cards" | translate }}</th>
-          <th>{{ "dashboard.table.is-public" | translate }}</th>
-          <th>{{ "dashboard.table.publish-start" | translate }}</th>
-          <th>{{ "dashboard.table.publish-end" | translate }}</th>
-          <th style="width: 50px"></th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr
-          *ngFor="let gacha of getDisplayedGachas()"
-          class="table-row-clickable"
-          (click)="openCardRegistration(gacha)"
-        >
-          <td
-            [matTooltip]="
-              'dashboard.card-registration' | translate: { name: gacha.name }
-            "
-            matTooltipPosition="above"
-          >
-            {{ gacha.name }}
-          </td>
-          <td>{{ gacha.consumptionType }}</td>
-          <td>{{ gacha.cost }}</td>
-          <td>{{ gacha.cards }}枚</td>
-          <td>
-            <span
-              class="badge"
-              [ngClass]="gacha.isPublic ? 'badge-active' : 'badge-inactive'"
-            >
-              <span class="badge-dot"></span>
-              {{ gacha.isPublic ? "公開中" : "非公開" }}
-            </span>
-          </td>
-          <td style="color: #718096; font-size: 13px">
-            {{ gacha.publishStart }}
-          </td>
-          <td style="color: #718096; font-size: 13px">
-            {{ gacha.publishEnd || "-" }}
-          </td>
-          <td
-            style="width: 50px; text-align: center"
-            (click)="$event.stopPropagation()"
-          >
-            <app-action-menu
-              (edit)="editGacha(gacha)"
-              (delete)="deleteGacha(gacha)"
-            ></app-action-menu>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
+<app-gacha-table
+  *ngIf="viewMode === ViewMode.Gacha"
+  [gachas]="gachas"
+  (openCardRegistration)="openCardRegistration($event)"
+  (gachasUpdated)="onGachasUpdated()"
+></app-gacha-table>
 
-  <div class="pagination">
-    <div class="pagination-info">
-      全 {{ filteredGachas.length }}件中
-      {{ (currentPage - 1) * itemsPerPage + 1 }}〜{{
-        Math.min(currentPage * itemsPerPage, filteredGachas.length)
-      }}件を表示
-    </div>
-    <div class="pagination-btns">
-      <button
-        class="page-btn"
-        (click)="previousPage()"
-        [disabled]="currentPage === 1"
-      >
-        <span class="page-btn-icon" [innerHTML]="chevronLeftIcon"></span>
-      </button>
-      <button
-        *ngFor="let page of getPageNumbers()"
-        class="page-btn"
-        [class.active]="page === currentPage"
-        [disabled]="typeof page === 'string'"
-        (click)="typeof page === 'number' && goToPage(page)"
-      >
-        {{ page }}
-      </button>
-      <button
-        class="page-btn"
-        (click)="nextPage()"
-        [disabled]="currentPage === getTotalPages()"
-      >
-        <span class="page-btn-icon" [innerHTML]="chevronRightIcon"></span>
-      </button>
-    </div>
-  </div>
-</div>
+<app-card-table
+  *ngIf="viewMode === ViewMode.Card"
+  [cards]="cards"
+  (cardsUpdated)="onCardsUpdated()"
+></app-card-table>

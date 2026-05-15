@@ -90,8 +90,71 @@ async function getByGachaId(gachaId: number) {
   return cards.map(toPlain);
 }
 
+/**
+ * Update an existing card. Images are optional — kept if not provided.
+ * @param {number} id - Card id to update
+ * @param {object} payload - Card attributes with optional image files
+ * @returns {Promise<any>} - Updated card object
+ */
+async function update(
+  id: number,
+  payload: {
+    name: string;
+    cardType: string;
+    exchangeType: string;
+    exchangePoints?: number | null;
+    imageFrontFile?: any;
+    imageBackFile?: any;
+  },
+) {
+  const card = await db.Card.findByPk(id);
+  if (!card) {
+    throw new Error(messages.errors.CARD_NOT_FOUND);
+  }
+
+  let imageFrontBase64 = card.imageFront;
+  if (payload.imageFrontFile) {
+    imageFrontBase64 = `data:${payload.imageFrontFile.mimetype};base64,${payload.imageFrontFile.buffer.toString("base64")}`;
+  }
+
+  let imageBackBase64 = card.imageBack;
+  if (payload.imageBackFile) {
+    imageBackBase64 = `data:${payload.imageBackFile.mimetype};base64,${payload.imageBackFile.buffer.toString("base64")}`;
+  }
+
+  await card.update({
+    name: payload.name,
+    cardType: payload.cardType,
+    exchangeType: payload.exchangeType,
+    exchangePoints:
+      payload.exchangeType === "BOTH" ? (payload.exchangePoints ?? null) : null,
+    imageFront: imageFrontBase64,
+    imageBack: imageBackBase64,
+  });
+
+  const plainCard = toPlain(card);
+  gachaRuntime.updateCardInCache(plainCard.gachaId, plainCard);
+  return plainCard;
+}
+
+/**
+ * Delete an existing card by id
+ * @param {number} id - Card id to delete
+ */
+async function deleteById(id: number) {
+  const card = await db.Card.findByPk(id);
+  if (!card) {
+    throw new Error(messages.errors.CARD_NOT_FOUND);
+  }
+  const gachaId = card.gachaId;
+  await card.destroy();
+  gachaRuntime.removeCardFromCache(gachaId, id);
+}
+
 module.exports = {
   init,
   create,
   getByGachaId,
+  update,
+  deleteById,
 };

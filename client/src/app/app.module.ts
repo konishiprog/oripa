@@ -25,8 +25,11 @@ import { CreateCardComponent } from './components/createCard/createCard.componen
 import { AdminAccountListComponent } from './components/adminAccountList/adminAccountList.component';
 import { AdminPanelComponent } from './components/adminPanel/adminPanel.component';
 import { ActionMenuComponent } from './components/common/actionMenu/actionMenu.component';
+import { PaginationFilterComponent } from './components/common/paginationFilter/paginationFilter.component';
 import { LoginComponent } from './components/login/login.component';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
+import { GachaTableComponent } from './components/gachaTable/gachaTable.component';
+import { CardTableComponent } from './components/cardTable/cardTable.component';
 import { SidebarComponent } from './components/sidebar/sidebar.component';
 
 @NgModule({
@@ -38,8 +41,11 @@ import { SidebarComponent } from './components/sidebar/sidebar.component';
     AdminAccountListComponent,
     AdminPanelComponent,
     ActionMenuComponent,
+    PaginationFilterComponent,
     LoginComponent,
     DashboardComponent,
+    GachaTableComponent,
+    CardTableComponent,
     SidebarComponent,
   ],
   imports: [

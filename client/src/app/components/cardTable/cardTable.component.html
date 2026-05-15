@@ -1,0 +1,85 @@
+<div class="filter-bar">
+  <div class="filter-bar-left">
+    <div class="search-input-wrap">
+      <span class="search-icon" [innerHTML]="searchIcon"></span>
+      <input
+        type="text"
+        class="search-input"
+        [placeholder]="'dashboard.search-placeholder-card' | translate"
+        [(ngModel)]="searchQuery"
+        (input)="applyFilters()"
+      />
+    </div>
+  </div>
+  <div class="filter-bar-right">
+    <app-pagination-filter
+      [itemsPerPage]="itemsPerPage"
+      (itemsPerPageChange)="onItemsPerPageChange($event)"
+    ></app-pagination-filter>
+  </div>
+</div>
+
+<div class="table-card">
+  <div class="table-scroll">
+    <table>
+      <thead>
+        <tr>
+          <th *ngFor="let header of tableHeaders">
+            {{ header.labelKey | translate }}
+          </th>
+          <th class="table-header-action"></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let card of getDisplayedCards()">
+          <ng-container *ngFor="let cell of tableCells">
+            <td *ngIf="cell.type === 'text'">
+              {{ getTextCellValue(cell, card) }}
+            </td>
+            <td *ngIf="cell.type === 'method'">
+              {{ getMethodCellValue(cell, card) }}
+            </td>
+          </ng-container>
+
+          <td class="table-action-cell">
+            <app-action-menu
+              (edit)="editCard(card)"
+              (delete)="deleteCard(card)"
+            ></app-action-menu>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="pagination">
+    <div class="pagination-info">
+      {{ getPaginationInfo() }}
+    </div>
+    <div class="pagination-btns">
+      <button
+        class="page-btn"
+        (click)="previousPage()"
+        [disabled]="currentPage === 1"
+      >
+        <span class="page-btn-icon" [innerHTML]="chevronLeftIcon"></span>
+      </button>
+      <button
+        *ngFor="let page of getPageNumbers()"
+        class="page-btn"
+        [class.active]="page === currentPage"
+        [disabled]="typeof page === 'string'"
+        (click)="typeof page === 'number' && goToPage(page)"
+      >
+        {{ page }}
+      </button>
+      <button
+        class="page-btn"
+        (click)="nextPage()"
+        [disabled]="currentPage === getTotalPages()"
+      >
+        <span class="page-btn-icon" [innerHTML]="chevronRightIcon"></span>
+      </button>
+    </div>
+  </div>
+</div>

@@ -157,6 +157,35 @@ function addCardToCache(gachaId: number, card: any) {
   gachaCache.set(gachaId, cached);
 }
 
+/**
+ * Replace an existing card inside the gacha cache so subsequent reads
+ * return the updated card values without reloading from the database.
+ * @param {number} gachaId - Target gacha id
+ * @param {*} card - Plain card object with updated values
+ */
+function updateCardInCache(gachaId: number, card: any) {
+  const cached = gachaCache.get(gachaId);
+  if (!cached) return;
+  cached.cards = (cached.cards ?? []).map((cardInCache: any) =>
+    cardInCache.id === card.id ? card : cardInCache,
+  );
+  gachaCache.set(gachaId, cached);
+}
+
+/**
+ * Remove a card from the gacha cache so cardsCount stays current
+ * @param {number} gachaId - Target gacha id
+ * @param {number} cardId - Card id to remove
+ */
+function removeCardFromCache(gachaId: number, cardId: number) {
+  const cached = gachaCache.get(gachaId);
+  if (!cached) return;
+  cached.cards = (cached.cards ?? []).filter(
+    (cardInCache: any) => cardInCache.id !== cardId,
+  );
+  gachaCache.set(gachaId, cached);
+}
+
 module.exports = {
   init,
   create,
@@ -164,4 +193,6 @@ module.exports = {
   update,
   deleteById,
   addCardToCache,
+  updateCardInCache,
+  removeCardFromCache,
 };
