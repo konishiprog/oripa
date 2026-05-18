@@ -15,6 +15,15 @@
     </div>
   </div>
   <div class="filter-bar-right">
+    <button
+      type="button"
+      class="filter-btn"
+      [class.has-active-filter]="isFilterActive()"
+      (click)="openFilterDialog()"
+    >
+      <span class="filter-btn-icon" [innerHTML]="filterIcon"></span>
+      {{ "dashboard.filter-button" | translate }}
+    </button>
     <app-pagination-filter
       [itemsPerPage]="itemsPerPage"
       (itemsPerPageChange)="onItemsPerPageChange($event)"

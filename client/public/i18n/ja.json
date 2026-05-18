@@ -36,6 +36,7 @@
 
     "search-placeholder": "ボックス名",
     "search-placeholder-card": "カード名",
+    "filter-button": "絞り込み",
     "view-toggle": {
       "gacha": "ガチャ一覧",
       "card": "カード一覧"
@@ -105,6 +106,28 @@
     "error-required": "全ての項目を入力してください",
     "error-invalid-image": "画像ファイルを選択してください",
     "error-exchange-points": "返還ポイント数は1以上の整数を入力してください"
+  },
+
+  "filter-dialog": {
+    "title": "絞り込み",
+    "publish-period": "公開日付（期間）",
+    "cost-range": "値段の範囲",
+    "cost-min": "最小",
+    "cost-max": "最大",
+    "public-status": "公開状況",
+    "public-status-all": "全て",
+    "public-status-public": "公開",
+    "public-status-private": "非公開",
+    "card-count": "カード枚数",
+    "card-count-all": "全て",
+    "card-count-0": "0枚",
+    "card-count-1-10": "1〜10枚",
+    "card-count-11-50": "11〜50枚",
+    "card-count-51-100": "51〜100枚",
+    "card-count-101+": "101枚以上",
+    "reset": "リセット",
+    "apply": "適用",
+    "close": "閉じる"
   },
 
   "gacha-create": {

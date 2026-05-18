@@ -16,6 +16,12 @@ import {
   CreateGachaComponent,
   GachaFormMode,
 } from '../createGacha/createGacha.component';
+import {
+  GachaFilterDialogComponent,
+  GachaFilterCriteria,
+  DEFAULT_GACHA_FILTER_CRITERIA,
+  isGachaFilterActive,
+} from '../gachaFilterDialog/gachaFilterDialog.component';
 import { GachaService } from '../../service/gacha.service';
 
 export interface Gacha {
@@ -66,7 +72,12 @@ const GACHA_TABLE_CELLS: TableCell[] = [
   { key: 'cards', type: 'method', methodName: 'getCardUnitLabel' },
   { key: 'is-public', type: 'badge' },
   { key: 'publish-start', type: 'date', dataKey: 'publishStart' },
-  { key: 'publish-end', type: 'date', dataKey: 'publishEnd', hasSpecialDisplay: true },
+  {
+    key: 'publish-end',
+    type: 'date',
+    dataKey: 'publishEnd',
+    hasSpecialDisplay: true,
+  },
 ];
 
 @Component({
@@ -90,7 +101,9 @@ export class GachaTableComponent implements OnInit, OnChanges {
   searchIcon: SafeHtml = '';
   chevronLeftIcon: SafeHtml = '';
   chevronRightIcon: SafeHtml = '';
+  filterIcon: SafeHtml = '';
   isComposing: boolean = false;
+  filterCriteria: GachaFilterCriteria = { ...DEFAULT_GACHA_FILTER_CRITERIA };
 
   constructor(
     private http: HttpClient,
@@ -134,10 +147,94 @@ export class GachaTableComponent implements OnInit, OnChanges {
 
   applyFilters(): void {
     const query = this.searchQuery.trim().toLowerCase();
-    this.filteredGachas = query
-      ? this.gachas.filter((gacha) => gacha.name.toLowerCase().includes(query))
-      : [...this.gachas];
+    this.filteredGachas = this.gachas.filter((gacha) => {
+      if (query && !gacha.name.toLowerCase().includes(query)) {
+        return false;
+      }
+      return this.matchesFilterCriteria(gacha);
+    });
     this.currentPage = 1;
+  }
+
+  openFilterDialog(): void {
+    const dialogRef = this.dialog.open(GachaFilterDialogComponent, {
+      width: '420px',
+      data: { criteria: this.filterCriteria },
+    });
+
+    dialogRef
+      .afterClosed()
+      .subscribe((result: GachaFilterCriteria | undefined) => {
+        if (result) {
+          this.filterCriteria = result;
+          this.applyFilters();
+          this.cdr.markForCheck();
+        }
+      });
+  }
+
+  isFilterActive(): boolean {
+    return isGachaFilterActive(this.filterCriteria);
+  }
+
+  private matchesFilterCriteria(gacha: Gacha): boolean {
+    return (
+      this.matchesPublishDateRange(gacha) &&
+      this.matchesCostRange(gacha) &&
+      this.matchesPublicStatus(gacha) &&
+      this.matchesCardCountPreset(
+        gacha.cards,
+        this.filterCriteria.cardCountPreset,
+      )
+    );
+  }
+
+  private matchesPublishDateRange(gacha: Gacha): boolean {
+    const startDate = this.extractDatePart(gacha.publishStart);
+    const { publishStartFrom, publishStartTo } = this.filterCriteria;
+    return (
+      (!publishStartFrom || startDate >= publishStartFrom) &&
+      (!publishStartTo || startDate <= publishStartTo)
+    );
+  }
+
+  private matchesCostRange(gacha: Gacha): boolean {
+    const { costMin, costMax } = this.filterCriteria;
+    return (
+      (costMin === null || gacha.cost >= costMin) &&
+      (costMax === null || gacha.cost <= costMax)
+    );
+  }
+
+  private matchesPublicStatus(gacha: Gacha): boolean {
+    const { publicStatus } = this.filterCriteria;
+    if (publicStatus === 'all') return true;
+    return publicStatus === 'public' ? gacha.isPublic : !gacha.isPublic;
+  }
+
+  private matchesCardCountPreset(
+    count: number,
+    preset: GachaFilterCriteria['cardCountPreset'],
+  ): boolean {
+    switch (preset) {
+      case 'all':
+        return true;
+      case '0':
+        return count === 0;
+      case '1-10':
+        return count >= 1 && count <= 10;
+      case '11-50':
+        return count >= 11 && count <= 50;
+      case '51-100':
+        return count >= 51 && count <= 100;
+      case '101+':
+        return count >= 101;
+    }
+  }
+
+  private extractDatePart(value: string | null | undefined): string {
+    if (!value) return '';
+    return value.includes('T') ? value.split('T')[0] : value;
   }
 
   getDisplayedGachas(): Gacha[] {
@@ -204,16 +301,22 @@ export class GachaTableComponent implements OnInit, OnChanges {
 
   getBadgeLabel(isPublic: boolean): string {
     return this.translateService.instant(
-      isPublic ? 'dashboard.gacha.badge-active' : 'dashboard.gacha.badge-inactive',
+      isPublic
+        ? 'dashboard.gacha.badge-active'
+        : 'dashboard.gacha.badge-inactive',
     );
   }
 
   getCardUnitLabel(count: number): string {
-    return this.translateService.instant('dashboard.gacha.unit-cards', { count });
+    return this.translateService.instant('dashboard.gacha.unit-cards', {
+      count,
+    });
   }
 
   getPublishEndDisplay(publishEnd: string | null): string {
-    return publishEnd || this.translateService.instant('dashboard.gacha.no-end-date');
+    return (
+      publishEnd || this.translateService.instant('dashboard.gacha.no-end-date')
+    );
   }
 
   getTextCellValue(cell: TableCell, gacha: Gacha): any {
@@ -304,6 +407,7 @@ export class GachaTableComponent implements OnInit, OnChanges {
       'assets/icons/chevron-right.svg',
       (svg) => (this.chevronRightIcon = svg),
     );
+    this.loadIcon('assets/icons/filter.svg', (svg) => (this.filterIcon = svg));
   }
 
   private loadIcon(path: string, assign: (svg: SafeHtml) => void): void {
