@@ -1,0 +1,96 @@
+<div class="container">
+  <div class="form-wrapper">
+    <h1>{{ "user-signup.title" | translate }}</h1>
+
+    <div class="success-message" *ngIf="successMessage">
+      {{ successMessage }}
+    </div>
+
+    <div class="error-message" *ngIf="errorMessage">
+      {{ errorMessage }}
+    </div>
+
+    <form (ngSubmit)="onSubmit()">
+      <div class="form-group">
+        <label for="email">{{ "user-signup.email" | translate }}</label>
+        <input
+          id="email"
+          type="email"
+          [(ngModel)]="email"
+          name="email"
+          required
+          [disabled]="isLoading"
+        />
+      </div>
+
+      <div class="form-group password-group">
+        <label for="password">{{ "user-signup.password" | translate }}</label>
+        <div class="password-input-wrapper">
+          <input
+            id="password"
+            [type]="passwordVisible ? 'text' : 'password'"
+            [(ngModel)]="password"
+            name="password"
+            required
+            [disabled]="isLoading"
+          />
+          <mat-icon
+            class="password-icon"
+            [svgIcon]="passwordVisible ? 'visible' : 'invisible'"
+            (click)="togglePasswordVisibility()"
+          ></mat-icon>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="name">{{ "user-signup.name" | translate }}</label>
+        <input
+          id="name"
+          type="text"
+          [(ngModel)]="name"
+          name="name"
+          required
+          [disabled]="isLoading"
+        />
+      </div>
+
+      <div class="form-group">
+        <label for="address">{{ "user-signup.address" | translate }}</label>
+        <input
+          id="address"
+          type="text"
+          [(ngModel)]="address"
+          name="address"
+          required
+          [disabled]="isLoading"
+        />
+      </div>
+
+      <div class="form-group">
+        <label for="phone">{{ "user-signup.phone" | translate }}</label>
+        <input
+          id="phone"
+          type="tel"
+          inputmode="numeric"
+          [(ngModel)]="phone"
+          name="phone"
+          required
+          [disabled]="isLoading"
+        />
+      </div>
+
+      <button type="submit" [disabled]="isLoading" class="submit-btn">
+        {{ "user-signup.submit" | translate }}
+      </button>
+
+      <button
+        type="button"
+        class="back-btn"
+        (click)="goBack()"
+        [disabled]="isLoading"
+      >
+        {{ "user-signup.back" | translate }}
+      </button>
+    </form>
+  </div>
+</div>

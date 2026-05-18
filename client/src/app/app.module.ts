@@ -31,6 +31,10 @@ import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { GachaTableComponent } from './components/gachaTable/gachaTable.component';
 import { CardTableComponent } from './components/cardTable/cardTable.component';
 import { SidebarComponent } from './components/sidebar/sidebar.component';
+import { UserGachaPageComponent } from './components/userGachaPage/userGachaPage.component';
+import { UserSignupComponent } from './components/userSignup/userSignup.component';
+import { UserLoginDialogComponent } from './components/userLoginDialog/userLoginDialog.component';
+import { AppLogoComponent } from './components/common/appLogo/appLogo.component';
 
 @NgModule({
   declarations: [
@@ -47,6 +51,10 @@ import { SidebarComponent } from './components/sidebar/sidebar.component';
     GachaTableComponent,
     CardTableComponent,
     SidebarComponent,
+    UserGachaPageComponent,
+    UserSignupComponent,
+    UserLoginDialogComponent,
+    AppLogoComponent,
   ],
   imports: [
     BrowserModule,

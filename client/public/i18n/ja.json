@@ -12,7 +12,6 @@
   },
 
   "sidebar": {
-    "title": "net-oripa",
     "dashboard": "ダッシュボード",
     "user-management": "ユーザー管理",
     "main": "メイン",
@@ -134,6 +133,53 @@
     "error-name-exists": "この名前のガチャは既に存在しています"
   },
 
+  "user-gacha": {
+    "login": "ログイン",
+    "signup": "アカウント作成",
+    "admin-page": "管理者専用ページ",
+    "my-page": "マイページ",
+    "logout": "ログアウト",
+    "tab-all": "オリパ",
+    "tab-new": "新着",
+    "tab-popular": "人気",
+    "tab-my-page": "マイページ",
+    "section-title": "オリパ一覧",
+    "loading": "読み込み中...",
+    "empty-state": "現在公開中のオリパはありません"
+  },
+
+  "user-login": {
+    "title": "ログイン",
+    "identifier": "メールアドレスまたは電話番号",
+    "identifier-placeholder": "example@example.com / 09012345678",
+    "password": "パスワード",
+    "submit": "ログイン",
+    "close": "×",
+    "success": "ログインが完了しました",
+    "error": "ログインに失敗しました",
+    "error-required": "全ての項目を入力してください",
+    "error-invalid-credentials": "メールアドレス/電話番号またはパスワードが正しくありません"
+  },
+
+  "user-signup": {
+    "title": "アカウント作成",
+    "email": "メールアドレス",
+    "password": "パスワード",
+    "name": "お名前",
+    "address": "住所",
+    "phone": "電話番号",
+    "submit": "登録する",
+    "back": "戻る",
+    "success": "アカウントを作成しました",
+    "error": "登録に失敗しました",
+    "error-required": "全ての項目を入力してください",
+    "error-email": "メールアドレスに@を含める必要があります",
+    "error-password": "パスワードは5文字以上にしてください",
+    "error-phone": "電話番号は数字のみで入力してください",
+    "error-email-exists": "このメールアドレスは既に登録されています",
+    "error-phone-exists": "この電話番号は既に登録されています"
+  },
+
   "admin-create": {
     "title": "管理者登録",
     "title-edit": "管理者編集",
@@ -172,6 +218,7 @@
   },
 
   "common": {
+    "app-name": "net-oripa",
     "console": "Console",
     "actions": {
       "edit": "編集",
