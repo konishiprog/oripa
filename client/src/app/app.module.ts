@@ -29,6 +29,7 @@ import { PaginationFilterComponent } from './components/common/paginationFilter/
 import { LoginComponent } from './components/login/login.component';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { GachaTableComponent } from './components/gachaTable/gachaTable.component';
+import { GachaFilterDialogComponent } from './components/gachaFilterDialog/gachaFilterDialog.component';
 import { CardTableComponent } from './components/cardTable/cardTable.component';
 import { SidebarComponent } from './components/sidebar/sidebar.component';
 import { UserGachaPageComponent } from './components/userGachaPage/userGachaPage.component';
@@ -49,6 +50,7 @@ import { AppLogoComponent } from './components/common/appLogo/appLogo.component'
     LoginComponent,
     DashboardComponent,
     GachaTableComponent,
+    GachaFilterDialogComponent,
     CardTableComponent,
     SidebarComponent,
     UserGachaPageComponent,

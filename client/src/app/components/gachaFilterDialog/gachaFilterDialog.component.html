@@ -1,0 +1,95 @@
+<div class="filter-dialog">
+  <h2 class="filter-dialog-title">
+    {{ "filter-dialog.title" | translate }}
+  </h2>
+
+  <div class="filter-section">
+    <label class="filter-label">
+      {{ "filter-dialog.publish-period" | translate }}
+    </label>
+    <div class="range-row">
+      <input
+        type="date"
+        class="range-input"
+        [(ngModel)]="criteria.publishStartFrom"
+      />
+      <span class="range-separator">〜</span>
+      <input
+        type="date"
+        class="range-input"
+        [(ngModel)]="criteria.publishStartTo"
+      />
+    </div>
+  </div>
+
+  <div class="filter-section">
+    <label class="filter-label">
+      {{ "filter-dialog.cost-range" | translate }}
+    </label>
+    <div class="range-row">
+      <input
+        type="number"
+        min="0"
+        class="range-input"
+        [(ngModel)]="criteria.costMin"
+        [placeholder]="'filter-dialog.cost-min' | translate"
+      />
+      <span class="range-separator">〜</span>
+      <input
+        type="number"
+        min="0"
+        class="range-input"
+        [(ngModel)]="criteria.costMax"
+        [placeholder]="'filter-dialog.cost-max' | translate"
+      />
+    </div>
+  </div>
+
+  <div class="filter-section">
+    <label class="filter-label">
+      {{ "filter-dialog.public-status" | translate }}
+    </label>
+    <div class="option-row">
+      <button
+        *ngFor="let status of publicStatusOptions"
+        type="button"
+        class="option-btn"
+        [class.active]="criteria.publicStatus === status"
+        (click)="setPublicStatus(status)"
+      >
+        {{ getPublicStatusTranslationKey(status) | translate }}
+      </button>
+    </div>
+  </div>
+
+  <div class="filter-section">
+    <label class="filter-label">
+      {{ "filter-dialog.card-count" | translate }}
+    </label>
+    <div class="option-row option-row-wrap">
+      <button
+        *ngFor="let preset of cardCountOptions"
+        type="button"
+        class="option-btn"
+        [class.active]="criteria.cardCountPreset === preset"
+        (click)="setCardCountPreset(preset)"
+      >
+        {{ getCardCountTranslationKey(preset) | translate }}
+      </button>
+    </div>
+  </div>
+
+  <div class="filter-actions">
+    <button type="button" class="reset-btn" (click)="onReset()">
+      {{ "filter-dialog.reset" | translate }}
+    </button>
+    <div class="filter-actions-right">
+      <button type="button" class="close-btn" (click)="onClose()">
+        {{ "filter-dialog.close" | translate }}
+      </button>
+      <button type="button" class="apply-btn" (click)="onApply()">
+        {{ "filter-dialog.apply" | translate }}
+      </button>
+    </div>
+  </div>
+</div>

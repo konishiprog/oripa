@@ -1,0 +1,152 @@
+.filter-dialog {
+  padding: 24px;
+  background-color: #ffffff;
+  min-width: 360px;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+.filter-dialog-title {
+  font-size: 18px;
+  font-weight: 700;
+  color: #1a202c;
+  margin: 0 0 20px 0;
+}
+
+.filter-section {
+  margin-bottom: 18px;
+}
+
+.filter-label {
+  display: block;
+  font-size: 13px;
+  font-weight: 600;
+  color: #4a5568;
+  margin-bottom: 8px;
+}
+
+.range-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.range-input {
+  flex: 1;
+  min-width: 0;
+  padding: 8px 10px;
+  background-color: #f7f8fa;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  font-size: 13.5px;
+  color: #1a202c;
+  outline: none;
+  transition: border-color 0.15s;
+  box-sizing: border-box;
+}
+
+.range-input::placeholder {
+  color: #a0aec0;
+}
+
+.range-input:focus {
+  border-color: #805ad5;
+  background-color: #fff;
+}
+
+.range-separator {
+  font-size: 13px;
+  color: #a0aec0;
+}
+
+.option-row {
+  display: flex;
+  gap: 8px;
+}
+
+.option-row-wrap {
+  flex-wrap: wrap;
+}
+
+.option-btn {
+  padding: 7px 14px;
+  background-color: #f7f8fa;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  font-size: 13px;
+  color: #4a5568;
+  cursor: pointer;
+  transition:
+    background-color 0.15s,
+    color 0.15s,
+    border-color 0.15s;
+}
+
+.option-btn:hover:not(.active) {
+  background-color: #edf2f7;
+  color: #1a202c;
+}
+
+.option-btn.active {
+  background: linear-gradient(135deg, #805ad5, #6b46c1);
+  border-color: #6b46c1;
+  color: #ffffff;
+}
+
+.filter-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 24px;
+  padding-top: 16px;
+  border-top: 1px solid #e2e8f0;
+}
+
+.filter-actions-right {
+  display: flex;
+  gap: 8px;
+}
+
+.reset-btn,
+.close-btn,
+.apply-btn {
+  padding: 9px 18px;
+  border-radius: 8px;
+  font-size: 13.5px;
+  font-weight: 500;
+  cursor: pointer;
+  border: none;
+  transition:
+    background-color 0.15s,
+    color 0.15s,
+    opacity 0.15s;
+}
+
+.reset-btn {
+  background-color: transparent;
+  color: #718096;
+  text-decoration: underline;
+}
+
+.reset-btn:hover {
+  color: #4a5568;
+}
+
+.close-btn {
+  background-color: #edf2f7;
+  color: #4a5568;
+}
+
+.close-btn:hover {
+  background-color: #e2e8f0;
+}
+
+.apply-btn {
+  background: linear-gradient(135deg, #805ad5, #6b46c1);
+  color: #ffffff;
+}
+
+.apply-btn:hover {
+  opacity: 0.88;
+}
