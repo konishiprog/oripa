@@ -1,0 +1,80 @@
+<div class="app">
+  <header class="app-header">
+    <app-logo class="header-logo"></app-logo>
+    <div class="header-right">
+      <ng-container *ngIf="!isLoggedIn">
+        <button
+          class="header-btn header-btn-outline"
+          type="button"
+          (click)="openLoginDialog()"
+        >
+          {{ "user-gacha.login" | translate }}
+        </button>
+        <button class="header-btn header-btn-primary" routerLink="/userSignup">
+          {{ "user-gacha.signup" | translate }}
+        </button>
+        <button class="header-btn header-btn-admin" routerLink="/login">
+          {{ "user-gacha.admin-page" | translate }}
+        </button>
+      </ng-container>
+      <ng-container *ngIf="isLoggedIn">
+        <button
+          class="header-btn header-btn-primary"
+          type="button"
+          (click)="goToMyPage()"
+        >
+          {{ "user-gacha.my-page" | translate }}
+        </button>
+        <button
+          class="header-btn header-btn-outline"
+          type="button"
+          (click)="logout()"
+        >
+          {{ "user-gacha.logout" | translate }}
+        </button>
+      </ng-container>
+    </div>
+  </header>
+
+  <div class="nav-tabs">
+    <div class="nav-tab active">{{ "user-gacha.tab-all" | translate }}</div>
+    <div class="nav-tab">{{ "user-gacha.tab-new" | translate }}</div>
+    <div class="nav-tab">{{ "user-gacha.tab-popular" | translate }}</div>
+  </div>
+
+  <div class="content">
+    <div class="section-header">
+      <div class="section-title">
+        {{ "user-gacha.section-title" | translate }}
+      </div>
+    </div>
+
+    <div *ngIf="isLoading" class="loading-state">
+      {{ "user-gacha.loading" | translate }}
+    </div>
+
+    <div *ngIf="!isLoading && gachas.length === 0" class="empty-state">
+      {{ "user-gacha.empty-state" | translate }}
+    </div>
+
+    <div *ngIf="!isLoading && gachas.length > 0" class="box-grid">
+      <div *ngFor="let gacha of gachas" class="box-card">
+        <div class="box-thumb">
+          <img
+            *ngIf="gacha.headerImage"
+            [src]="gacha.headerImage"
+            [alt]="gacha.name"
+            class="box-image"
+          />
+          <span *ngIf="!gacha.headerImage" class="box-placeholder">🎴</span>
+        </div>
+        <div class="box-info">
+          <div class="box-name">{{ gacha.name }}</div>
+          <div class="box-meta">
+            <span class="box-price">{{ formatPrice(gacha.cost) }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

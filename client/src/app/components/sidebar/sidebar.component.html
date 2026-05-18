@@ -1,9 +1,6 @@
 <!-- Sidebar -->
 <aside class="sidebar">
-  <div class="sidebar-logo">
-    <div class="sidebar-logo-icon" [innerHTML]="logoSvg"></div>
-    <span class="sidebar-logo-text">{{ "sidebar.title" | translate }}</span>
-  </div>
+  <app-logo class="sidebar-logo"></app-logo>
 
   <div class="sidebar-section" *ngFor="let section of menuSections">
     <div class="sidebar-section-label">{{ section.title | translate }}</div>

@@ -1,0 +1,4 @@
+<div [class]="class || 'logo'">
+  <div [class]="(class ? class + '-icon' : 'logo-icon')" [innerHTML]="logoSvg"></div>
+  <span [class]="(class ? class + '-text' : 'logo-text')">{{ "common.app-name" | translate }}</span>
+</div>

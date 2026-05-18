@@ -14,7 +14,6 @@ import { SIDEBAR_MENU, MenuSection, MenuItem } from '../../config/sidebar-menu.c
   styleUrls: ['./sidebar.component.css'],
 })
 export class SidebarComponent implements OnInit {
-  logoSvg: SafeHtml = '';
   adminEmail: string = '';
   menuSections: MenuSection[] = SIDEBAR_MENU;
   iconCache: Map<string, SafeHtml> = new Map();
@@ -32,7 +31,6 @@ export class SidebarComponent implements OnInit {
   async ngOnInit(): Promise<void> {
     this.translateService.setDefaultLang('ja');
     this.translateService.use('ja');
-    this.loadLogo();
     this.loadIcons();
     await this.loadAdminEmail();
     this.checkAdminAccountRoute();
@@ -54,17 +52,6 @@ export class SidebarComponent implements OnInit {
     } catch (error) {
       console.error('Failed to load admin email:', error);
     }
-  }
-
-  private loadLogo(): void {
-    this.http.get('assets/icons/logo.svg', { responseType: 'text' }).subscribe({
-      next: (svg) => {
-        this.logoSvg = this.sanitizer.bypassSecurityTrustHtml(svg);
-      },
-      error: (error) => {
-        console.error('Failed to load logo:', error);
-      }
-    });
   }
 
   private loadIcons(): void {
