@@ -4,6 +4,7 @@ import express, { Request, Response } from "express";
 import cors from "cors";
 import path from "path";
 import db from "../models";
+import { runMigrations } from "./migration";
 
 const admin = require("./admin");
 const adminApi = require("../api/admin");
@@ -23,6 +24,9 @@ const PORT = 3000;
  */
 async function init(_db?: any) {
   const database = _db || db;
+
+  // Run migrations
+  await runMigrations(database);
 
   // Initialize Express app
   app = express();

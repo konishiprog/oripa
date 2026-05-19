@@ -15,7 +15,9 @@
     "USER_FIELDS_REQUIRED": "Email, password, name, address and phone are required",
     "PHONE_INVALID_FORMAT": "Phone number must contain only digits",
     "PHONE_ALREADY_EXISTS": "Phone number already registered",
-    "IDENTIFIER_PASSWORD_REQUIRED": "Email/phone and password are required"
+    "IDENTIFIER_PASSWORD_REQUIRED": "Email/phone and password are required",
+    "MIGRATION_PATH_NOT_FOUND": "Unable to resolve migration path for: {name}",
+    "MIGRATION_FAILED": "Migration failed"
   },
   "success": {
     "ADMIN_CREATED": "Admin created successfully",
@@ -33,6 +35,14 @@
     "CARD_DELETED": "Card deleted successfully",
     "CARDS_RETRIEVED": "Cards retrieved successfully",
     "USER_CREATED": "User created successfully",
-    "USERS_RETRIEVED": "Users retrieved successfully"
+    "USERS_RETRIEVED": "Users retrieved successfully",
+    "MIGRATIONS_COMPLETED": "Migrations completed successfully"
+  },
+  "migration": {
+    "RUNNING": "Running {count} migration(s)...",
+    "MIGRATION_ITEM": "   - {name}",
+    "ICON_RUNNING": "📋",
+    "ICON_SUCCESS": "✅",
+    "ICON_ERROR": "❌"
   }
 }
