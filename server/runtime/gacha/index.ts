@@ -3,6 +3,7 @@
 export {};
 
 const messages = require("../../constants/messages.json");
+const userRuntime = require("../user");
 
 let db: any;
 let gachaCache: Map<number, any> = new Map();
@@ -72,14 +73,104 @@ async function create(payload: {
 }
 
 /**
- * Get all gachas from cache with cards count
+ * Get all gachas from cache with cards count and remaining count
  * @returns {Promise<any[]>} - Array of gacha objects
  */
 async function getAll() {
-  return Array.from(gachaCache.values()).map((gacha: any) => ({
+  return Array.from(gachaCache.values()).map((gacha: any) => {
+    const cards = gacha.cards ?? [];
+    return {
+      ...gacha,
+      cardsCount: cards.length,
+      remainingCount: cards.filter((card: any) => !card.isDrawn).length,
+    };
+  });
+}
+
+/**
+ * Get a single gacha by id with cards and remaining count
+ * @param {number} id - Gacha id
+ * @returns {any | null} - Gacha object or null
+ */
+function getById(id: number) {
+  const gacha = gachaCache.get(id);
+  if (!gacha) return null;
+  const cards = gacha.cards ?? [];
+  const remainingCount = cards.filter((card: any) => !card.isDrawn).length;
+  return {
     ...gacha,
-    cardsCount: gacha.cards?.length ?? 0,
-  }));
+    cardsCount: cards.length,
+    remainingCount,
+  };
+}
+
+/**
+ * Draw cards from a gacha for a user.
+ * - Picks min(drawCount, remaining) random not-yet-drawn cards.
+ * - Validates user coin balance against cost * actualDrawCount.
+ * - Marks picked cards as drawn and deducts coin.
+ * @param {object} payload - { gachaId, userId, drawCount }
+ * @returns {Promise<{drawnCards: any[], remainingCount: number, userCoin: number, actualDrawCount: number}>}
+ */
+async function draw(payload: {
+  gachaId: number;
+  userId: number;
+  drawCount: number;
+}) {
+  if (!Number.isInteger(payload.drawCount) || payload.drawCount <= 0) {
+    throw new Error(messages.errors.DRAW_COUNT_INVALID);
+  }
+
+  const user = userRuntime.getById(payload.userId);
+  if (!user) {
+    throw new Error(messages.errors.USER_NOT_FOUND);
+  }
+
+  const gacha = gachaCache.get(payload.gachaId);
+  if (!gacha) {
+    throw new Error(messages.errors.GACHA_NOT_FOUND);
+  }
+
+  const availableCards = (gacha.cards ?? []).filter(
+    (card: any) => !card.isDrawn,
+  );
+  if (availableCards.length === 0) {
+    throw new Error(messages.errors.GACHA_OUT_OF_STOCK);
+  }
+
+  const actualDrawCount = Math.min(payload.drawCount, availableCards.length);
+  const totalCost = gacha.cost * actualDrawCount;
+
+  if (user.coin < totalCost) {
+    throw new Error(messages.errors.INSUFFICIENT_COIN);
+  }
+
+  const shuffled = [...availableCards].sort(() => Math.random() - 0.5);
+  const drawnCards = shuffled.slice(0, actualDrawCount);
+  const drawnIds = drawnCards.map((card: any) => card.id);
+
+  await db.Card.update({ isDrawn: true }, { where: { id: drawnIds } });
+
+  gacha.cards = (gacha.cards ?? []).map((card: any) =>
+    drawnIds.includes(card.id) ? { ...card, isDrawn: true } : card,
+  );
+  gachaCache.set(payload.gachaId, gacha);
+
+  const updatedUser = await userRuntime.updateCoin(
+    payload.userId,
+    user.coin - totalCost,
+  );
+
+  const remainingCount = gacha.cards.filter(
+    (card: any) => !card.isDrawn,
+  ).length;
+
+  return {
+    drawnCards: drawnCards.map((card: any) => ({ ...card, isDrawn: true })),
+    remainingCount,
+    userCoin: updatedUser.coin,
+    actualDrawCount,
+  };
 }
 
 /**
@@ -191,8 +282,10 @@ module.exports = {
   init,
   create,
   getAll,
+  getById,
   update,
   deleteById,
+  draw,
   addCardToCache,
   updateCardInCache,
   removeCardFromCache,

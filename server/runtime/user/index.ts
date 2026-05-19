@@ -95,9 +95,37 @@ async function getAll() {
   return Array.from(userCache.values());
 }
 
+/**
+ * Get a user by id from cache
+ * @param {number} id - User id
+ * @returns {any | null} - User object or null
+ */
+function getById(id: number) {
+  return userCache.get(id) || null;
+}
+
+/**
+ * Update a user's coin balance
+ * @param {number} id - User id
+ * @param {number} newCoin - New coin value
+ * @returns {Promise<any>} - Updated user object
+ */
+async function updateCoin(id: number, newCoin: number) {
+  const user = await db.User.findByPk(id);
+  if (!user) {
+    throw new Error(messages.errors.USER_NOT_FOUND);
+  }
+  await user.update({ coin: newCoin });
+  const plainUser = toPlain(user);
+  userCache.set(id, plainUser);
+  return plainUser;
+}
+
 module.exports = {
   init,
   create,
   verifyCredentials,
   getAll,
+  getById,
+  updateCoin,
 };
