@@ -75,6 +75,18 @@ const handleError = (
   if (error.message === messages.errors.GACHA_NOT_FOUND) {
     return { status: 404, message: messages.errors.GACHA_NOT_FOUND };
   }
+  if (error.message === messages.errors.USER_NOT_FOUND) {
+    return { status: 404, message: messages.errors.USER_NOT_FOUND };
+  }
+  if (error.message === messages.errors.GACHA_OUT_OF_STOCK) {
+    return { status: 409, message: messages.errors.GACHA_OUT_OF_STOCK };
+  }
+  if (error.message === messages.errors.INSUFFICIENT_COIN) {
+    return { status: 402, message: messages.errors.INSUFFICIENT_COIN };
+  }
+  if (error.message === messages.errors.DRAW_COUNT_INVALID) {
+    return { status: 400, message: messages.errors.DRAW_COUNT_INVALID };
+  }
   return { status: 500, message: error.message };
 };
 
@@ -174,9 +186,7 @@ module.exports = {
     router.delete("/:id", async (req: Request, res: Response) => {
       const id = Number(req.params.id);
       if (!Number.isInteger(id) || id <= 0) {
-        return res
-          .status(400)
-          .json({ error: messages.errors.GACHA_NOT_FOUND });
+        return res.status(400).json({ error: messages.errors.GACHA_NOT_FOUND });
       }
 
       try {
@@ -203,6 +213,71 @@ module.exports = {
         });
       } catch (error: any) {
         const { status, message } = handleError(error, "Gacha retrieval");
+        return res.status(status).json({ error: message });
+      }
+    });
+
+    /**
+     * Get a single gacha by id with remaining count
+     * GET /api/gacha/:id
+     */
+    router.get("/:id", async (req: Request, res: Response) => {
+      const id = Number(req.params.id);
+      if (!Number.isInteger(id) || id <= 0) {
+        return res.status(400).json({ error: messages.errors.GACHA_NOT_FOUND });
+      }
+
+      try {
+        const gacha = runtime.gacha.getById(id);
+        if (!gacha) {
+          return res
+            .status(404)
+            .json({ error: messages.errors.GACHA_NOT_FOUND });
+        }
+        return res.status(200).json({
+          message: messages.success.GACHAS_RETRIEVED,
+          data: gacha,
+        });
+      } catch (error: any) {
+        const { status, message } = handleError(error, "Gacha retrieval");
+        return res.status(status).json({ error: message });
+      }
+    });
+
+    /**
+     * Draw cards from a gacha for a user
+     * POST /api/gacha/:id/draw
+     */
+    router.post("/:id/draw", async (req: Request, res: Response) => {
+      const gachaId = Number(req.params.id);
+      if (!Number.isInteger(gachaId) || gachaId <= 0) {
+        return res.status(400).json({ error: messages.errors.GACHA_NOT_FOUND });
+      }
+
+      const { userId, drawCount } = req.body;
+      if (
+        !Number.isInteger(Number(userId)) ||
+        Number(userId) <= 0 ||
+        !Number.isInteger(Number(drawCount)) ||
+        Number(drawCount) <= 0
+      ) {
+        return res
+          .status(400)
+          .json({ error: messages.errors.DRAW_COUNT_INVALID });
+      }
+
+      try {
+        const result = await runtime.gacha.draw({
+          gachaId,
+          userId: Number(userId),
+          drawCount: Number(drawCount),
+        });
+        return res.status(200).json({
+          message: messages.success.GACHA_DRAWN,
+          data: result,
+        });
+      } catch (error: any) {
+        const { status, message } = handleError(error, "Gacha draw");
         return res.status(status).json({ error: message });
       }
     });

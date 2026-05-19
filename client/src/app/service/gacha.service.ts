@@ -50,11 +50,9 @@ export class GachaService {
 
     const headers = new HttpHeaders();
     return await lastValueFrom(
-      this.http.post<any>(
-        `${this.apiConfig.domain}/api/gacha`,
-        formData,
-        { headers },
-      ),
+      this.http.post<any>(`${this.apiConfig.domain}/api/gacha`, formData, {
+        headers,
+      }),
     );
   }
 
@@ -77,11 +75,9 @@ export class GachaService {
 
     const headers = new HttpHeaders();
     return await lastValueFrom(
-      this.http.put<any>(
-        `${this.apiConfig.domain}/api/gacha/${id}`,
-        formData,
-        { headers },
-      ),
+      this.http.put<any>(`${this.apiConfig.domain}/api/gacha/${id}`, formData, {
+        headers,
+      }),
     );
   }
 
@@ -92,10 +88,9 @@ export class GachaService {
    */
   async deleteGacha(id: number) {
     return await lastValueFrom(
-      this.http.delete<any>(
-        `${this.apiConfig.domain}/api/gacha/${id}`,
-        { headers: this.apiConfig.headers },
-      ),
+      this.http.delete<any>(`${this.apiConfig.domain}/api/gacha/${id}`, {
+        headers: this.apiConfig.headers,
+      }),
     );
   }
 
@@ -111,5 +106,42 @@ export class GachaService {
       ),
     );
     return response.data || [];
+  }
+
+  /**
+   * Get a single gacha by id (with remaining count)
+   * @param {number} id - Gacha id
+   * @returns {Promise<any>} - Gacha object
+   */
+  async getGachaById(id: number): Promise<any> {
+    const response = await lastValueFrom(
+      this.http.get<{ message: string; data: any }>(
+        `${this.apiConfig.domain}/api/gacha/${id}`,
+        { headers: this.apiConfig.headers },
+      ),
+    );
+    return response.data;
+  }
+
+  /**
+   * Draw cards from a gacha for the given user
+   * @param {number} gachaId - Gacha id
+   * @param {number} userId - User id performing the draw
+   * @param {number} drawCount - Requested draw count (may be capped to remaining)
+   * @returns {Promise<any>} - Draw result with drawn cards, remaining count and updated user coin
+   */
+  async drawGacha(
+    gachaId: number,
+    userId: number,
+    drawCount: number,
+  ): Promise<any> {
+    const response = await lastValueFrom(
+      this.http.post<{ message: string; data: any }>(
+        `${this.apiConfig.domain}/api/gacha/${gachaId}/draw`,
+        { userId, drawCount },
+        { headers: this.apiConfig.headers },
+      ),
+    );
+    return response.data;
   }
 }

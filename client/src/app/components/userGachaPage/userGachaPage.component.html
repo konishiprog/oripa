@@ -37,9 +37,20 @@
   </header>
 
   <div class="nav-tabs">
-    <div class="nav-tab active">{{ "user-gacha.tab-all" | translate }}</div>
-    <div class="nav-tab">{{ "user-gacha.tab-new" | translate }}</div>
-    <div class="nav-tab">{{ "user-gacha.tab-popular" | translate }}</div>
+    <div
+      class="nav-tab"
+      [class.active]="activeTab === 'new'"
+      (click)="selectTab('new')"
+    >
+      {{ "user-gacha.tab-new" | translate }}
+    </div>
+    <div
+      class="nav-tab"
+      [class.active]="activeTab === 'popular'"
+      (click)="selectTab('popular')"
+    >
+      {{ "user-gacha.tab-popular" | translate }}
+    </div>
   </div>
 
   <div class="content">
@@ -49,32 +60,25 @@
       </div>
     </div>
 
-    <div *ngIf="isLoading" class="loading-state">
-      {{ "user-gacha.loading" | translate }}
-    </div>
-
-    <div *ngIf="!isLoading && gachas.length === 0" class="empty-state">
-      {{ "user-gacha.empty-state" | translate }}
-    </div>
-
-    <div *ngIf="!isLoading && gachas.length > 0" class="box-grid">
-      <div *ngFor="let gacha of gachas" class="box-card">
-        <div class="box-thumb">
-          <img
-            *ngIf="gacha.headerImage"
-            [src]="gacha.headerImage"
-            [alt]="gacha.name"
-            class="box-image"
-          />
-          <span *ngIf="!gacha.headerImage" class="box-placeholder">🎴</span>
-        </div>
-        <div class="box-info">
-          <div class="box-name">{{ gacha.name }}</div>
-          <div class="box-meta">
-            <span class="box-price">{{ formatPrice(gacha.cost) }}</span>
-          </div>
-        </div>
+    <ng-container *ngIf="activeTab === 'new'">
+      <div *ngIf="isLoading" class="loading-state">
+        {{ "user-gacha.loading" | translate }}
       </div>
+
+      <div *ngIf="!isLoading && gachas.length === 0" class="empty-state">
+        {{ "user-gacha.empty-state" | translate }}
+      </div>
+
+      <div *ngIf="!isLoading && gachas.length > 0" class="box-grid">
+        <app-gacha-box
+          *ngFor="let gacha of gachas"
+          [gacha]="gacha"
+        ></app-gacha-box>
+      </div>
+    </ng-container>
+
+    <div *ngIf="activeTab === 'popular'" class="empty-state">
+      {{ "user-gacha.popular-coming-soon" | translate }}
     </div>
   </div>
 </div>
