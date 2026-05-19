@@ -16,6 +16,8 @@
     "PHONE_INVALID_FORMAT": "Phone number must contain only digits",
     "PHONE_ALREADY_EXISTS": "Phone number already registered",
     "IDENTIFIER_PASSWORD_REQUIRED": "Email/phone and password are required",
+    "MIGRATION_PATH_NOT_FOUND": "Unable to resolve migration path for: {name}",
+    "MIGRATION_FAILED": "Migration failed"
     "USER_NOT_FOUND": "User not found",
     "DRAW_COUNT_INVALID": "Draw count must be a positive integer",
     "GACHA_OUT_OF_STOCK": "No remaining cards in this gacha",
@@ -38,6 +40,14 @@
     "CARDS_RETRIEVED": "Cards retrieved successfully",
     "USER_CREATED": "User created successfully",
     "USERS_RETRIEVED": "Users retrieved successfully",
+    "MIGRATIONS_COMPLETED": "Migrations completed successfully"
+  },
+  "migration": {
+    "RUNNING": "Running {count} migration(s)...",
+    "MIGRATION_ITEM": "   - {name}",
+    "ICON_RUNNING": "📋",
+    "ICON_SUCCESS": "✅",
+    "ICON_ERROR": "❌"
     "GACHA_DRAWN": "Gacha drawn successfully"
   }
 }
