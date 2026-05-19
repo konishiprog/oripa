@@ -10,10 +10,13 @@ export interface UserGacha {
   name: string;
   headerImage: string;
   cost: number;
+  remainingCount: number;
   isPublic: boolean;
   publishStart: string;
   publishEnd: string | null;
 }
+
+export type GachaTab = 'new' | 'popular';
 
 @Component({
   selector: 'app-user-gacha-page',
@@ -25,6 +28,7 @@ export class UserGachaPageComponent implements OnInit {
   gachas: UserGacha[] = [];
   isLoading: boolean = true;
   isLoggedIn: boolean = false;
+  activeTab: GachaTab = 'new';
 
   constructor(
     private gachaService: GachaService,
@@ -74,10 +78,12 @@ export class UserGachaPageComponent implements OnInit {
           name: gacha.name,
           headerImage: gacha.headerImage,
           cost: gacha.cost,
+          remainingCount: gacha.remainingCount ?? 0,
           isPublic: gacha.isPublic ?? false,
           publishStart: gacha.publishStart,
           publishEnd: gacha.publishEnd,
-        }));
+        }))
+        .sort((gachaA, gachaB) => gachaB.id - gachaA.id);
     } catch (error) {
       console.error('Failed to load gachas:', error);
     } finally {
@@ -86,7 +92,7 @@ export class UserGachaPageComponent implements OnInit {
     }
   }
 
-  formatPrice(cost: number): string {
-    return `¥${cost.toLocaleString()}`;
+  selectTab(tab: GachaTab): void {
+    this.activeTab = tab;
   }
 }

@@ -1,0 +1,51 @@
+<div class="box-card">
+  <div class="box-thumb">
+    <img [src]="gacha.headerImage" [alt]="gacha.name" class="box-image" />
+  </div>
+  <div class="box-info">
+    <div class="box-name">{{ gacha.name }}</div>
+    <div class="box-meta">
+      <span class="box-price">{{ formatPrice(gacha.cost) }}</span>
+      <span class="box-remaining">
+        {{ "gacha-box.remaining" | translate: { count: gacha.remainingCount } }}
+      </span>
+    </div>
+    <div class="box-actions">
+      <button
+        class="draw-btn draw-btn-single"
+        type="button"
+        [disabled]="!isLoggedIn || isDrawing || effectiveDrawCount(1) === 0"
+        (click)="draw(1)"
+      >
+        {{ "gacha-box.draw-single" | translate }}
+      </button>
+      <button
+        class="draw-btn draw-btn-multi"
+        type="button"
+        [disabled]="!isLoggedIn || isDrawing || effectiveDrawCount(10) === 0"
+        (click)="draw(10)"
+      >
+        <ng-container *ngIf="effectiveDrawCount(10) === 10">
+          {{ "gacha-box.draw-ten" | translate }}
+        </ng-container>
+        <ng-container
+          *ngIf="effectiveDrawCount(10) > 0 && effectiveDrawCount(10) < 10"
+        >
+          {{
+            "gacha-box.draw-remaining"
+              | translate: { count: effectiveDrawCount(10) }
+          }}
+        </ng-container>
+        <ng-container *ngIf="effectiveDrawCount(10) === 0">
+          {{ "gacha-box.draw-ten" | translate }}
+        </ng-container>
+      </button>
+    </div>
+    <div *ngIf="!isLoggedIn" class="login-notice">
+      {{ "gacha-box.login-required" | translate }}
+    </div>
+    <div *ngIf="isLoggedIn && gacha.remainingCount === 0" class="out-of-stock">
+      {{ "gacha-box.out-of-stock" | translate }}
+    </div>
+  </div>
+</div>

@@ -36,6 +36,7 @@ import { UserGachaPageComponent } from './components/userGachaPage/userGachaPage
 import { UserSignupComponent } from './components/userSignup/userSignup.component';
 import { UserLoginDialogComponent } from './components/userLoginDialog/userLoginDialog.component';
 import { AppLogoComponent } from './components/common/appLogo/appLogo.component';
+import { GachaBoxComponent } from './components/gachaBox/gachaBox.component';
 
 @NgModule({
   declarations: [
@@ -57,6 +58,7 @@ import { AppLogoComponent } from './components/common/appLogo/appLogo.component'
     UserSignupComponent,
     UserLoginDialogComponent,
     AppLogoComponent,
+    GachaBoxComponent,
   ],
   imports: [
     BrowserModule,

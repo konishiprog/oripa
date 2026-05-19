@@ -162,13 +162,24 @@
     "admin-page": "管理者専用ページ",
     "my-page": "マイページ",
     "logout": "ログアウト",
-    "tab-all": "オリパ",
     "tab-new": "新着",
     "tab-popular": "人気",
     "tab-my-page": "マイページ",
     "section-title": "オリパ一覧",
     "loading": "読み込み中...",
-    "empty-state": "現在公開中のオリパはありません"
+    "empty-state": "現在公開中のオリパはありません",
+    "popular-coming-soon": "人気タブは現在準備中です"
+  },
+
+  "gacha-box": {
+    "remaining": "残り{{count}}枚",
+    "draw-single": "1回引く",
+    "draw-ten": "10回引く",
+    "draw-remaining": "残り{{count}}回引く",
+    "login-required": "ログインすると引けます",
+    "out-of-stock": "在庫なし",
+    "draw-success": "{{count}}枚引きました！",
+    "draw-error": "ガチャ抽選に失敗しました"
   },
 
   "user-login": {
