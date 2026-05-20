@@ -8,7 +8,7 @@ import { lastValueFrom } from 'rxjs';
 import { ApiConfigService } from './api-config.service';
 
 export interface CreateCardPayload {
-  gachaId: number;
+  gachaId: string;
   name: string;
   cardType: string;
   exchangeType: string;
@@ -62,11 +62,11 @@ export class CardService {
 
   /**
    * Update an existing card (images are optional — kept if not provided)
-   * @param {number} id - Card id to update
+   * @param {string} id - Card id (UUID) to update
    * @param {UpdateCardPayload} payload - Card attributes with optional image files
    * @returns {Promise<any>} - Updated card object
    */
-  async updateCard(id: number, payload: UpdateCardPayload) {
+  async updateCard(id: string, payload: UpdateCardPayload) {
     const formData = new FormData();
     formData.append('name', payload.name);
     formData.append('cardType', payload.cardType);
@@ -91,10 +91,10 @@ export class CardService {
 
   /**
    * Delete an existing card
-   * @param {number} id - Card id to delete
+   * @param {string} id - Card id (UUID) to delete
    * @returns {Promise<any>}
    */
-  async deleteCard(id: number) {
+  async deleteCard(id: string) {
     return await lastValueFrom(
       this.http.delete<any>(`${this.apiConfig.domain}/api/card/${id}`, {
         headers: this.apiConfig.headers,
@@ -104,10 +104,10 @@ export class CardService {
 
   /**
    * Get all cards for a specific gacha
-   * @param {number} gachaId - Gacha id
+   * @param {string} gachaId - Gacha id (UUID)
    * @returns {Promise<any[]>} - Array of card objects
    */
-  async getCardsByGachaId(gachaId: number): Promise<any[]> {
+  async getCardsByGachaId(gachaId: string): Promise<any[]> {
     const response = await lastValueFrom(
       this.http.get<{ message: string; data: any[] }>(
         `${this.apiConfig.domain}/api/card/gacha/${gachaId}`,

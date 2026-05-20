@@ -1,10 +1,12 @@
 import { Component, Input, ChangeDetectorRef } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { TranslateService } from '@ngx-translate/core';
 import { GachaService } from '../../service/gacha.service';
 import { UserService } from '../../service/user.service';
+import { GachaDrawResultDialogComponent } from '../gachaDrawResultDialog/gachaDrawResultDialog.component';
 
 export interface GachaBoxData {
-  id: number;
+  id: string;
   name: string;
   headerImage: string;
   cost: number;
@@ -25,6 +27,7 @@ export class GachaBoxComponent {
     private gachaService: GachaService,
     private userService: UserService,
     private translateService: TranslateService,
+    private dialog: MatDialog,
     private cdr: ChangeDetectorRef,
   ) {}
 
@@ -54,6 +57,13 @@ export class GachaBoxComponent {
     const count = this.effectiveDrawCount(requested);
     if (count <= 0) return;
 
+    const totalCost = this.gacha.cost * count;
+    const userCoin = this.userService.getCoin();
+    if (userCoin === null || userCoin < totalCost) {
+      alert(this.translateService.instant('gacha-box.error-insufficient-coin'));
+      return;
+    }
+
     this.isDrawing = true;
     this.cdr.markForCheck();
 
@@ -63,32 +73,57 @@ export class GachaBoxComponent {
         userId,
         count,
       );
-      const names = (result.drawnCards ?? [])
-        .map((card: any) => card.name)
-        .join('\n');
+      const drawnCards = result.drawnCards ?? [];
+      if (result.userCoin !== undefined) {
+        this.userService.saveCoin(result.userCoin);
+      }
       this.gacha = {
         ...this.gacha,
         remainingCount: result.remainingCount ?? 0,
       };
-      alert(
-        this.translateService.instant('gacha-box.draw-success', {
-          count: result.actualDrawCount ?? count,
-        }) +
-          '\n' +
-          names,
-      );
+
+      if (drawnCards.length === 1) {
+        const cardName = drawnCards[0].name;
+        alert(
+          this.translateService.instant('gacha-box.draw-success-single', {
+            name: cardName,
+          }),
+        );
+      } else {
+        this.dialog.open(GachaDrawResultDialogComponent, {
+          width: '520px',
+          maxWidth: '95vw',
+          disableClose: true,
+          data: { drawnCards },
+        });
+      }
     } catch (error: any) {
       console.error('Failed to draw gacha:', error);
-      const errorMessage =
-        error?.error?.error || error?.message || 'unknown error';
-      alert(
-        this.translateService.instant('gacha-box.draw-error') +
-          '\n' +
-          errorMessage,
-      );
+      alert(this.resolveDrawErrorMessage(error));
     } finally {
       this.isDrawing = false;
       this.cdr.markForCheck();
     }
+  }
+
+  private resolveDrawErrorMessage(error: any): string {
+    const serverMessage: string = error?.error?.error || error?.message || '';
+
+    const errorKeyByServerMessage: Record<string, string> = {
+      'Insufficient coin balance': 'gacha-box.error-insufficient-coin',
+      'No remaining cards in this gacha': 'gacha-box.error-out-of-stock',
+      'Gacha not found': 'gacha-box.error-gacha-not-found',
+      'User not found': 'gacha-box.error-user-not-found',
+      'Draw count must be a positive integer':
+        'gacha-box.error-invalid-draw-count',
+    };
+
+    const translateKey = errorKeyByServerMessage[serverMessage];
+    if (translateKey) {
+      return this.translateService.instant(translateKey);
+    }
+
+    const fallback = this.translateService.instant('gacha-box.draw-error');
+    return serverMessage ? `${fallback}\n${serverMessage}` : fallback;
   }
 }

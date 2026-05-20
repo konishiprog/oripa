@@ -19,6 +19,7 @@ describe('UserGachaPageComponent', () => {
     const userSpy = {
       isLoggedIn: jest.fn<boolean, []>(),
       clearUserId: jest.fn<void, []>(),
+      clearCoin: jest.fn<void, []>(),
     };
 
     await TestBed.configureTestingModule({
@@ -183,6 +184,7 @@ describe('UserGachaPageComponent', () => {
     component.logout();
 
     expect(userService.clearUserId).toHaveBeenCalled();
+    expect(userService.clearCoin).toHaveBeenCalled();
     expect(component.isLoggedIn).toBe(false);
   });
 

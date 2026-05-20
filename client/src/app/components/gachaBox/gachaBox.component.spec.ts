@@ -1,5 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { MatDialogModule } from '@angular/material/dialog';
 import { TranslateModule } from '@ngx-translate/core';
 import { GachaBoxComponent } from './gachaBox.component';
 
@@ -10,13 +11,17 @@ describe('GachaBoxComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [GachaBoxComponent],
-      imports: [HttpClientTestingModule, TranslateModule.forRoot()],
+      imports: [
+        HttpClientTestingModule,
+        MatDialogModule,
+        TranslateModule.forRoot(),
+      ],
     }).compileComponents();
 
     fixture = TestBed.createComponent(GachaBoxComponent);
     component = fixture.componentInstance;
     component.gacha = {
-      id: 1,
+      id: 'test-gacha-id',
       name: 'Test Gacha',
       headerImage: '',
       cost: 500,

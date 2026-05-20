@@ -17,7 +17,7 @@ export enum GachaFormMode {
 }
 
 export interface GachaDialogPayload {
-  id: number;
+  id: string;
   name: string;
   headerImage: string;
   cost: number;
@@ -58,7 +58,7 @@ export class CreateGachaComponent implements OnInit {
   errorMessage: string = '';
   isLoading: boolean = false;
   mode: GachaFormMode = GachaFormMode.Create;
-  private editingGachaId: number | null = null;
+  private editingGachaId: string | null = null;
 
   constructor(
     private gachaService: GachaService,

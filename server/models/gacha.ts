@@ -16,9 +16,9 @@ module.exports = (sequelize: any, DataTypes: any) => {
   Gacha.init(
     {
       id: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.UUID,
         primaryKey: true,
-        autoIncrement: true,
+        defaultValue: DataTypes.UUIDV4,
       },
       headerImage: {
         type: DataTypes.TEXT,

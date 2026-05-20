@@ -17,7 +17,7 @@ export enum CardFormMode {
 }
 
 export interface CardDialogPayload {
-  id: number;
+  id: string;
   name: string;
   cardType: string;
   exchangeType: string;
@@ -27,7 +27,7 @@ export interface CardDialogPayload {
 }
 
 export interface CreateCardDialogData {
-  gachaId: number;
+  gachaId: string;
   gachaName: string;
   mode?: CardFormMode;
   card?: CardDialogPayload;
@@ -67,7 +67,7 @@ export class CreateCardComponent implements OnInit {
   cardTypes = CARD_TYPES;
   exchangeTypes = EXCHANGE_TYPES;
   mode: CardFormMode = CardFormMode.Create;
-  private editingCardId: number | null = null;
+  private editingCardId: string | null = null;
 
   readonly minExchangePoints = 1;
   readonly stepExchangePoints = 1;

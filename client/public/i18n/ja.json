@@ -179,7 +179,27 @@
     "login-required": "ログインすると引けます",
     "out-of-stock": "在庫なし",
     "draw-success": "{{count}}枚引きました！",
-    "draw-error": "ガチャ抽選に失敗しました"
+    "draw-success-single": "{{name}}が当たりました！",
+    "draw-error": "ガチャ抽選に失敗しました",
+    "error-insufficient-coin": "コインが足りません。チャージしてから再度お試しください。",
+    "error-out-of-stock": "在庫がなくなりました",
+    "error-gacha-not-found": "対象のガチャが見つかりません",
+    "error-user-not-found": "ユーザー情報が見つかりません。ログインし直してください。",
+    "error-invalid-draw-count": "引く枚数が正しくありません"
+  },
+
+  "gacha-draw-result": {
+    "progress": "{{current}} / {{total}}",
+    "summary-title": "{{count}}枚の結果",
+    "tap-to-reveal": "タップしてめくる",
+    "back-alt": "カード裏面",
+    "reveal": "めくる",
+    "reveal-all": "全部めくる",
+    "next": "次へ",
+    "finish": "結果を見る",
+    "close": "閉じる",
+    "close-icon": "×",
+    "close-aria-label": "閉じる"
   },
 
   "user-login": {

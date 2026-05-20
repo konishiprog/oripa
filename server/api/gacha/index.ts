@@ -149,8 +149,8 @@ module.exports = {
       async (req: Request, res: Response) => {
         if (!validateGachaUpdatePayload(req, res)) return;
 
-        const id = Number(req.params.id);
-        if (!Number.isInteger(id) || id <= 0) {
+        const id = req.params.id as string;
+        if (!id || typeof id !== 'string' || id.trim() === "") {
           return res
             .status(400)
             .json({ error: messages.errors.GACHA_NOT_FOUND });
@@ -184,8 +184,8 @@ module.exports = {
      * DELETE /api/gacha/:id
      */
     router.delete("/:id", async (req: Request, res: Response) => {
-      const id = Number(req.params.id);
-      if (!Number.isInteger(id) || id <= 0) {
+      const id = req.params.id as string;
+      if (!id || typeof id !== 'string' || id.trim() === "") {
         return res.status(400).json({ error: messages.errors.GACHA_NOT_FOUND });
       }
 
@@ -222,8 +222,8 @@ module.exports = {
      * GET /api/gacha/:id
      */
     router.get("/:id", async (req: Request, res: Response) => {
-      const id = Number(req.params.id);
-      if (!Number.isInteger(id) || id <= 0) {
+      const id = req.params.id as string;
+      if (!id || typeof id !== 'string' || id.trim() === "") {
         return res.status(400).json({ error: messages.errors.GACHA_NOT_FOUND });
       }
 
@@ -249,15 +249,16 @@ module.exports = {
      * POST /api/gacha/:id/draw
      */
     router.post("/:id/draw", async (req: Request, res: Response) => {
-      const gachaId = Number(req.params.id);
-      if (!Number.isInteger(gachaId) || gachaId <= 0) {
+      const gachaId = req.params.id as string;
+      if (!gachaId || typeof gachaId !== 'string' || gachaId.trim() === "") {
         return res.status(400).json({ error: messages.errors.GACHA_NOT_FOUND });
       }
 
       const { userId, drawCount } = req.body;
       if (
-        !Number.isInteger(Number(userId)) ||
-        Number(userId) <= 0 ||
+        !userId ||
+        typeof userId !== 'string' ||
+        userId.trim() === '' ||
         !Number.isInteger(Number(drawCount)) ||
         Number(drawCount) <= 0
       ) {
@@ -269,7 +270,7 @@ module.exports = {
       try {
         const result = await runtime.gacha.draw({
           gachaId,
-          userId: Number(userId),
+          userId,
           drawCount: Number(drawCount),
         });
         return res.status(200).json({
