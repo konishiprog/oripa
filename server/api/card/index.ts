@@ -95,6 +95,9 @@ const handleError = (
   if (error.message === messages.errors.CARD_NOT_FOUND) {
     return { status: 404, message: messages.errors.CARD_NOT_FOUND };
   }
+  if (error.message === messages.errors.LAST_CARD_ALREADY_EXISTS) {
+    return { status: 400, message: messages.errors.LAST_CARD_ALREADY_EXISTS };
+  }
   return { status: 500, message: error.message };
 };
 

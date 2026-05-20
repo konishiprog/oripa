@@ -171,7 +171,8 @@
     "error": "カードの登録に失敗しました",
     "error-required": "全ての項目を入力してください",
     "error-invalid-image": "画像ファイルを選択してください",
-    "error-exchange-points": "返還ポイント数は1以上の整数を入力してください"
+    "error-exchange-points": "返還ポイント数は1以上の整数を入力してください",
+    "error-last-card-already-exists": "このガチャには既にラストワンが登録されています"
   },
 
   "filter-dialog": {

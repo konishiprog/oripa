@@ -42,7 +42,10 @@ export const CARD_TYPES = [
 ];
 
 export const EXCHANGE_TYPES = [
-  { value: 'SHIPPING_ONLY', labelKey: 'card-create.exchange-type-shipping-only' },
+  {
+    value: 'SHIPPING_ONLY',
+    labelKey: 'card-create.exchange-type-shipping-only',
+  },
   { value: 'BOTH', labelKey: 'card-create.exchange-type-both' },
 ];
 
@@ -234,7 +237,13 @@ export class CreateCardComponent implements OnInit {
         this.dialogRef?.close({ mode: 'create', data: created.data });
       }
     } catch (error: any) {
-      this.showError('card-create.error');
+      const errorMsg = error.error?.error || error.message || '';
+      const errorKeyMap: { [key: string]: string } = {
+        'Last card already exists in this gacha':
+          'card-create.error-last-card-already-exists',
+      };
+      const translationKey = errorKeyMap[errorMsg] || 'card-create.error';
+      this.showError(translationKey);
     } finally {
       this.isLoading = false;
     }
