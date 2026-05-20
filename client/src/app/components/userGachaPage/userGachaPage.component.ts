@@ -1,4 +1,5 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
+import { Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 import { TranslateService } from '@ngx-translate/core';
 import { GachaService } from '../../service/gacha.service';
@@ -36,6 +37,7 @@ export class UserGachaPageComponent implements OnInit {
     private dialog: MatDialog,
     private cdr: ChangeDetectorRef,
     private translateService: TranslateService,
+    private router: Router,
   ) {}
 
   ngOnInit(): void {
@@ -69,7 +71,7 @@ export class UserGachaPageComponent implements OnInit {
   }
 
   goToMyPage(): void {
-    console.log('My page navigation not yet implemented');
+    this.router.navigate(['/myPage']);
   }
 
   async loadGachas(): Promise<void> {

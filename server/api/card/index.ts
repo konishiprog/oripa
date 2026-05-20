@@ -168,8 +168,10 @@ module.exports = {
         if (!validateCardUpdatePayload(req, res)) return;
 
         const id = req.params.id as string;
-        if (!id || typeof id !== 'string' || id.trim() === "") {
-          return res.status(400).json({ error: messages.errors.CARD_NOT_FOUND });
+        if (!id || typeof id !== "string" || id.trim() === "") {
+          return res
+            .status(400)
+            .json({ error: messages.errors.CARD_NOT_FOUND });
         }
 
         try {
@@ -204,7 +206,7 @@ module.exports = {
      */
     router.delete("/:id", async (req: Request, res: Response) => {
       const id = req.params.id as string;
-      if (!id || typeof id !== 'string' || id.trim() === "") {
+      if (!id || typeof id !== "string" || id.trim() === "") {
         return res.status(400).json({ error: messages.errors.CARD_NOT_FOUND });
       }
 
@@ -220,23 +222,18 @@ module.exports = {
     });
 
     /**
-     * Get all cards for a specific gacha
-     * GET /api/card/gacha/:gachaId
+     * Get all cards
+     * GET /api/card
      */
-    router.get("/gacha/:gachaId", async (req: Request, res: Response) => {
-      const gachaId = req.params.gachaId as string;
-      if (!gachaId || typeof gachaId !== 'string' || gachaId.trim() === "") {
-        return res.status(400).json({ error: messages.errors.GACHA_NOT_FOUND });
-      }
-
+    router.get("/", async (_req: Request, res: Response) => {
       try {
-        const cards = await runtime.card.getByGachaId(gachaId);
+        const cards = await runtime.card.getAll();
         return res.status(200).json({
           message: messages.success.CARDS_RETRIEVED,
           data: cards,
         });
       } catch (error: any) {
-        const { status, message } = handleError(error, "Cards retrieval");
+        const { status, message } = handleError(error, "All cards retrieval");
         return res.status(status).json({ error: message });
       }
     });

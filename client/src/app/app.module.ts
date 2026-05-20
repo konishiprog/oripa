@@ -36,6 +36,9 @@ import { UserDetailDialogComponent } from './components/userDetailDialog/userDet
 import { UserGachaPageComponent } from './components/userGachaPage/userGachaPage.component';
 import { UserManagementComponent } from './components/userManagement/userManagement.component';
 import { UserSignupComponent } from './components/userSignup/userSignup.component';
+import { UserMyPageComponent } from './components/userMyPage/userMyPage.component';
+import { ConfirmUpdateDialogComponent } from './components/userMyPage/confirm-update-dialog/confirm-update-dialog.component';
+import { UserCardHistoryPageComponent } from './components/userCardHistoryPage/userCardHistoryPage.component';
 import { UserLoginDialogComponent } from './components/userLoginDialog/userLoginDialog.component';
 import { AppLogoComponent } from './components/common/appLogo/appLogo.component';
 import { GachaBoxComponent } from './components/gachaBox/gachaBox.component';
@@ -61,6 +64,9 @@ import { GachaDrawResultDialogComponent } from './components/gachaDrawResultDial
     UserGachaPageComponent,
     UserManagementComponent,
     UserSignupComponent,
+    UserMyPageComponent,
+    ConfirmUpdateDialogComponent,
+    UserCardHistoryPageComponent,
     UserLoginDialogComponent,
     AppLogoComponent,
     GachaBoxComponent,

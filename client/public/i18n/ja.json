@@ -25,6 +25,43 @@
     }
   },
 
+  "admin-create": {
+    "title": "管理者登録",
+    "title-edit": "管理者編集",
+    "email": "メールアドレス",
+    "password": "パスワード",
+    "close": "閉じる",
+    "submit": "登録",
+    "submit-edit": "更新",
+    "success": "登録が完了しました",
+    "success-edit": "更新が完了しました",
+    "error": "登録に失敗しました",
+    "error-edit": "更新に失敗しました",
+    "error-email": "メールアドレスに@を含める必要があります",
+    "error-password": "パスワードは5文字以上にしてください",
+    "error-email-exists": "このメールアドレスは既に登録されています"
+  },
+
+  "admin-account": {
+    "page": {
+      "title": "管理者アカウント",
+      "desc": "管理者アカウントを管理します。",
+      "no-data-message": "管理者アカウントはありません",
+      "table": {
+        "header": {
+          "email": "メールアドレス",
+          "password": "パスワード"
+        }
+      },
+      "footer": {
+        "add": "+ 追加"
+      },
+      "account-count-text": "{{count}} / {{count_max}}",
+      "delete-confirm": "このアカウント ({{email}}) を削除してもよろしいですか？",
+      "delete-error-last-account": "最後の1つのアカウントは削除できません。最低でも1つの管理者アカウントが必要です。"
+    }
+  },
+
   "dashboard": {
     "page-title": "ダッシュボード",
     "desc": "システムの概要と統計情報を表示",
@@ -34,7 +71,6 @@
     "delete-confirm": "このガチャ ({{name}}) を削除してもよろしいですか？\nこのガチャを削除するとそれに紐づけられているカードも消えてしまいます",
     "delete-confirm-card": "このカード ({{name}}) を削除してもよろしいですか？",
     "delete-error": "削除に失敗しました",
-
     "search-placeholder": "ボックス名",
     "search-placeholder-card": "カード名",
     "filter-button": "絞り込み",
@@ -81,6 +117,32 @@
     "pagination": {
       "info": "全 {{total}}件中{{start}}〜{{end}}件を表示"
     }
+  },
+
+  "gacha-create": {
+    "title": "ガチャ作成",
+    "title-edit": "ガチャ編集",
+    "name": "ガチャ名",
+    "header-image": "ヘッダー画像",
+    "image-select": "画像を選択",
+    "image-change": "画像を変更",
+    "cost": "値段",
+    "publish-start": "公開日",
+    "publish-end": "終了日",
+    "is-public": "公開状況",
+    "is-public-yes": "公開",
+    "is-public-no": "非公開",
+    "close": "閉じる",
+    "submit": "登録",
+    "submit-edit": "更新",
+    "success": "登録が完了しました",
+    "success-edit": "更新が完了しました",
+    "error": "登録に失敗しました",
+    "error-required": "全ての項目を入力してください",
+    "error-cost": "値段は0以上の数値を入力してください",
+    "error-date-range": "終了日は公開日以降の日付を指定してください",
+    "error-invalid-image": "画像ファイルを選択してください",
+    "error-name-exists": "この名前のガチャは既に存在しています"
   },
 
   "card-create": {
@@ -134,47 +196,6 @@
     "close": "閉じる"
   },
 
-  "gacha-create": {
-    "title": "ガチャ作成",
-    "title-edit": "ガチャ編集",
-    "name": "ガチャ名",
-    "header-image": "ヘッダー画像",
-    "image-select": "画像を選択",
-    "image-change": "画像を変更",
-    "cost": "値段",
-    "publish-start": "公開日",
-    "publish-end": "終了日",
-    "is-public": "公開状況",
-    "is-public-yes": "公開",
-    "is-public-no": "非公開",
-    "close": "閉じる",
-    "submit": "登録",
-    "submit-edit": "更新",
-    "success": "登録が完了しました",
-    "success-edit": "更新が完了しました",
-    "error": "登録に失敗しました",
-    "error-required": "全ての項目を入力してください",
-    "error-cost": "値段は0以上の数値を入力してください",
-    "error-date-range": "終了日は公開日以降の日付を指定してください",
-    "error-invalid-image": "画像ファイルを選択してください",
-    "error-name-exists": "この名前のガチャは既に存在しています"
-  },
-
-  "user-gacha": {
-    "login": "ログイン",
-    "signup": "アカウント作成",
-    "admin-page": "管理者専用ページ",
-    "my-page": "マイページ",
-    "logout": "ログアウト",
-    "tab-new": "新着",
-    "tab-popular": "人気",
-    "tab-my-page": "マイページ",
-    "section-title": "オリパ一覧",
-    "loading": "読み込み中...",
-    "empty-state": "現在公開中のオリパはありません",
-    "popular-coming-soon": "人気タブは現在準備中です"
-  },
-
   "gacha-box": {
     "remaining": "残り{{count}}枚",
     "draw-single": "1回引く",
@@ -204,6 +225,21 @@
     "close": "閉じる",
     "close-icon": "×",
     "close-aria-label": "閉じる"
+  },
+
+  "user-gacha": {
+    "login": "ログイン",
+    "signup": "アカウント作成",
+    "admin-page": "管理者専用ページ",
+    "my-page": "マイページ",
+    "logout": "ログアウト",
+    "tab-new": "新着",
+    "tab-popular": "人気",
+    "tab-my-page": "マイページ",
+    "section-title": "オリパ一覧",
+    "loading": "読み込み中...",
+    "empty-state": "現在公開中のオリパはありません",
+    "popular-coming-soon": "人気タブは現在準備中です"
   },
 
   "user-login": {
@@ -238,21 +274,46 @@
     "error-phone-exists": "この電話番号は既に登録されています"
   },
 
-  "admin-create": {
-    "title": "管理者登録",
-    "title-edit": "管理者編集",
-    "email": "メールアドレス",
-    "password": "パスワード",
-    "close": "閉じる",
-    "submit": "登録",
-    "submit-edit": "更新",
-    "success": "登録が完了しました",
-    "success-edit": "更新が完了しました",
-    "error": "登録に失敗しました",
-    "error-edit": "更新に失敗しました",
+  "my-page": {
+    "title": "マイページ",
+    "back": "戻る",
+    "loading": "読み込み中...",
+    "card-history": "カード獲得履歴",
+    "coin-history": "コイン購入履歴",
+    "address": "お届け先登録・変更",
+    "email": "メールアドレスの変更",
+    "password": "パスワードの変更",
+    "coin-empty": "コイン購入履歴がありません",
+    "address-label": "住所",
+    "address-placeholder": "東京都港区...",
+    "email-label": "メールアドレス",
+    "email-placeholder": "example@example.com",
+    "current-password": "現在のパスワード",
+    "new-password": "新しいパスワード",
+    "confirm-password": "新しいパスワード（確認）",
+    "save": "保存",
+    "save-success": "保存しました",
+    "save-error": "保存に失敗しました",
+    "error-required": "全ての項目を入力してください",
     "error-email": "メールアドレスに@を含める必要があります",
     "error-password": "パスワードは5文字以上にしてください",
+    "error-password-mismatch": "新しいパスワードが一致しません",
+    "error-password-same": "新しいパスワードは現在のパスワードと異なる必要があります",
+    "error-current-password": "現在のパスワードが正しくありません",
     "error-email-exists": "このメールアドレスは既に登録されています"
+  },
+
+  "card-history": {
+    "title": "カード獲得履歴",
+    "back": "戻る",
+    "tab-unselected": "未選択",
+    "tab-pending": "発送待ち",
+    "tab-shipped": "発送済み",
+    "loading": "読み込み中...",
+    "empty-unselected": "未選択の獲得商品がありません",
+    "empty-pending": "発送待ちの獲得商品がありません",
+    "empty-shipped": "発送済みの獲得商品がありません",
+    "from-gacha": "{{name}} より"
   },
 
   "user-management": {
@@ -278,29 +339,13 @@
     "save": "保存"
   },
 
-  "admin-account": {
-    "page": {
-      "title": "管理者アカウント",
-      "desc": "管理者アカウントを管理します。",
-      "no-data-message": "管理者アカウントはありません",
-      "table": {
-        "header": {
-          "email": "メールアドレス",
-          "password": "パスワード"
-        }
-      },
-      "footer": {
-        "add": "+ 追加"
-      },
-      "account-count-text": "{{count}} / {{count_max}}",
-      "delete-confirm": "このアカウント ({{email}}) を削除してもよろしいですか？",
-      "delete-error-last-account": "最後の1つのアカウントは削除できません。最低でも1つの管理者アカウントが必要です。"
-    }
-  },
-
   "common": {
     "app-name": "net-oripa",
     "console": "Console",
+    "confirm": "確認",
+    "confirm-update": "を変更します。よろしいですか？",
+    "ok": "はい",
+    "cancel": "キャンセル",
     "actions": {
       "edit": "編集",
       "delete": "削除"

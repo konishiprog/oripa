@@ -12,6 +12,8 @@ import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { UserGachaPageComponent } from './components/userGachaPage/userGachaPage.component';
 import { UserManagementComponent } from './components/userManagement/userManagement.component';
 import { UserSignupComponent } from './components/userSignup/userSignup.component';
+import { UserMyPageComponent } from './components/userMyPage/userMyPage.component';
+import { UserCardHistoryPageComponent } from './components/userCardHistoryPage/userCardHistoryPage.component';
 
 const routes: Routes = [
   {
@@ -30,6 +32,14 @@ const routes: Routes = [
   {
     path: 'userSignup',
     component: UserSignupComponent,
+  },
+  {
+    path: 'myPage',
+    component: UserMyPageComponent,
+  },
+  {
+    path: 'myPage/cardHistory',
+    component: UserCardHistoryPageComponent,
   },
   {
     path: 'adminPanel',

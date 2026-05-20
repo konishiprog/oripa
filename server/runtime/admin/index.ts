@@ -119,4 +119,5 @@ module.exports = {
   deleteAdmin,
   getAll,
   verifyCredentials,
+  refreshCache,
 };
