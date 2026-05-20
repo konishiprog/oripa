@@ -18,6 +18,7 @@
     "logs": "ログ",
     "purchase-log": "購入ログ",
     "point-history": "ポイント履歴",
+    "back-to-gacha": "ガチャページに戻る",
     "user": {
       "avatar": "管",
       "role": "管理者"
@@ -62,7 +63,8 @@
       "card-name": "カード名",
       "card-type": "カードタイプ",
       "exchange-type": "交換タイプ",
-      "exchange-points": "交換コイン"
+      "exchange-points": "交換コイン",
+      "is-drawn": "引かれた"
     },
     "card-registration": "{{name}} のカード登録",
     "gacha": {
@@ -72,7 +74,9 @@
       "no-end-date": "-"
     },
     "card": {
-      "no-exchange-points": "-"
+      "no-exchange-points": "-",
+      "drawn": "引かれた",
+      "not-drawn": "未引き"
     },
     "pagination": {
       "info": "全 {{total}}件中{{start}}〜{{end}}件を表示"

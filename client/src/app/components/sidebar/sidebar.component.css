@@ -21,6 +21,27 @@
   gap: 10px;
 }
 
+.back-to-gacha-btn {
+  margin: 12px 12px 0;
+  padding: 9px 10px;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  background-color: #fff;
+  color: #718096;
+  font-size: 13px;
+  cursor: pointer;
+  transition:
+    background 0.15s,
+    color 0.15s,
+    border-color 0.15s;
+}
+
+.back-to-gacha-btn:hover {
+  background-color: #f7f8fa;
+  color: #1a202c;
+  border-color: #cbd5e0;
+}
+
 .sidebar-logo-icon {
   width: 36px;
   height: 36px;
@@ -68,7 +89,9 @@
   color: #718096;
   cursor: pointer;
   text-decoration: none;
-  transition: background 0.15s, color 0.15s;
+  transition:
+    background 0.15s,
+    color 0.15s;
   margin-bottom: 2px;
 }
 

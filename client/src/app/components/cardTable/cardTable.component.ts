@@ -30,6 +30,7 @@ export interface Card {
   exchangePoints: number | null;
   imageFront: string;
   imageBack: string;
+  isDrawn: boolean;
 }
 
 interface TableHeader {
@@ -43,6 +44,7 @@ const CARD_TABLE_HEADERS: TableHeader[] = [
   { key: 'card-type', labelKey: 'dashboard.card-table.card-type' },
   { key: 'exchange-type', labelKey: 'dashboard.card-table.exchange-type' },
   { key: 'exchange-points', labelKey: 'dashboard.card-table.exchange-points' },
+  { key: 'is-drawn', labelKey: 'dashboard.card-table.is-drawn' },
 ];
 
 type CellType = 'text' | 'method';
@@ -57,9 +59,24 @@ interface TableCell {
 const CARD_TABLE_CELLS: TableCell[] = [
   { key: 'gacha-name', type: 'text', dataKey: 'gachaName' },
   { key: 'card-name', type: 'text', dataKey: 'name' },
-  { key: 'card-type', type: 'method', methodName: 'getCardTypeLabel', dataKey: 'cardType' },
-  { key: 'exchange-type', type: 'method', methodName: 'getExchangeTypeLabel', dataKey: 'exchangeType' },
-  { key: 'exchange-points', type: 'method', methodName: 'getExchangePointsDisplay' },
+  {
+    key: 'card-type',
+    type: 'method',
+    methodName: 'getCardTypeLabel',
+    dataKey: 'cardType',
+  },
+  {
+    key: 'exchange-type',
+    type: 'method',
+    methodName: 'getExchangeTypeLabel',
+    dataKey: 'exchangeType',
+  },
+  {
+    key: 'exchange-points',
+    type: 'method',
+    methodName: 'getExchangePointsDisplay',
+  },
+  { key: 'is-drawn', type: 'method', methodName: 'getIsDrawnLabel' },
 ];
 
 @Component({
@@ -220,6 +237,12 @@ export class CardTableComponent implements OnInit, OnChanges {
       : this.translateService.instant('dashboard.card.no-exchange-points');
   }
 
+  getIsDrawnLabel(card: Card): string {
+    return this.translateService.instant(
+      card.isDrawn ? 'dashboard.card.drawn' : 'dashboard.card.not-drawn',
+    );
+  }
+
   getTextCellValue(cell: TableCell, card: Card): any {
     return cell.dataKey ? card[cell.dataKey as keyof Card] : '';
   }
@@ -227,11 +250,17 @@ export class CardTableComponent implements OnInit, OnChanges {
   getMethodCellValue(cell: TableCell, card: Card): string {
     switch (cell.methodName) {
       case 'getCardTypeLabel':
-        return this.getCardTypeLabel(card[cell.dataKey as keyof Card] as string);
+        return this.getCardTypeLabel(
+          card[cell.dataKey as keyof Card] as string,
+        );
       case 'getExchangeTypeLabel':
-        return this.getExchangeTypeLabel(card[cell.dataKey as keyof Card] as string);
+        return this.getExchangeTypeLabel(
+          card[cell.dataKey as keyof Card] as string,
+        );
       case 'getExchangePointsDisplay':
         return this.getExchangePointsDisplay(card);
+      case 'getIsDrawnLabel':
+        return this.getIsDrawnLabel(card);
       default:
         return '';
     }
@@ -270,6 +299,7 @@ export class CardTableComponent implements OnInit, OnChanges {
             exchangePoints: result.data.exchangePoints ?? null,
             imageFront: result.data.imageFront ?? '',
             imageBack: result.data.imageBack ?? '',
+            isDrawn: result.data.isDrawn ?? false,
           };
           this.cards = [...this.cards];
           this.applyFilters();
