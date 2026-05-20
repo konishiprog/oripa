@@ -144,8 +144,9 @@ export class DashboardComponent implements OnInit {
   ): Promise<void> {
     try {
       const cards = await this.cardService.getCardsByGachaId(gachaId);
+      const notDrawnCards = cards.filter((card: any) => !card.isDrawn);
       this.gachas = this.gachas.map((gacha) =>
-        gacha.id === gachaId ? { ...gacha, cards: cards.length } : gacha,
+        gacha.id === gachaId ? { ...gacha, cards: notDrawnCards.length } : gacha,
       );
       this.cards = [
         ...this.cards.filter((card) => card.gachaId !== gachaId),

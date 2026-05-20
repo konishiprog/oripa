@@ -9,6 +9,7 @@ import multer from "multer";
 const messages = require("../../constants/messages.json");
 
 let runtime: any;
+let gacha: any;
 const upload = multer({ storage: multer.memoryStorage() });
 
 const validateCardPayload = (req: Request, res: Response): boolean => {
@@ -100,10 +101,11 @@ const handleError = (
 module.exports = {
   /**
    * Initialize card API with runtime
-   * @param {*} _runtime - Runtime instance containing card module
+   * @param {*} _runtime - Runtime instance containing card and gacha modules
    */
   init: function (_runtime: any) {
     runtime = _runtime;
+    gacha = _runtime.gacha;
   },
 
   /**
@@ -143,6 +145,7 @@ module.exports = {
             imageFrontFile,
             imageBackFile,
           });
+          await gacha.refreshGachaCards(gachaId);
           return res.status(201).json({
             message: messages.success.CARD_CREATED,
             data: card,
@@ -189,6 +192,7 @@ module.exports = {
             imageFrontFile,
             imageBackFile,
           });
+          await gacha.refreshGachaCards(card.gachaId);
           return res.status(200).json({
             message: messages.success.CARD_UPDATED,
             data: card,
@@ -211,7 +215,8 @@ module.exports = {
       }
 
       try {
-        await runtime.card.deleteById(id);
+        const gachaId = await runtime.card.deleteById(id);
+        await gacha.refreshGachaCards(gachaId);
         return res.status(200).json({
           message: messages.success.CARD_DELETED,
         });
