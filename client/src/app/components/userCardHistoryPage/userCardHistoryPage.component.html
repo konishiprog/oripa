@@ -1,0 +1,63 @@
+<div class="page">
+  <header class="page-header">
+    <button type="button" class="back-btn" (click)="goBack()">
+      <span [innerHTML]="chevronSvg" class="back-icon"></span>
+      {{ "card-history.back" | translate }}
+    </button>
+    <h1 class="page-title">{{ "card-history.title" | translate }}</h1>
+    <div class="header-spacer"></div>
+  </header>
+
+  <div class="nav-tabs">
+    <div
+      class="nav-tab"
+      [class.active]="activeTab === 'unselected'"
+      (click)="selectTab('unselected')"
+    >
+      {{ "card-history.tab-unselected" | translate }}
+    </div>
+    <div
+      class="nav-tab"
+      [class.active]="activeTab === 'pending'"
+      (click)="selectTab('pending')"
+    >
+      {{ "card-history.tab-pending" | translate }}
+    </div>
+    <div
+      class="nav-tab"
+      [class.active]="activeTab === 'shipped'"
+      (click)="selectTab('shipped')"
+    >
+      {{ "card-history.tab-shipped" | translate }}
+    </div>
+  </div>
+
+  <div class="content">
+    <div *ngIf="isLoading" class="loading-state">
+      {{ "card-history.loading" | translate }}
+    </div>
+
+    <div *ngIf="!isLoading && filteredCards.length === 0" class="empty-state">
+      {{ emptyMessageKey | translate }}
+    </div>
+
+    <div *ngIf="!isLoading && filteredCards.length > 0" class="card-list">
+      <div class="card-item" *ngFor="let card of filteredCards">
+        <img
+          *ngIf="card.imageFront"
+          [src]="card.imageFront"
+          [alt]="card.name"
+          class="card-image"
+        />
+        <div class="card-info">
+          <div class="card-name">{{ card.name }}</div>
+          <div *ngIf="card.gachaName" class="card-gacha">
+            {{
+              "card-history.from-gacha" | translate: { name: card.gachaName }
+            }}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

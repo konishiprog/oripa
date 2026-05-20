@@ -7,6 +7,16 @@ import { HttpClient } from '@angular/common/http';
 import { lastValueFrom } from 'rxjs';
 import { ApiConfigService } from './api-config.service';
 
+export interface User {
+  id: string;
+  email: string;
+  password: string;
+  name: string;
+  address: string;
+  phone: string;
+  coin: number;
+}
+
 export interface CreateUserPayload {
   email: string;
   password: string;
@@ -32,26 +42,44 @@ export class UserService {
    * @param {CreateUserPayload} payload - User signup attributes
    * @returns {Promise<any>} - Created user object
    */
-  async createUser(payload: CreateUserPayload) {
-    return await lastValueFrom(
-      this.http.post<any>(`${this.apiConfig.domain}/api/user`, payload, {
-        headers: this.apiConfig.headers,
-      }),
+  async createUser(payload: CreateUserPayload): Promise<User> {
+    const response = await lastValueFrom(
+      this.http.post<{ message: string; data: User }>(
+        `${this.apiConfig.domain}/api/user`,
+        payload,
+        { headers: this.apiConfig.headers },
+      ),
     );
+    return response.data;
   }
 
   /**
    * Get all users
    * @returns {Promise<any[]>} - Array of users
    */
-  async getAllUsers(): Promise<any[]> {
+  async getAllUsers(): Promise<User[]> {
     const response = await lastValueFrom(
-      this.http.get<{ message: string; data: any[] }>(
+      this.http.get<{ message: string; data: User[] }>(
         `${this.apiConfig.domain}/api/user`,
         { headers: this.apiConfig.headers },
       ),
     );
     return response.data || [];
+  }
+
+  /**
+   * Get a single user by id
+   * @param {string} id - User id (UUID)
+   * @returns {Promise<any>} - User object
+   */
+  async getUserById(id: string): Promise<User> {
+    const response = await lastValueFrom(
+      this.http.get<{ message: string; data: User }>(
+        `${this.apiConfig.domain}/api/user/${id}`,
+        { headers: this.apiConfig.headers },
+      ),
+    );
+    return response.data;
   }
 
   /**
@@ -70,24 +98,28 @@ export class UserService {
       phone: string;
       coin: number;
     },
-  ) {
-    return await lastValueFrom(
-      this.http.put<any>(`${this.apiConfig.domain}/api/user/${id}`, payload, {
-        headers: this.apiConfig.headers,
-      }),
+  ): Promise<User> {
+    const response = await lastValueFrom(
+      this.http.put<{ message: string; data: User }>(
+        `${this.apiConfig.domain}/api/user/${id}`,
+        payload,
+        { headers: this.apiConfig.headers },
+      ),
     );
+    return response.data;
   }
 
   /**
    * Delete a user
    * @param {string} id - User id
-   * @returns {Promise<any>} - Delete response
+   * @returns {Promise<{ message: string }>} - Delete response
    */
-  async deleteUser(id: string) {
+  async deleteUser(id: string): Promise<{ message: string }> {
     return await lastValueFrom(
-      this.http.delete<any>(`${this.apiConfig.domain}/api/user/${id}`, {
-        headers: this.apiConfig.headers,
-      }),
+      this.http.delete<{ message: string }>(
+        `${this.apiConfig.domain}/api/user/${id}`,
+        { headers: this.apiConfig.headers },
+      ),
     );
   }
 
@@ -95,11 +127,14 @@ export class UserService {
    * Login a user by email or phone
    * @param {string} identifier - Email address or phone number
    * @param {string} password - User password
-   * @returns {Promise<any>} - Login response with user data
+   * @returns {Promise<{ message: string; data: User }>} - Login response with user data
    */
-  async login(identifier: string, password: string) {
+  async login(
+    identifier: string,
+    password: string,
+  ): Promise<{ message: string; data: User }> {
     return await lastValueFrom(
-      this.http.post<any>(
+      this.http.post<{ message: string; data: User }>(
         `${this.apiConfig.domain}/api/user/login`,
         { identifier, password },
         { headers: this.apiConfig.headers },

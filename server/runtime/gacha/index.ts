@@ -4,6 +4,7 @@ export {};
 
 const messages = require("../../constants/messages.json");
 const userRuntime = require("../user");
+const cardRuntime = require("../card");
 
 let db: any;
 let gachaCache: Map<string, any> = new Map();
@@ -161,6 +162,11 @@ async function draw(payload: {
     { where: { id: drawnIds } },
   );
 
+  await cardRuntime.update(drawnIds, {
+    isDrawn: true,
+    userId: payload.userId,
+  });
+
   gacha.cards = (gacha.cards ?? []).map((card: any) =>
     drawnIds.includes(card.id)
       ? { ...card, isDrawn: true, userId: payload.userId }
@@ -178,7 +184,11 @@ async function draw(payload: {
   ).length;
 
   return {
-    drawnCards: drawnCards.map((card: any) => ({ ...card, isDrawn: true, userId: payload.userId })),
+    drawnCards: drawnCards.map((card: any) => ({
+      ...card,
+      isDrawn: true,
+      userId: payload.userId,
+    })),
     remainingCount,
     userCoin: updatedUser.coin,
     actualDrawCount,

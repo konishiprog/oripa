@@ -125,6 +125,33 @@ module.exports = {
     });
 
     /**
+     * Get a single user by id
+     * GET /api/user/:id
+     */
+    router.get("/:id", async (req: Request, res: Response) => {
+      const { id } = req.params;
+      if (!id || typeof id !== "string" || id.trim() === "") {
+        return res.status(400).json({ error: messages.errors.USER_NOT_FOUND });
+      }
+
+      try {
+        const user = runtime.user.getById(id);
+        if (!user) {
+          return res
+            .status(404)
+            .json({ error: messages.errors.USER_NOT_FOUND });
+        }
+        return res.status(200).json({
+          message: messages.success.USERS_RETRIEVED,
+          data: user,
+        });
+      } catch (error: any) {
+        const { status, message } = handleError(error, "User retrieval");
+        return res.status(status).json({ error: message });
+      }
+    });
+
+    /**
      * Update a user
      * PUT /api/user/:id
      */
@@ -133,7 +160,9 @@ module.exports = {
       const { email, password, name, address, phone, coin } = req.body;
 
       if (!id) {
-        return res.status(400).json({ error: "User ID is required" });
+        return res
+          .status(400)
+          .json({ error: messages.errors.USER_ID_REQUIRED });
       }
 
       try {
@@ -146,7 +175,7 @@ module.exports = {
           coin,
         });
         return res.status(200).json({
-          message: "User updated successfully",
+          message: messages.success.USER_UPDATED,
           data: user,
         });
       } catch (error: any) {
@@ -163,13 +192,15 @@ module.exports = {
       const { id } = req.params;
 
       if (!id) {
-        return res.status(400).json({ error: "User ID is required" });
+        return res
+          .status(400)
+          .json({ error: messages.errors.USER_ID_REQUIRED });
       }
 
       try {
         await runtime.user.delete(id);
         return res.status(200).json({
-          message: "User deleted successfully",
+          message: messages.success.USER_DELETED,
         });
       } catch (error: any) {
         const { status, message } = handleError(error, "User deletion");

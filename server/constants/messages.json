@@ -21,7 +21,8 @@
     "USER_NOT_FOUND": "User not found",
     "DRAW_COUNT_INVALID": "Draw count must be a positive integer",
     "GACHA_OUT_OF_STOCK": "No remaining cards in this gacha",
-    "INSUFFICIENT_COIN": "Insufficient coin balance"
+    "INSUFFICIENT_COIN": "Insufficient coin balance",
+    "USER_ID_REQUIRED": "User ID is required"
   },
   "success": {
     "ADMIN_CREATED": "Admin created successfully",
@@ -39,6 +40,8 @@
     "CARD_DELETED": "Card deleted successfully",
     "CARDS_RETRIEVED": "Cards retrieved successfully",
     "USER_CREATED": "User created successfully",
+    "USER_UPDATED": "User updated successfully",
+    "USER_DELETED": "User deleted successfully",
     "USERS_RETRIEVED": "Users retrieved successfully",
     "MIGRATIONS_COMPLETED": "Migrations completed successfully"
   },

@@ -1,0 +1,200 @@
+<div class="page">
+  <header class="page-header">
+    <button type="button" class="back-btn" (click)="goBack()">
+      <span [innerHTML]="chevronSvg" class="back-icon"></span>
+      {{ "my-page.back" | translate }}
+    </button>
+    <h1 class="page-title">{{ "my-page.title" | translate }}</h1>
+    <div class="header-spacer"></div>
+  </header>
+
+  <div *ngIf="isLoading" class="loading-state">
+    {{ "my-page.loading" | translate }}
+  </div>
+
+  <div *ngIf="!isLoading" class="menu">
+    <button
+      type="button"
+      class="menu-item menu-item-link"
+      (click)="goToCardHistory()"
+    >
+      <span class="menu-label">{{ "my-page.card-history" | translate }}</span>
+      <span [innerHTML]="chevronSvg" class="menu-icon"></span>
+    </button>
+
+    <div class="menu-item-wrapper">
+      <button
+        type="button"
+        class="menu-item"
+        [class.expanded]="expandedSection === 'coin'"
+        (click)="toggleSection('coin')"
+      >
+        <span class="menu-label">{{ "my-page.coin-history" | translate }}</span>
+        <span [innerHTML]="chevronSvg" class="menu-icon"></span>
+      </button>
+      <div *ngIf="expandedSection === 'coin'" class="menu-detail">
+        <div class="empty-detail">
+          {{ "my-page.coin-empty" | translate }}
+        </div>
+      </div>
+    </div>
+
+    <div class="menu-item-wrapper">
+      <button
+        type="button"
+        class="menu-item"
+        [class.expanded]="expandedSection === 'address'"
+        (click)="toggleSection('address')"
+      >
+        <span class="menu-label">{{ "my-page.address" | translate }}</span>
+        <span [innerHTML]="chevronSvg" class="menu-icon"></span>
+      </button>
+      <div *ngIf="expandedSection === 'address'" class="menu-detail">
+        <div *ngIf="successMessage" class="success-message">
+          {{ successMessage }}
+        </div>
+        <div *ngIf="errorMessage" class="error-message">
+          {{ errorMessage }}
+        </div>
+        <div class="form-group">
+          <label for="address">{{ "my-page.address-label" | translate }}</label>
+          <input
+            id="address"
+            type="text"
+            [(ngModel)]="addressInput"
+            [placeholder]="'my-page.address-placeholder' | translate"
+            [disabled]="isSaving"
+          />
+        </div>
+        <button
+          type="button"
+          class="save-btn"
+          [disabled]="isSaving"
+          (click)="saveAddress()"
+        >
+          {{ "my-page.save" | translate }}
+        </button>
+      </div>
+    </div>
+
+    <div class="menu-item-wrapper">
+      <button
+        type="button"
+        class="menu-item"
+        [class.expanded]="expandedSection === 'email'"
+        (click)="toggleSection('email')"
+      >
+        <span class="menu-label">{{ "my-page.email" | translate }}</span>
+        <span [innerHTML]="chevronSvg" class="menu-icon"></span>
+      </button>
+      <div *ngIf="expandedSection === 'email'" class="menu-detail">
+        <div *ngIf="successMessage" class="success-message">
+          {{ successMessage }}
+        </div>
+        <div *ngIf="errorMessage" class="error-message">
+          {{ errorMessage }}
+        </div>
+        <div class="form-group">
+          <label for="email">{{ "my-page.email-label" | translate }}</label>
+          <input
+            id="email"
+            type="email"
+            [(ngModel)]="emailInput"
+            [placeholder]="'my-page.email-placeholder' | translate"
+            [disabled]="isSaving"
+          />
+        </div>
+        <button
+          type="button"
+          class="save-btn"
+          [disabled]="isSaving"
+          (click)="saveEmail()"
+        >
+          {{ "my-page.save" | translate }}
+        </button>
+      </div>
+    </div>
+
+    <div class="menu-item-wrapper">
+      <button
+        type="button"
+        class="menu-item"
+        [class.expanded]="expandedSection === 'password'"
+        (click)="toggleSection('password')"
+      >
+        <span class="menu-label">{{ "my-page.password" | translate }}</span>
+        <span [innerHTML]="chevronSvg" class="menu-icon"></span>
+      </button>
+      <div *ngIf="expandedSection === 'password'" class="menu-detail">
+        <div *ngIf="successMessage" class="success-message">
+          {{ successMessage }}
+        </div>
+        <div *ngIf="errorMessage" class="error-message">
+          {{ errorMessage }}
+        </div>
+        <div class="form-group password-group">
+          <label for="currentPassword">
+            {{ "my-page.current-password" | translate }}
+          </label>
+          <div class="password-input-wrapper">
+            <input
+              id="currentPassword"
+              [type]="currentPasswordVisible ? 'text' : 'password'"
+              [(ngModel)]="currentPasswordInput"
+              [disabled]="isSaving"
+            />
+            <mat-icon
+              class="password-icon"
+              [svgIcon]="currentPasswordVisible ? 'visible' : 'invisible'"
+              (click)="toggleCurrentPasswordVisibility()"
+            ></mat-icon>
+          </div>
+        </div>
+        <div class="form-group password-group">
+          <label for="newPassword">
+            {{ "my-page.new-password" | translate }}
+          </label>
+          <div class="password-input-wrapper">
+            <input
+              id="newPassword"
+              [type]="newPasswordVisible ? 'text' : 'password'"
+              [(ngModel)]="newPasswordInput"
+              [disabled]="isSaving"
+            />
+            <mat-icon
+              class="password-icon"
+              [svgIcon]="newPasswordVisible ? 'visible' : 'invisible'"
+              (click)="toggleNewPasswordVisibility()"
+            ></mat-icon>
+          </div>
+        </div>
+        <div class="form-group password-group">
+          <label for="confirmPassword">
+            {{ "my-page.confirm-password" | translate }}
+          </label>
+          <div class="password-input-wrapper">
+            <input
+              id="confirmPassword"
+              [type]="confirmPasswordVisible ? 'text' : 'password'"
+              [(ngModel)]="confirmPasswordInput"
+              [disabled]="isSaving"
+            />
+            <mat-icon
+              class="password-icon"
+              [svgIcon]="confirmPasswordVisible ? 'visible' : 'invisible'"
+              (click)="toggleConfirmPasswordVisibility()"
+            ></mat-icon>
+          </div>
+        </div>
+        <button
+          type="button"
+          class="save-btn"
+          [disabled]="isSaving"
+          (click)="savePassword()"
+        >
+          {{ "my-page.save" | translate }}
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

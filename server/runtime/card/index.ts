@@ -6,6 +6,7 @@ const messages = require("../../constants/messages.json");
 const gachaRuntime = require("../gacha");
 
 let db: any;
+let cardCache: Map<string, any> = new Map();
 
 const toPlain = (card: any) => card?.get({ plain: true }) || null;
 
@@ -15,6 +16,26 @@ const toPlain = (card: any) => card?.get({ plain: true }) || null;
  */
 async function init(_db: any) {
   db = _db;
+  await refreshCache();
+}
+
+/**
+ * Refresh card cache from database (single DB call for all cards)
+ */
+async function refreshCache() {
+  const cards = await db.Card.findAll({
+    include: [{ model: db.Gacha, as: "gacha" }],
+    order: [["id", "ASC"]],
+  });
+  cardCache.clear();
+  cards.forEach((card: any) => {
+    const plainCard = toPlain(card);
+    const cardWithGacha = {
+      ...plainCard,
+      gachaName: card.gacha?.name ?? null,
+    };
+    cardCache.set(plainCard.id, cardWithGacha);
+  });
 }
 
 /**
@@ -59,40 +80,54 @@ async function create(payload: {
   });
 
   const plainCard = toPlain(card);
+  const plainCardWithGacha = { ...plainCard, gachaName: gacha.name };
+  cardCache.set(plainCard.id, plainCardWithGacha);
   gachaRuntime.addCardToCache(payload.gachaId, plainCard);
   return plainCard;
 }
 
 /**
- * Get all cards for a specific gacha
- * @param {string} gachaId - Gacha id
- * @returns {Promise<any[]>} - Array of card objects
+ * Get all cards from cache
+ * @returns {Promise<any[]>} - Array of all card objects
  */
-async function getByGachaId(gachaId: string) {
-  const cards = await db.Card.findAll({
-    where: { gachaId },
-    order: [["id", "ASC"]],
-  });
-  return cards.map(toPlain);
+function getAll() {
+  const cards = Array.from(cardCache.values());
+  return Promise.resolve(cards);
 }
 
 /**
- * Update an existing card. Images are optional — kept if not provided.
- * @param {string} id - Card id to update
- * @param {object} payload - Card attributes with optional image files
- * @returns {Promise<any>} - Updated card object
+ * Update cards (single detailed update or bulk draw update)
+ * For single update: requires name, cardType, exchangeType, and optional images
+ * For bulk draw update: pass cardIds array and userId
+ * @param {string | string[]} id - Card id or array of card ids
+ * @param {object} payload - Card attributes with optional image files or draw data
+ * @returns {Promise<any>} - Updated card object(s)
  */
 async function update(
-  id: string,
+  id: string | string[],
   payload: {
-    name: string;
-    cardType: string;
-    exchangeType: string;
+    name?: string;
+    cardType?: string;
+    exchangeType?: string;
     exchangePoints?: number | null;
     imageFrontFile?: any;
     imageBackFile?: any;
+    userId?: string;
+    isDrawn?: boolean;
   },
 ) {
+  if (Array.isArray(id)) {
+    id.forEach((cardId: string) => {
+      const card = cardCache.get(cardId);
+      if (card) {
+        if (payload.isDrawn !== undefined) card.isDrawn = payload.isDrawn;
+        if (payload.userId !== undefined) card.userId = payload.userId;
+        cardCache.set(cardId, card);
+      }
+    });
+    return;
+  }
+
   const card = await db.Card.findByPk(id);
   if (!card) {
     throw new Error(messages.errors.CARD_NOT_FOUND);
@@ -119,6 +154,9 @@ async function update(
   });
 
   const plainCard = toPlain(card);
+  const cachedCard = cardCache.get(id);
+  const plainCardWithGacha = { ...plainCard, gachaName: cachedCard?.gachaName };
+  cardCache.set(id, plainCardWithGacha);
   gachaRuntime.updateCardInCache(plainCard.gachaId, plainCard);
   return plainCard;
 }
@@ -128,19 +166,21 @@ async function update(
  * @param {string} id - Card id to delete
  */
 async function deleteById(id: string) {
-  const card = await db.Card.findByPk(id);
-  if (!card) {
+  const cachedCard = cardCache.get(id);
+  if (!cachedCard) {
     throw new Error(messages.errors.CARD_NOT_FOUND);
   }
-  const gachaId = card.gachaId;
-  await card.destroy();
+  const gachaId = cachedCard.gachaId;
+  await db.Card.destroy({ where: { id } });
+  cardCache.delete(id);
   gachaRuntime.removeCardFromCache(gachaId, id);
 }
 
 module.exports = {
   init,
   create,
-  getByGachaId,
+  getAll,
   update,
   deleteById,
+  refreshCache,
 };
