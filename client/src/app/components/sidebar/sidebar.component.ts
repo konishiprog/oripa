@@ -5,7 +5,11 @@ import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { TranslateService } from '@ngx-translate/core';
 import { filter } from 'rxjs/operators';
 import { SidebarService } from '../../service/sidebar.service';
-import { SIDEBAR_MENU, MenuSection, MenuItem } from '../../config/sidebar-menu.config';
+import {
+  SIDEBAR_MENU,
+  MenuSection,
+  MenuItem,
+} from '../../config/sidebar-menu.config';
 
 @Component({
   selector: 'app-sidebar',
@@ -27,7 +31,6 @@ export class SidebarComponent implements OnInit {
     private sidebarService: SidebarService,
   ) {}
 
-
   async ngOnInit(): Promise<void> {
     this.translateService.setDefaultLang('ja');
     this.translateService.use('ja');
@@ -42,7 +45,8 @@ export class SidebarComponent implements OnInit {
   }
 
   private checkAdminAccountRoute(): void {
-    this.isAdminAccountActive = this.router.url === '/adminPanel/adminAccountList';
+    this.isAdminAccountActive =
+      this.router.url === '/adminPanel/adminAccountList';
   }
 
   private async loadAdminEmail(): Promise<void> {
@@ -56,20 +60,23 @@ export class SidebarComponent implements OnInit {
 
   private loadIcons(): void {
     const iconPaths = new Set<string>();
-    this.menuSections.forEach(section => {
-      section.items.forEach(item => {
+    this.menuSections.forEach((section) => {
+      section.items.forEach((item) => {
         iconPaths.add(item.icon);
       });
     });
 
-    iconPaths.forEach(iconPath => {
+    iconPaths.forEach((iconPath) => {
       this.http.get(iconPath, { responseType: 'text' }).subscribe({
         next: (svg) => {
-          this.iconCache.set(iconPath, this.sanitizer.bypassSecurityTrustHtml(svg));
+          this.iconCache.set(
+            iconPath,
+            this.sanitizer.bypassSecurityTrustHtml(svg),
+          );
         },
         error: (error) => {
           console.error(`Failed to load icon ${iconPath}:`, error);
-        }
+        },
       });
     });
   }
@@ -80,5 +87,9 @@ export class SidebarComponent implements OnInit {
 
   navigateToAdminAccountList(): void {
     this.router.navigate(['/adminPanel/adminAccountList']);
+  }
+
+  goBackToGacha(): void {
+    this.router.navigate(['/userGachaPage']);
   }
 }

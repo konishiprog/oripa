@@ -85,10 +85,11 @@ async function getAll() {
     })
     .map((gacha: any) => {
       const cards = gacha.cards ?? [];
+      const notDrawnCards = cards.filter((card: any) => !card.isDrawn);
       return {
         ...gacha,
-        cardsCount: cards.length,
-        remainingCount: cards.filter((card: any) => !card.isDrawn).length,
+        cardsCount: notDrawnCards.length,
+        remainingCount: notDrawnCards.length,
       };
     });
 }

@@ -1,6 +1,9 @@
 <!-- Sidebar -->
 <aside class="sidebar">
   <app-logo class="sidebar-logo"></app-logo>
+  <button class="back-to-gacha-btn" (click)="goBackToGacha()">
+    {{ "sidebar.back-to-gacha" | translate }}
+  </button>
 
   <div class="sidebar-section" *ngFor="let section of menuSections">
     <div class="sidebar-section-label">{{ section.title | translate }}</div>

@@ -64,6 +64,7 @@ export class DashboardComponent implements OnInit {
           exchangePoints: card.exchangePoints ?? null,
           imageFront: card.imageFront ?? '',
           imageBack: card.imageBack ?? '',
+          isDrawn: card.isDrawn ?? false,
         })),
       );
       this.cdr.markForCheck();
@@ -158,6 +159,7 @@ export class DashboardComponent implements OnInit {
           exchangePoints: card.exchangePoints ?? null,
           imageFront: card.imageFront ?? '',
           imageBack: card.imageBack ?? '',
+          isDrawn: card.isDrawn ?? false,
         })),
       ];
       this.cdr.markForCheck();
