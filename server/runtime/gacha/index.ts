@@ -154,8 +154,18 @@ async function draw(payload: {
     throw new Error(messages.errors.INSUFFICIENT_COIN);
   }
 
-  const shuffled = [...availableCards].sort(() => Math.random() - 0.5);
-  const drawnCards = shuffled.slice(0, actualDrawCount);
+  const nonLastCards = availableCards.filter(
+    (card: any) => card.cardType !== "LAST",
+  );
+
+  let drawnCards: any[] = [];
+
+  if (availableCards.length === 1) {
+    drawnCards = availableCards;
+  } else {
+    const shuffledNonLast = [...nonLastCards].sort(() => Math.random() - 0.5);
+    drawnCards = shuffledNonLast.slice(0, actualDrawCount);
+  }
   const drawnIds = drawnCards.map((card: any) => card.id);
 
   await db.Card.update(

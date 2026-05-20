@@ -83,10 +83,13 @@ export class GachaBoxComponent {
       };
 
       if (drawnCards.length === 1) {
-        const cardName = drawnCards[0].name;
+        const card = drawnCards[0];
+        const messageKey = card.cardType === 'LAST'
+          ? 'gacha-box.draw-success-last'
+          : 'gacha-box.draw-success-single';
         alert(
-          this.translateService.instant('gacha-box.draw-success-single', {
-            name: cardName,
+          this.translateService.instant(messageKey, {
+            name: card.name,
           }),
         );
       } else {
