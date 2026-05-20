@@ -3,7 +3,6 @@
 export {};
 
 const messages = require("../../constants/messages.json");
-const gachaRuntime = require("../gacha");
 
 let db: any;
 let cardCache: Map<string, any> = new Map();
@@ -57,6 +56,19 @@ async function create(payload: {
     throw new Error(messages.errors.GACHA_NOT_FOUND);
   }
 
+  if (payload.cardType === "LAST") {
+    const existingLastCard = await db.Card.findOne({
+      where: {
+        gachaId: payload.gachaId,
+        cardType: "LAST",
+        isDrawn: false,
+      },
+    });
+    if (existingLastCard) {
+      throw new Error(messages.errors.LAST_CARD_ALREADY_EXISTS);
+    }
+  }
+
   let imageFrontBase64 = "";
   if (payload.imageFrontFile) {
     imageFrontBase64 = `data:${payload.imageFrontFile.mimetype};base64,${payload.imageFrontFile.buffer.toString("base64")}`;
@@ -82,7 +94,6 @@ async function create(payload: {
   const plainCard = toPlain(card);
   const plainCardWithGacha = { ...plainCard, gachaName: gacha.name };
   cardCache.set(plainCard.id, plainCardWithGacha);
-  gachaRuntime.addCardToCache(payload.gachaId, plainCard);
   return plainCard;
 }
 
@@ -157,7 +168,6 @@ async function update(
   const cachedCard = cardCache.get(id);
   const plainCardWithGacha = { ...plainCard, gachaName: cachedCard?.gachaName };
   cardCache.set(id, plainCardWithGacha);
-  gachaRuntime.updateCardInCache(plainCard.gachaId, plainCard);
   return plainCard;
 }
 
@@ -173,7 +183,7 @@ async function deleteById(id: string) {
   const gachaId = cachedCard.gachaId;
   await db.Card.destroy({ where: { id } });
   cardCache.delete(id);
-  gachaRuntime.removeCardFromCache(gachaId, id);
+  return gachaId;
 }
 
 module.exports = {

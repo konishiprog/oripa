@@ -171,7 +171,8 @@
     "error": "カードの登録に失敗しました",
     "error-required": "全ての項目を入力してください",
     "error-invalid-image": "画像ファイルを選択してください",
-    "error-exchange-points": "返還ポイント数は1以上の整数を入力してください"
+    "error-exchange-points": "返還ポイント数は1以上の整数を入力してください",
+    "error-last-card-already-exists": "このガチャには既にラストワンが登録されています"
   },
 
   "filter-dialog": {
@@ -205,6 +206,7 @@
     "out-of-stock": "在庫なし",
     "draw-success": "{{count}}枚引きました！",
     "draw-success-single": "{{name}}が当たりました！",
+    "draw-success-last": "おめでとう！ラストワン賞の{{name}}が当たりました！",
     "draw-error": "ガチャ抽選に失敗しました",
     "error-insufficient-coin": "コインが足りません。チャージしてから再度お試しください。",
     "error-out-of-stock": "在庫がなくなりました",

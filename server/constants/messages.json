@@ -12,6 +12,7 @@
     "CARD_FIELDS_REQUIRED": "Name, card type, image front and image back are required",
     "CARD_UPDATE_FIELDS_REQUIRED": "Name, card type and exchange type are required",
     "CARD_NOT_FOUND": "Card not found",
+    "LAST_CARD_ALREADY_EXISTS": "Last card already exists in this gacha",
     "USER_FIELDS_REQUIRED": "Email, password, name, address and phone are required",
     "PHONE_INVALID_FORMAT": "Phone number must contain only digits",
     "PHONE_ALREADY_EXISTS": "Phone number already registered",

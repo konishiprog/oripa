@@ -30,7 +30,8 @@ async function refreshCache() {
   gachaCache.clear();
   gachas.forEach((gacha: any) => {
     const plainGacha = toPlain(gacha);
-    gachaCache.set(plainGacha.id, plainGacha);
+    const cards = (gacha.cards || []).map((card: any) => toPlain(card));
+    gachaCache.set(plainGacha.id, { ...plainGacha, cards });
   });
 }
 
@@ -104,11 +105,11 @@ function getById(id: string) {
   const gacha = gachaCache.get(id);
   if (!gacha) return null;
   const cards = gacha.cards ?? [];
-  const remainingCount = cards.filter((card: any) => !card.isDrawn).length;
+  const notDrawnCards = cards.filter((card: any) => !card.isDrawn);
   return {
     ...gacha,
-    cardsCount: cards.length,
-    remainingCount,
+    cardsCount: notDrawnCards.length,
+    remainingCount: notDrawnCards.length,
   };
 }
 
@@ -153,8 +154,18 @@ async function draw(payload: {
     throw new Error(messages.errors.INSUFFICIENT_COIN);
   }
 
-  const shuffled = [...availableCards].sort(() => Math.random() - 0.5);
-  const drawnCards = shuffled.slice(0, actualDrawCount);
+  const nonLastCards = availableCards.filter(
+    (card: any) => card.cardType !== "LAST",
+  );
+
+  let drawnCards: any[] = [];
+
+  if (availableCards.length === 1) {
+    drawnCards = availableCards;
+  } else {
+    const shuffledNonLast = [...nonLastCards].sort(() => Math.random() - 0.5);
+    drawnCards = shuffledNonLast.slice(0, actualDrawCount);
+  }
   const drawnIds = drawnCards.map((card: any) => card.id);
 
   await db.Card.update(
@@ -260,6 +271,23 @@ async function deleteById(id: string) {
 }
 
 /**
+ * Refresh a specific gacha's cards from database
+ * @param {string} gachaId - Target gacha id
+ */
+async function refreshGachaCards(gachaId: string) {
+  const gacha = await db.Gacha.findByPk(gachaId, {
+    include: [{ model: db.Card, as: "cards" }],
+  });
+  if (!gacha) return;
+
+  const cached = gachaCache.get(gachaId);
+  if (!cached) return;
+
+  const cards = (gacha.cards || []).map((card: any) => toPlain(card));
+  gachaCache.set(gachaId, { ...cached, cards });
+}
+
+/**
  * Append a newly created card into the gacha cache so cardsCount stays current
  * @param {number} gachaId - Target gacha id
  * @param {*} card - Plain card object
@@ -308,6 +336,7 @@ module.exports = {
   update,
   deleteById,
   draw,
+  refreshGachaCards,
   addCardToCache,
   updateCardInCache,
   removeCardFromCache,

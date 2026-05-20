@@ -61,7 +61,7 @@ async function init(_db?: any) {
   await gacha.init(database);
   gachaApi.init({ gacha });
   await card.init(database);
-  cardApi.init({ card });
+  cardApi.init({ card, gacha });
   await user.init(database);
   userApi.init({ user });
 
