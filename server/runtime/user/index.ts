@@ -121,6 +121,74 @@ async function updateCoin(id: string, newCoin: number) {
   return plainUser;
 }
 
+/**
+ * Update a user
+ * @param {string} id - User id
+ * @param {object} payload - User update attributes
+ * @returns {Promise<any>} - Updated user object
+ */
+async function update(
+  id: string,
+  payload: {
+    email?: string;
+    password?: string;
+    name?: string;
+    address?: string;
+    phone?: string;
+    coin?: number;
+  },
+) {
+  const user = await db.User.findByPk(id);
+  if (!user) {
+    throw new Error(messages.errors.USER_NOT_FOUND);
+  }
+
+  if (payload.email && payload.email !== user.email) {
+    const exists = Array.from(userCache.values()).some(
+      (u: any) => u.email === payload.email && u.id !== id,
+    );
+    if (exists) {
+      throw new Error(messages.errors.EMAIL_ALREADY_EXISTS);
+    }
+  }
+
+  if (payload.phone && payload.phone !== user.phone) {
+    const exists = Array.from(userCache.values()).some(
+      (u: any) => u.phone === payload.phone && u.id !== id,
+    );
+    if (exists) {
+      throw new Error(messages.errors.PHONE_ALREADY_EXISTS);
+    }
+  }
+
+  const updateData: any = {};
+  if (payload.email !== undefined) updateData.email = payload.email;
+  if (payload.password !== undefined) updateData.password = payload.password;
+  if (payload.name !== undefined) updateData.name = payload.name;
+  if (payload.address !== undefined) updateData.address = payload.address;
+  if (payload.phone !== undefined) updateData.phone = payload.phone;
+  if (payload.coin !== undefined) updateData.coin = payload.coin;
+
+  await user.update(updateData);
+  const plainUser = toPlain(user);
+  userCache.set(id, plainUser);
+  return plainUser;
+}
+
+/**
+ * Delete a user
+ * @param {string} id - User id
+ * @returns {Promise<void>}
+ */
+async function deleteUser(id: string) {
+  const user = await db.User.findByPk(id);
+  if (!user) {
+    throw new Error(messages.errors.USER_NOT_FOUND);
+  }
+  await user.destroy();
+  userCache.delete(id);
+}
+
 module.exports = {
   init,
   create,
@@ -128,4 +196,6 @@ module.exports = {
   getAll,
   getById,
   updateCoin,
+  update,
+  delete: deleteUser,
 };

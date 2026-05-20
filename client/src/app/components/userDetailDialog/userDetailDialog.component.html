@@ -1,0 +1,153 @@
+<div class="container">
+  <div class="dialog-wrapper">
+    <h1>
+      {{
+        (isEditMode ? "user-detail.title-edit" : "user-detail.title")
+          | translate
+      }}
+    </h1>
+
+    <div *ngIf="!isEditMode" class="detail-list">
+      <div class="detail-row">
+        <div class="detail-label">
+          {{ "user-management.table.email" | translate }}
+        </div>
+        <div class="detail-value">{{ user.email }}</div>
+      </div>
+
+      <div class="detail-row">
+        <div class="detail-label">
+          {{ "user-management.table.password" | translate }}
+        </div>
+        <div class="detail-value">{{ user.password }}</div>
+      </div>
+
+      <div class="detail-row">
+        <div class="detail-label">
+          {{ "user-management.table.name" | translate }}
+        </div>
+        <div class="detail-value">{{ user.name }}</div>
+      </div>
+
+      <div class="detail-row">
+        <div class="detail-label">
+          {{ "user-management.table.coin" | translate }}
+        </div>
+        <div class="detail-value">{{ user.coin }}</div>
+      </div>
+
+      <div class="detail-row">
+        <div class="detail-label">
+          {{ "user-management.table.address" | translate }}
+        </div>
+        <div class="detail-value">{{ user.address }}</div>
+      </div>
+
+      <div class="detail-row">
+        <div class="detail-label">
+          {{ "user-management.table.phone" | translate }}
+        </div>
+        <div class="detail-value">{{ user.phone }}</div>
+      </div>
+    </div>
+
+    <form *ngIf="isEditMode" (ngSubmit)="onSubmit()">
+      <div class="form-group">
+        <label for="email">{{
+          "user-management.table.email" | translate
+        }}</label>
+        <input
+          id="email"
+          type="email"
+          [(ngModel)]="user.email"
+          name="email"
+          required
+          [disabled]="isLoading"
+        />
+      </div>
+
+      <div class="form-group">
+        <label for="password">
+          {{ "user-management.table.password" | translate }}
+        </label>
+        <input
+          id="password"
+          type="text"
+          [(ngModel)]="user.password"
+          name="password"
+          required
+          [disabled]="isLoading"
+        />
+      </div>
+
+      <div class="form-group">
+        <label for="name">{{ "user-management.table.name" | translate }}</label>
+        <input
+          id="name"
+          type="text"
+          [(ngModel)]="user.name"
+          name="name"
+          required
+          [disabled]="isLoading"
+        />
+      </div>
+
+      <div class="form-group">
+        <label for="coin">{{ "user-management.table.coin" | translate }}</label>
+        <input
+          id="coin"
+          type="number"
+          [(ngModel)]="user.coin"
+          name="coin"
+          [disabled]="isLoading"
+        />
+      </div>
+
+      <div class="form-group">
+        <label for="address">
+          {{ "user-management.table.address" | translate }}
+        </label>
+        <input
+          id="address"
+          type="text"
+          [(ngModel)]="user.address"
+          name="address"
+          [disabled]="isLoading"
+        />
+      </div>
+
+      <div class="form-group">
+        <label for="phone">
+          {{ "user-management.table.phone" | translate }}
+        </label>
+        <input
+          id="phone"
+          type="text"
+          [(ngModel)]="user.phone"
+          name="phone"
+          [disabled]="isLoading"
+        />
+      </div>
+    </form>
+
+    <div class="button-group">
+      <button
+        type="button"
+        (click)="onClose()"
+        [disabled]="isLoading"
+        class="close-btn"
+      >
+        {{ "user-detail.close" | translate }}
+      </button>
+      <button
+        *ngIf="isEditMode"
+        type="button"
+        (click)="onSubmit()"
+        [disabled]="isLoading"
+        class="submit-btn"
+      >
+        {{ "user-detail.save" | translate }}
+      </button>
+    </div>
+  </div>
+</div>

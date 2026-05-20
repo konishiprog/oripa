@@ -124,6 +124,59 @@ module.exports = {
       }
     });
 
+    /**
+     * Update a user
+     * PUT /api/user/:id
+     */
+    router.put("/:id", async (req: Request, res: Response) => {
+      const { id } = req.params;
+      const { email, password, name, address, phone, coin } = req.body;
+
+      if (!id) {
+        return res.status(400).json({ error: "User ID is required" });
+      }
+
+      try {
+        const user = await runtime.user.update(id, {
+          email,
+          password,
+          name,
+          address,
+          phone,
+          coin,
+        });
+        return res.status(200).json({
+          message: "User updated successfully",
+          data: user,
+        });
+      } catch (error: any) {
+        const { status, message } = handleError(error, "User update");
+        return res.status(status).json({ error: message });
+      }
+    });
+
+    /**
+     * Delete a user
+     * DELETE /api/user/:id
+     */
+    router.delete("/:id", async (req: Request, res: Response) => {
+      const { id } = req.params;
+
+      if (!id) {
+        return res.status(400).json({ error: "User ID is required" });
+      }
+
+      try {
+        await runtime.user.delete(id);
+        return res.status(200).json({
+          message: "User deleted successfully",
+        });
+      } catch (error: any) {
+        const { status, message } = handleError(error, "User deletion");
+        return res.status(status).json({ error: message });
+      }
+    });
+
     return router;
   },
 };

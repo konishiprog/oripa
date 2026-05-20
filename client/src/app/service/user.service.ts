@@ -41,6 +41,57 @@ export class UserService {
   }
 
   /**
+   * Get all users
+   * @returns {Promise<any[]>} - Array of users
+   */
+  async getAllUsers(): Promise<any[]> {
+    const response = await lastValueFrom(
+      this.http.get<{ message: string; data: any[] }>(
+        `${this.apiConfig.domain}/api/user`,
+        { headers: this.apiConfig.headers },
+      ),
+    );
+    return response.data || [];
+  }
+
+  /**
+   * Update a user
+   * @param {string} id - User id
+   * @param {object} payload - User update data
+   * @returns {Promise<any>} - Updated user object
+   */
+  async updateUser(
+    id: string,
+    payload: {
+      email: string;
+      password: string;
+      name: string;
+      address: string;
+      phone: string;
+      coin: number;
+    },
+  ) {
+    return await lastValueFrom(
+      this.http.put<any>(`${this.apiConfig.domain}/api/user/${id}`, payload, {
+        headers: this.apiConfig.headers,
+      }),
+    );
+  }
+
+  /**
+   * Delete a user
+   * @param {string} id - User id
+   * @returns {Promise<any>} - Delete response
+   */
+  async deleteUser(id: string) {
+    return await lastValueFrom(
+      this.http.delete<any>(`${this.apiConfig.domain}/api/user/${id}`, {
+        headers: this.apiConfig.headers,
+      }),
+    );
+  }
+
+  /**
    * Login a user by email or phone
    * @param {string} identifier - Email address or phone number
    * @param {string} password - User password
