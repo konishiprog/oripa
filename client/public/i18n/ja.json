@@ -251,6 +251,29 @@
     "error-email-exists": "このメールアドレスは既に登録されています"
   },
 
+  "user-management": {
+    "page-title": "ユーザー管理",
+    "desc": "登録ユーザーの一覧を表示",
+    "total-users": "総ユーザー数",
+    "search-placeholder": "メールアドレス・名前・電話番号",
+    "table": {
+      "email": "メールアドレス",
+      "password": "パスワード",
+      "name": "名前",
+      "coin": "コイン数",
+      "address": "住所",
+      "phone": "電話番号"
+    },
+    "delete-confirm": "このユーザー ({{email}}) を削除してもよろしいですか？"
+  },
+
+  "user-detail": {
+    "title": "ユーザー詳細",
+    "title-edit": "ユーザー編集",
+    "close": "閉じる",
+    "save": "保存"
+  },
+
   "admin-account": {
     "page": {
       "title": "管理者アカウント",

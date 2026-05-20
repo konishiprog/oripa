@@ -32,7 +32,9 @@ import { GachaTableComponent } from './components/gachaTable/gachaTable.componen
 import { GachaFilterDialogComponent } from './components/gachaFilterDialog/gachaFilterDialog.component';
 import { CardTableComponent } from './components/cardTable/cardTable.component';
 import { SidebarComponent } from './components/sidebar/sidebar.component';
+import { UserDetailDialogComponent } from './components/userDetailDialog/userDetailDialog.component';
 import { UserGachaPageComponent } from './components/userGachaPage/userGachaPage.component';
+import { UserManagementComponent } from './components/userManagement/userManagement.component';
 import { UserSignupComponent } from './components/userSignup/userSignup.component';
 import { UserLoginDialogComponent } from './components/userLoginDialog/userLoginDialog.component';
 import { AppLogoComponent } from './components/common/appLogo/appLogo.component';
@@ -55,7 +57,9 @@ import { GachaDrawResultDialogComponent } from './components/gachaDrawResultDial
     GachaFilterDialogComponent,
     CardTableComponent,
     SidebarComponent,
+    UserDetailDialogComponent,
     UserGachaPageComponent,
+    UserManagementComponent,
     UserSignupComponent,
     UserLoginDialogComponent,
     AppLogoComponent,

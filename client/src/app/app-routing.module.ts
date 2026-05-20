@@ -10,6 +10,7 @@ import { AdminPanelComponent } from './components/adminPanel/adminPanel.componen
 import { LoginComponent } from './components/login/login.component';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { UserGachaPageComponent } from './components/userGachaPage/userGachaPage.component';
+import { UserManagementComponent } from './components/userManagement/userManagement.component';
 import { UserSignupComponent } from './components/userSignup/userSignup.component';
 
 const routes: Routes = [
@@ -46,6 +47,10 @@ const routes: Routes = [
       {
         path: 'adminAccountList',
         component: AdminAccountListComponent,
+      },
+      {
+        path: 'userManagement',
+        component: UserManagementComponent,
       },
       {
         path: 'createAdmin',
