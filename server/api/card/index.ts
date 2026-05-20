@@ -134,7 +134,7 @@ module.exports = {
           const imageBackFile = files.imageBack[0];
 
           const card = await runtime.card.create({
-            gachaId: Number(gachaId),
+            gachaId,
             name,
             cardType,
             exchangeType,
@@ -167,8 +167,8 @@ module.exports = {
       async (req: Request, res: Response) => {
         if (!validateCardUpdatePayload(req, res)) return;
 
-        const id = Number(req.params.id);
-        if (!Number.isInteger(id) || id <= 0) {
+        const id = req.params.id as string;
+        if (!id || typeof id !== 'string' || id.trim() === "") {
           return res.status(400).json({ error: messages.errors.CARD_NOT_FOUND });
         }
 
@@ -203,8 +203,8 @@ module.exports = {
      * DELETE /api/card/:id
      */
     router.delete("/:id", async (req: Request, res: Response) => {
-      const id = Number(req.params.id);
-      if (!Number.isInteger(id) || id <= 0) {
+      const id = req.params.id as string;
+      if (!id || typeof id !== 'string' || id.trim() === "") {
         return res.status(400).json({ error: messages.errors.CARD_NOT_FOUND });
       }
 
@@ -224,8 +224,8 @@ module.exports = {
      * GET /api/card/gacha/:gachaId
      */
     router.get("/gacha/:gachaId", async (req: Request, res: Response) => {
-      const gachaId = Number(req.params.gachaId);
-      if (!Number.isInteger(gachaId) || gachaId <= 0) {
+      const gachaId = req.params.gachaId as string;
+      if (!gachaId || typeof gachaId !== 'string' || gachaId.trim() === "") {
         return res.status(400).json({ error: messages.errors.GACHA_NOT_FOUND });
       }
 

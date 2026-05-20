@@ -6,7 +6,7 @@ import { UserService } from '../../service/user.service';
 import { UserLoginDialogComponent } from '../userLoginDialog/userLoginDialog.component';
 
 export interface UserGacha {
-  id: number;
+  id: string;
   name: string;
   headerImage: string;
   cost: number;
@@ -53,6 +53,9 @@ export class UserGachaPageComponent implements OnInit {
     dialogRef.afterClosed().subscribe((result) => {
       if (result?.success) {
         this.isLoggedIn = true;
+        if (result.data?.coin !== undefined) {
+          this.userService.saveCoin(result.data.coin);
+        }
         this.cdr.markForCheck();
       }
     });
@@ -60,6 +63,7 @@ export class UserGachaPageComponent implements OnInit {
 
   logout(): void {
     this.userService.clearUserId();
+    this.userService.clearCoin();
     this.isLoggedIn = false;
     this.cdr.markForCheck();
   }

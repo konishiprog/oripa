@@ -6,7 +6,7 @@ const messages = require("../../constants/messages.json");
 const userRuntime = require("../user");
 
 let db: any;
-let gachaCache: Map<number, any> = new Map();
+let gachaCache: Map<string, any> = new Map();
 
 const toPlain = (gacha: any) => gacha?.get({ plain: true }) || null;
 
@@ -74,17 +74,23 @@ async function create(payload: {
 
 /**
  * Get all gachas from cache with cards count and remaining count
- * @returns {Promise<any[]>} - Array of gacha objects
+ * @returns {Promise<any[]>} - Array of gacha objects sorted by publishStart descending
  */
 async function getAll() {
-  return Array.from(gachaCache.values()).map((gacha: any) => {
-    const cards = gacha.cards ?? [];
-    return {
-      ...gacha,
-      cardsCount: cards.length,
-      remainingCount: cards.filter((card: any) => !card.isDrawn).length,
-    };
-  });
+  return Array.from(gachaCache.values())
+    .sort((gachaA: any, gachaB: any) => {
+      const dateA = new Date(gachaA.publishStart).getTime();
+      const dateB = new Date(gachaB.publishStart).getTime();
+      return dateB - dateA;
+    })
+    .map((gacha: any) => {
+      const cards = gacha.cards ?? [];
+      return {
+        ...gacha,
+        cardsCount: cards.length,
+        remainingCount: cards.filter((card: any) => !card.isDrawn).length,
+      };
+    });
 }
 
 /**
@@ -92,7 +98,7 @@ async function getAll() {
  * @param {number} id - Gacha id
  * @returns {any | null} - Gacha object or null
  */
-function getById(id: number) {
+function getById(id: string) {
   const gacha = gachaCache.get(id);
   if (!gacha) return null;
   const cards = gacha.cards ?? [];
@@ -113,8 +119,8 @@ function getById(id: number) {
  * @returns {Promise<{drawnCards: any[], remainingCount: number, userCoin: number, actualDrawCount: number}>}
  */
 async function draw(payload: {
-  gachaId: number;
-  userId: number;
+  gachaId: string;
+  userId: string;
   drawCount: number;
 }) {
   if (!Number.isInteger(payload.drawCount) || payload.drawCount <= 0) {
@@ -149,10 +155,15 @@ async function draw(payload: {
   const drawnCards = shuffled.slice(0, actualDrawCount);
   const drawnIds = drawnCards.map((card: any) => card.id);
 
-  await db.Card.update({ isDrawn: true }, { where: { id: drawnIds } });
+  await db.Card.update(
+    { isDrawn: true, userId: payload.userId },
+    { where: { id: drawnIds } },
+  );
 
   gacha.cards = (gacha.cards ?? []).map((card: any) =>
-    drawnIds.includes(card.id) ? { ...card, isDrawn: true } : card,
+    drawnIds.includes(card.id)
+      ? { ...card, isDrawn: true, userId: payload.userId }
+      : card,
   );
   gachaCache.set(payload.gachaId, gacha);
 
@@ -166,7 +177,7 @@ async function draw(payload: {
   ).length;
 
   return {
-    drawnCards: drawnCards.map((card: any) => ({ ...card, isDrawn: true })),
+    drawnCards: drawnCards.map((card: any) => ({ ...card, isDrawn: true, userId: payload.userId })),
     remainingCount,
     userCoin: updatedUser.coin,
     actualDrawCount,
@@ -180,7 +191,7 @@ async function draw(payload: {
  * @returns {Promise<any>} - Updated gacha object
  */
 async function update(
-  id: number,
+  id: string,
   payload: {
     name: string;
     cost: number;
@@ -227,7 +238,7 @@ async function update(
  * Delete an existing gacha by id
  * @param {number} id - Gacha id to delete
  */
-async function deleteById(id: number) {
+async function deleteById(id: string) {
   const gacha = await db.Gacha.findByPk(id);
   if (!gacha) {
     throw new Error(messages.errors.GACHA_NOT_FOUND);
@@ -242,7 +253,7 @@ async function deleteById(id: number) {
  * @param {number} gachaId - Target gacha id
  * @param {*} card - Plain card object
  */
-function addCardToCache(gachaId: number, card: any) {
+function addCardToCache(gachaId: string, card: any) {
   const cached = gachaCache.get(gachaId);
   if (!cached) return;
   cached.cards = [...(cached.cards ?? []), card];
@@ -255,7 +266,7 @@ function addCardToCache(gachaId: number, card: any) {
  * @param {number} gachaId - Target gacha id
  * @param {*} card - Plain card object with updated values
  */
-function updateCardInCache(gachaId: number, card: any) {
+function updateCardInCache(gachaId: string, card: any) {
   const cached = gachaCache.get(gachaId);
   if (!cached) return;
   cached.cards = (cached.cards ?? []).map((cardInCache: any) =>
@@ -269,7 +280,7 @@ function updateCardInCache(gachaId: number, card: any) {
  * @param {number} gachaId - Target gacha id
  * @param {number} cardId - Card id to remove
  */
-function removeCardFromCache(gachaId: number, cardId: number) {
+function removeCardFromCache(gachaId: string, cardId: string) {
   const cached = gachaCache.get(gachaId);
   if (!cached) return;
   cached.cards = (cached.cards ?? []).filter(

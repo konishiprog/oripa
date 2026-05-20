@@ -5,7 +5,7 @@ export {};
 const messages = require("../../constants/messages.json");
 
 let db: any;
-let userCache: Map<number, any> = new Map();
+let userCache: Map<string, any> = new Map();
 
 const toPlain = (user: any) => user?.get({ plain: true }) || null;
 
@@ -97,20 +97,20 @@ async function getAll() {
 
 /**
  * Get a user by id from cache
- * @param {number} id - User id
+ * @param {string} id - User id
  * @returns {any | null} - User object or null
  */
-function getById(id: number) {
+function getById(id: string) {
   return userCache.get(id) || null;
 }
 
 /**
  * Update a user's coin balance
- * @param {number} id - User id
+ * @param {string} id - User id
  * @param {number} newCoin - New coin value
  * @returns {Promise<any>} - Updated user object
  */
-async function updateCoin(id: number, newCoin: number) {
+async function updateCoin(id: string, newCoin: number) {
   const user = await db.User.findByPk(id);
   if (!user) {
     throw new Error(messages.errors.USER_NOT_FOUND);

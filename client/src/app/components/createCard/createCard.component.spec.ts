@@ -16,7 +16,7 @@ describe('CreateCardComponent', () => {
   let mockDialogRef: any;
   let mockSanitizer: any;
 
-  const dialogData = { gachaId: 1, gachaName: 'Test Gacha' };
+  const dialogData = { gachaId: 'test-uuid-1', gachaName: 'Test Gacha' };
 
   beforeEach(async () => {
     jest.spyOn(console, 'error').mockImplementation(() => {});
@@ -24,8 +24,8 @@ describe('CreateCardComponent', () => {
     mockCardService = {
       createCard: jest.fn().mockResolvedValue({
         data: {
-          id: 1,
-          gachaId: 1,
+          id: 'test-uuid-1',
+          gachaId: 'test-uuid-1',
           name: 'Test Card',
           cardType: 'SSR',
           exchangeType: 'SHIPPING_ONLY',
@@ -85,7 +85,7 @@ describe('CreateCardComponent', () => {
   });
 
   it('should receive gacha data from dialog', () => {
-    expect(component.data.gachaId).toBe(1);
+    expect(component.data.gachaId).toBe('test-uuid-1');
     expect(component.data.gachaName).toBe('Test Gacha');
   });
 
@@ -255,7 +255,7 @@ describe('CreateCardComponent', () => {
     await component.onSubmit();
 
     expect(mockCardService.createCard).toHaveBeenCalledWith({
-      gachaId: 1,
+      gachaId: 'test-uuid-1',
       name: 'Test Card',
       cardType: 'SSR',
       exchangeType: 'SHIPPING_ONLY',
@@ -267,8 +267,8 @@ describe('CreateCardComponent', () => {
     expect(mockDialogRef.close).toHaveBeenCalledWith({
       mode: 'create',
       data: {
-        id: 1,
-        gachaId: 1,
+        id: 'test-uuid-1',
+        gachaId: 'test-uuid-1',
         name: 'Test Card',
         cardType: 'SSR',
         exchangeType: 'SHIPPING_ONLY',
@@ -311,8 +311,8 @@ describe('CreateCardComponent', () => {
 
     resolveCreate({
       data: {
-        id: 1,
-        gachaId: 1,
+        id: 'test-uuid-1',
+        gachaId: 'test-uuid-1',
         name: 'Test Card',
         cardType: 'SSR',
         exchangeType: 'SHIPPING_ONLY',

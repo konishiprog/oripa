@@ -21,8 +21,8 @@ import {
 import { CardService } from '../../service/card.service';
 
 export interface Card {
-  id: number;
-  gachaId: number;
+  id: string;
+  gachaId: string;
   gachaName: string;
   name: string;
   cardType: string;

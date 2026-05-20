@@ -18,23 +18,12 @@ async function init(_db: any) {
 }
 
 /**
- * Get the next unique card id across all gachas
- * @returns {Promise<number>} - Next available card id
- */
-async function getNextCardId(): Promise<number> {
-  const maxCard = await db.Card.findOne({
-    order: [["id", "DESC"]],
-  });
-  return maxCard ? maxCard.id + 1 : 1;
-}
-
-/**
  * Create a new card for a gacha
  * @param {object} payload - Card attributes with optional image files
  * @returns {Promise<any>} - Created card object
  */
 async function create(payload: {
-  gachaId: number;
+  gachaId: string;
   name: string;
   cardType: string;
   exchangeType: string;
@@ -57,10 +46,7 @@ async function create(payload: {
     imageBackBase64 = `data:${payload.imageBackFile.mimetype};base64,${payload.imageBackFile.buffer.toString("base64")}`;
   }
 
-  const id = await getNextCardId();
-
   const card = await db.Card.create({
-    id,
     gachaId: payload.gachaId,
     name: payload.name,
     cardType: payload.cardType,
@@ -79,10 +65,10 @@ async function create(payload: {
 
 /**
  * Get all cards for a specific gacha
- * @param {number} gachaId - Gacha id
+ * @param {string} gachaId - Gacha id
  * @returns {Promise<any[]>} - Array of card objects
  */
-async function getByGachaId(gachaId: number) {
+async function getByGachaId(gachaId: string) {
   const cards = await db.Card.findAll({
     where: { gachaId },
     order: [["id", "ASC"]],
@@ -92,12 +78,12 @@ async function getByGachaId(gachaId: number) {
 
 /**
  * Update an existing card. Images are optional — kept if not provided.
- * @param {number} id - Card id to update
+ * @param {string} id - Card id to update
  * @param {object} payload - Card attributes with optional image files
  * @returns {Promise<any>} - Updated card object
  */
 async function update(
-  id: number,
+  id: string,
   payload: {
     name: string;
     cardType: string;
@@ -139,9 +125,9 @@ async function update(
 
 /**
  * Delete an existing card by id
- * @param {number} id - Card id to delete
+ * @param {string} id - Card id to delete
  */
-async function deleteById(id: number) {
+async function deleteById(id: string) {
   const card = await db.Card.findByPk(id);
   if (!card) {
     throw new Error(messages.errors.CARD_NOT_FOUND);

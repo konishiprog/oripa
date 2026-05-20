@@ -25,7 +25,7 @@ import {
 import { GachaService } from '../../service/gacha.service';
 
 export interface Gacha {
-  id: number;
+  id: string;
   name: string;
   headerImage: string;
   consumptionType: string;

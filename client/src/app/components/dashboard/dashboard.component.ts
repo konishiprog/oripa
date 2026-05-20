@@ -138,7 +138,7 @@ export class DashboardComponent implements OnInit {
   }
 
   private async refreshCardsForGacha(
-    gachaId: number,
+    gachaId: string,
     gachaName: string,
   ): Promise<void> {
     try {

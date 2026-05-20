@@ -1,0 +1,82 @@
+<div class="dialog-wrapper">
+  <div class="dialog-header">
+    <h2>
+      <ng-container *ngIf="!showSummary">
+        {{
+          "gacha-draw-result.progress"
+            | translate: { current: currentIndex + 1, total: drawnCards.length }
+        }}
+      </ng-container>
+      <ng-container *ngIf="showSummary">
+        {{
+          "gacha-draw-result.summary-title"
+            | translate: { count: drawnCards.length }
+        }}
+      </ng-container>
+    </h2>
+    <button
+      type="button"
+      class="close-icon"
+      (click)="close()"
+      [attr.aria-label]="'gacha-draw-result.close-aria-label' | translate"
+    >
+      {{ "gacha-draw-result.close-icon" | translate }}
+    </button>
+  </div>
+
+  <div class="reveal-stage" *ngIf="!showSummary && currentCard">
+    <div
+      class="card-flip"
+      [class.is-flipped]="isCurrentRevealed"
+      (click)="reveal()"
+    >
+      <div class="card-face card-back">
+        <img
+          *ngIf="currentCard.imageBack"
+          [src]="currentCard.imageBack"
+          [alt]="'gacha-draw-result.back-alt' | translate"
+        />
+        <div class="card-back-hint" *ngIf="!isCurrentRevealed">
+          {{ "gacha-draw-result.tap-to-reveal" | translate }}
+        </div>
+      </div>
+      <div class="card-face card-front">
+        <img [src]="currentCard.imageFront" [alt]="currentCard.name" />
+        <div class="card-front-name">{{ currentCard.name }}</div>
+      </div>
+    </div>
+
+    <div class="reveal-actions">
+      <button
+        type="button"
+        class="reveal-btn reveal-btn-skip"
+        (click)="revealAll()"
+      >
+        {{ "gacha-draw-result.reveal-all" | translate }}
+      </button>
+      <button type="button" class="reveal-btn reveal-btn-next" (click)="next()">
+        <ng-container *ngIf="!isCurrentRevealed">
+          {{ "gacha-draw-result.reveal" | translate }}
+        </ng-container>
+        <ng-container *ngIf="isCurrentRevealed && !isLast">
+          {{ "gacha-draw-result.next" | translate }}
+        </ng-container>
+        <ng-container *ngIf="isCurrentRevealed && isLast">
+          {{ "gacha-draw-result.finish" | translate }}
+        </ng-container>
+      </button>
+    </div>
+  </div>
+
+  <div class="summary" *ngIf="showSummary">
+    <div class="summary-grid">
+      <div class="summary-card" *ngFor="let card of drawnCards">
+        <img [src]="card.imageFront" [alt]="card.name" />
+        <div class="summary-card-name">{{ card.name }}</div>
+      </div>
+    </div>
+    <button type="button" class="reveal-btn reveal-btn-next" (click)="close()">
+      {{ "gacha-draw-result.close" | translate }}
+    </button>
+  </div>
+</div>

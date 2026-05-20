@@ -20,6 +20,7 @@ export interface CreateUserPayload {
 })
 export class UserService {
   private readonly STORAGE_KEY = 'userId';
+  private readonly COIN_STORAGE_KEY = 'userCoin';
 
   constructor(
     private http: HttpClient,
@@ -33,11 +34,9 @@ export class UserService {
    */
   async createUser(payload: CreateUserPayload) {
     return await lastValueFrom(
-      this.http.post<any>(
-        `${this.apiConfig.domain}/api/user`,
-        payload,
-        { headers: this.apiConfig.headers },
-      ),
+      this.http.post<any>(`${this.apiConfig.domain}/api/user`, payload, {
+        headers: this.apiConfig.headers,
+      }),
     );
   }
 
@@ -59,19 +58,18 @@ export class UserService {
 
   /**
    * Save the logged-in user id to local storage
-   * @param {number} id - User id
+   * @param {string} id - User id (UUID)
    */
-  saveUserId(id: number): void {
-    localStorage.setItem(this.STORAGE_KEY, String(id));
+  saveUserId(id: string): void {
+    localStorage.setItem(this.STORAGE_KEY, id);
   }
 
   /**
    * Get the logged-in user id from local storage
-   * @returns {number | null} - User id or null
+   * @returns {string | null} - User id (UUID) or null
    */
-  getUserId(): number | null {
-    const value = localStorage.getItem(this.STORAGE_KEY);
-    return value ? Number(value) : null;
+  getUserId(): string | null {
+    return localStorage.getItem(this.STORAGE_KEY);
   }
 
   /**
@@ -87,5 +85,29 @@ export class UserService {
    */
   isLoggedIn(): boolean {
     return this.getUserId() !== null;
+  }
+
+  /**
+   * Save the user's coin balance to local storage
+   * @param {number} coin - User coin balance
+   */
+  saveCoin(coin: number): void {
+    localStorage.setItem(this.COIN_STORAGE_KEY, coin.toString());
+  }
+
+  /**
+   * Get the user's coin balance from local storage
+   * @returns {number | null} - User coin balance or null
+   */
+  getCoin(): number | null {
+    const coin = localStorage.getItem(this.COIN_STORAGE_KEY);
+    return coin ? parseInt(coin, 10) : null;
+  }
+
+  /**
+   * Clear the user's coin balance from local storage
+   */
+  clearCoin(): void {
+    localStorage.removeItem(this.COIN_STORAGE_KEY);
   }
 }

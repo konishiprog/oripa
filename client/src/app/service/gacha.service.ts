@@ -58,11 +58,11 @@ export class GachaService {
 
   /**
    * Update an existing gacha (image is optional — kept if not provided)
-   * @param {number} id - Gacha id to update
+   * @param {string} id - Gacha id (UUID) to update
    * @param {UpdateGachaPayload} payload - Gacha attributes with optional image file
    * @returns {Promise<any>} - Updated gacha object
    */
-  async updateGacha(id: number, payload: UpdateGachaPayload) {
+  async updateGacha(id: string, payload: UpdateGachaPayload) {
     const formData = new FormData();
     formData.append('name', payload.name);
     formData.append('cost', payload.cost.toString());
@@ -83,10 +83,10 @@ export class GachaService {
 
   /**
    * Delete an existing gacha
-   * @param {number} id - Gacha id to delete
+   * @param {string} id - Gacha id (UUID) to delete
    * @returns {Promise<any>}
    */
-  async deleteGacha(id: number) {
+  async deleteGacha(id: string) {
     return await lastValueFrom(
       this.http.delete<any>(`${this.apiConfig.domain}/api/gacha/${id}`, {
         headers: this.apiConfig.headers,
@@ -110,10 +110,10 @@ export class GachaService {
 
   /**
    * Get a single gacha by id (with remaining count)
-   * @param {number} id - Gacha id
+   * @param {string} id - Gacha id (UUID)
    * @returns {Promise<any>} - Gacha object
    */
-  async getGachaById(id: number): Promise<any> {
+  async getGachaById(id: string): Promise<any> {
     const response = await lastValueFrom(
       this.http.get<{ message: string; data: any }>(
         `${this.apiConfig.domain}/api/gacha/${id}`,
@@ -125,14 +125,14 @@ export class GachaService {
 
   /**
    * Draw cards from a gacha for the given user
-   * @param {number} gachaId - Gacha id
-   * @param {number} userId - User id performing the draw
+   * @param {string} gachaId - Gacha id (UUID)
+   * @param {string} userId - User id (UUID) performing the draw
    * @param {number} drawCount - Requested draw count (may be capped to remaining)
    * @returns {Promise<any>} - Draw result with drawn cards, remaining count and updated user coin
    */
   async drawGacha(
-    gachaId: number,
-    userId: number,
+    gachaId: string,
+    userId: string,
     drawCount: number,
   ): Promise<any> {
     const response = await lastValueFrom(

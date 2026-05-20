@@ -14,7 +14,7 @@ describe('GachaTableComponent', () => {
 
   const mockGachas: Gacha[] = [
     {
-      id: 1,
+      id: 'gacha-uuid-1',
       name: 'Gacha 1',
       headerImage: 'header1.jpg',
       consumptionType: 'TICKETS',
@@ -25,7 +25,7 @@ describe('GachaTableComponent', () => {
       cards: 10,
     },
     {
-      id: 2,
+      id: 'gacha-uuid-2',
       name: 'Gacha 2',
       headerImage: 'header2.jpg',
       consumptionType: 'POINTS',
@@ -36,7 +36,7 @@ describe('GachaTableComponent', () => {
       cards: 15,
     },
     {
-      id: 3,
+      id: 'gacha-uuid-3',
       name: 'Gacha 3',
       headerImage: 'header3.jpg',
       consumptionType: 'TICKETS',
@@ -149,8 +149,8 @@ describe('GachaTableComponent', () => {
     component.itemsPerPage = 2;
     const displayed = component.getDisplayedGachas();
     expect(displayed.length).toBe(2);
-    expect(displayed[0].id).toBe(1);
-    expect(displayed[1].id).toBe(2);
+    expect(displayed[0].id).toBe('gacha-uuid-1');
+    expect(displayed[1].id).toBe('gacha-uuid-2');
   });
 
   it('should get correct total pages', () => {
@@ -171,7 +171,7 @@ describe('GachaTableComponent', () => {
   it('should show ellipsis and boundary pages for large page count', () => {
     const largeList = Array.from({ length: 100 }, (_, i) => ({
       ...mockGachas[0],
-      id: i + 1,
+      id: `gacha-uuid-${i + 1}`,
     }));
     component.filteredGachas = largeList;
     component.itemsPerPage = 5;
@@ -301,7 +301,9 @@ describe('GachaTableComponent', () => {
     jest.spyOn(window, 'confirm').mockReturnValue(true);
 
     await component.deleteGacha(mockGachas[0]);
-    expect(component.gachas.find((g) => g.id === 1)).toBeUndefined();
+    expect(
+      component.gachas.find((gacha) => gacha.id === 'gacha-uuid-1'),
+    ).toBeUndefined();
   });
 
   it('should call applyFilters after deleting gacha', async () => {
@@ -352,8 +354,8 @@ describe('GachaTableComponent', () => {
       };
       component.applyFilters();
       expect(component.filteredGachas.length).toBe(2);
-      expect(component.filteredGachas[0].id).toBe(2);
-      expect(component.filteredGachas[1].id).toBe(3);
+      expect(component.filteredGachas[0].id).toBe('gacha-uuid-2');
+      expect(component.filteredGachas[1].id).toBe('gacha-uuid-3');
     });
 
     it('should filter by publish date range - to date', () => {
@@ -367,8 +369,8 @@ describe('GachaTableComponent', () => {
       };
       component.applyFilters();
       expect(component.filteredGachas.length).toBe(2);
-      expect(component.filteredGachas[0].id).toBe(1);
-      expect(component.filteredGachas[1].id).toBe(2);
+      expect(component.filteredGachas[0].id).toBe('gacha-uuid-1');
+      expect(component.filteredGachas[1].id).toBe('gacha-uuid-2');
     });
 
     it('should filter by publish date range - between dates', () => {
@@ -382,7 +384,7 @@ describe('GachaTableComponent', () => {
       };
       component.applyFilters();
       expect(component.filteredGachas.length).toBe(1);
-      expect(component.filteredGachas[0].id).toBe(2);
+      expect(component.filteredGachas[0].id).toBe('gacha-uuid-2');
     });
 
     it('should filter by cost range - min cost', () => {
@@ -426,7 +428,7 @@ describe('GachaTableComponent', () => {
       };
       component.applyFilters();
       expect(component.filteredGachas.length).toBe(1);
-      expect(component.filteredGachas[0].id).toBe(1);
+      expect(component.filteredGachas[0].id).toBe('gacha-uuid-1');
       expect(component.filteredGachas[0].cost).toBe(100);
     });
 
@@ -456,7 +458,7 @@ describe('GachaTableComponent', () => {
       };
       component.applyFilters();
       expect(component.filteredGachas.length).toBe(1);
-      expect(component.filteredGachas[0].id).toBe(2);
+      expect(component.filteredGachas[0].id).toBe('gacha-uuid-2');
       expect(component.filteredGachas[0].isPublic).toBe(false);
     });
 
@@ -555,7 +557,7 @@ describe('GachaTableComponent', () => {
       };
       component.applyFilters();
       expect(component.filteredGachas.length).toBe(1);
-      expect(component.filteredGachas[0].id).toBe(1);
+      expect(component.filteredGachas[0].id).toBe('gacha-uuid-1');
     });
 
     it('should combine search query with filters', () => {
