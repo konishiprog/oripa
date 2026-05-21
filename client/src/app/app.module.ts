@@ -41,6 +41,7 @@ import { ConfirmUpdateDialogComponent } from './components/userMyPage/confirm-up
 import { UserCardHistoryPageComponent } from './components/userCardHistoryPage/userCardHistoryPage.component';
 import { UserLoginDialogComponent } from './components/userLoginDialog/userLoginDialog.component';
 import { AppLogoComponent } from './components/common/appLogo/appLogo.component';
+import { AppHeaderComponent } from './components/common/appHeader/appHeader.component';
 import { GachaBoxComponent } from './components/gachaBox/gachaBox.component';
 import { GachaDrawResultDialogComponent } from './components/gachaDrawResultDialog/gachaDrawResultDialog.component';
 import { CoinExchangeDialogComponent } from './components/coinExchangeDialog/coinExchangeDialog.component';
@@ -70,6 +71,7 @@ import { CoinExchangeDialogComponent } from './components/coinExchangeDialog/coi
     UserCardHistoryPageComponent,
     UserLoginDialogComponent,
     AppLogoComponent,
+    AppHeaderComponent,
     GachaBoxComponent,
     GachaDrawResultDialogComponent,
     CoinExchangeDialogComponent,

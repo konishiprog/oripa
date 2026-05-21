@@ -8,61 +8,9 @@
   flex-direction: column;
   flex-shrink: 0;
   position: fixed;
-  top: 0;
+  top: 52px;
   left: 0;
   bottom: 0;
-}
-
-.sidebar-logo {
-  padding: 20px 20px 16px;
-  border-bottom: 1px solid #e2e8f0;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-.back-to-gacha-btn {
-  margin: 12px 12px 0;
-  padding: 9px 10px;
-  border: 1px solid #e2e8f0;
-  border-radius: 8px;
-  background-color: #fff;
-  color: #718096;
-  font-size: 13px;
-  cursor: pointer;
-  transition:
-    background 0.15s,
-    color 0.15s,
-    border-color 0.15s;
-}
-
-.back-to-gacha-btn:hover {
-  background-color: #f7f8fa;
-  color: #1a202c;
-  border-color: #cbd5e0;
-}
-
-.sidebar-logo-icon {
-  width: 36px;
-  height: 36px;
-  background: linear-gradient(135deg, #805ad5, #6b46c1);
-  border-radius: 9px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-}
-
-.sidebar-logo-icon svg {
-  width: 18px;
-  height: 18px;
-  fill: #fff;
-}
-
-.sidebar-logo-text {
-  font-size: 15px;
-  font-weight: 700;
-  color: #1a202c;
 }
 
 .sidebar-section {

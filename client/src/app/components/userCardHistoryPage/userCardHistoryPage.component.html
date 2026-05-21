@@ -1,5 +1,8 @@
-<div class="page">
-  <header class="page-header">
+<div class="app">
+  <app-header></app-header>
+
+  <div class="page">
+    <header class="page-header">
     <button type="button" class="back-btn" (click)="goBack()">
       <span [innerHTML]="chevronSvg" class="back-icon"></span>
       {{ "card-history.back" | translate }}
@@ -99,5 +102,6 @@
           | translate: { points: selectedTotalPoints }
       }}
     </button>
+  </div>
   </div>
 </div>
