@@ -247,7 +247,7 @@ module.exports = {
       try {
         await runtime.card.update(id, { isDrawn: CARD_STATUS.REFUNDED });
         const allCards = await runtime.card.getAll();
-        const card = allCards.find((c: any) => c.id === id);
+        const card = allCards.find((foundCard: any) => foundCard.id === id);
         if (card) {
           await gacha.refreshGachaCards(card.gachaId);
         }
@@ -256,6 +256,38 @@ module.exports = {
           .json({ message: messages.success.CARD_EXCHANGED });
       } catch (error: any) {
         const { status, message } = handleError(error, "Card exchange");
+        return res.status(status).json({ error: message });
+      }
+    });
+
+    /**
+     * Update card status
+     * PATCH /api/card/:id/status
+     */
+    router.patch("/:id/status", async (req: Request, res: Response) => {
+      const id = req.params.id as string;
+      if (!id || typeof id !== "string" || id.trim() === "") {
+        return res.status(400).json({ error: messages.errors.CARD_NOT_FOUND });
+      }
+
+      const { isDrawn } = req.body;
+      if (!isDrawn || typeof isDrawn !== "string") {
+        return res.status(400).json({ error: messages.errors.CARD_NOT_FOUND });
+      }
+
+      try {
+        await runtime.card.update(id, { isDrawn });
+        const allCards = await runtime.card.getAll();
+        const card = allCards.find((foundCard: any) => foundCard.id === id);
+        if (card) {
+          await gacha.refreshGachaCards(card.gachaId);
+        }
+        return res.status(200).json({
+          message: messages.success.CARD_UPDATED,
+          data: card,
+        });
+      } catch (error: any) {
+        const { status, message } = handleError(error, "Card status update");
         return res.status(status).json({ error: message });
       }
     });

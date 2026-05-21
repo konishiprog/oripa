@@ -5,7 +5,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { TranslateService, TranslateModule } from '@ngx-translate/core';
 import { Subject } from 'rxjs';
 import { AppHeaderComponent } from './appHeader.component';
-import { UserService } from '../../../service/user.service';
+import { UserService } from '../../service/user.service';
 
 describe('AppHeaderComponent', () => {
   let component: AppHeaderComponent;

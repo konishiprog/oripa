@@ -281,6 +281,7 @@
   "my-page": {
     "title": "マイページ",
     "back": "戻る",
+    "back-to-gacha": "ガチャページに戻る",
     "loading": "読み込み中...",
     "card-history": "カード獲得履歴",
     "coin-history": "コイン購入履歴",
@@ -310,6 +311,8 @@
   "card-history": {
     "title": "カード獲得履歴",
     "back": "戻る",
+    "exchange-mode": "コイン変換",
+    "shipping-mode": "発送",
     "tab-unselected": "未選択",
     "tab-pending": "発送待ち",
     "tab-shipped": "発送済み",
@@ -319,7 +322,8 @@
     "empty-shipped": "発送済みの獲得商品がありません",
     "from-gacha": "{{name}} より",
     "exchange-button": "コインに交換する（{{points}}コイン）",
-    "exchange-confirm": "選択したカードを {{points}} コインに変換しますか？"
+    "exchange-confirm": "選択したカードを {{points}} コインに変換しますか？",
+    "shipping-button": "発送開始"
   },
 
   "user-management": {

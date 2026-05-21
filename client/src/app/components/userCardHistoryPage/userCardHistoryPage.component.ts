@@ -38,6 +38,7 @@ export class UserCardHistoryPageComponent implements OnInit {
   isLoading: boolean = true;
   cards: UserCard[] = [];
   chevronSvg: SafeHtml = '';
+  mode: 'exchange' | 'shipping' = 'exchange';
 
   selectedCardIds = new Set<string>();
 
@@ -75,19 +76,25 @@ export class UserCardHistoryPageComponent implements OnInit {
       const data = await this.cardService.getCardsByUserId(userId);
       this.cards = data
         .filter((card: any) => card.isDrawn !== CARD_STATUS.REFUNDED)
-        .map((card: any) => ({
-          id: card.id,
-          gachaId: card.gachaId,
-          name: card.name,
-          imageFront: card.imageFront,
-          imageBack: card.imageBack,
-          cardType: card.cardType,
-          exchangeType: card.exchangeType,
-          exchangePoints: card.exchangePoints,
-          isDrawn: card.isDrawn,
-          gachaName: card.gachaName,
-          status: 'unselected',
-        }));
+        .map((card: any) => {
+          let status: CardHistoryTab = 'unselected';
+          if (card.isDrawn === CARD_STATUS.SHIPPING_PENDING) {
+            status = 'pending';
+          }
+          return {
+            id: card.id,
+            gachaId: card.gachaId,
+            name: card.name,
+            imageFront: card.imageFront,
+            imageBack: card.imageBack,
+            cardType: card.cardType,
+            exchangeType: card.exchangeType,
+            exchangePoints: card.exchangePoints,
+            isDrawn: card.isDrawn,
+            gachaName: card.gachaName,
+            status,
+          };
+        });
     } catch (error) {
       console.error('Failed to load user cards:', error);
     } finally {
@@ -123,14 +130,29 @@ export class UserCardHistoryPageComponent implements OnInit {
     return card.exchangeType === EXCHANGE_TYPE.BOTH;
   }
 
+  isSelectableForCurrentMode(card: UserCard): boolean {
+    if (this.mode === 'exchange') {
+      return this.isExchangeable(card) && card.isDrawn !== CARD_STATUS.REFUNDED;
+    } else {
+      return (
+        card.isDrawn !== CARD_STATUS.REFUNDED &&
+        card.isDrawn !== CARD_STATUS.SHIPPING_PENDING
+      );
+    }
+  }
+
   toggleSelect(card: UserCard): void {
-    if (!this.isExchangeable(card) || card.isDrawn === CARD_STATUS.REFUNDED)
-      return;
+    if (!this.isSelectableForCurrentMode(card)) return;
     if (this.selectedCardIds.has(card.id)) {
       this.selectedCardIds.delete(card.id);
     } else {
       this.selectedCardIds.add(card.id);
     }
+  }
+
+  switchMode(newMode: 'exchange' | 'shipping'): void {
+    this.mode = newMode;
+    this.selectedCardIds.clear();
   }
 
   get selectedTotalPoints(): number {
@@ -185,6 +207,28 @@ export class UserCardHistoryPageComponent implements OnInit {
       this.cdr.markForCheck();
     } catch (error) {
       console.error('Failed to exchange cards:', error);
+    }
+  }
+
+  async startShipping(): Promise<void> {
+    try {
+      const selectedCards = this.cards.filter((card) =>
+        this.selectedCardIds.has(card.id),
+      );
+
+      for (const card of selectedCards) {
+        await this.cardService.updateCardStatus(
+          card.id,
+          CARD_STATUS.SHIPPING_PENDING,
+        );
+        card.isDrawn = CARD_STATUS.SHIPPING_PENDING;
+        card.status = 'pending';
+      }
+
+      this.selectedCardIds.clear();
+      this.cdr.markForCheck();
+    } catch (error) {
+      console.error('Failed to start shipping:', error);
     }
   }
 }

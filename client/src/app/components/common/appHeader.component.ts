@@ -2,8 +2,8 @@ import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 import { TranslateService } from '@ngx-translate/core';
-import { UserService } from '../../../service/user.service';
-import { UserLoginDialogComponent } from '../../userLoginDialog/userLoginDialog.component';
+import { UserService } from '../../service/user.service';
+import { UserLoginDialogComponent } from '../userLoginDialog/userLoginDialog.component';
 
 @Component({
   selector: 'app-header',
