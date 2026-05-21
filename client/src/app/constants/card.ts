@@ -3,6 +3,7 @@ export const CARD_STATUS = {
   DRAWN: '引かれた',
   REFUNDED: '差し戻し',
   SHIPPING_PENDING: '発送待ち',
+  SHIPPED: '発送済み',
 } as const;
 
 export type CardStatusType = (typeof CARD_STATUS)[keyof typeof CARD_STATUS];

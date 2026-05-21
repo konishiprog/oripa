@@ -18,6 +18,7 @@
     "logs": "ログ",
     "purchase-log": "購入ログ",
     "point-history": "ポイント履歴",
+    "shipping-info": "輸送情報",
     "user": {
       "avatar": "管",
       "role": "管理者"
@@ -112,7 +113,9 @@
       "no-exchange-points": "-",
       "drawn": "引かれた",
       "not-drawn": "未引き",
-      "refunded": "差し戻し"
+      "refunded": "差し戻し",
+      "shipping-pending": "発送待ち",
+      "shipped": "発送済み"
     },
     "pagination": {
       "info": "全 {{total}}件中{{start}}〜{{end}}件を表示"
@@ -195,6 +198,31 @@
     "reset": "リセット",
     "apply": "適用",
     "close": "閉じる"
+  },
+
+  "shipping-info": {
+    "page-title": "輸送情報",
+    "page-desc": "発送待ちのカード一覧を表示",
+    "total-cards": "発送待ちカード数",
+    "no-data": "発送待ちのカードがありません",
+    "error": "発送待ちカード情報の読み込みに失敗しました",
+    "no-selection": "発送するカードを選択してください",
+    "complete-button": "発送完了",
+    "complete-confirm": "発送完了した連絡を入れますがよろしいですか？",
+    "complete-success": "カードの発送が完了しました",
+    "complete-error": "カードの発送処理に失敗しました",
+    "table": {
+      "user-name": "ユーザー名",
+      "address": "住所",
+      "phone": "電話番号",
+      "card-info": "カード情報",
+      "gacha-name": "ガチャ名",
+      "card-name": "カード名"
+    }
+  },
+
+  "shipping-card-detail": {
+    "title": "カード詳細情報"
   },
 
   "gacha-box": {

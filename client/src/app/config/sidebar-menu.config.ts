@@ -15,6 +15,7 @@ export const SIDEBAR_MENU: MenuSection[] = [
     items: [
       { label: 'sidebar.dashboard', icon: 'assets/icons/dashboard.svg', route: '/adminPanel/dashboard' },
       { label: 'sidebar.user-management', icon: 'assets/icons/user-management.svg', route: '/adminPanel/userManagement' },
+      { label: 'sidebar.shipping-info', icon: 'assets/icons/box-management.svg', route: '/adminPanel/shippingInfo' },
     ],
   },
   {

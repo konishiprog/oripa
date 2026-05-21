@@ -1,0 +1,48 @@
+<div class="container">
+  <div class="dialog-wrapper">
+    <h1>{{ "shipping-card-detail.title" | translate }}</h1>
+
+    <div class="detail-list">
+      <div class="detail-row">
+        <div class="detail-label">
+          {{ "shipping-info.table.user-name" | translate }}
+        </div>
+        <div class="detail-value">{{ card.userName }}</div>
+      </div>
+
+      <div class="detail-row">
+        <div class="detail-label">
+          {{ "shipping-info.table.address" | translate }}
+        </div>
+        <div class="detail-value">{{ card.address }}</div>
+      </div>
+
+      <div class="detail-row">
+        <div class="detail-label">
+          {{ "shipping-info.table.phone" | translate }}
+        </div>
+        <div class="detail-value">{{ card.phone }}</div>
+      </div>
+
+      <div class="detail-row">
+        <div class="detail-label">
+          {{ "shipping-info.table.gacha-name" | translate }}
+        </div>
+        <div class="detail-value">{{ card.gachaName }}</div>
+      </div>
+
+      <div class="detail-row">
+        <div class="detail-label">
+          {{ "shipping-info.table.card-name" | translate }}
+        </div>
+        <div class="detail-value">{{ card.cardName }}</div>
+      </div>
+    </div>
+
+    <div class="button-group">
+      <button type="button" (click)="onClose()" class="close-btn">
+        {{ "common.ok" | translate }}
+      </button>
+    </div>
+  </div>
+</div>

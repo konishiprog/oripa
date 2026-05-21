@@ -169,23 +169,22 @@ describe('UserGachaPageComponent', () => {
     expect(component.gachas.map((gacha) => gacha.id)).toEqual([3, 2, 1]);
   });
 
-  it('should check login status on init', async () => {
-    gachaService.getGachas.mockResolvedValue([]);
-    userService.isLoggedIn.mockReturnValue(true);
+  it('should handle error when loading gachas fails', async () => {
+    gachaService.getGachas.mockRejectedValue(new Error('API Error'));
 
     fixture.detectChanges();
     await fixture.whenStable();
 
-    expect(component.isLoggedIn).toBe(true);
+    expect(component.isLoading).toBe(false);
+    expect(component.gachas.length).toBe(0);
   });
 
-  it('should logout user', () => {
-    component.isLoggedIn = true;
-    component.logout();
+  it('should switch active tab', () => {
+    component.selectTab('popular');
+    expect(component.activeTab).toBe('popular');
 
-    expect(userService.clearUserId).toHaveBeenCalled();
-    expect(userService.clearCoin).toHaveBeenCalled();
-    expect(component.isLoggedIn).toBe(false);
+    component.selectTab('new');
+    expect(component.activeTab).toBe('new');
   });
 
   it('selectTab should switch active tab', () => {

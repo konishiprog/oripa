@@ -244,13 +244,20 @@ export class CardTableComponent implements OnInit, OnChanges {
   }
 
   getIsDrawnLabel(card: Card): string {
-    if (card.isDrawn === CARD_STATUS.NOT_DRAWN) {
-      return this.translateService.instant('dashboard.card.not-drawn');
+    switch (card.isDrawn) {
+      case CARD_STATUS.NOT_DRAWN:
+        return this.translateService.instant('dashboard.card.not-drawn');
+      case CARD_STATUS.DRAWN:
+        return this.translateService.instant('dashboard.card.drawn');
+      case CARD_STATUS.REFUNDED:
+        return this.translateService.instant('dashboard.card.refunded');
+      case CARD_STATUS.SHIPPING_PENDING:
+        return this.translateService.instant('dashboard.card.shipping-pending');
+      case CARD_STATUS.SHIPPED:
+        return this.translateService.instant('dashboard.card.shipped');
+      default:
+        return card.isDrawn;
     }
-    if (card.isDrawn === CARD_STATUS.REFUNDED) {
-      return this.translateService.instant('dashboard.card.refunded');
-    }
-    return this.translateService.instant('dashboard.card.drawn');
   }
 
   getTextCellValue(cell: TableCell, card: Card): any {
