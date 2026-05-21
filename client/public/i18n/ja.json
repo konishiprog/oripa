@@ -18,7 +18,6 @@
     "logs": "ログ",
     "purchase-log": "購入ログ",
     "point-history": "ポイント履歴",
-    "back-to-gacha": "ガチャページに戻る",
     "user": {
       "avatar": "管",
       "role": "管理者"
@@ -232,11 +231,6 @@
   },
 
   "user-gacha": {
-    "login": "ログイン",
-    "signup": "アカウント作成",
-    "admin-page": "管理者専用ページ",
-    "my-page": "マイページ",
-    "logout": "ログアウト",
     "tab-new": "新着",
     "tab-popular": "人気",
     "tab-my-page": "マイページ",
@@ -356,6 +350,14 @@
     "confirm-update": "を変更します。よろしいですか？",
     "ok": "はい",
     "cancel": "キャンセル",
+    "header": {
+      "login": "ログイン",
+      "signup": "アカウント作成",
+      "admin-page": "管理者専用ページ",
+      "my-page": "マイページ",
+      "logout": "ログアウト",
+      "back-to-gacha": "ガチャページに戻る"
+    },
     "actions": {
       "edit": "編集",
       "delete": "削除"

@@ -3,7 +3,7 @@
   <div class="header-right">
     <ng-container *ngIf="isAdminPage">
       <button class="header-btn header-btn-primary" (click)="goToGachaPage()">
-        {{ "sidebar.back-to-gacha" | translate }}
+        {{ "common.header.back-to-gacha" | translate }}
       </button>
     </ng-container>
     <ng-container *ngIf="!isAdminPage">
@@ -13,13 +13,13 @@
           type="button"
           (click)="openLoginDialog()"
         >
-          {{ "user-gacha.login" | translate }}
+          {{ "common.header.login" | translate }}
         </button>
         <button class="header-btn header-btn-primary" (click)="goToSignup()">
-          {{ "user-gacha.signup" | translate }}
+          {{ "common.header.signup" | translate }}
         </button>
         <button class="header-btn header-btn-admin" (click)="goToAdminPage()">
-          {{ "user-gacha.admin-page" | translate }}
+          {{ "common.header.admin-page" | translate }}
         </button>
       </ng-container>
       <ng-container *ngIf="isLoggedIn">
@@ -28,14 +28,14 @@
           type="button"
           (click)="goToMyPage()"
         >
-          {{ "user-gacha.my-page" | translate }}
+          {{ "common.header.my-page" | translate }}
         </button>
         <button
           class="header-btn header-btn-outline"
           type="button"
           (click)="logout()"
         >
-          {{ "user-gacha.logout" | translate }}
+          {{ "common.header.logout" | translate }}
         </button>
       </ng-container>
     </ng-container>
