@@ -345,7 +345,12 @@
     "from-gacha": "{{name}} より",
     "exchange-button": "コインに交換する（{{points}}コイン）",
     "exchange-confirm": "選択したカードを {{points}} コインに変換しますか？",
-    "shipping-button": "発送開始"
+    "shipping-button": "発送開始",
+    "confirm-received": "中身を確認しました",
+    "no-selection": "カードを選択してください",
+    "confirm-received-message": "選択したカードをリストから削除しますか？",
+    "confirm-received-success": "カードを削除しました",
+    "confirm-received-error": "カード削除に失敗しました"
   },
 
   "user-management": {

@@ -11,6 +11,17 @@ import { CARD_STATUS, EXCHANGE_TYPE } from '../../constants/card';
 
 export type CardHistoryTab = 'unselected' | 'pending' | 'shipped';
 
+const CARD_HISTORY_TABS = {
+  UNSELECTED: 'unselected' as const,
+  PENDING: 'pending' as const,
+  SHIPPED: 'shipped' as const,
+};
+
+const STATUS_TO_TAB_MAP: Record<string, CardHistoryTab> = {
+  [CARD_STATUS.SHIPPING_PENDING]: CARD_HISTORY_TABS.PENDING,
+  [CARD_STATUS.SHIPPED]: CARD_HISTORY_TABS.SHIPPED,
+};
+
 export interface UserCard {
   id: string;
   gachaId: string;
@@ -33,8 +44,9 @@ export interface UserCard {
 })
 export class UserCardHistoryPageComponent implements OnInit {
   readonly CARD_STATUS = CARD_STATUS;
+  readonly CARD_HISTORY_TABS = CARD_HISTORY_TABS;
 
-  activeTab: CardHistoryTab = 'unselected';
+  activeTab: CardHistoryTab = CARD_HISTORY_TABS.UNSELECTED;
   isLoading: boolean = true;
   cards: UserCard[] = [];
   chevronSvg: SafeHtml = '';
@@ -77,10 +89,9 @@ export class UserCardHistoryPageComponent implements OnInit {
       this.cards = data
         .filter((card: any) => card.isDrawn !== CARD_STATUS.REFUNDED)
         .map((card: any) => {
-          let status: CardHistoryTab = 'unselected';
-          if (card.isDrawn === CARD_STATUS.SHIPPING_PENDING) {
-            status = 'pending';
-          }
+          const status: CardHistoryTab =
+            (STATUS_TO_TAB_MAP[card.isDrawn] as CardHistoryTab) ||
+            CARD_HISTORY_TABS.UNSELECTED;
           return {
             id: card.id,
             gachaId: card.gachaId,
@@ -117,9 +128,9 @@ export class UserCardHistoryPageComponent implements OnInit {
 
   get emptyMessageKey(): string {
     switch (this.activeTab) {
-      case 'pending':
+      case CARD_HISTORY_TABS.PENDING:
         return 'card-history.empty-pending';
-      case 'shipped':
+      case CARD_HISTORY_TABS.SHIPPED:
         return 'card-history.empty-shipped';
       default:
         return 'card-history.empty-unselected';
@@ -131,6 +142,9 @@ export class UserCardHistoryPageComponent implements OnInit {
   }
 
   isSelectableForCurrentMode(card: UserCard): boolean {
+    if (this.activeTab === CARD_HISTORY_TABS.SHIPPED) {
+      return true;
+    }
     if (this.mode === 'exchange') {
       return this.isExchangeable(card) && card.isDrawn !== CARD_STATUS.REFUNDED;
     } else {
@@ -222,13 +236,49 @@ export class UserCardHistoryPageComponent implements OnInit {
           CARD_STATUS.SHIPPING_PENDING,
         );
         card.isDrawn = CARD_STATUS.SHIPPING_PENDING;
-        card.status = 'pending';
+        card.status = CARD_HISTORY_TABS.PENDING;
       }
 
       this.selectedCardIds.clear();
       this.cdr.markForCheck();
     } catch (error) {
       console.error('Failed to start shipping:', error);
+    }
+  }
+
+  async confirmReceived(): Promise<void> {
+    if (this.selectedCardIds.size === 0) {
+      alert(this.translateService.instant('card-history.no-selection'));
+      return;
+    }
+
+    const confirmed = confirm(
+      this.translateService.instant('card-history.confirm-received-message'),
+    );
+
+    if (!confirmed) {
+      return;
+    }
+
+    try {
+      const selectedCardIds = Array.from(this.selectedCardIds);
+      for (const cardId of selectedCardIds) {
+        await this.cardService.deleteCard(cardId);
+      }
+
+      this.cards = this.cards.filter(
+        (card) => !this.selectedCardIds.has(card.id),
+      );
+      this.selectedCardIds.clear();
+      alert(
+        this.translateService.instant('card-history.confirm-received-success'),
+      );
+      this.cdr.markForCheck();
+    } catch (error) {
+      console.error('Failed to delete cards:', error);
+      alert(
+        this.translateService.instant('card-history.confirm-received-error'),
+      );
     }
   }
 }

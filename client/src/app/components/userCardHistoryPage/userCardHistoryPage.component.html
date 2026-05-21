@@ -14,28 +14,28 @@
     <div class="nav-tabs">
       <div
         class="nav-tab"
-        [class.active]="activeTab === 'unselected'"
-        (click)="selectTab('unselected')"
+        [class.active]="activeTab === CARD_HISTORY_TABS.UNSELECTED"
+        (click)="selectTab(CARD_HISTORY_TABS.UNSELECTED)"
       >
         {{ "card-history.tab-unselected" | translate }}
       </div>
       <div
         class="nav-tab"
-        [class.active]="activeTab === 'pending'"
-        (click)="selectTab('pending')"
+        [class.active]="activeTab === CARD_HISTORY_TABS.PENDING"
+        (click)="selectTab(CARD_HISTORY_TABS.PENDING)"
       >
         {{ "card-history.tab-pending" | translate }}
       </div>
       <div
         class="nav-tab"
-        [class.active]="activeTab === 'shipped'"
-        (click)="selectTab('shipped')"
+        [class.active]="activeTab === CARD_HISTORY_TABS.SHIPPED"
+        (click)="selectTab(CARD_HISTORY_TABS.SHIPPED)"
       >
         {{ "card-history.tab-shipped" | translate }}
       </div>
     </div>
 
-    <div class="mode-buttons" *ngIf="activeTab === 'unselected'">
+    <div class="mode-buttons" *ngIf="activeTab === CARD_HISTORY_TABS.UNSELECTED">
       <button
         type="button"
         class="mode-btn"
@@ -66,7 +66,10 @@
       <div *ngIf="!isLoading && filteredCards.length > 0" class="card-list">
         <div class="card-item" *ngFor="let card of filteredCards">
           <div
-            *ngIf="activeTab === 'unselected'"
+            *ngIf="
+              activeTab === CARD_HISTORY_TABS.UNSELECTED ||
+              activeTab === CARD_HISTORY_TABS.SHIPPED
+            "
             class="checkbox-wrapper"
             [class.disabled]="!isSelectableForCurrentMode(card)"
           >
@@ -104,11 +107,16 @@
 
     <div
       *ngIf="
-        activeTab === 'unselected' && !isLoading && filteredCards.length > 0
+        (activeTab === CARD_HISTORY_TABS.UNSELECTED ||
+          activeTab === CARD_HISTORY_TABS.SHIPPED) &&
+        !isLoading &&
+        filteredCards.length > 0
       "
       class="exchange-footer"
     >
-      <ng-container *ngIf="mode === 'exchange'">
+      <ng-container
+        *ngIf="activeTab === CARD_HISTORY_TABS.UNSELECTED && mode === 'exchange'"
+      >
         <button
           type="button"
           class="exchange-btn"
@@ -121,7 +129,9 @@
           }}
         </button>
       </ng-container>
-      <ng-container *ngIf="mode === 'shipping'">
+      <ng-container
+        *ngIf="activeTab === CARD_HISTORY_TABS.UNSELECTED && mode === 'shipping'"
+      >
         <button
           type="button"
           class="exchange-btn"
@@ -129,6 +139,16 @@
           (click)="startShipping()"
         >
           {{ "card-history.shipping-button" | translate }}
+        </button>
+      </ng-container>
+      <ng-container *ngIf="activeTab === CARD_HISTORY_TABS.SHIPPED">
+        <button
+          type="button"
+          class="exchange-btn"
+          [disabled]="!hasSelectedCards"
+          (click)="confirmReceived()"
+        >
+          {{ "card-history.confirm-received" | translate }}
         </button>
       </ng-container>
     </div>
