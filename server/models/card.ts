@@ -1,13 +1,14 @@
 export {};
-('use strict');
-const { Model } = require('sequelize');
+("use strict");
+const { Model } = require("sequelize");
+const { CARD_STATUS } = require("../constants/card");
 
 module.exports = (sequelize: any, DataTypes: any) => {
   class Card extends Model {
     static associate(models: any) {
       Card.belongsTo(models.Gacha, {
-        foreignKey: 'gachaId',
-        as: 'gacha',
+        foreignKey: "gachaId",
+        as: "gacha",
       });
     }
   }
@@ -47,15 +48,15 @@ module.exports = (sequelize: any, DataTypes: any) => {
         allowNull: true,
       },
       isDrawn: {
-        type: DataTypes.BOOLEAN,
-        defaultValue: false,
+        type: DataTypes.STRING,
+        defaultValue: CARD_STATUS.NOT_DRAWN,
       },
     },
     {
       sequelize,
-      modelName: 'Card',
+      modelName: "Card",
       timestamps: false,
-    }
+    },
   );
 
   return Card;

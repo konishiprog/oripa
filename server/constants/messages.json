@@ -39,6 +39,7 @@
     "CARD_CREATED": "Card created successfully",
     "CARD_UPDATED": "Card updated successfully",
     "CARD_DELETED": "Card deleted successfully",
+    "CARD_EXCHANGED": "Card exchanged successfully",
     "CARDS_RETRIEVED": "Cards retrieved successfully",
     "USER_CREATED": "User created successfully",
     "USER_UPDATED": "User updated successfully",

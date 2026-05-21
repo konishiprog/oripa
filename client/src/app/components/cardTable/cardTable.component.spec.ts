@@ -14,8 +14,8 @@ describe('CardTableComponent', () => {
 
   const mockCards: Card[] = [
     {
-      id: 1,
-      gachaId: 1,
+      id: '1',
+      gachaId: '1',
       gachaName: 'Gacha 1',
       name: 'Card 1',
       cardType: 'SSR',
@@ -23,10 +23,11 @@ describe('CardTableComponent', () => {
       exchangePoints: 100,
       imageFront: 'front1.jpg',
       imageBack: 'back1.jpg',
+      isDrawn: '未引き',
     },
     {
-      id: 2,
-      gachaId: 1,
+      id: '2',
+      gachaId: '1',
       gachaName: 'Gacha 1',
       name: 'Card 2',
       cardType: 'R',
@@ -34,10 +35,11 @@ describe('CardTableComponent', () => {
       exchangePoints: null,
       imageFront: 'front2.jpg',
       imageBack: 'back2.jpg',
+      isDrawn: '未引き',
     },
     {
-      id: 3,
-      gachaId: 2,
+      id: '3',
+      gachaId: '2',
       gachaName: 'Gacha 2',
       name: 'Card 3',
       cardType: 'SR',
@@ -45,6 +47,7 @@ describe('CardTableComponent', () => {
       exchangePoints: 500,
       imageFront: 'front3.jpg',
       imageBack: 'back3.jpg',
+      isDrawn: '引かれた',
     },
   ];
 
@@ -157,8 +160,8 @@ describe('CardTableComponent', () => {
     component.itemsPerPage = 2;
     const displayed = component.getDisplayedCards();
     expect(displayed.length).toBe(2);
-    expect(displayed[0].id).toBe(1);
-    expect(displayed[1].id).toBe(2);
+    expect(displayed[0].id).toBe('1');
+    expect(displayed[1].id).toBe('2');
   });
 
   it('should get correct total pages', () => {
@@ -179,7 +182,7 @@ describe('CardTableComponent', () => {
   it('should show ellipsis and boundary pages for large page count', () => {
     const largeList = Array.from({ length: 100 }, (_, i) => ({
       ...mockCards[0],
-      id: i + 1,
+      id: String(i + 1),
     }));
     component.filteredCards = largeList;
     component.itemsPerPage = 5;
@@ -294,7 +297,7 @@ describe('CardTableComponent', () => {
     jest.spyOn(window, 'confirm').mockReturnValue(true);
 
     await component.deleteCard(mockCards[0]);
-    expect(component.cards.find((c) => c.id === 1)).toBeUndefined();
+    expect(component.cards.find((c) => c.id === '1')).toBeUndefined();
   });
 
   it('should call applyFilters after deleting card', async () => {

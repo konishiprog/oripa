@@ -10,6 +10,7 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { CardService } from '../../service/card.service';
 import { ApiConfigService } from '../../service/api-config.service';
+import { EXCHANGE_TYPE } from '../../constants/card';
 
 export enum CardFormMode {
   Create = 'create',
@@ -43,10 +44,10 @@ export const CARD_TYPES = [
 
 export const EXCHANGE_TYPES = [
   {
-    value: 'SHIPPING_ONLY',
+    value: EXCHANGE_TYPE.SHIPPING_ONLY,
     labelKey: 'card-create.exchange-type-shipping-only',
   },
-  { value: 'BOTH', labelKey: 'card-create.exchange-type-both' },
+  { value: EXCHANGE_TYPE.BOTH, labelKey: 'card-create.exchange-type-both' },
 ];
 
 @Component({
@@ -58,7 +59,7 @@ export const EXCHANGE_TYPES = [
 export class CreateCardComponent implements OnInit {
   name: string = '';
   cardType: string = 'SSR';
-  exchangeType: string = 'SHIPPING_ONLY';
+  exchangeType: string = EXCHANGE_TYPE.SHIPPING_ONLY;
   exchangePoints: number | null = null;
   imageFrontFile: File | null = null;
   imageFrontPreview: SafeUrl | null = null;
@@ -76,7 +77,7 @@ export class CreateCardComponent implements OnInit {
   readonly stepExchangePoints = 1;
 
   get isPointExchangeable(): boolean {
-    return this.exchangeType === 'BOTH';
+    return this.exchangeType === EXCHANGE_TYPE.BOTH;
   }
 
   get isEditMode(): boolean {

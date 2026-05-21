@@ -7,6 +7,7 @@ import express, { Request, Response, Router } from "express";
 import multer from "multer";
 
 const messages = require("../../constants/messages.json");
+const { CARD_STATUS, EXCHANGE_TYPE } = require("../../constants/card");
 
 let runtime: any;
 let gacha: any;
@@ -38,7 +39,7 @@ const validateCardPayload = (req: Request, res: Response): boolean => {
     return false;
   }
 
-  if (exchangeType === "BOTH") {
+  if (exchangeType === EXCHANGE_TYPE.BOTH) {
     const points = Number(exchangePoints);
     if (!Number.isInteger(points) || points <= 0) {
       res.status(400).json({ error: messages.errors.CARD_FIELDS_REQUIRED });
@@ -71,7 +72,7 @@ const validateCardUpdatePayload = (req: Request, res: Response): boolean => {
     return false;
   }
 
-  if (exchangeType === "BOTH") {
+  if (exchangeType === EXCHANGE_TYPE.BOTH) {
     const points = Number(exchangePoints);
     if (!Number.isInteger(points) || points <= 0) {
       res
@@ -144,7 +145,9 @@ module.exports = {
             cardType,
             exchangeType,
             exchangePoints:
-              exchangeType === "BOTH" ? Number(exchangePoints) : null,
+              exchangeType === EXCHANGE_TYPE.BOTH
+                ? Number(exchangePoints)
+                : null,
             imageFrontFile,
             imageBackFile,
           });
@@ -191,7 +194,9 @@ module.exports = {
             cardType,
             exchangeType,
             exchangePoints:
-              exchangeType === "BOTH" ? Number(exchangePoints) : null,
+              exchangeType === EXCHANGE_TYPE.BOTH
+                ? Number(exchangePoints)
+                : null,
             imageFrontFile,
             imageBackFile,
           });
@@ -225,6 +230,32 @@ module.exports = {
         });
       } catch (error: any) {
         const { status, message } = handleError(error, "Card deletion");
+        return res.status(status).json({ error: message });
+      }
+    });
+
+    /**
+     * Exchange a card for coins (mark as exchanged)
+     * PATCH /api/card/:id/exchange
+     */
+    router.patch("/:id/exchange", async (req: Request, res: Response) => {
+      const id = req.params.id as string;
+      if (!id || typeof id !== "string" || id.trim() === "") {
+        return res.status(400).json({ error: messages.errors.CARD_NOT_FOUND });
+      }
+
+      try {
+        await runtime.card.update(id, { isDrawn: CARD_STATUS.REFUNDED });
+        const allCards = await runtime.card.getAll();
+        const card = allCards.find((c: any) => c.id === id);
+        if (card) {
+          await gacha.refreshGachaCards(card.gachaId);
+        }
+        return res
+          .status(200)
+          .json({ message: messages.success.CARD_EXCHANGED });
+      } catch (error: any) {
+        const { status, message } = handleError(error, "Card exchange");
         return res.status(status).json({ error: message });
       }
     });

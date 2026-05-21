@@ -13,6 +13,11 @@ import { MatDialog } from '@angular/material/dialog';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { TranslateService } from '@ngx-translate/core';
 import {
+  CARD_STATUS,
+  EXCHANGE_TYPE,
+  ExchangeTypeType,
+} from '../../constants/card';
+import {
   CreateCardComponent,
   CardFormMode,
   CARD_TYPES,
@@ -30,7 +35,7 @@ export interface Card {
   exchangePoints: number | null;
   imageFront: string;
   imageBack: string;
-  isDrawn: boolean;
+  isDrawn: string;
 }
 
 interface TableHeader {
@@ -227,20 +232,25 @@ export class CardTableComponent implements OnInit, OnChanges {
   }
 
   getExchangeTypeLabel(value: string): string {
-    const key = this.exchangeTypeLabelMap.get(value);
+    const key = this.exchangeTypeLabelMap.get(value as ExchangeTypeType);
     return key ? this.translateService.instant(key) : value;
   }
 
   getExchangePointsDisplay(card: Card): string {
-    return card.exchangeType === 'BOTH' && card.exchangePoints !== null
+    return card.exchangeType === EXCHANGE_TYPE.BOTH &&
+      card.exchangePoints !== null
       ? card.exchangePoints.toString()
       : this.translateService.instant('dashboard.card.no-exchange-points');
   }
 
   getIsDrawnLabel(card: Card): string {
-    return this.translateService.instant(
-      card.isDrawn ? 'dashboard.card.drawn' : 'dashboard.card.not-drawn',
-    );
+    if (card.isDrawn === CARD_STATUS.NOT_DRAWN) {
+      return this.translateService.instant('dashboard.card.not-drawn');
+    }
+    if (card.isDrawn === CARD_STATUS.REFUNDED) {
+      return this.translateService.instant('dashboard.card.refunded');
+    }
+    return this.translateService.instant('dashboard.card.drawn');
   }
 
   getTextCellValue(cell: TableCell, card: Card): any {
@@ -299,7 +309,7 @@ export class CardTableComponent implements OnInit, OnChanges {
             exchangePoints: result.data.exchangePoints ?? null,
             imageFront: result.data.imageFront ?? '',
             imageBack: result.data.imageBack ?? '',
-            isDrawn: result.data.isDrawn ?? false,
+            isDrawn: result.data.isDrawn ?? CARD_STATUS.NOT_DRAWN,
           };
           this.cards = [...this.cards];
           this.applyFilters();

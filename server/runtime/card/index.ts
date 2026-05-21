@@ -3,6 +3,7 @@
 export {};
 
 const messages = require("../../constants/messages.json");
+const { CARD_STATUS, EXCHANGE_TYPE } = require("../../constants/card");
 
 let db: any;
 let cardCache: Map<string, any> = new Map();
@@ -85,10 +86,12 @@ async function create(payload: {
     cardType: payload.cardType,
     exchangeType: payload.exchangeType,
     exchangePoints:
-      payload.exchangeType === "BOTH" ? (payload.exchangePoints ?? null) : null,
+      payload.exchangeType === EXCHANGE_TYPE.BOTH
+        ? (payload.exchangePoints ?? null)
+        : null,
     imageFront: imageFrontBase64,
     imageBack: imageBackBase64,
-    isDrawn: false,
+    isDrawn: CARD_STATUS.NOT_DRAWN,
   });
 
   const plainCard = toPlain(card);
@@ -124,7 +127,7 @@ async function update(
     imageFrontFile?: any;
     imageBackFile?: any;
     userId?: string;
-    isDrawn?: boolean;
+    isDrawn?: string;
   },
 ) {
   if (Array.isArray(id)) {
@@ -154,15 +157,23 @@ async function update(
     imageBackBase64 = `data:${payload.imageBackFile.mimetype};base64,${payload.imageBackFile.buffer.toString("base64")}`;
   }
 
-  await card.update({
-    name: payload.name,
-    cardType: payload.cardType,
-    exchangeType: payload.exchangeType,
-    exchangePoints:
-      payload.exchangeType === "BOTH" ? (payload.exchangePoints ?? null) : null,
+  const updateData: any = {
     imageFront: imageFrontBase64,
     imageBack: imageBackBase64,
-  });
+  };
+  if (payload.name !== undefined) updateData.name = payload.name;
+  if (payload.cardType !== undefined) updateData.cardType = payload.cardType;
+  if (payload.exchangeType !== undefined) {
+    updateData.exchangeType = payload.exchangeType;
+    updateData.exchangePoints =
+      payload.exchangeType === EXCHANGE_TYPE.BOTH
+        ? (payload.exchangePoints ?? null)
+        : null;
+  }
+  if (payload.isDrawn !== undefined) updateData.isDrawn = payload.isDrawn;
+  if (payload.userId !== undefined) updateData.userId = payload.userId;
+
+  await card.update(updateData);
 
   const plainCard = toPlain(card);
   const cachedCard = cardCache.get(id);
