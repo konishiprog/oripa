@@ -18,7 +18,7 @@
     "logs": "ログ",
     "purchase-log": "購入ログ",
     "point-history": "ポイント履歴",
-    "back-to-gacha": "ガチャページに戻る",
+    "shipping-info": "輸送情報",
     "user": {
       "avatar": "管",
       "role": "管理者"
@@ -113,7 +113,9 @@
       "no-exchange-points": "-",
       "drawn": "引かれた",
       "not-drawn": "未引き",
-      "refunded": "差し戻し"
+      "refunded": "差し戻し",
+      "shipping-pending": "発送待ち",
+      "shipped": "発送済み"
     },
     "pagination": {
       "info": "全 {{total}}件中{{start}}〜{{end}}件を表示"
@@ -198,6 +200,31 @@
     "close": "閉じる"
   },
 
+  "shipping-info": {
+    "page-title": "輸送情報",
+    "page-desc": "発送待ちのカード一覧を表示",
+    "total-cards": "発送待ちカード数",
+    "no-data": "発送待ちのカードがありません",
+    "error": "発送待ちカード情報の読み込みに失敗しました",
+    "no-selection": "発送するカードを選択してください",
+    "complete-button": "発送完了",
+    "complete-confirm": "発送完了した連絡を入れますがよろしいですか？",
+    "complete-success": "カードの発送が完了しました",
+    "complete-error": "カードの発送処理に失敗しました",
+    "table": {
+      "user-name": "ユーザー名",
+      "address": "住所",
+      "phone": "電話番号",
+      "card-info": "カード情報",
+      "gacha-name": "ガチャ名",
+      "card-name": "カード名"
+    }
+  },
+
+  "shipping-card-detail": {
+    "title": "カード詳細情報"
+  },
+
   "gacha-box": {
     "remaining": "残り{{count}}枚",
     "draw-single": "1回引く",
@@ -232,11 +259,6 @@
   },
 
   "user-gacha": {
-    "login": "ログイン",
-    "signup": "アカウント作成",
-    "admin-page": "管理者専用ページ",
-    "my-page": "マイページ",
-    "logout": "ログアウト",
     "tab-new": "新着",
     "tab-popular": "人気",
     "tab-my-page": "マイページ",
@@ -281,6 +303,7 @@
   "my-page": {
     "title": "マイページ",
     "back": "戻る",
+    "back-to-gacha": "ガチャページに戻る",
     "loading": "読み込み中...",
     "card-history": "カード獲得履歴",
     "coin-history": "コイン購入履歴",
@@ -310,6 +333,8 @@
   "card-history": {
     "title": "カード獲得履歴",
     "back": "戻る",
+    "exchange-mode": "コイン変換",
+    "shipping-mode": "発送",
     "tab-unselected": "未選択",
     "tab-pending": "発送待ち",
     "tab-shipped": "発送済み",
@@ -319,7 +344,13 @@
     "empty-shipped": "発送済みの獲得商品がありません",
     "from-gacha": "{{name}} より",
     "exchange-button": "コインに交換する（{{points}}コイン）",
-    "exchange-confirm": "選択したカードを {{points}} コインに変換しますか？"
+    "exchange-confirm": "選択したカードを {{points}} コインに変換しますか？",
+    "shipping-button": "発送開始",
+    "confirm-received": "中身を確認しました",
+    "no-selection": "カードを選択してください",
+    "confirm-received-message": "選択したカードをリストから削除しますか？",
+    "confirm-received-success": "カードを削除しました",
+    "confirm-received-error": "カード削除に失敗しました"
   },
 
   "user-management": {
@@ -352,6 +383,14 @@
     "confirm-update": "を変更します。よろしいですか？",
     "ok": "はい",
     "cancel": "キャンセル",
+    "header": {
+      "login": "ログイン",
+      "signup": "アカウント作成",
+      "admin-page": "管理者専用ページ",
+      "my-page": "マイページ",
+      "logout": "ログアウト",
+      "back-to-gacha": "ガチャページに戻る"
+    },
     "actions": {
       "edit": "編集",
       "delete": "削除"

@@ -14,6 +14,7 @@ import { UserManagementComponent } from './components/userManagement/userManagem
 import { UserSignupComponent } from './components/userSignup/userSignup.component';
 import { UserMyPageComponent } from './components/userMyPage/userMyPage.component';
 import { UserCardHistoryPageComponent } from './components/userCardHistoryPage/userCardHistoryPage.component';
+import { ShippingInfoPageComponent } from './components/shippingInfoPage/shippingInfoPage.component';
 
 const routes: Routes = [
   {
@@ -61,6 +62,10 @@ const routes: Routes = [
       {
         path: 'userManagement',
         component: UserManagementComponent,
+      },
+      {
+        path: 'shippingInfo',
+        component: ShippingInfoPageComponent,
       },
       {
         path: 'createAdmin',

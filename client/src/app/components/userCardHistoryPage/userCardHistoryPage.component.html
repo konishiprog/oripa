@@ -1,103 +1,156 @@
-<div class="page">
-  <header class="page-header">
-    <button type="button" class="back-btn" (click)="goBack()">
-      <span [innerHTML]="chevronSvg" class="back-icon"></span>
-      {{ "card-history.back" | translate }}
-    </button>
-    <h1 class="page-title">{{ "card-history.title" | translate }}</h1>
-    <div class="header-spacer"></div>
-  </header>
+<div class="app">
+  <app-header></app-header>
 
-  <div class="nav-tabs">
-    <div
-      class="nav-tab"
-      [class.active]="activeTab === 'unselected'"
-      (click)="selectTab('unselected')"
-    >
-      {{ "card-history.tab-unselected" | translate }}
-    </div>
-    <div
-      class="nav-tab"
-      [class.active]="activeTab === 'pending'"
-      (click)="selectTab('pending')"
-    >
-      {{ "card-history.tab-pending" | translate }}
-    </div>
-    <div
-      class="nav-tab"
-      [class.active]="activeTab === 'shipped'"
-      (click)="selectTab('shipped')"
-    >
-      {{ "card-history.tab-shipped" | translate }}
-    </div>
-  </div>
+  <div class="page">
+    <header class="page-header">
+      <button type="button" class="back-btn" (click)="goBack()">
+        <span [innerHTML]="chevronSvg" class="back-icon"></span>
+        {{ "card-history.back" | translate }}
+      </button>
+      <h1 class="page-title">{{ "card-history.title" | translate }}</h1>
+      <div class="header-spacer"></div>
+    </header>
 
-  <div class="content">
-    <div *ngIf="isLoading" class="loading-state">
-      {{ "card-history.loading" | translate }}
+    <div class="nav-tabs">
+      <div
+        class="nav-tab"
+        [class.active]="activeTab === CARD_HISTORY_TABS.UNSELECTED"
+        (click)="selectTab(CARD_HISTORY_TABS.UNSELECTED)"
+      >
+        {{ "card-history.tab-unselected" | translate }}
+      </div>
+      <div
+        class="nav-tab"
+        [class.active]="activeTab === CARD_HISTORY_TABS.PENDING"
+        (click)="selectTab(CARD_HISTORY_TABS.PENDING)"
+      >
+        {{ "card-history.tab-pending" | translate }}
+      </div>
+      <div
+        class="nav-tab"
+        [class.active]="activeTab === CARD_HISTORY_TABS.SHIPPED"
+        (click)="selectTab(CARD_HISTORY_TABS.SHIPPED)"
+      >
+        {{ "card-history.tab-shipped" | translate }}
+      </div>
     </div>
 
-    <div *ngIf="!isLoading && filteredCards.length === 0" class="empty-state">
-      {{ emptyMessageKey | translate }}
+    <div class="mode-buttons" *ngIf="activeTab === CARD_HISTORY_TABS.UNSELECTED">
+      <button
+        type="button"
+        class="mode-btn"
+        [class.active]="mode === 'exchange'"
+        (click)="switchMode('exchange')"
+      >
+        {{ "card-history.exchange-mode" | translate }}
+      </button>
+      <button
+        type="button"
+        class="mode-btn"
+        [class.active]="mode === 'shipping'"
+        (click)="switchMode('shipping')"
+      >
+        {{ "card-history.shipping-mode" | translate }}
+      </button>
     </div>
 
-    <div *ngIf="!isLoading && filteredCards.length > 0" class="card-list">
-      <div class="card-item" *ngFor="let card of filteredCards">
-        <div
-          *ngIf="activeTab === 'unselected'"
-          class="checkbox-wrapper"
-          [class.disabled]="
-            !isExchangeable(card) || card.isDrawn === CARD_STATUS.REFUNDED
-          "
-        >
-          <input
-            type="checkbox"
-            class="card-checkbox"
-            [checked]="selectedCardIds.has(card.id)"
-            [disabled]="
-              !isExchangeable(card) || card.isDrawn === CARD_STATUS.REFUNDED
-            "
-            (change)="toggleSelect(card)"
-          />
-        </div>
-        <img
-          *ngIf="card.imageFront"
-          [src]="card.imageFront"
-          [alt]="card.name"
-          class="card-image"
-        />
-        <div class="card-info">
-          <div class="card-name">{{ card.name }}</div>
-          <div *ngIf="card.gachaName" class="card-gacha">
-            {{
-              "card-history.from-gacha" | translate: { name: card.gachaName }
-            }}
-          </div>
+    <div class="content">
+      <div *ngIf="isLoading" class="loading-state">
+        {{ "card-history.loading" | translate }}
+      </div>
+
+      <div *ngIf="!isLoading && filteredCards.length === 0" class="empty-state">
+        {{ emptyMessageKey | translate }}
+      </div>
+
+      <div *ngIf="!isLoading && filteredCards.length > 0" class="card-list">
+        <div class="card-item" *ngFor="let card of filteredCards">
           <div
-            *ngIf="card.isDrawn === CARD_STATUS.REFUNDED"
-            class="card-status"
+            *ngIf="
+              activeTab === CARD_HISTORY_TABS.UNSELECTED ||
+              activeTab === CARD_HISTORY_TABS.SHIPPED
+            "
+            class="checkbox-wrapper"
+            [class.disabled]="!isSelectableForCurrentMode(card)"
           >
-            {{ "card-history.status-exchanged" | translate }}
+            <input
+              type="checkbox"
+              class="card-checkbox"
+              [checked]="selectedCardIds.has(card.id)"
+              [disabled]="!isSelectableForCurrentMode(card)"
+              (change)="toggleSelect(card)"
+            />
+          </div>
+          <img
+            *ngIf="card.imageFront"
+            [src]="card.imageFront"
+            [alt]="card.name"
+            class="card-image"
+          />
+          <div class="card-info">
+            <div class="card-name">{{ card.name }}</div>
+            <div *ngIf="card.gachaName" class="card-gacha">
+              {{
+                "card-history.from-gacha" | translate: { name: card.gachaName }
+              }}
+            </div>
+            <div
+              *ngIf="card.isDrawn === CARD_STATUS.REFUNDED"
+              class="card-status"
+            >
+              {{ "card-history.status-exchanged" | translate }}
+            </div>
           </div>
         </div>
       </div>
     </div>
-  </div>
 
-  <div
-    *ngIf="activeTab === 'unselected' && !isLoading && filteredCards.length > 0"
-    class="exchange-footer"
-  >
-    <button
-      type="button"
-      class="exchange-btn"
-      [disabled]="!hasSelectedCards"
-      (click)="openExchangeDialog()"
+    <div
+      *ngIf="
+        (activeTab === CARD_HISTORY_TABS.UNSELECTED ||
+          activeTab === CARD_HISTORY_TABS.SHIPPED) &&
+        !isLoading &&
+        filteredCards.length > 0
+      "
+      class="exchange-footer"
     >
-      {{
-        "card-history.exchange-button"
-          | translate: { points: selectedTotalPoints }
-      }}
-    </button>
+      <ng-container
+        *ngIf="activeTab === CARD_HISTORY_TABS.UNSELECTED && mode === 'exchange'"
+      >
+        <button
+          type="button"
+          class="exchange-btn"
+          [disabled]="!hasSelectedCards"
+          (click)="openExchangeDialog()"
+        >
+          {{
+            "card-history.exchange-button"
+              | translate: { points: selectedTotalPoints }
+          }}
+        </button>
+      </ng-container>
+      <ng-container
+        *ngIf="activeTab === CARD_HISTORY_TABS.UNSELECTED && mode === 'shipping'"
+      >
+        <button
+          type="button"
+          class="exchange-btn"
+          [disabled]="!hasSelectedCards"
+          (click)="startShipping()"
+        >
+          {{ "card-history.shipping-button" | translate }}
+        </button>
+      </ng-container>
+      <ng-container *ngIf="activeTab === CARD_HISTORY_TABS.SHIPPED">
+        <button
+          type="button"
+          class="exchange-btn"
+          [disabled]="!hasSelectedCards"
+          (click)="confirmReceived()"
+        >
+          {{ "card-history.confirm-received" | translate }}
+        </button>
+      </ng-container>
+    </div>
   </div>
 </div>

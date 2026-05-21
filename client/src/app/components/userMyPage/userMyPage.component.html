@@ -1,12 +1,15 @@
-<div class="page">
-  <header class="page-header">
-    <button type="button" class="back-btn" (click)="goBack()">
-      <span [innerHTML]="chevronSvg" class="back-icon"></span>
-      {{ "my-page.back" | translate }}
-    </button>
-    <h1 class="page-title">{{ "my-page.title" | translate }}</h1>
-    <div class="header-spacer"></div>
-  </header>
+<div class="app">
+  <app-header></app-header>
+
+  <div class="page">
+    <header class="page-header">
+      <button type="button" class="back-btn" (click)="goBack()">
+        <span [innerHTML]="chevronSvg" class="back-icon"></span>
+        {{ "my-page.back" | translate }}
+      </button>
+      <h1 class="page-title">{{ "my-page.title" | translate }}</h1>
+      <div class="header-spacer"></div>
+    </header>
 
   <div *ngIf="isLoading" class="loading-state">
     {{ "my-page.loading" | translate }}
@@ -196,5 +199,6 @@
         </button>
       </div>
     </div>
+  </div>
   </div>
 </div>

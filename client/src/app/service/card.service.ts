@@ -152,4 +152,20 @@ export class CardService {
       ),
     );
   }
+
+  /**
+   * Update card status
+   * @param {string} id - Card id (UUID)
+   * @param {string} status - New status (isDrawn value)
+   * @returns {Promise<any>}
+   */
+  async updateCardStatus(id: string, status: string) {
+    return await lastValueFrom(
+      this.http.patch<any>(
+        `${this.apiConfig.domain}/api/card/${id}/status`,
+        { isDrawn: status },
+        { headers: this.apiConfig.headers },
+      ),
+    );
+  }
 }

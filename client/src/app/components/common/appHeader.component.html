@@ -1,0 +1,43 @@
+<header class="app-header">
+  <app-logo class="header-logo"></app-logo>
+  <div class="header-right">
+    <ng-container *ngIf="isAdminPage">
+      <button class="header-btn header-btn-primary" (click)="goToGachaPage()">
+        {{ "common.header.back-to-gacha" | translate }}
+      </button>
+    </ng-container>
+    <ng-container *ngIf="!isAdminPage">
+      <ng-container *ngIf="!isLoggedIn">
+        <button
+          class="header-btn header-btn-outline"
+          type="button"
+          (click)="openLoginDialog()"
+        >
+          {{ "common.header.login" | translate }}
+        </button>
+        <button class="header-btn header-btn-primary" (click)="goToSignup()">
+          {{ "common.header.signup" | translate }}
+        </button>
+        <button class="header-btn header-btn-admin" (click)="goToAdminPage()">
+          {{ "common.header.admin-page" | translate }}
+        </button>
+      </ng-container>
+      <ng-container *ngIf="isLoggedIn">
+        <button
+          class="header-btn header-btn-primary"
+          type="button"
+          (click)="goToMyPage()"
+        >
+          {{ "common.header.my-page" | translate }}
+        </button>
+        <button
+          class="header-btn header-btn-outline"
+          type="button"
+          (click)="logout()"
+        >
+          {{ "common.header.logout" | translate }}
+        </button>
+      </ng-container>
+    </ng-container>
+  </div>
+</header>

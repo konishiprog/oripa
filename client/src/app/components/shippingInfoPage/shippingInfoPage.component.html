@@ -1,0 +1,80 @@
+<div class="page-header">
+  <div>
+    <div class="page-title">{{ "shipping-info.page-title" | translate }}</div>
+    <div class="page-desc">{{ "shipping-info.page-desc" | translate }}</div>
+  </div>
+</div>
+
+<div class="stats-row">
+  <div class="stat-card">
+    <div class="stat-label">
+      {{ "shipping-info.total-cards" | translate }}
+    </div>
+    <div class="stat-value">{{ getTotalCards() }}</div>
+  </div>
+</div>
+
+<ng-container *ngIf="!isLoading">
+  <div *ngIf="error" class="error-message">
+    {{ error }}
+  </div>
+
+  <div *ngIf="shippingCards.length > 0" class="table-card">
+    <div class="table-scroll">
+      <table>
+        <thead>
+          <tr>
+            <th class="checkbox-column">
+              <input
+                type="checkbox"
+                [checked]="
+                  selectedCardIds.size === shippingCards.length &&
+                  shippingCards.length > 0
+                "
+                (change)="toggleAllCards()"
+              />
+            </th>
+            <th *ngFor="let header of tableHeaders">
+              {{ header.labelKey | translate }}
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let card of shippingCards" class="clickable-row">
+            <td class="checkbox-column" (click)="$event.stopPropagation()">
+              <input
+                type="checkbox"
+                [checked]="isCardSelected(card.cardId)"
+                (change)="toggleCardSelection(card.cardId)"
+              />
+            </td>
+            <td
+              *ngFor="let header of tableHeaders"
+              (click)="viewCardDetail(card)"
+            >
+              {{ getCellValue(card, header.key) }}
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="table-footer" *ngIf="shippingCards.length > 0">
+      <button
+        class="complete-btn"
+        (click)="completeShipping()"
+        [disabled]="selectedCardIds.size === 0"
+      >
+        {{ "shipping-info.complete-button" | translate }}
+      </button>
+    </div>
+  </div>
+
+  <div *ngIf="shippingCards.length === 0 && !error" class="no-data">
+    {{ "shipping-info.no-data" | translate }}
+  </div>
+</ng-container>
+
+<div *ngIf="isLoading" class="loading">
+  {{ "common.loading" | translate }}
+</div>

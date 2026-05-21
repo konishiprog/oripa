@@ -88,8 +88,4 @@ export class SidebarComponent implements OnInit {
   navigateToAdminAccountList(): void {
     this.router.navigate(['/adminPanel/adminAccountList']);
   }
-
-  goBackToGacha(): void {
-    this.router.navigate(['/userGachaPage']);
-  }
 }

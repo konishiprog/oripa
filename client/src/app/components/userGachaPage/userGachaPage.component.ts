@@ -1,10 +1,6 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
-import { Router } from '@angular/router';
-import { MatDialog } from '@angular/material/dialog';
 import { TranslateService } from '@ngx-translate/core';
 import { GachaService } from '../../service/gacha.service';
-import { UserService } from '../../service/user.service';
-import { UserLoginDialogComponent } from '../userLoginDialog/userLoginDialog.component';
 
 export interface UserGacha {
   id: string;
@@ -28,50 +24,18 @@ export type GachaTab = 'new' | 'popular';
 export class UserGachaPageComponent implements OnInit {
   gachas: UserGacha[] = [];
   isLoading: boolean = true;
-  isLoggedIn: boolean = false;
   activeTab: GachaTab = 'new';
 
   constructor(
     private gachaService: GachaService,
-    private userService: UserService,
-    private dialog: MatDialog,
     private cdr: ChangeDetectorRef,
     private translateService: TranslateService,
-    private router: Router,
   ) {}
 
   ngOnInit(): void {
     this.translateService.setDefaultLang('ja');
     this.translateService.use('ja');
     this.loadGachas();
-    this.isLoggedIn = this.userService.isLoggedIn();
-  }
-
-  openLoginDialog(): void {
-    const dialogRef = this.dialog.open(UserLoginDialogComponent, {
-      width: '420px',
-    });
-
-    dialogRef.afterClosed().subscribe((result) => {
-      if (result?.success) {
-        this.isLoggedIn = true;
-        if (result.data?.coin !== undefined) {
-          this.userService.saveCoin(result.data.coin);
-        }
-        this.cdr.markForCheck();
-      }
-    });
-  }
-
-  logout(): void {
-    this.userService.clearUserId();
-    this.userService.clearCoin();
-    this.isLoggedIn = false;
-    this.cdr.markForCheck();
-  }
-
-  goToMyPage(): void {
-    this.router.navigate(['/myPage']);
   }
 
   async loadGachas(): Promise<void> {

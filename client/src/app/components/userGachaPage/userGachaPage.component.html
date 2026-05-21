@@ -1,40 +1,5 @@
 <div class="app">
-  <header class="app-header">
-    <app-logo class="header-logo"></app-logo>
-    <div class="header-right">
-      <ng-container *ngIf="!isLoggedIn">
-        <button
-          class="header-btn header-btn-outline"
-          type="button"
-          (click)="openLoginDialog()"
-        >
-          {{ "user-gacha.login" | translate }}
-        </button>
-        <button class="header-btn header-btn-primary" routerLink="/userSignup">
-          {{ "user-gacha.signup" | translate }}
-        </button>
-        <button class="header-btn header-btn-admin" routerLink="/login">
-          {{ "user-gacha.admin-page" | translate }}
-        </button>
-      </ng-container>
-      <ng-container *ngIf="isLoggedIn">
-        <button
-          class="header-btn header-btn-primary"
-          type="button"
-          (click)="goToMyPage()"
-        >
-          {{ "user-gacha.my-page" | translate }}
-        </button>
-        <button
-          class="header-btn header-btn-outline"
-          type="button"
-          (click)="logout()"
-        >
-          {{ "user-gacha.logout" | translate }}
-        </button>
-      </ng-container>
-    </div>
-  </header>
+  <app-header></app-header>
 
   <div class="nav-tabs">
     <div
