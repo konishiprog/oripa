@@ -1,0 +1,22 @@
+<div class="dialog-content">
+  <h2 class="dialog-title">{{ "common.confirm" | translate }}</h2>
+  <p class="dialog-message">
+    {{ "card-history.exchange-confirm" | translate: { points: data.points } }}
+  </p>
+  <div class="dialog-buttons">
+    <button
+      type="button"
+      class="dialog-btn dialog-btn-cancel"
+      (click)="onCancel()"
+    >
+      {{ "common.cancel" | translate }}
+    </button>
+    <button
+      type="button"
+      class="dialog-btn dialog-btn-confirm"
+      (click)="onConfirm()"
+    >
+      {{ "common.ok" | translate }}
+    </button>
+  </div>
+</div>

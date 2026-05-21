@@ -43,6 +43,7 @@ import { UserLoginDialogComponent } from './components/userLoginDialog/userLogin
 import { AppLogoComponent } from './components/common/appLogo/appLogo.component';
 import { GachaBoxComponent } from './components/gachaBox/gachaBox.component';
 import { GachaDrawResultDialogComponent } from './components/gachaDrawResultDialog/gachaDrawResultDialog.component';
+import { CoinExchangeDialogComponent } from './components/coinExchangeDialog/coinExchangeDialog.component';
 
 @NgModule({
   declarations: [
@@ -71,6 +72,7 @@ import { GachaDrawResultDialogComponent } from './components/gachaDrawResultDial
     AppLogoComponent,
     GachaBoxComponent,
     GachaDrawResultDialogComponent,
+    CoinExchangeDialogComponent,
   ],
   imports: [
     BrowserModule,

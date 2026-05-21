@@ -3,6 +3,7 @@
 export {};
 
 const messages = require("../../constants/messages.json");
+const { CARD_STATUS } = require("../../constants/card");
 const userRuntime = require("../user");
 const cardRuntime = require("../card");
 
@@ -87,7 +88,9 @@ async function getAll() {
     })
     .map((gacha: any) => {
       const cards = gacha.cards ?? [];
-      const notDrawnCards = cards.filter((card: any) => !card.isDrawn);
+      const notDrawnCards = cards.filter(
+        (card: any) => card.isDrawn === CARD_STATUS.NOT_DRAWN,
+      );
       return {
         ...gacha,
         cardsCount: notDrawnCards.length,
@@ -105,7 +108,9 @@ function getById(id: string) {
   const gacha = gachaCache.get(id);
   if (!gacha) return null;
   const cards = gacha.cards ?? [];
-  const notDrawnCards = cards.filter((card: any) => !card.isDrawn);
+  const notDrawnCards = cards.filter(
+    (card: any) => card.isDrawn === CARD_STATUS.NOT_DRAWN,
+  );
   return {
     ...gacha,
     cardsCount: notDrawnCards.length,
@@ -141,7 +146,7 @@ async function draw(payload: {
   }
 
   const availableCards = (gacha.cards ?? []).filter(
-    (card: any) => !card.isDrawn,
+    (card: any) => card.isDrawn === CARD_STATUS.NOT_DRAWN,
   );
   if (availableCards.length === 0) {
     throw new Error(messages.errors.GACHA_OUT_OF_STOCK);
@@ -169,18 +174,18 @@ async function draw(payload: {
   const drawnIds = drawnCards.map((card: any) => card.id);
 
   await db.Card.update(
-    { isDrawn: true, userId: payload.userId },
+    { isDrawn: CARD_STATUS.DRAWN, userId: payload.userId },
     { where: { id: drawnIds } },
   );
 
   await cardRuntime.update(drawnIds, {
-    isDrawn: true,
+    isDrawn: CARD_STATUS.DRAWN,
     userId: payload.userId,
   });
 
   gacha.cards = (gacha.cards ?? []).map((card: any) =>
     drawnIds.includes(card.id)
-      ? { ...card, isDrawn: true, userId: payload.userId }
+      ? { ...card, isDrawn: CARD_STATUS.DRAWN, userId: payload.userId }
       : card,
   );
   gachaCache.set(payload.gachaId, gacha);
@@ -191,13 +196,13 @@ async function draw(payload: {
   );
 
   const remainingCount = gacha.cards.filter(
-    (card: any) => !card.isDrawn,
+    (card: any) => card.isDrawn === CARD_STATUS.NOT_DRAWN,
   ).length;
 
   return {
     drawnCards: drawnCards.map((card: any) => ({
       ...card,
-      isDrawn: true,
+      isDrawn: CARD_STATUS.DRAWN,
       userId: payload.userId,
     })),
     remainingCount,

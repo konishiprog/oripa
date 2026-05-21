@@ -85,19 +85,19 @@ export class UserService {
   /**
    * Update a user
    * @param {string} id - User id
-   * @param {object} payload - User update data
+   * @param {object} payload - User update data (partial)
    * @returns {Promise<any>} - Updated user object
    */
   async updateUser(
     id: string,
-    payload: {
+    payload: Partial<{
       email: string;
       password: string;
       name: string;
       address: string;
       phone: string;
       coin: number;
-    },
+    }>,
   ): Promise<User> {
     const response = await lastValueFrom(
       this.http.put<{ message: string; data: User }>(

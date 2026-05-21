@@ -137,4 +137,19 @@ export class CardService {
       (card: any) => card.userId === userId && card.isDrawn,
     );
   }
+
+  /**
+   * Exchange a card for coins (return to gacha)
+   * @param {string} id - Card id (UUID) to exchange
+   * @returns {Promise<any>}
+   */
+  async exchangeCard(id: string) {
+    return await lastValueFrom(
+      this.http.patch<any>(
+        `${this.apiConfig.domain}/api/card/${id}/exchange`,
+        {},
+        { headers: this.apiConfig.headers },
+      ),
+    );
+  }
 }

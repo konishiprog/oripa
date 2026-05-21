@@ -9,6 +9,7 @@ import { GachaService } from '../../service/gacha.service';
 import { CardService } from '../../service/card.service';
 import { Gacha } from '../gachaTable/gachaTable.component';
 import { Card } from '../cardTable/cardTable.component';
+import { CARD_STATUS } from '../../constants/card';
 
 enum ViewMode {
   Gacha = 'gacha',
@@ -64,7 +65,7 @@ export class DashboardComponent implements OnInit {
           exchangePoints: card.exchangePoints ?? null,
           imageFront: card.imageFront ?? '',
           imageBack: card.imageBack ?? '',
-          isDrawn: card.isDrawn ?? false,
+          isDrawn: card.isDrawn ?? CARD_STATUS.NOT_DRAWN,
         })),
       );
       this.cdr.markForCheck();
@@ -144,7 +145,7 @@ export class DashboardComponent implements OnInit {
   ): Promise<void> {
     try {
       const cards = await this.cardService.getCardsByGachaId(gachaId);
-      const notDrawnCards = cards.filter((card: any) => !card.isDrawn);
+      const notDrawnCards = cards.filter((card: any) => card.isDrawn === CARD_STATUS.NOT_DRAWN);
       this.gachas = this.gachas.map((gacha) =>
         gacha.id === gachaId ? { ...gacha, cards: notDrawnCards.length } : gacha,
       );
@@ -160,7 +161,7 @@ export class DashboardComponent implements OnInit {
           exchangePoints: card.exchangePoints ?? null,
           imageFront: card.imageFront ?? '',
           imageBack: card.imageBack ?? '',
-          isDrawn: card.isDrawn ?? false,
+          isDrawn: card.isDrawn ?? CARD_STATUS.NOT_DRAWN,
         })),
       ];
       this.cdr.markForCheck();

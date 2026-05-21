@@ -112,7 +112,8 @@
     "card": {
       "no-exchange-points": "-",
       "drawn": "引かれた",
-      "not-drawn": "未引き"
+      "not-drawn": "未引き",
+      "refunded": "差し戻し"
     },
     "pagination": {
       "info": "全 {{total}}件中{{start}}〜{{end}}件を表示"
@@ -226,7 +227,8 @@
     "finish": "結果を見る",
     "close": "閉じる",
     "close-icon": "×",
-    "close-aria-label": "閉じる"
+    "close-aria-label": "閉じる",
+    "exchange-guide": "マイページ > カード獲得履歴からコイン交換またはカード発送手続きができます"
   },
 
   "user-gacha": {
@@ -315,7 +317,9 @@
     "empty-unselected": "未選択の獲得商品がありません",
     "empty-pending": "発送待ちの獲得商品がありません",
     "empty-shipped": "発送済みの獲得商品がありません",
-    "from-gacha": "{{name}} より"
+    "from-gacha": "{{name}} より",
+    "exchange-button": "コインに交換する（{{points}}コイン）",
+    "exchange-confirm": "選択したカードを {{points}} コインに変換しますか？"
   },
 
   "user-management": {

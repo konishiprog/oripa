@@ -43,6 +43,23 @@
 
     <div *ngIf="!isLoading && filteredCards.length > 0" class="card-list">
       <div class="card-item" *ngFor="let card of filteredCards">
+        <div
+          *ngIf="activeTab === 'unselected'"
+          class="checkbox-wrapper"
+          [class.disabled]="
+            !isExchangeable(card) || card.isDrawn === CARD_STATUS.REFUNDED
+          "
+        >
+          <input
+            type="checkbox"
+            class="card-checkbox"
+            [checked]="selectedCardIds.has(card.id)"
+            [disabled]="
+              !isExchangeable(card) || card.isDrawn === CARD_STATUS.REFUNDED
+            "
+            (change)="toggleSelect(card)"
+          />
+        </div>
         <img
           *ngIf="card.imageFront"
           [src]="card.imageFront"
@@ -56,8 +73,31 @@
               "card-history.from-gacha" | translate: { name: card.gachaName }
             }}
           </div>
+          <div
+            *ngIf="card.isDrawn === CARD_STATUS.REFUNDED"
+            class="card-status"
+          >
+            {{ "card-history.status-exchanged" | translate }}
+          </div>
         </div>
       </div>
     </div>
+  </div>
+
+  <div
+    *ngIf="activeTab === 'unselected' && !isLoading && filteredCards.length > 0"
+    class="exchange-footer"
+  >
+    <button
+      type="button"
+      class="exchange-btn"
+      [disabled]="!hasSelectedCards"
+      (click)="openExchangeDialog()"
+    >
+      {{
+        "card-history.exchange-button"
+          | translate: { points: selectedTotalPoints }
+      }}
+    </button>
   </div>
 </div>
