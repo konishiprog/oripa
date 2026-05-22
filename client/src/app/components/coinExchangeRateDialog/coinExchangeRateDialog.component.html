@@ -1,0 +1,78 @@
+<div class="container">
+  <div class="form-wrapper">
+    <h1>
+      {{
+        (isEditMode
+          ? "coin-exchange-rate.title-edit"
+          : "coin-exchange-rate.title-create"
+        ) | translate
+      }}
+    </h1>
+
+    <div class="error-message" *ngIf="errorMessage">
+      {{ errorMessage }}
+    </div>
+
+    <form (ngSubmit)="onSubmit()">
+      <div class="form-group">
+        <label for="point">{{ "coin-exchange-rate.point" | translate }}</label>
+        <input
+          id="point"
+          type="number"
+          [(ngModel)]="point"
+          name="point"
+          min="1"
+          required
+          [disabled]="isLoading"
+        />
+      </div>
+
+      <div class="form-group">
+        <label for="price">{{ "coin-exchange-rate.price" | translate }}</label>
+        <input
+          id="price"
+          type="number"
+          [(ngModel)]="price"
+          name="price"
+          min="1"
+          required
+          [disabled]="isLoading"
+        />
+      </div>
+
+      <div class="form-group">
+        <label for="specialPoint">{{
+          "coin-exchange-rate.special-point" | translate
+        }}</label>
+        <input
+          id="specialPoint"
+          type="number"
+          [(ngModel)]="specialPoint"
+          name="specialPoint"
+          min="0"
+          required
+          [disabled]="isLoading"
+        />
+      </div>
+
+      <div class="button-group">
+        <button
+          type="button"
+          (click)="onClose()"
+          [disabled]="isLoading"
+          class="close-btn"
+        >
+          {{ "common.cancel" | translate }}
+        </button>
+        <button type="submit" [disabled]="isLoading" class="submit-btn">
+          {{
+            (isEditMode
+              ? "coin-exchange-rate.save"
+              : "coin-exchange-rate.create"
+            ) | translate
+          }}
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

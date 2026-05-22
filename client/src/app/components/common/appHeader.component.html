@@ -37,6 +37,21 @@
         >
           {{ "common.header.logout" | translate }}
         </button>
+        <div class="user-coin-section">
+          <div class="user-coin-display">
+            {{ userCoin }}{{ "common.unit.point" | translate }}
+          </div>
+          <div class="user-special-point-display">
+            +{{ userSpecialPoint || 0 }}{{ "common.unit.point" | translate }}
+          </div>
+          <button
+            class="header-btn header-btn-charge"
+            type="button"
+            (click)="goToCharge()"
+          >
+            {{ "common.header.charge" | translate }}
+          </button>
+        </div>
       </ng-container>
     </ng-container>
   </div>

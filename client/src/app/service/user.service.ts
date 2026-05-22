@@ -15,6 +15,7 @@ export interface User {
   address: string;
   phone: string;
   coin: number;
+  specialPoint: number;
 }
 
 export interface CreateUserPayload {
@@ -25,12 +26,23 @@ export interface CreateUserPayload {
   phone: string;
 }
 
+export interface ChargeResult {
+  userId: string;
+  previousCoin: number;
+  newCoin: number;
+  addedPoint: number;
+  previousSpecialPoint: number;
+  newSpecialPoint: number;
+  addedSpecialPoint: number;
+}
+
 @Injectable({
   providedIn: 'root',
 })
 export class UserService {
   private readonly STORAGE_KEY = 'userId';
   private readonly COIN_STORAGE_KEY = 'userCoin';
+  private readonly SPECIAL_POINT_STORAGE_KEY = 'userSpecialPoint';
 
   constructor(
     private http: HttpClient,
@@ -124,6 +136,24 @@ export class UserService {
   }
 
   /**
+   * Charge a user's coin balance based on exchange rate
+   * @param {string} rateId - Coin exchange rate id
+   * @param {string} userId - User id
+   * @returns {Promise<ChargeResult>} - Charge result with updated values
+   */
+  async charge(rateId: string, userId: string): Promise<ChargeResult> {
+    const headers = this.apiConfig.headers.set('x-user-id', userId);
+    const response = await lastValueFrom(
+      this.http.post<{ message: string; data: ChargeResult }>(
+        `${this.apiConfig.domain}/api/user/charge`,
+        { rateId },
+        { headers },
+      ),
+    );
+    return response.data;
+  }
+
+  /**
    * Login a user by email or phone
    * @param {string} identifier - Email address or phone number
    * @param {string} password - User password
@@ -195,5 +225,32 @@ export class UserService {
    */
   clearCoin(): void {
     localStorage.removeItem(this.COIN_STORAGE_KEY);
+  }
+
+  /**
+   * Save the user's special point balance to local storage
+   * @param {number} specialPoint - User special point balance
+   */
+  saveSpecialPoint(specialPoint: number): void {
+    localStorage.setItem(
+      this.SPECIAL_POINT_STORAGE_KEY,
+      specialPoint.toString(),
+    );
+  }
+
+  /**
+   * Get the user's special point balance from local storage
+   * @returns {number | null} - User special point balance or null
+   */
+  getSpecialPoint(): number | null {
+    const specialPoint = localStorage.getItem(this.SPECIAL_POINT_STORAGE_KEY);
+    return specialPoint ? parseInt(specialPoint, 10) : null;
+  }
+
+  /**
+   * Clear the user's special point balance from local storage
+   */
+  clearSpecialPoint(): void {
+    localStorage.removeItem(this.SPECIAL_POINT_STORAGE_KEY);
   }
 }

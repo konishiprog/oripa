@@ -47,6 +47,9 @@ import { GachaDrawResultDialogComponent } from './components/gachaDrawResultDial
 import { CoinExchangeDialogComponent } from './components/coinExchangeDialog/coinExchangeDialog.component';
 import { ShippingInfoPageComponent } from './components/shippingInfoPage/shippingInfoPage.component';
 import { ShippingCardDetailDialogComponent } from './components/shippingCardDetailDialog/shippingCardDetailDialog.component';
+import { CoinExchangeRateManagementComponent } from './components/coinExchangeRateManagement/coinExchangeRateManagement.component';
+import { CoinExchangeRateDialogComponent } from './components/coinExchangeRateDialog/coinExchangeRateDialog.component';
+import { CoinChargePageComponent } from './components/coinChargePage/coinChargePage.component';
 
 @NgModule({
   declarations: [
@@ -79,6 +82,9 @@ import { ShippingCardDetailDialogComponent } from './components/shippingCardDeta
     CoinExchangeDialogComponent,
     ShippingInfoPageComponent,
     ShippingCardDetailDialogComponent,
+    CoinExchangeRateManagementComponent,
+    CoinExchangeRateDialogComponent,
+    CoinChargePageComponent,
   ],
   imports: [
     BrowserModule,

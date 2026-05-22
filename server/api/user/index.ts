@@ -185,6 +185,52 @@ module.exports = {
     });
 
     /**
+     * Charge a user's coin balance
+     * POST /api/user/charge
+     * Body: { rateId }
+     * Headers: x-user-id
+     */
+    router.post("/charge", async (req: Request, res: Response) => {
+      const { rateId } = req.body;
+      const userId = req.headers["x-user-id"] as string;
+
+      if (!userId) {
+        return res
+          .status(401)
+          .json({ error: messages.errors.UNAUTHORIZED });
+      }
+
+      if (!rateId) {
+        return res
+          .status(400)
+          .json({ error: messages.errors.RATE_ID_REQUIRED });
+      }
+
+      try {
+        const rate = runtime.coinExchangeRate.getById(rateId);
+        if (!rate) {
+          return res
+            .status(404)
+            .json({ error: messages.errors.RATE_NOT_FOUND });
+        }
+
+        const result = await runtime.user.charge(
+          userId,
+          rate.point,
+          rate.specialPoint,
+        );
+
+        return res.status(200).json({
+          message: messages.success.CHARGE_SUCCESSFUL,
+          data: result,
+        });
+      } catch (error: any) {
+        const { status, message } = handleError(error, "User charge");
+        return res.status(status).json({ error: message });
+      }
+    });
+
+    /**
      * Delete a user
      * DELETE /api/user/:id
      */

@@ -18,9 +18,13 @@ describe('AppHeaderComponent', () => {
   beforeEach(async () => {
     mockUserService = {
       isLoggedIn: jest.fn().mockReturnValue(false),
+      getCoin: jest.fn().mockReturnValue(null),
+      getSpecialPoint: jest.fn().mockReturnValue(null),
       saveCoin: jest.fn(),
+      saveSpecialPoint: jest.fn(),
       clearUserId: jest.fn(),
       clearCoin: jest.fn(),
+      clearSpecialPoint: jest.fn(),
     };
     const routerEventsSubject = new Subject();
     mockRouter = {
@@ -34,6 +38,7 @@ describe('AppHeaderComponent', () => {
     mockTranslateService = {
       setDefaultLang: jest.fn(),
       use: jest.fn(),
+      instant: jest.fn((key: string) => key),
     };
 
     await TestBed.configureTestingModule({
@@ -71,6 +76,20 @@ describe('AppHeaderComponent', () => {
     component.logout();
     expect(mockUserService.clearUserId).toHaveBeenCalled();
     expect(mockUserService.clearCoin).toHaveBeenCalled();
+    expect(mockUserService.clearSpecialPoint).toHaveBeenCalled();
     expect(mockRouter.navigate).toHaveBeenCalledWith(['/userGachaPage']);
+  });
+
+  it('should navigate to coin charge page when charge button is clicked', () => {
+    component.goToCharge();
+    expect(mockRouter.navigate).toHaveBeenCalledWith(['/coinCharge']);
+  });
+
+  it('should load coin and special point on init', () => {
+    mockUserService.getCoin.mockReturnValue(1000);
+    mockUserService.getSpecialPoint.mockReturnValue(100);
+    component.ngOnInit();
+    expect(component.userCoin).toBe(1000);
+    expect(component.userSpecialPoint).toBe(100);
   });
 });

@@ -28,6 +28,10 @@ module.exports = (sequelize: any, DataTypes: any) => {
         type: DataTypes.INTEGER,
         defaultValue: 0,
       },
+      specialPoint: {
+        type: DataTypes.INTEGER,
+        defaultValue: 0,
+      },
       address: {
         type: DataTypes.STRING,
       },

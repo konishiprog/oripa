@@ -15,6 +15,8 @@ import { UserSignupComponent } from './components/userSignup/userSignup.componen
 import { UserMyPageComponent } from './components/userMyPage/userMyPage.component';
 import { UserCardHistoryPageComponent } from './components/userCardHistoryPage/userCardHistoryPage.component';
 import { ShippingInfoPageComponent } from './components/shippingInfoPage/shippingInfoPage.component';
+import { CoinExchangeRateManagementComponent } from './components/coinExchangeRateManagement/coinExchangeRateManagement.component';
+import { CoinChargePageComponent } from './components/coinChargePage/coinChargePage.component';
 
 const routes: Routes = [
   {
@@ -43,6 +45,10 @@ const routes: Routes = [
     component: UserCardHistoryPageComponent,
   },
   {
+    path: 'coinCharge',
+    component: CoinChargePageComponent,
+  },
+  {
     path: 'adminPanel',
     component: AdminPanelComponent,
     children: [
@@ -66,6 +72,10 @@ const routes: Routes = [
       {
         path: 'shippingInfo',
         component: ShippingInfoPageComponent,
+      },
+      {
+        path: 'coinExchangeRate',
+        component: CoinExchangeRateManagementComponent,
       },
       {
         path: 'createAdmin',

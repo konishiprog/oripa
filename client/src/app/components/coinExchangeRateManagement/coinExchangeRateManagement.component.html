@@ -1,0 +1,50 @@
+<div class="coin-exchange-rate-container">
+  <div class="page-header">
+    <h1>{{ "coin-exchange-rate.page-title" | translate }}</h1>
+    <button class="back-btn" (click)="goBack()">
+      {{ "coin-exchange-rate.back" | translate }}
+    </button>
+  </div>
+
+  <div class="page-desc">
+    {{ "coin-exchange-rate.page-desc" | translate }}
+  </div>
+
+  <div *ngIf="isLoading" class="loading">
+    {{ "common.loading" | translate }}
+  </div>
+
+  <div *ngIf="!isLoading" class="content">
+    <button class="add-btn" (click)="openCreateDialog()">
+      {{ "coin-exchange-rate.add-new" | translate }}
+    </button>
+
+    <table class="rates-table">
+      <thead>
+        <tr>
+          <th>{{ "coin-exchange-rate.point" | translate }}</th>
+          <th>{{ "coin-exchange-rate.price" | translate }}</th>
+          <th>{{ "coin-exchange-rate.special-point" | translate }}</th>
+          <th class="action-header"></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let rate of rates">
+          <td>{{ rate.point }}</td>
+          <td>{{ rate.price }}</td>
+          <td>{{ rate.specialPoint }}</td>
+          <td class="action-cell">
+            <app-action-menu
+              (edit)="openEditDialog(rate)"
+              (delete)="deleteRate(rate)"
+            ></app-action-menu>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div *ngIf="rates.length === 0" class="no-data">
+      {{ "coin-exchange-rate.no-data" | translate }}
+    </div>
+  </div>
+</div>

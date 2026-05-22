@@ -15,6 +15,8 @@
     "dashboard": "ダッシュボード",
     "user-management": "ユーザー管理",
     "main": "メイン",
+    "settings": "設定",
+    "coin-exchange-rate": "ポイント交換レート",
     "logs": "ログ",
     "purchase-log": "購入ログ",
     "point-history": "ポイント履歴",
@@ -376,6 +378,44 @@
     "save": "保存"
   },
 
+  "coin-exchange-rate": {
+    "page-title": "ポイント交換レート設定",
+    "page-desc": "ユーザーがコインに交換できるポイント交換のレートを設定します。",
+    "back": "戻る",
+    "title-create": "ポイント交換レート登録",
+    "title-edit": "ポイント交換レート編集",
+    "point": "ポイント",
+    "price": "金額",
+    "special-point": "特別ポイント",
+    "actions": "アクション",
+    "add-new": "+ 新規レート追加",
+    "save": "保存",
+    "create": "作成",
+    "delete-confirm": "このレート設定を削除してもよろしいですか？",
+    "delete-success": "レート設定を削除しました",
+    "save-success": "レート設定を保存しました",
+    "create-success": "レート設定を作成しました",
+    "error-load": "レート設定の読み込みに失敗しました",
+    "error-save": "レート設定の保存に失敗しました",
+    "error-delete": "レート設定の削除に失敗しました",
+    "error-create": "レート設定の作成に失敗しました",
+    "error-invalid-input": "ポイントと金額は1以上の整数で入力してください",
+    "no-data": "レート設定はまだ登録されていません"
+  },
+
+  "coin-charge": {
+    "page-title": "ポイントチャージ",
+    "page-desc": "ポイントをチャージして購入できます。",
+    "back": "戻る",
+    "select-option": "チャージオプションを選択",
+    "price": "金額",
+    "charge-button": "チャージする",
+    "error-load": "チャージオプションの読み込みに失敗しました",
+    "error-no-option": "チャージオプションを選択してください",
+    "error-charge": "チャージに失敗しました",
+    "success-charge": "{{addedPoint}}ポイント チャージしました。現在のポイント: {{newCoin}}P"
+  },
+
   "common": {
     "app-name": "net-oripa",
     "console": "Console",
@@ -383,13 +423,20 @@
     "confirm-update": "を変更します。よろしいですか？",
     "ok": "はい",
     "cancel": "キャンセル",
+    "loading": "読み込み中...",
+    "error-not-logged-in": "ログインしてください",
+    "unit": {
+      "point": "P",
+      "yen": "¥"
+    },
     "header": {
       "login": "ログイン",
       "signup": "アカウント作成",
       "admin-page": "管理者専用ページ",
       "my-page": "マイページ",
       "logout": "ログアウト",
-      "back-to-gacha": "ガチャページに戻る"
+      "back-to-gacha": "ガチャページに戻る",
+      "charge": "ポイントチャージ"
     },
     "actions": {
       "edit": "編集",
