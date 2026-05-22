@@ -1,5 +1,7 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { TranslateService } from '@ngx-translate/core';
+import { CoinPurchaseHistoryFilterDialogComponent } from '../coinPurchaseHistoryFilterDialog/coinPurchaseHistoryFilterDialog.component';
 import {
   CoinPurchaseHistoryService,
   CoinPurchaseHistoryItem,
@@ -54,19 +56,67 @@ const COIN_PURCHASE_HISTORY_TABLE_CELLS: TableCell[] = [
 })
 export class CoinPurchaseHistoryPageComponent implements OnInit {
   histories: CoinPurchaseHistoryItem[] = [];
+  filteredHistories: CoinPurchaseHistoryItem[] = [];
   isLoading: boolean = false;
 
   tableHeaders = COIN_PURCHASE_HISTORY_TABLE_HEADERS;
   tableCells = COIN_PURCHASE_HISTORY_TABLE_CELLS;
 
+  searchQuery: string = '';
+  minPrice: number | null = null;
+  maxPrice: number | null = null;
+  minPoint: number | null = null;
+  maxPoint: number | null = null;
+  startDate: string = '';
+  endDate: string = '';
+  yearFilter: string = '';
+
+  currentPage: number = 1;
+  itemsPerPage: number = 20;
+  Math = Math;
+
   constructor(
     private historyService: CoinPurchaseHistoryService,
     private translateService: TranslateService,
     private cdr: ChangeDetectorRef,
+    private dialog: MatDialog,
   ) {}
 
   ngOnInit(): void {
     this.loadHistories();
+  }
+
+  openFilterDialog(): void {
+    const dialogRef = this.dialog.open(
+      CoinPurchaseHistoryFilterDialogComponent,
+      {
+        width: '500px',
+        data: {
+          criteria: {
+            minPrice: this.minPrice,
+            maxPrice: this.maxPrice,
+            minPoint: this.minPoint,
+            maxPoint: this.maxPoint,
+            startDate: this.startDate,
+            endDate: this.endDate,
+            yearFilter: this.yearFilter,
+          },
+        },
+      },
+    );
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        this.minPrice = result.minPrice;
+        this.maxPrice = result.maxPrice;
+        this.minPoint = result.minPoint;
+        this.maxPoint = result.maxPoint;
+        this.startDate = result.startDate;
+        this.endDate = result.endDate;
+        this.yearFilter = result.yearFilter;
+        this.applyFilters();
+      }
+    });
   }
 
   getTextCellValue(cell: TableCell, history: CoinPurchaseHistoryItem): any {
@@ -125,12 +175,128 @@ export class CoinPurchaseHistoryPageComponent implements OnInit {
     this.isLoading = true;
     try {
       this.histories = await this.historyService.getAllHistories();
-      this.cdr.markForCheck();
+      this.applyFilters();
     } catch (error) {
       console.error('Failed to load purchase histories:', error);
       alert(this.translateService.instant('coin-purchase-history.error-load'));
     } finally {
       this.isLoading = false;
     }
+  }
+
+  onSearchInput(query: string): void {
+    this.searchQuery = query;
+    this.applyFilters();
+  }
+
+  onPageChange(page: number): void {
+    this.currentPage = page;
+  }
+
+  onItemsPerPageChange(newValue: number): void {
+    this.itemsPerPage = newValue;
+    this.currentPage = 1;
+  }
+
+  getDisplayedHistories(): CoinPurchaseHistoryItem[] {
+    const start = (this.currentPage - 1) * this.itemsPerPage;
+    const end = start + this.itemsPerPage;
+    return this.filteredHistories.slice(start, end);
+  }
+
+  applyFilters(): void {
+    let filtered = [...this.histories];
+
+    if (this.searchQuery.trim()) {
+      const query = this.searchQuery.toLowerCase();
+      filtered = filtered.filter((history) => {
+        const userName = (
+          (history as any)['User.name'] || history.userId
+        ).toLowerCase();
+        return userName.includes(query);
+      });
+    }
+
+    if (this.minPrice !== null) {
+      filtered = filtered.filter((history) => history.price >= this.minPrice!);
+    }
+
+    if (this.maxPrice !== null) {
+      filtered = filtered.filter((history) => history.price <= this.maxPrice!);
+    }
+
+    if (this.minPoint !== null) {
+      filtered = filtered.filter((history) => history.point >= this.minPoint!);
+    }
+
+    if (this.maxPoint !== null) {
+      filtered = filtered.filter((history) => history.point <= this.maxPoint!);
+    }
+
+    if (this.startDate) {
+      const start = new Date(this.startDate);
+      filtered = filtered.filter(
+        (history) => new Date(history.createdAt) >= start,
+      );
+    }
+
+    if (this.endDate) {
+      const end = new Date(this.endDate);
+      end.setHours(23, 59, 59, 999);
+      filtered = filtered.filter(
+        (history) => new Date(history.createdAt) <= end,
+      );
+    }
+
+    if (this.yearFilter) {
+      const now = new Date();
+
+      if (this.yearFilter === 'recent-1year') {
+        const oneYearAgo = new Date(
+          now.getFullYear(),
+          now.getMonth(),
+          now.getDate() - 365,
+        );
+        filtered = filtered.filter(
+          (history) => new Date(history.createdAt) >= oneYearAgo,
+        );
+      } else {
+        const filterYear = Number(this.yearFilter);
+        if (!Number.isNaN(filterYear)) {
+          filtered = filtered.filter(
+            (history) =>
+              new Date(history.createdAt).getFullYear() === filterYear,
+          );
+        }
+      }
+    }
+
+    this.filteredHistories = filtered;
+    this.currentPage = 1;
+    this.cdr.markForCheck();
+  }
+
+  isFilterActive(): boolean {
+    return (
+      this.minPrice !== null ||
+      this.maxPrice !== null ||
+      this.minPoint !== null ||
+      this.maxPoint !== null ||
+      this.startDate !== '' ||
+      this.endDate !== '' ||
+      this.yearFilter !== ''
+    );
+  }
+
+  clearFilters(): void {
+    this.searchQuery = '';
+    this.minPrice = null;
+    this.maxPrice = null;
+    this.minPoint = null;
+    this.maxPoint = null;
+    this.startDate = '';
+    this.endDate = '';
+    this.yearFilter = '';
+    this.applyFilters();
   }
 }

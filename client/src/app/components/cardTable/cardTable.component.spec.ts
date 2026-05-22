@@ -89,12 +89,6 @@ describe('CardTableComponent', () => {
     expect(component.itemsPerPage).toBe(20);
   });
 
-  it('should load icons on init', () => {
-    jest.spyOn(component as any, 'loadIcons');
-    component.ngOnInit();
-    expect(component['loadIcons']).toHaveBeenCalled();
-  });
-
   it('should apply filters on init', () => {
     jest.spyOn(component, 'applyFilters');
     component.ngOnInit();
@@ -164,78 +158,6 @@ describe('CardTableComponent', () => {
     expect(displayed[1].id).toBe('2');
   });
 
-  it('should get correct total pages', () => {
-    component.filteredCards = mockCards;
-    component.itemsPerPage = 2;
-    const totalPages = component.getTotalPages();
-    expect(totalPages).toBe(2);
-  });
-
-  it('should calculate page numbers correctly for small page count', () => {
-    component.filteredCards = mockCards;
-    component.itemsPerPage = 20;
-    component.currentPage = 1;
-    const pageNumbers = component.getPageNumbers();
-    expect(pageNumbers).toEqual([1]);
-  });
-
-  it('should show ellipsis and boundary pages for large page count', () => {
-    const largeList = Array.from({ length: 100 }, (_, i) => ({
-      ...mockCards[0],
-      id: String(i + 1),
-    }));
-    component.filteredCards = largeList;
-    component.itemsPerPage = 5;
-    component.currentPage = 15;
-    const pageNumbers = component.getPageNumbers();
-    expect(pageNumbers[0]).toBe(1);
-    expect(pageNumbers[pageNumbers.length - 1]).toBe(20);
-    expect(pageNumbers).toContain('...');
-  });
-
-  it('should navigate to valid page', () => {
-    component.filteredCards = mockCards;
-    component.itemsPerPage = 1;
-    component.goToPage(2);
-    expect(component.currentPage).toBe(2);
-  });
-
-  it('should not navigate to invalid page', () => {
-    component.filteredCards = mockCards;
-    component.itemsPerPage = 1;
-    component.currentPage = 1;
-    component.goToPage(999);
-    expect(component.currentPage).toBe(1);
-  });
-
-  it('should go to previous page', () => {
-    component.currentPage = 3;
-    component.previousPage();
-    expect(component.currentPage).toBe(2);
-  });
-
-  it('should not go below page 1', () => {
-    component.currentPage = 1;
-    component.previousPage();
-    expect(component.currentPage).toBe(1);
-  });
-
-  it('should go to next page', () => {
-    component.filteredCards = mockCards;
-    component.itemsPerPage = 1;
-    component.currentPage = 1;
-    component.nextPage();
-    expect(component.currentPage).toBe(2);
-  });
-
-  it('should not go beyond total pages', () => {
-    component.filteredCards = mockCards;
-    component.itemsPerPage = 1;
-    component.currentPage = 3;
-    component.nextPage();
-    expect(component.currentPage).toBe(3);
-  });
-
   it('should change items per page and reset to page 1', () => {
     component.currentPage = 5;
     component.onItemsPerPageChange(50);
@@ -247,7 +169,9 @@ describe('CardTableComponent', () => {
     jest.spyOn(translateService, 'instant').mockReturnValue('Super Rare');
     const label = component.getCardTypeLabel('SSR');
     expect(label).toBe('Super Rare');
-    expect(translateService.instant).toHaveBeenCalledWith('card-create.card-type-ssr');
+    expect(translateService.instant).toHaveBeenCalledWith(
+      'card-create.card-type-ssr',
+    );
   });
 
   it('should return value when card type not found', () => {
@@ -259,7 +183,9 @@ describe('CardTableComponent', () => {
     jest.spyOn(translateService, 'instant').mockReturnValue('Both');
     const label = component.getExchangeTypeLabel('BOTH');
     expect(label).toBe('Both');
-    expect(translateService.instant).toHaveBeenCalledWith('card-create.exchange-type-both');
+    expect(translateService.instant).toHaveBeenCalledWith(
+      'card-create.exchange-type-both',
+    );
   });
 
   it('should return value when exchange type not found', () => {
@@ -321,14 +247,5 @@ describe('CardTableComponent', () => {
     await component.deleteCard(mockCards[0]);
     expect(component.cards.length).toBe(initialLength);
     expect(cardService.deleteCard).not.toHaveBeenCalled();
-  });
-
-  it('should get pagination info string', () => {
-    jest.spyOn(translateService, 'instant').mockReturnValue('Showing 1-3 of 3');
-    component.filteredCards = mockCards;
-    component.currentPage = 1;
-    component.itemsPerPage = 20;
-    component.getPaginationInfo();
-    expect(translateService.instant).toHaveBeenCalled();
   });
 });

@@ -155,30 +155,6 @@ describe('UserManagementComponent', () => {
     });
   });
 
-  describe('onSearchInput', () => {
-    beforeEach(async () => {
-      await component.loadUsers();
-    });
-
-    it('should apply filters when not composing', () => {
-      jest.spyOn(component, 'applyFilters');
-      component.isComposing = false;
-
-      component.onSearchInput();
-
-      expect(component.applyFilters).toHaveBeenCalled();
-    });
-
-    it('should not apply filters when composing', () => {
-      jest.spyOn(component, 'applyFilters');
-      component.isComposing = true;
-
-      component.onSearchInput();
-
-      expect(component.applyFilters).not.toHaveBeenCalled();
-    });
-  });
-
   describe('pagination', () => {
     beforeEach(async () => {
       await component.loadUsers();
@@ -192,45 +168,6 @@ describe('UserManagementComponent', () => {
       expect(displayed.length).toBe(2);
       expect(displayed[0].id).toBe('user-uuid-1');
       expect(displayed[1].id).toBe('user-uuid-2');
-    });
-
-    it('should calculate total pages', () => {
-      component.filteredUsers = mockUsers;
-      component.itemsPerPage = 2;
-
-      expect(component.getTotalPages()).toBe(2);
-    });
-
-    it('should navigate to previous page', () => {
-      component.currentPage = 2;
-      component.previousPage();
-
-      expect(component.currentPage).toBe(1);
-    });
-
-    it('should not go below page 1', () => {
-      component.currentPage = 1;
-      component.previousPage();
-
-      expect(component.currentPage).toBe(1);
-    });
-
-    it('should navigate to next page', () => {
-      component.filteredUsers = mockUsers;
-      component.itemsPerPage = 2;
-      component.currentPage = 1;
-      component.nextPage();
-
-      expect(component.currentPage).toBe(2);
-    });
-
-    it('should not go beyond total pages', () => {
-      component.filteredUsers = mockUsers;
-      component.itemsPerPage = 10;
-      component.currentPage = 1;
-      component.nextPage();
-
-      expect(component.currentPage).toBe(1);
     });
   });
 
@@ -354,55 +291,6 @@ describe('UserManagementComponent', () => {
 
       expect(component.itemsPerPage).toBe(50);
       expect(component.currentPage).toBe(1);
-    });
-  });
-
-  describe('getPaginationInfo', () => {
-    beforeEach(async () => {
-      await component.loadUsers();
-    });
-
-    it('should return pagination info string', () => {
-      component.filteredUsers = mockUsers;
-      component.currentPage = 1;
-      component.itemsPerPage = 2;
-
-      const info = component.getPaginationInfo();
-
-      expect(info).toBeTruthy();
-    });
-  });
-
-  describe('getPageNumbers', () => {
-    beforeEach(async () => {
-      await component.loadUsers();
-    });
-
-    it('should return page numbers for 5 or fewer pages', () => {
-      component.filteredUsers = mockUsers;
-      component.itemsPerPage = 1;
-      component.currentPage = 1;
-
-      const pages = component.getPageNumbers();
-
-      expect(pages.length).toBe(3);
-      expect(pages[0]).toBe(1);
-      expect(pages[1]).toBe(2);
-      expect(pages[2]).toBe(3);
-    });
-
-    it('should include ellipsis for many pages', () => {
-      const manyUsers = Array.from({ length: 20 }, (_, i) => ({
-        ...mockUsers[0],
-        id: `user-${i}`,
-      }));
-      component.filteredUsers = manyUsers;
-      component.currentPage = 1;
-      component.itemsPerPage = 1;
-
-      const pages = component.getPageNumbers();
-
-      expect(pages).toContain('...');
     });
   });
 });

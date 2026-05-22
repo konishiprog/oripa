@@ -1,0 +1,87 @@
+<div class="dialog-container">
+  <div class="dialog-header">
+    <h2 class="dialog-title">
+      {{ "dashboard.card-filter.title" | translate }}
+    </h2>
+  </div>
+
+  <div class="dialog-content">
+    <div class="filter-group" *ngIf="availableGachaNames.length > 0">
+      <label>{{ "dashboard.card-filter.gacha-name" | translate }}</label>
+      <div class="filter-checkbox-list">
+        <label
+          *ngFor="let gachaName of availableGachaNames"
+          class="checkbox-label"
+        >
+          <input
+            type="checkbox"
+            [checked]="criteria.gachaNames.includes(gachaName)"
+            (change)="toggleGachaName(gachaName)"
+            class="checkbox-input"
+          />
+          {{ gachaName }}
+        </label>
+      </div>
+    </div>
+
+    <div class="filter-group">
+      <label>{{ "dashboard.card-filter.card-type" | translate }}</label>
+      <div class="filter-checkbox-list">
+        <label *ngFor="let cardType of cardTypes" class="checkbox-label">
+          <input
+            type="checkbox"
+            [checked]="criteria.cardTypes.includes(cardType.value)"
+            (change)="toggleCardType(cardType.value)"
+            class="checkbox-input"
+          />
+          {{ cardType.labelKey | translate }}
+        </label>
+      </div>
+    </div>
+
+    <div class="filter-group">
+      <label>{{ "dashboard.card-filter.exchange-type" | translate }}</label>
+      <div class="filter-checkbox-list">
+        <label
+          *ngFor="let exchangeType of exchangeTypes"
+          class="checkbox-label"
+        >
+          <input
+            type="checkbox"
+            [checked]="criteria.exchangeTypes.includes(exchangeType.value)"
+            (change)="toggleExchangeType(exchangeType.value)"
+            class="checkbox-input"
+          />
+          {{ exchangeType.labelKey | translate }}
+        </label>
+      </div>
+    </div>
+
+    <div class="filter-group">
+      <label>{{ "dashboard.card-filter.is-drawn" | translate }}</label>
+      <div class="filter-checkbox-list">
+        <label *ngFor="let status of cardStatusList" class="checkbox-label">
+          <input
+            type="checkbox"
+            [checked]="criteria.isDrawnStatuses.includes(status)"
+            (change)="toggleIsDrawnStatus(status)"
+            class="checkbox-input"
+          />
+          {{ status }}
+        </label>
+      </div>
+    </div>
+  </div>
+
+  <div class="dialog-actions">
+    <button class="btn btn-secondary" (click)="onReset()">
+      {{ "filter-dialog.reset" | translate }}
+    </button>
+    <button class="btn btn-cancel" (click)="onClose()">
+      {{ "filter-dialog.close" | translate }}
+    </button>
+    <button class="btn btn-primary" (click)="onApply()">
+      {{ "filter-dialog.apply" | translate }}
+    </button>
+  </div>
+</div>

@@ -23,7 +23,7 @@ export class PaginationFilterComponent {
   }
 
   getOptionLabel(pageCount: number): string {
-    return this.translateService.instant('dashboard.filter.pagination-option', {
+    return this.translateService.instant('common.pagination.option', {
       page_count: pageCount,
     });
   }

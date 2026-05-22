@@ -1,26 +1,15 @@
-<div class="filter-bar">
-  <div class="filter-bar-left">
-    <div class="search-input-wrap">
-      <span class="search-icon" [innerHTML]="searchIcon"></span>
-      <input
-        type="text"
-        class="search-input"
-        [placeholder]="'dashboard.search-placeholder-card' | translate"
-        [(ngModel)]="searchQuery"
-        (input)="onSearchInput()"
-        (compositionstart)="onCompositionStart()"
-        (compositionend)="onCompositionEnd()"
-        (keydown)="onSearchKeydown($event)"
-      />
-    </div>
-  </div>
-  <div class="filter-bar-right">
-    <app-pagination-filter
-      [itemsPerPage]="itemsPerPage"
-      (itemsPerPageChange)="onItemsPerPageChange($event)"
-    ></app-pagination-filter>
-  </div>
-</div>
+<app-table-controls
+  [placeholder]="'dashboard.search-placeholder-card' | translate"
+  [showFilterButton]="true"
+  [filterActive]="isFilterActive()"
+  [currentPage]="currentPage"
+  [totalItems]="filteredCards.length"
+  [itemsPerPage]="itemsPerPage"
+  (search)="onSearchInput($event)"
+  (filterOpen)="openFilterDialog()"
+  (pageChange)="onPageChange($event)"
+  (itemsPerPageChange)="onItemsPerPageChange($event)"
+></app-table-controls>
 
 <div class="table-card">
   <div class="table-scroll">
@@ -53,36 +42,5 @@
         </tr>
       </tbody>
     </table>
-  </div>
-
-  <div class="pagination">
-    <div class="pagination-info">
-      {{ getPaginationInfo() }}
-    </div>
-    <div class="pagination-btns">
-      <button
-        class="page-btn"
-        (click)="previousPage()"
-        [disabled]="currentPage === 1"
-      >
-        <span class="page-btn-icon" [innerHTML]="chevronLeftIcon"></span>
-      </button>
-      <button
-        *ngFor="let page of getPageNumbers()"
-        class="page-btn"
-        [class.active]="page === currentPage"
-        [disabled]="typeof page === 'string'"
-        (click)="typeof page === 'number' && goToPage(page)"
-      >
-        {{ page }}
-      </button>
-      <button
-        class="page-btn"
-        (click)="nextPage()"
-        [disabled]="currentPage === getTotalPages()"
-      >
-        <span class="page-btn-icon" [innerHTML]="chevronRightIcon"></span>
-      </button>
-    </div>
   </div>
 </div>

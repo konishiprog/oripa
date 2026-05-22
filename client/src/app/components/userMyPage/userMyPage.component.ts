@@ -9,8 +9,12 @@ import {
   ConfirmUpdateDialogComponent,
   ConfirmDialogData,
 } from './confirm-update-dialog/confirm-update-dialog.component';
+import {
+  CoinPurchaseHistoryService,
+  CoinPurchaseHistoryItem,
+} from '../../service/coin-purchase-history.service';
 
-export type MyPageSection = 'address' | 'email' | 'password' | 'coin' | null;
+export type MyPageSection = 'address' | 'email' | 'password' | 'point' | null;
 
 @Component({
   selector: 'app-user-my-page',
@@ -24,6 +28,7 @@ export class UserMyPageComponent implements OnInit {
   chevronSvg: SafeHtml = '';
 
   user: User | null = null;
+  purchaseHistories: CoinPurchaseHistoryItem[] = [];
 
   addressInput: string = '';
   emailInput: string = '';
@@ -49,6 +54,7 @@ export class UserMyPageComponent implements OnInit {
     private http: HttpClient,
     private sanitizer: DomSanitizer,
     private dialog: MatDialog,
+    private coinPurchaseHistoryService: CoinPurchaseHistoryService,
   ) {}
 
   async ngOnInit(): Promise<void> {
@@ -74,8 +80,15 @@ export class UserMyPageComponent implements OnInit {
       this.user = await this.userService.getUserById(userId);
       this.addressInput = this.user?.address ?? '';
       this.emailInput = this.user?.email ?? '';
+
+      const allHistories =
+        await this.coinPurchaseHistoryService.getAllHistories();
+      this.purchaseHistories = allHistories
+        .filter((history) => history.userId === userId)
+        .reverse()
+        .slice(0, 10);
     } catch (error) {
-      console.error('Failed to load user:', error);
+      console.error('Failed to load user or purchase histories:', error);
     } finally {
       this.isLoading = false;
       this.cdr.markForCheck();
@@ -224,6 +237,14 @@ export class UserMyPageComponent implements OnInit {
 
   toggleConfirmPasswordVisibility(): void {
     this.confirmPasswordVisible = !this.confirmPasswordVisible;
+  }
+
+  formatDate(date: Date): string {
+    const dateObj = new Date(date);
+    const year = dateObj.getFullYear();
+    const month = String(dateObj.getMonth() + 1).padStart(2, '0');
+    const day = String(dateObj.getDate()).padStart(2, '0');
+    return `${year}/${month}/${day}`;
   }
 
   private showConfirmDialog(labelKey: string): Promise<boolean> {

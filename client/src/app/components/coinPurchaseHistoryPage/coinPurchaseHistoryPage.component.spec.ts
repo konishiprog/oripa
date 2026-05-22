@@ -1,5 +1,6 @@
 import 'zone.js';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { CoinPurchaseHistoryPageComponent } from './coinPurchaseHistoryPage.component';
 import {
@@ -41,7 +42,7 @@ describe('CoinPurchaseHistoryPageComponent', () => {
 
     await TestBed.configureTestingModule({
       declarations: [CoinPurchaseHistoryPageComponent],
-      imports: [TranslateModule.forRoot()],
+      imports: [HttpClientTestingModule, TranslateModule.forRoot()],
       providers: [
         {
           provide: CoinPurchaseHistoryService,

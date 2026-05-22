@@ -1,0 +1,65 @@
+<div class="filter-bar">
+  <div class="filter-bar-left">
+    <div class="search-input-wrap">
+      <span class="search-icon" [innerHTML]="searchIcon"></span>
+      <input
+        type="text"
+        class="search-input"
+        [placeholder]="placeholder"
+        [(ngModel)]="searchQuery"
+        (input)="onSearchInput()"
+        (compositionstart)="onCompositionStart()"
+        (compositionend)="onCompositionEnd()"
+        (keydown)="onSearchKeydown($event)"
+      />
+    </div>
+  </div>
+  <div class="filter-bar-right" *ngIf="showFilterButton">
+    <button
+      type="button"
+      class="filter-btn"
+      [class.has-active-filter]="filterActive"
+      (click)="onFilterClick()"
+    >
+      <span class="filter-btn-icon" [innerHTML]="filterIcon"></span>
+      {{ "common.filter.button" | translate }}
+    </button>
+  </div>
+</div>
+
+<div class="pagination">
+  <div class="pagination-info">
+    {{ getPaginationInfo() }}
+  </div>
+  <div class="pagination-controls">
+    <div class="pagination-btns">
+      <button
+        class="page-btn"
+        (click)="previousPage()"
+        [disabled]="currentPage === 1"
+      >
+        <span class="page-btn-icon" [innerHTML]="chevronLeftIcon"></span>
+      </button>
+      <button
+        *ngFor="let page of getPageNumbers()"
+        class="page-btn"
+        [class.active]="page === currentPage"
+        [disabled]="typeof page === 'string'"
+        (click)="typeof page === 'number' && goToPage(page)"
+      >
+        {{ page }}
+      </button>
+      <button
+        class="page-btn"
+        (click)="nextPage()"
+        [disabled]="currentPage === getTotalPages()"
+      >
+        <span class="page-btn-icon" [innerHTML]="chevronRightIcon"></span>
+      </button>
+    </div>
+    <app-pagination-filter
+      [itemsPerPage]="itemsPerPage"
+      (itemsPerPageChange)="onItemsPerPageChange($event)"
+    ></app-pagination-filter>
+  </div>
+</div>

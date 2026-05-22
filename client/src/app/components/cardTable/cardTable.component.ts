@@ -8,9 +8,7 @@ import {
   SimpleChanges,
   ChangeDetectorRef,
 } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
 import { MatDialog } from '@angular/material/dialog';
-import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { TranslateService } from '@ngx-translate/core';
 import {
   CARD_STATUS,
@@ -24,6 +22,12 @@ import {
   EXCHANGE_TYPES,
 } from '../createCard/createCard.component';
 import { CardService } from '../../service/card.service';
+import {
+  CardTableFilterDialogComponent,
+  CardFilterCriteria,
+  DEFAULT_CARD_FILTER_CRITERIA,
+  isCardFilterActive,
+} from '../cardTableFilterDialog/cardTableFilterDialog.component';
 
 export interface Card {
   id: string;
@@ -100,11 +104,7 @@ export class CardTableComponent implements OnInit, OnChanges {
   searchQuery: string = '';
   currentPage: number = 1;
   itemsPerPage: number = 20;
-  Math = Math;
-  searchIcon: SafeHtml = '';
-  chevronLeftIcon: SafeHtml = '';
-  chevronRightIcon: SafeHtml = '';
-  isComposing: boolean = false;
+  filterCriteria: CardFilterCriteria = { ...DEFAULT_CARD_FILTER_CRITERIA };
 
   private readonly cardTypeLabelMap = new Map(
     CARD_TYPES.map((cardType) => [cardType.value, cardType.labelKey]),
@@ -117,8 +117,6 @@ export class CardTableComponent implements OnInit, OnChanges {
   );
 
   constructor(
-    private http: HttpClient,
-    private sanitizer: DomSanitizer,
     private translateService: TranslateService,
     private cdr: ChangeDetectorRef,
     private dialog: MatDialog,
@@ -126,7 +124,6 @@ export class CardTableComponent implements OnInit, OnChanges {
   ) {}
 
   ngOnInit(): void {
-    this.loadIcons();
     this.applyFilters();
   }
 
@@ -136,35 +133,48 @@ export class CardTableComponent implements OnInit, OnChanges {
     }
   }
 
-  onSearchInput(): void {
-    if (!this.isComposing) {
-      this.applyFilters();
-    }
-  }
-
-  onCompositionStart(): void {
-    this.isComposing = true;
-  }
-
-  onCompositionEnd(): void {
-    this.isComposing = false;
-  }
-
-  onSearchKeydown(event: KeyboardEvent): void {
-    if (event.key === 'Enter') {
-      this.applyFilters();
-    }
+  onSearchInput(query: string): void {
+    this.searchQuery = query;
+    this.applyFilters();
   }
 
   applyFilters(): void {
-    const query = this.searchQuery.trim().toLowerCase();
-    this.filteredCards = query
-      ? this.cards.filter(
-          (card) =>
-            card.name.toLowerCase().includes(query) ||
-            card.gachaName.toLowerCase().includes(query),
-        )
-      : [...this.cards];
+    let filtered = [...this.cards];
+
+    if (this.searchQuery.trim()) {
+      const query = this.searchQuery.trim().toLowerCase();
+      filtered = filtered.filter(
+        (card) =>
+          card.name.toLowerCase().includes(query) ||
+          card.gachaName.toLowerCase().includes(query),
+      );
+    }
+
+    if (this.filterCriteria.gachaNames.length > 0) {
+      filtered = filtered.filter((card) =>
+        this.filterCriteria.gachaNames.includes(card.gachaName),
+      );
+    }
+
+    if (this.filterCriteria.cardTypes.length > 0) {
+      filtered = filtered.filter((card) =>
+        this.filterCriteria.cardTypes.includes(card.cardType),
+      );
+    }
+
+    if (this.filterCriteria.exchangeTypes.length > 0) {
+      filtered = filtered.filter((card) =>
+        this.filterCriteria.exchangeTypes.includes(card.exchangeType),
+      );
+    }
+
+    if (this.filterCriteria.isDrawnStatuses.length > 0) {
+      filtered = filtered.filter((card) =>
+        this.filterCriteria.isDrawnStatuses.includes(card.isDrawn),
+      );
+    }
+
+    this.filteredCards = filtered;
     this.currentPage = 1;
   }
 
@@ -174,51 +184,8 @@ export class CardTableComponent implements OnInit, OnChanges {
     return this.filteredCards.slice(start, end);
   }
 
-  getTotalPages(): number {
-    return Math.ceil(this.filteredCards.length / this.itemsPerPage);
-  }
-
-  getPageNumbers(): (number | string)[] {
-    const total = this.getTotalPages();
-    const current = this.currentPage;
-    const pages: (number | string)[] = [];
-
-    if (total <= 5) {
-      for (let i = 1; i <= total; i++) {
-        pages.push(i);
-      }
-    } else {
-      pages.push(1);
-      if (current > 3) pages.push('...');
-      for (
-        let i = Math.max(2, current - 1);
-        i <= Math.min(total - 1, current + 1);
-        i++
-      ) {
-        if (!pages.includes(i)) pages.push(i);
-      }
-      if (current < total - 2) pages.push('...');
-      pages.push(total);
-    }
-    return pages;
-  }
-
-  goToPage(page: number | string): void {
-    if (typeof page === 'number' && page >= 1 && page <= this.getTotalPages()) {
-      this.currentPage = page;
-    }
-  }
-
-  previousPage(): void {
-    if (this.currentPage > 1) {
-      this.currentPage--;
-    }
-  }
-
-  nextPage(): void {
-    if (this.currentPage < this.getTotalPages()) {
-      this.currentPage++;
-    }
+  onPageChange(page: number): void {
+    this.currentPage = page;
   }
 
   onItemsPerPageChange(newValue: number): void {
@@ -327,17 +294,6 @@ export class CardTableComponent implements OnInit, OnChanges {
     });
   }
 
-  getPaginationInfo(): string {
-    const total = this.filteredCards.length;
-    const start = (this.currentPage - 1) * this.itemsPerPage + 1;
-    const end = Math.min(this.currentPage * this.itemsPerPage, total);
-    return this.translateService.instant('dashboard.pagination.info', {
-      total,
-      start,
-      end,
-    });
-  }
-
   async deleteCard(card: Card): Promise<void> {
     const message = this.translateService.instant(
       'dashboard.delete-confirm-card',
@@ -359,27 +315,28 @@ export class CardTableComponent implements OnInit, OnChanges {
     }
   }
 
-  private loadIcons(): void {
-    this.loadIcon('assets/icons/search.svg', (svg) => (this.searchIcon = svg));
-    this.loadIcon(
-      'assets/icons/chevron-left.svg',
-      (svg) => (this.chevronLeftIcon = svg),
-    );
-    this.loadIcon(
-      'assets/icons/chevron-right.svg',
-      (svg) => (this.chevronRightIcon = svg),
-    );
-  }
+  openFilterDialog(): void {
+    const availableGachaNames = [
+      ...new Set(this.cards.map((card) => card.gachaName)),
+    ].sort();
 
-  private loadIcon(path: string, assign: (svg: SafeHtml) => void): void {
-    this.http.get(path, { responseType: 'text' }).subscribe({
-      next: (svg) => {
-        assign(this.sanitizer.bypassSecurityTrustHtml(svg));
-        this.cdr.markForCheck();
-      },
-      error: (error) => {
-        console.error(`Failed to load icon ${path}:`, error);
+    const dialogRef = this.dialog.open(CardTableFilterDialogComponent, {
+      width: '500px',
+      data: {
+        criteria: { ...this.filterCriteria },
+        availableGachaNames,
       },
     });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result !== undefined) {
+        this.filterCriteria = result;
+        this.applyFilters();
+      }
+    });
+  }
+
+  isFilterActive(): boolean {
+    return isCardFilterActive(this.filterCriteria);
   }
 }

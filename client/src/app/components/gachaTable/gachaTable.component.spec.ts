@@ -86,12 +86,6 @@ describe('GachaTableComponent', () => {
     expect(component.itemsPerPage).toBe(20);
   });
 
-  it('should load icons on init', () => {
-    jest.spyOn(component as any, 'loadIcons');
-    component.ngOnInit();
-    expect(component['loadIcons']).toHaveBeenCalled();
-  });
-
   it('should apply filters on init', () => {
     jest.spyOn(component, 'applyFilters');
     component.ngOnInit();
@@ -151,78 +145,6 @@ describe('GachaTableComponent', () => {
     expect(displayed.length).toBe(2);
     expect(displayed[0].id).toBe('gacha-uuid-1');
     expect(displayed[1].id).toBe('gacha-uuid-2');
-  });
-
-  it('should get correct total pages', () => {
-    component.filteredGachas = mockGachas;
-    component.itemsPerPage = 2;
-    const totalPages = component.getTotalPages();
-    expect(totalPages).toBe(2);
-  });
-
-  it('should calculate page numbers correctly for small page count', () => {
-    component.filteredGachas = mockGachas;
-    component.itemsPerPage = 20;
-    component.currentPage = 1;
-    const pageNumbers = component.getPageNumbers();
-    expect(pageNumbers).toEqual([1]);
-  });
-
-  it('should show ellipsis and boundary pages for large page count', () => {
-    const largeList = Array.from({ length: 100 }, (_, i) => ({
-      ...mockGachas[0],
-      id: `gacha-uuid-${i + 1}`,
-    }));
-    component.filteredGachas = largeList;
-    component.itemsPerPage = 5;
-    component.currentPage = 15;
-    const pageNumbers = component.getPageNumbers();
-    expect(pageNumbers[0]).toBe(1);
-    expect(pageNumbers[pageNumbers.length - 1]).toBe(20);
-    expect(pageNumbers).toContain('...');
-  });
-
-  it('should navigate to valid page', () => {
-    component.filteredGachas = mockGachas;
-    component.itemsPerPage = 1;
-    component.goToPage(2);
-    expect(component.currentPage).toBe(2);
-  });
-
-  it('should not navigate to invalid page', () => {
-    component.filteredGachas = mockGachas;
-    component.itemsPerPage = 1;
-    component.currentPage = 1;
-    component.goToPage(999);
-    expect(component.currentPage).toBe(1);
-  });
-
-  it('should go to previous page', () => {
-    component.currentPage = 3;
-    component.previousPage();
-    expect(component.currentPage).toBe(2);
-  });
-
-  it('should not go below page 1', () => {
-    component.currentPage = 1;
-    component.previousPage();
-    expect(component.currentPage).toBe(1);
-  });
-
-  it('should go to next page', () => {
-    component.filteredGachas = mockGachas;
-    component.itemsPerPage = 1;
-    component.currentPage = 1;
-    component.nextPage();
-    expect(component.currentPage).toBe(2);
-  });
-
-  it('should not go beyond total pages', () => {
-    component.filteredGachas = mockGachas;
-    component.itemsPerPage = 1;
-    component.currentPage = 3;
-    component.nextPage();
-    expect(component.currentPage).toBe(3);
   });
 
   it('should change items per page and reset to page 1', () => {
@@ -327,15 +249,6 @@ describe('GachaTableComponent', () => {
     await component.deleteGacha(mockGachas[0]);
     expect(component.gachas.length).toBe(initialLength);
     expect(gachaService.deleteGacha).not.toHaveBeenCalled();
-  });
-
-  it('should get pagination info string', () => {
-    jest.spyOn(translateService, 'instant').mockReturnValue('Showing 1-3 of 3');
-    component.filteredGachas = mockGachas;
-    component.currentPage = 1;
-    component.itemsPerPage = 20;
-    const info = component.getPaginationInfo();
-    expect(translateService.instant).toHaveBeenCalled();
   });
 
   describe('Filter functionality', () => {

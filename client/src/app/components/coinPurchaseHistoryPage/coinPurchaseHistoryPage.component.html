@@ -10,6 +10,21 @@
     </div>
   </div>
 
+  <app-table-controls
+    [placeholder]="
+      'coin-purchase-history.filter.search-placeholder' | translate
+    "
+    [showFilterButton]="true"
+    [filterActive]="isFilterActive()"
+    [currentPage]="currentPage"
+    [totalItems]="filteredHistories.length"
+    [itemsPerPage]="itemsPerPage"
+    (search)="onSearchInput($event)"
+    (filterOpen)="openFilterDialog()"
+    (pageChange)="onPageChange($event)"
+    (itemsPerPageChange)="onItemsPerPageChange($event)"
+  ></app-table-controls>
+
   <div class="table">
     <div class="table-header">
       <div
@@ -23,12 +38,12 @@
 
     <div class="table-content">
       <div class="tabl-data">
-        <div class="no-data" *ngIf="!histories.length">
+        <div class="no-data" *ngIf="!filteredHistories.length">
           {{ "coin-purchase-history.page.no-data-message" | translate }}
         </div>
         <div
           class="table-row"
-          *ngFor="let history of histories; let index = index"
+          *ngFor="let history of getDisplayedHistories(); let index = index"
           [attr.data-cy]="'purchase-history-row-' + index"
         >
           <div class="row-content">
