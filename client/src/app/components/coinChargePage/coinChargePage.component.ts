@@ -125,6 +125,6 @@ export class CoinChargePageComponent implements OnInit {
   }
 
   goBack(): void {
-    this.router.navigate(['/myPage']);
+    this.router.navigate(['/userGachaPage']);
   }
 }

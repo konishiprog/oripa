@@ -1,0 +1,135 @@
+.dialog-container {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  width: 100%;
+  min-width: 400px;
+}
+
+.dialog-header {
+  padding: 20px;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.dialog-title {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 700;
+  color: #1a202c;
+}
+
+.dialog-content {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+.filter-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.filter-group label {
+  font-size: 13px;
+  font-weight: 500;
+  color: #555;
+}
+
+.filter-inputs {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.filter-input {
+  flex: 1;
+  padding: 8px 10px;
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
+  font-size: 13px;
+  box-sizing: border-box;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.filter-input:focus {
+  border-color: #805ad5;
+}
+
+.filter-separator {
+  color: #a0aec0;
+  font-size: 12px;
+  flex-shrink: 0;
+}
+
+.filter-select {
+  padding: 8px 10px;
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
+  font-size: 13px;
+  box-sizing: border-box;
+  background: #fff;
+  cursor: pointer;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.filter-select:focus {
+  border-color: #805ad5;
+}
+
+.dialog-actions {
+  display: flex;
+  gap: 8px;
+  padding: 16px 20px;
+  border-top: 1px solid #e2e8f0;
+  background: #f9f9f9;
+  justify-content: flex-end;
+}
+
+.btn {
+  padding: 10px 16px;
+  border: none;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition:
+    background-color 0.15s,
+    color 0.15s,
+    border-color 0.15s;
+  font-family: inherit;
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, #805ad5, #6b46c1);
+  color: #fff;
+}
+
+.btn-primary:hover {
+  box-shadow: 0 4px 12px rgba(128, 90, 213, 0.3);
+}
+
+.btn-secondary {
+  background: #f0f0f0;
+  color: #4a5568;
+  border: 1px solid #ddd;
+}
+
+.btn-secondary:hover {
+  background: #e0e0e0;
+}
+
+.btn-cancel {
+  background: #fff;
+  color: #4a5568;
+  border: 1px solid #e2e8f0;
+}
+
+.btn-cancel:hover {
+  background: #f7f8fa;
+}

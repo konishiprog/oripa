@@ -269,10 +269,10 @@ describe('CoinChargePageComponent', () => {
     expect(cdrSpy).toHaveBeenCalled();
   });
 
-  it('should navigate to myPage on goBack', () => {
+  it('should navigate to userGachaPage on goBack', () => {
     component.goBack();
 
-    expect(mockRouter.navigate).toHaveBeenCalledWith(['/myPage']);
+    expect(mockRouter.navigate).toHaveBeenCalledWith(['/userGachaPage']);
   });
 
   it('should format charge label correctly with special point', async () => {

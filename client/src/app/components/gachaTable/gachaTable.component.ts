@@ -8,9 +8,7 @@ import {
   SimpleChanges,
   ChangeDetectorRef,
 } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
 import { MatDialog } from '@angular/material/dialog';
-import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { TranslateService } from '@ngx-translate/core';
 import {
   CreateGachaComponent,
@@ -97,17 +95,9 @@ export class GachaTableComponent implements OnInit, OnChanges {
   searchQuery: string = '';
   currentPage: number = 1;
   itemsPerPage: number = 20;
-  Math = Math;
-  searchIcon: SafeHtml = '';
-  chevronLeftIcon: SafeHtml = '';
-  chevronRightIcon: SafeHtml = '';
-  filterIcon: SafeHtml = '';
-  isComposing: boolean = false;
   filterCriteria: GachaFilterCriteria = { ...DEFAULT_GACHA_FILTER_CRITERIA };
 
   constructor(
-    private http: HttpClient,
-    private sanitizer: DomSanitizer,
     private cdr: ChangeDetectorRef,
     private dialog: MatDialog,
     private gachaService: GachaService,
@@ -115,7 +105,6 @@ export class GachaTableComponent implements OnInit, OnChanges {
   ) {}
 
   ngOnInit(): void {
-    this.loadIcons();
     this.applyFilters();
   }
 
@@ -125,24 +114,9 @@ export class GachaTableComponent implements OnInit, OnChanges {
     }
   }
 
-  onSearchInput(): void {
-    if (!this.isComposing) {
-      this.applyFilters();
-    }
-  }
-
-  onCompositionStart(): void {
-    this.isComposing = true;
-  }
-
-  onCompositionEnd(): void {
-    this.isComposing = false;
-  }
-
-  onSearchKeydown(event: KeyboardEvent): void {
-    if (event.key === 'Enter') {
-      this.applyFilters();
-    }
+  onSearchInput(query: string): void {
+    this.searchQuery = query;
+    this.applyFilters();
   }
 
   applyFilters(): void {
@@ -243,51 +217,8 @@ export class GachaTableComponent implements OnInit, OnChanges {
     return this.filteredGachas.slice(start, end);
   }
 
-  getTotalPages(): number {
-    return Math.ceil(this.filteredGachas.length / this.itemsPerPage);
-  }
-
-  getPageNumbers(): (number | string)[] {
-    const total = this.getTotalPages();
-    const current = this.currentPage;
-    const pages: (number | string)[] = [];
-
-    if (total <= 5) {
-      for (let i = 1; i <= total; i++) {
-        pages.push(i);
-      }
-    } else {
-      pages.push(1);
-      if (current > 3) pages.push('...');
-      for (
-        let i = Math.max(2, current - 1);
-        i <= Math.min(total - 1, current + 1);
-        i++
-      ) {
-        if (!pages.includes(i)) pages.push(i);
-      }
-      if (current < total - 2) pages.push('...');
-      pages.push(total);
-    }
-    return pages;
-  }
-
-  goToPage(page: number | string): void {
-    if (typeof page === 'number' && page >= 1 && page <= this.getTotalPages()) {
-      this.currentPage = page;
-    }
-  }
-
-  previousPage(): void {
-    if (this.currentPage > 1) {
-      this.currentPage--;
-    }
-  }
-
-  nextPage(): void {
-    if (this.currentPage < this.getTotalPages()) {
-      this.currentPage++;
-    }
+  onPageChange(page: number): void {
+    this.currentPage = page;
   }
 
   onItemsPerPageChange(newValue: number): void {
@@ -321,17 +252,6 @@ export class GachaTableComponent implements OnInit, OnChanges {
 
   getTextCellValue(cell: TableCell, gacha: Gacha): any {
     return cell.dataKey ? gacha[cell.dataKey as keyof Gacha] : '';
-  }
-
-  getPaginationInfo(): string {
-    const total = this.filteredGachas.length;
-    const start = (this.currentPage - 1) * this.itemsPerPage + 1;
-    const end = Math.min(this.currentPage * this.itemsPerPage, total);
-    return this.translateService.instant('dashboard.pagination.info', {
-      total,
-      start,
-      end,
-    });
   }
 
   editGacha(gacha: Gacha): void {
@@ -395,30 +315,5 @@ export class GachaTableComponent implements OnInit, OnChanges {
       console.error('Failed to delete gacha:', error);
       alert(this.translateService.instant('dashboard.delete-error'));
     }
-  }
-
-  private loadIcons(): void {
-    this.loadIcon('assets/icons/search.svg', (svg) => (this.searchIcon = svg));
-    this.loadIcon(
-      'assets/icons/chevron-left.svg',
-      (svg) => (this.chevronLeftIcon = svg),
-    );
-    this.loadIcon(
-      'assets/icons/chevron-right.svg',
-      (svg) => (this.chevronRightIcon = svg),
-    );
-    this.loadIcon('assets/icons/filter.svg', (svg) => (this.filterIcon = svg));
-  }
-
-  private loadIcon(path: string, assign: (svg: SafeHtml) => void): void {
-    this.http.get(path, { responseType: 'text' }).subscribe({
-      next: (svg) => {
-        assign(this.sanitizer.bypassSecurityTrustHtml(svg));
-        this.cdr.markForCheck();
-      },
-      error: (error) => {
-        console.error(`Failed to load icon ${path}:`, error);
-      },
-    });
   }
 }

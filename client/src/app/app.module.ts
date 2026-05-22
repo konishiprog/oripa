@@ -42,6 +42,7 @@ import { UserCardHistoryPageComponent } from './components/userCardHistoryPage/u
 import { UserLoginDialogComponent } from './components/userLoginDialog/userLoginDialog.component';
 import { AppLogoComponent } from './components/common/appLogo/appLogo.component';
 import { AppHeaderComponent } from './components/common/appHeader.component';
+import { TableControlsComponent } from './components/common/tableControls/tableControls.component';
 import { GachaBoxComponent } from './components/gachaBox/gachaBox.component';
 import { GachaDrawResultDialogComponent } from './components/gachaDrawResultDialog/gachaDrawResultDialog.component';
 import { CoinExchangeDialogComponent } from './components/coinExchangeDialog/coinExchangeDialog.component';
@@ -50,6 +51,9 @@ import { ShippingCardDetailDialogComponent } from './components/shippingCardDeta
 import { CoinExchangeRateManagementComponent } from './components/coinExchangeRateManagement/coinExchangeRateManagement.component';
 import { CoinExchangeRateDialogComponent } from './components/coinExchangeRateDialog/coinExchangeRateDialog.component';
 import { CoinChargePageComponent } from './components/coinChargePage/coinChargePage.component';
+import { CoinPurchaseHistoryPageComponent } from './components/coinPurchaseHistoryPage/coinPurchaseHistoryPage.component';
+import { CoinPurchaseHistoryFilterDialogComponent } from './components/coinPurchaseHistoryFilterDialog/coinPurchaseHistoryFilterDialog.component';
+import { CardTableFilterDialogComponent } from './components/cardTableFilterDialog/cardTableFilterDialog.component';
 
 @NgModule({
   declarations: [
@@ -77,6 +81,7 @@ import { CoinChargePageComponent } from './components/coinChargePage/coinChargeP
     UserLoginDialogComponent,
     AppLogoComponent,
     AppHeaderComponent,
+    TableControlsComponent,
     GachaBoxComponent,
     GachaDrawResultDialogComponent,
     CoinExchangeDialogComponent,
@@ -85,6 +90,9 @@ import { CoinChargePageComponent } from './components/coinChargePage/coinChargeP
     CoinExchangeRateManagementComponent,
     CoinExchangeRateDialogComponent,
     CoinChargePageComponent,
+    CoinPurchaseHistoryPageComponent,
+    CoinPurchaseHistoryFilterDialogComponent,
+    CardTableFilterDialogComponent,
   ],
   imports: [
     BrowserModule,

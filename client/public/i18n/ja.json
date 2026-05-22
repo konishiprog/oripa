@@ -19,7 +19,6 @@
     "coin-exchange-rate": "ポイント交換レート",
     "logs": "ログ",
     "purchase-log": "購入ログ",
-    "point-history": "ポイント履歴",
     "shipping-info": "輸送情報",
     "user": {
       "avatar": "管",
@@ -75,7 +74,6 @@
     "delete-error": "削除に失敗しました",
     "search-placeholder": "ボックス名",
     "search-placeholder-card": "カード名",
-    "filter-button": "絞り込み",
     "view-toggle": {
       "gacha": "ガチャ一覧",
       "card": "カード一覧"
@@ -84,8 +82,14 @@
       "status-label": "ステータス：全て",
       "status-active": "公開中",
       "status-draft": "下書き",
-      "status-inactive": "非公開",
-      "pagination-option": "{{page_count}}件/ページ"
+      "status-inactive": "非公開"
+    },
+    "card-filter": {
+      "title": "絞り込み",
+      "gacha-name": "ガチャ名",
+      "card-type": "カードタイプ",
+      "exchange-type": "交換タイプ",
+      "is-drawn": "引かれたかどうか"
     },
     "gacha-table": {
       "name": "名前",
@@ -118,9 +122,6 @@
       "refunded": "差し戻し",
       "shipping-pending": "発送待ち",
       "shipped": "発送済み"
-    },
-    "pagination": {
-      "info": "全 {{total}}件中{{start}}〜{{end}}件を表示"
     }
   },
 
@@ -308,11 +309,11 @@
     "back-to-gacha": "ガチャページに戻る",
     "loading": "読み込み中...",
     "card-history": "カード獲得履歴",
-    "coin-history": "コイン購入履歴",
+    "point-history": "ポイント購入履歴",
     "address": "お届け先登録・変更",
     "email": "メールアドレスの変更",
     "password": "パスワードの変更",
-    "coin-empty": "コイン購入履歴がありません",
+    "point-empty": "ポイント購入履歴がありません",
     "address-label": "住所",
     "address-placeholder": "東京都港区...",
     "email-label": "メールアドレス",
@@ -416,6 +417,42 @@
     "success-charge": "{{addedPoint}}ポイント チャージしました。現在のポイント: {{newCoin}}P"
   },
 
+  "coin-purchase-history": {
+    "page": {
+      "title": "購入ログ",
+      "desc": "ユーザーのコイン購入履歴",
+      "table": {
+        "header": {
+          "user-id": "ユーザー名",
+          "price": "金額",
+          "point": "ポイント",
+          "special-point": "特別ポイント",
+          "status": "ステータス",
+          "date": "購入日時"
+        }
+      },
+      "no-data-message": "購入履歴がありません"
+    },
+    "filter": {
+      "title": "絞り込み",
+      "search-placeholder": "ユーザー名で検索",
+      "price-range": "購入金額",
+      "min": "最小",
+      "max": "最大",
+      "point-range": "獲得ポイント",
+      "date-range": "日付",
+      "year-filter": "年度フィルター",
+      "year-all": "全て",
+      "year-recent-1year": "直近1年間",
+      "year-suffix": "年",
+      "reset": "リセット",
+      "cancel": "キャンセル",
+      "apply": "適応",
+      "separator": "～"
+    },
+    "error-load": "購入履歴の読み込みに失敗しました"
+  },
+
   "common": {
     "app-name": "net-oripa",
     "console": "Console",
@@ -425,6 +462,15 @@
     "cancel": "キャンセル",
     "loading": "読み込み中...",
     "error-not-logged-in": "ログインしてください",
+    "pagination": {
+      "info": "全 {{total}}件中{{start}}〜{{end}}件を表示",
+      "option": "{{page_count}}件/ページ",
+      "previous": "＜",
+      "next": "＞"
+    },
+    "filter": {
+      "button": "絞り込み"
+    },
     "unit": {
       "point": "P",
       "yen": "¥"

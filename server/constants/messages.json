@@ -26,7 +26,9 @@
     "USER_ID_REQUIRED": "User ID is required",
     "UNAUTHORIZED": "Unauthorized",
     "RATE_ID_REQUIRED": "Rate ID is required",
-    "RATE_NOT_FOUND": "Rate not found"
+    "RATE_NOT_FOUND": "Rate not found",
+    "SERVER_ERROR": "Internal server error",
+    "MISSING_REQUIRED_FIELDS": "Missing required fields"
   },
   "success": {
     "ADMIN_CREATED": "Admin created successfully",
@@ -49,6 +51,8 @@
     "USER_DELETED": "User deleted successfully",
     "USERS_RETRIEVED": "Users retrieved successfully",
     "CHARGE_SUCCESSFUL": "Charge successful",
+    "RETRIEVED": "Retrieved successfully",
+    "CREATED": "Created successfully",
     "MIGRATIONS_COMPLETED": "Migrations completed successfully"
   },
   "migration": {
