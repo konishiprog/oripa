@@ -1,0 +1,64 @@
+<div class="coin-charge-container">
+  <div class="page-header">
+    <h1>{{ "coin-charge.page-title" | translate }}</h1>
+    <button class="back-btn" (click)="goBack()">
+      {{ "coin-charge.back" | translate }}
+    </button>
+  </div>
+
+  <div class="page-desc">
+    {{ "coin-charge.page-desc" | translate }}
+  </div>
+
+  <div *ngIf="isLoading" class="loading">
+    {{ "common.loading" | translate }}
+  </div>
+
+  <div *ngIf="!isLoading" class="content">
+    <div class="charge-section">
+      <div class="form-group">
+        <label for="chargeOption">{{
+          "coin-charge.select-option" | translate
+        }}</label>
+        <select
+          id="chargeOption"
+          [(ngModel)]="selectedOptionId"
+          class="charge-select"
+        >
+          <option *ngFor="let option of chargeOptions" [value]="option.id">
+            {{ option.label }}
+          </option>
+        </select>
+      </div>
+
+      <div class="charge-summary" *ngIf="selectedOption">
+        <div class="summary-item">
+          <span class="label">{{ "coin-charge.price" | translate }}</span>
+          <span class="value">¥{{ selectedOption.price | number }}</span>
+        </div>
+        <div class="summary-item">
+          <span class="label">{{
+            "coin-exchange-rate.point" | translate
+          }}</span>
+          <span class="value"
+            >{{ selectedOption.point
+            }}{{ "common.unit.point" | translate }}</span
+          >
+        </div>
+        <div class="summary-item" *ngIf="selectedOption.specialPoint > 0">
+          <span class="label">{{
+            "coin-exchange-rate.special-point" | translate
+          }}</span>
+          <span class="value bonus"
+            >+{{ selectedOption.specialPoint
+            }}{{ "common.unit.point" | translate }}</span
+          >
+        </div>
+      </div>
+
+      <button class="charge-btn" (click)="onCharge()">
+        {{ "coin-charge.charge-button" | translate }}
+      </button>
+    </div>
+  </div>
+</div>

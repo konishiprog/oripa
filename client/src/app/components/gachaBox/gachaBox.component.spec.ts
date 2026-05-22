@@ -1,20 +1,28 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { MatDialogModule } from '@angular/material/dialog';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { GachaBoxComponent } from './gachaBox.component';
 
 describe('GachaBoxComponent', () => {
   let component: GachaBoxComponent;
   let fixture: ComponentFixture<GachaBoxComponent>;
+  let mockTranslateService: any;
 
   beforeEach(async () => {
+    mockTranslateService = {
+      instant: jest.fn((key) => (key === 'common.unit.point' ? 'P' : '')),
+    };
+
     await TestBed.configureTestingModule({
       declarations: [GachaBoxComponent],
       imports: [
         HttpClientTestingModule,
         MatDialogModule,
         TranslateModule.forRoot(),
+      ],
+      providers: [
+        { provide: TranslateService, useValue: mockTranslateService },
       ],
     }).compileComponents();
 
@@ -33,8 +41,8 @@ describe('GachaBoxComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('formatPrice should format with yen symbol and commas', () => {
-    expect(component.formatPrice(12345)).toBe('¥12,345');
+  it('formatPrice should format with P suffix and commas', () => {
+    expect(component.formatPrice(12345)).toBe('12,345P');
   });
 
   it('effectiveDrawCount returns min of requested and remaining', () => {

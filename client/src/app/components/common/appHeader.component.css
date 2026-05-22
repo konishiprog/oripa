@@ -70,6 +70,41 @@
   box-shadow: 0 4px 12px rgba(128, 90, 213, 0.3);
 }
 
+.user-coin-section {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.user-coin-display {
+  font-size: 14px;
+  font-weight: 600;
+  color: #6b46c1;
+  padding: 8px 12px;
+  border-radius: 8px;
+}
+
+.user-special-point-display {
+  font-size: 14px;
+  font-weight: 700;
+  color: #d69e2e;
+  padding: 8px 12px;
+  border-radius: 8px;
+}
+
+.header-btn-charge {
+  background: #10b981;
+  color: #fff;
+  border: 1px solid transparent;
+  font-size: 13px;
+  padding: 8px 14px;
+  border-radius: 8px;
+}
+
+.header-btn-charge:hover {
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+}
+
 @media (max-width: 768px) {
   .header-btn {
     padding: 6px 10px;
@@ -78,5 +113,15 @@
 
   .header-btn-admin {
     display: none;
+  }
+
+  .user-coin-display {
+    font-size: 12px;
+    padding: 6px 10px;
+  }
+
+  .user-special-point-display {
+    font-size: 12px;
+    padding: 6px 10px;
   }
 }

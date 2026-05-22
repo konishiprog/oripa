@@ -14,6 +14,8 @@ const card = require("./card");
 const cardApi = require("../api/card");
 const user = require("./user");
 const userApi = require("../api/user");
+const coinExchangeRate = require("./coin-exchange-rate");
+const coinExchangeRateApi = require("../api/coin-exchange-rate");
 
 let app: any;
 const PORT = 3000;
@@ -63,13 +65,16 @@ async function init(_db?: any) {
   await card.init(database);
   cardApi.init({ card, gacha });
   await user.init(database);
-  userApi.init({ user });
+  await coinExchangeRate.init(database);
+  userApi.init({ user, coinExchangeRate });
+  coinExchangeRateApi.init({ coinExchangeRate });
 
   // Register routes
   app.use("/api/admin", adminApi.app());
   app.use("/api/gacha", gachaApi.app());
   app.use("/api/card", cardApi.app());
   app.use("/api/user", userApi.app());
+  app.use("/api/coin-exchange-rate", coinExchangeRateApi.app());
 }
 
 /**
@@ -103,6 +108,7 @@ const runtime = {
   gacha,
   card,
   user,
+  coinExchangeRate,
   get db() {
     return db;
   },

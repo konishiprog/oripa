@@ -1,0 +1,118 @@
+.coin-exchange-rate-container {
+  padding: 24px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.page-header h1 {
+  font-size: 28px;
+  font-weight: 700;
+  margin: 0;
+}
+
+.back-btn {
+  padding: 8px 14px;
+  border: 1px solid #e2e8f0;
+  background: #fff;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  color: #4a5568;
+  transition: all 0.15s;
+}
+
+.back-btn:hover {
+  background: #f7f8fa;
+  border-color: #cbd5e0;
+}
+
+.page-desc {
+  color: #718096;
+  font-size: 14px;
+  margin-bottom: 24px;
+}
+
+.loading {
+  text-align: center;
+  padding: 40px;
+  color: #718096;
+}
+
+.content {
+  background: #fff;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 24px;
+}
+
+.add-btn {
+  padding: 10px 16px;
+  background: linear-gradient(135deg, #805ad5, #6b46c1);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  margin-bottom: 24px;
+  transition: all 0.15s;
+}
+
+.add-btn:hover {
+  box-shadow: 0 4px 12px rgba(128, 90, 213, 0.3);
+}
+
+.rates-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 24px;
+}
+
+.rates-table thead {
+  background: #f7f8fa;
+  border-bottom: 2px solid #e2e8f0;
+}
+
+.rates-table th {
+  padding: 12px 16px;
+  text-align: left;
+  font-weight: 600;
+  color: #4a5568;
+  font-size: 14px;
+}
+
+.rates-table th.action-header {
+  width: 60px;
+}
+
+.rates-table tbody tr {
+  border-bottom: 1px solid #e2e8f0;
+  transition: background 0.15s;
+}
+
+.rates-table tbody tr:hover {
+  background: #f7f8fa;
+}
+
+.rates-table td {
+  padding: 12px 16px;
+  color: #2d3748;
+  font-size: 14px;
+}
+
+.rates-table td.action-cell {
+  text-align: right;
+}
+
+.no-data {
+  text-align: center;
+  padding: 40px;
+  color: #a0aec0;
+  font-size: 14px;
+}

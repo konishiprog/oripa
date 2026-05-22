@@ -36,7 +36,8 @@ export class GachaBoxComponent {
   }
 
   formatPrice(cost: number): string {
-    return `¥${cost.toLocaleString()}`;
+    const pointUnit = this.translateService.instant('common.unit.point');
+    return `${cost.toLocaleString()}${pointUnit}`;
   }
 
   /**
@@ -84,9 +85,10 @@ export class GachaBoxComponent {
 
       if (drawnCards.length === 1) {
         const card = drawnCards[0];
-        const messageKey = card.cardType === 'LAST'
-          ? 'gacha-box.draw-success-last'
-          : 'gacha-box.draw-success-single';
+        const messageKey =
+          card.cardType === 'LAST'
+            ? 'gacha-box.draw-success-last'
+            : 'gacha-box.draw-success-single';
         alert(
           this.translateService.instant(messageKey, {
             name: card.name,

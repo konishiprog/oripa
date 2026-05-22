@@ -14,6 +14,8 @@ import { UserLoginDialogComponent } from '../userLoginDialog/userLoginDialog.com
 export class AppHeaderComponent implements OnInit {
   isLoggedIn: boolean = false;
   isAdminPage: boolean = false;
+  userCoin: number | null = null;
+  userSpecialPoint: number | null = null;
 
   constructor(
     private userService: UserService,
@@ -27,9 +29,13 @@ export class AppHeaderComponent implements OnInit {
     this.translateService.setDefaultLang('ja');
     this.translateService.use('ja');
     this.isLoggedIn = this.userService.isLoggedIn();
+    this.userCoin = this.userService.getCoin();
+    this.userSpecialPoint = this.userService.getSpecialPoint();
     this.checkAdminPage();
     this.router.events.subscribe(() => {
       this.checkAdminPage();
+      this.userCoin = this.userService.getCoin();
+      this.userSpecialPoint = this.userService.getSpecialPoint();
     });
   }
 
@@ -47,6 +53,11 @@ export class AppHeaderComponent implements OnInit {
         this.isLoggedIn = true;
         if (result.data?.coin !== undefined) {
           this.userService.saveCoin(result.data.coin);
+          this.userCoin = result.data.coin;
+        }
+        if (result.data?.specialPoint !== undefined) {
+          this.userService.saveSpecialPoint(result.data.specialPoint);
+          this.userSpecialPoint = result.data.specialPoint;
         }
         this.cdr.markForCheck();
       }
@@ -56,7 +67,10 @@ export class AppHeaderComponent implements OnInit {
   logout(): void {
     this.userService.clearUserId();
     this.userService.clearCoin();
+    this.userService.clearSpecialPoint();
     this.isLoggedIn = false;
+    this.userCoin = null;
+    this.userSpecialPoint = null;
     this.router.navigate(['/userGachaPage']);
     this.cdr.markForCheck();
   }
@@ -75,5 +89,9 @@ export class AppHeaderComponent implements OnInit {
 
   goToGachaPage(): void {
     this.router.navigate(['/userGachaPage']);
+  }
+
+  goToCharge(): void {
+    this.router.navigate(['/coinCharge']);
   }
 }

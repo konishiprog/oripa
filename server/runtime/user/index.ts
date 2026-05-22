@@ -111,18 +111,57 @@ function getById(id: string) {
  * @returns {Promise<any>} - Updated user object
  */
 async function updateCoin(id: string, newCoin: number) {
-  const user = await db.User.findByPk(id);
-  if (!user) {
+  const cachedUser = userCache.get(id);
+  if (!cachedUser) {
     throw new Error(messages.errors.USER_NOT_FOUND);
   }
-  await user.update({ coin: newCoin });
-  const plainUser = toPlain(user);
-  userCache.set(id, plainUser);
-  return plainUser;
+  await db.User.update({ coin: newCoin }, { where: { id } });
+  const updatedUser = { ...cachedUser, coin: newCoin };
+  userCache.set(id, updatedUser);
+  return updatedUser;
+}
+
+/**
+ * Charge a user with coin and special points
+ * Uses cache to minimize DB access (only 1 UPDATE query)
+ * @param {string} id - User id
+ * @param {number} point - Point amount to add to coin
+ * @param {number} specialPoint - Special point amount to add
+ * @returns {Promise<any>} - Charge result with updated values
+ */
+async function charge(id: string, point: number, specialPoint: number = 0) {
+  const cachedUser = userCache.get(id);
+  if (!cachedUser) {
+    throw new Error(messages.errors.USER_NOT_FOUND);
+  }
+
+  const previousCoin = cachedUser.coin || 0;
+  const previousSpecialPoint = cachedUser.specialPoint || 0;
+  const newCoin = previousCoin + point;
+  const newSpecialPoint = previousSpecialPoint + specialPoint;
+
+  await db.User.update(
+    { coin: newCoin, specialPoint: newSpecialPoint },
+    { where: { id } },
+  );
+
+  const updatedUser = { ...cachedUser, coin: newCoin, specialPoint: newSpecialPoint };
+  userCache.set(id, updatedUser);
+
+  return {
+    userId: id,
+    previousCoin,
+    newCoin,
+    addedPoint: point,
+    previousSpecialPoint,
+    newSpecialPoint,
+    addedSpecialPoint: specialPoint,
+  };
 }
 
 /**
  * Update a user
+ * Uses cache to minimize DB access (only 1 UPDATE query)
  * @param {string} id - User id
  * @param {object} payload - User update attributes
  * @returns {Promise<any>} - Updated user object
@@ -136,14 +175,15 @@ async function update(
     address?: string;
     phone?: string;
     coin?: number;
+    specialPoint?: number;
   },
 ) {
-  const user = await db.User.findByPk(id);
-  if (!user) {
+  const cachedUser = userCache.get(id);
+  if (!cachedUser) {
     throw new Error(messages.errors.USER_NOT_FOUND);
   }
 
-  if (payload.email && payload.email !== user.email) {
+  if (payload.email && payload.email !== cachedUser.email) {
     const exists = Array.from(userCache.values()).some(
       (u: any) => u.email === payload.email && u.id !== id,
     );
@@ -152,7 +192,7 @@ async function update(
     }
   }
 
-  if (payload.phone && payload.phone !== user.phone) {
+  if (payload.phone && payload.phone !== cachedUser.phone) {
     const exists = Array.from(userCache.values()).some(
       (u: any) => u.phone === payload.phone && u.id !== id,
     );
@@ -168,24 +208,27 @@ async function update(
   if (payload.address !== undefined) updateData.address = payload.address;
   if (payload.phone !== undefined) updateData.phone = payload.phone;
   if (payload.coin !== undefined) updateData.coin = payload.coin;
+  if (payload.specialPoint !== undefined) updateData.specialPoint = payload.specialPoint;
 
-  await user.update(updateData);
-  const plainUser = toPlain(user);
-  userCache.set(id, plainUser);
-  return plainUser;
+  await db.User.update(updateData, { where: { id } });
+
+  const updatedUser = { ...cachedUser, ...updateData };
+  userCache.set(id, updatedUser);
+  return updatedUser;
 }
 
 /**
  * Delete a user
+ * Uses cache to minimize DB access (only 1 DELETE query)
  * @param {string} id - User id
  * @returns {Promise<void>}
  */
 async function deleteUser(id: string) {
-  const user = await db.User.findByPk(id);
-  if (!user) {
+  const cachedUser = userCache.get(id);
+  if (!cachedUser) {
     throw new Error(messages.errors.USER_NOT_FOUND);
   }
-  await user.destroy();
+  await db.User.destroy({ where: { id } });
   userCache.delete(id);
 }
 
@@ -197,5 +240,6 @@ module.exports = {
   getById,
   updateCoin,
   update,
+  charge,
   delete: deleteUser,
 };
