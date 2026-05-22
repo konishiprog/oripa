@@ -17,6 +17,7 @@ import { UserCardHistoryPageComponent } from './components/userCardHistoryPage/u
 import { ShippingInfoPageComponent } from './components/shippingInfoPage/shippingInfoPage.component';
 import { CoinExchangeRateManagementComponent } from './components/coinExchangeRateManagement/coinExchangeRateManagement.component';
 import { CoinChargePageComponent } from './components/coinChargePage/coinChargePage.component';
+import { CoinPurchaseHistoryPageComponent } from './components/coinPurchaseHistoryPage/coinPurchaseHistoryPage.component';
 
 const routes: Routes = [
   {
@@ -76,6 +77,10 @@ const routes: Routes = [
       {
         path: 'coinExchangeRate',
         component: CoinExchangeRateManagementComponent,
+      },
+      {
+        path: 'coinPurchaseHistory',
+        component: CoinPurchaseHistoryPageComponent,
       },
       {
         path: 'createAdmin',

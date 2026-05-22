@@ -43,10 +43,10 @@ export const SIDEBAR_MENU: MenuSection[] = [
   {
     title: 'sidebar.logs',
     items: [
-      { label: 'sidebar.purchase-log', icon: 'assets/icons/purchase-log.svg' },
       {
-        label: 'sidebar.point-history',
-        icon: 'assets/icons/point-history.svg',
+        label: 'sidebar.purchase-log',
+        icon: 'assets/icons/purchase-log.svg',
+        route: '/adminPanel/coinPurchaseHistory',
       },
     ],
   },

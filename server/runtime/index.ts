@@ -16,6 +16,8 @@ const user = require("./user");
 const userApi = require("../api/user");
 const coinExchangeRate = require("./coin-exchange-rate");
 const coinExchangeRateApi = require("../api/coin-exchange-rate");
+const coinPurchaseHistory = require("./coin-purchase-history");
+const coinPurchaseHistoryApi = require("../api/coin-purchase-history");
 
 let app: any;
 const PORT = 3000;
@@ -32,18 +34,22 @@ async function init(_db?: any) {
 
   // Initialize Express app
   app = express();
-  const allowedOrigins = process.env.ALLOWED_ORIGINS?.split(',') || ['http://localhost:4200'];
+  const allowedOrigins = process.env.ALLOWED_ORIGINS?.split(",") || [
+    "http://localhost:4200",
+  ];
 
-  app.use(cors({
-    origin: (origin: any, callback: any) => {
-      if (!origin || allowedOrigins.includes(origin)) {
-        callback(null, true);
-      } else {
-        callback(new Error("Not allowed by CORS"));
-      }
-    },
-    credentials: true
-  }));
+  app.use(
+    cors({
+      origin: (origin: any, callback: any) => {
+        if (!origin || allowedOrigins.includes(origin)) {
+          callback(null, true);
+        } else {
+          callback(new Error("Not allowed by CORS"));
+        }
+      },
+      credentials: true,
+    }),
+  );
   app.use(express.json());
   app.use("/uploads", express.static(path.join(__dirname, "../uploads")));
 
@@ -66,8 +72,10 @@ async function init(_db?: any) {
   cardApi.init({ card, gacha });
   await user.init(database);
   await coinExchangeRate.init(database);
-  userApi.init({ user, coinExchangeRate });
+  await coinPurchaseHistory.init(database);
+  userApi.init({ user, coinExchangeRate, coinPurchaseHistory });
   coinExchangeRateApi.init({ coinExchangeRate });
+  coinPurchaseHistoryApi.init({ coinPurchaseHistory });
 
   // Register routes
   app.use("/api/admin", adminApi.app());
@@ -75,6 +83,7 @@ async function init(_db?: any) {
   app.use("/api/card", cardApi.app());
   app.use("/api/user", userApi.app());
   app.use("/api/coin-exchange-rate", coinExchangeRateApi.app());
+  app.use("/api/coin-purchase-history", coinPurchaseHistoryApi.app());
 }
 
 /**

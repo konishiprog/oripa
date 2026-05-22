@@ -19,7 +19,6 @@
     "coin-exchange-rate": "ポイント交換レート",
     "logs": "ログ",
     "purchase-log": "購入ログ",
-    "point-history": "ポイント履歴",
     "shipping-info": "輸送情報",
     "user": {
       "avatar": "管",
@@ -414,6 +413,25 @@
     "error-no-option": "チャージオプションを選択してください",
     "error-charge": "チャージに失敗しました",
     "success-charge": "{{addedPoint}}ポイント チャージしました。現在のポイント: {{newCoin}}P"
+  },
+
+  "coin-purchase-history": {
+    "page": {
+      "title": "購入ログ",
+      "desc": "ユーザーのコイン購入履歴",
+      "table": {
+        "header": {
+          "user-id": "ユーザー名",
+          "price": "金額",
+          "point": "ポイント",
+          "special-point": "特別ポイント",
+          "status": "ステータス",
+          "date": "購入日時"
+        }
+      },
+      "no-data-message": "購入履歴がありません"
+    },
+    "error-load": "購入履歴の読み込みに失敗しました"
   },
 
   "common": {

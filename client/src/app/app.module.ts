@@ -50,6 +50,7 @@ import { ShippingCardDetailDialogComponent } from './components/shippingCardDeta
 import { CoinExchangeRateManagementComponent } from './components/coinExchangeRateManagement/coinExchangeRateManagement.component';
 import { CoinExchangeRateDialogComponent } from './components/coinExchangeRateDialog/coinExchangeRateDialog.component';
 import { CoinChargePageComponent } from './components/coinChargePage/coinChargePage.component';
+import { CoinPurchaseHistoryPageComponent } from './components/coinPurchaseHistoryPage/coinPurchaseHistoryPage.component';
 
 @NgModule({
   declarations: [
@@ -85,6 +86,7 @@ import { CoinChargePageComponent } from './components/coinChargePage/coinChargeP
     CoinExchangeRateManagementComponent,
     CoinExchangeRateDialogComponent,
     CoinChargePageComponent,
+    CoinPurchaseHistoryPageComponent,
   ],
   imports: [
     BrowserModule,

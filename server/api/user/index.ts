@@ -216,6 +216,7 @@ module.exports = {
 
         const result = await runtime.user.charge(
           userId,
+          rate.price,
           rate.point,
           rate.specialPoint,
         );

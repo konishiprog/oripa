@@ -129,7 +129,12 @@ async function updateCoin(id: string, newCoin: number) {
  * @param {number} specialPoint - Special point amount to add
  * @returns {Promise<any>} - Charge result with updated values
  */
-async function charge(id: string, point: number, specialPoint: number = 0) {
+async function charge(
+  id: string,
+  price: number,
+  point: number,
+  specialPoint: number = 0,
+) {
   const cachedUser = userCache.get(id);
   if (!cachedUser) {
     throw new Error(messages.errors.USER_NOT_FOUND);
@@ -147,6 +152,14 @@ async function charge(id: string, point: number, specialPoint: number = 0) {
 
   const updatedUser = { ...cachedUser, coin: newCoin, specialPoint: newSpecialPoint };
   userCache.set(id, updatedUser);
+
+  await db.CoinPurchaseHistory.create({
+    userId: id,
+    price,
+    point,
+    specialPoint,
+    status: 'completed',
+  });
 
   return {
     userId: id,

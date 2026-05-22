@@ -1,0 +1,58 @@
+<div class="page-content" *ngIf="!isLoading">
+  <div class="page-header">
+    <div>
+      <div class="page-title">
+        {{ "coin-purchase-history.page.title" | translate }}
+      </div>
+      <div class="page-desc">
+        {{ "coin-purchase-history.page.desc" | translate }}
+      </div>
+    </div>
+  </div>
+
+  <div class="table">
+    <div class="table-header">
+      <div
+        *ngFor="let header of tableHeaders"
+        [ngClass]="'header-td ' + header.key + '-header'"
+        class="header-td"
+      >
+        {{ header.labelKey | translate }}
+      </div>
+    </div>
+
+    <div class="table-content">
+      <div class="tabl-data">
+        <div class="no-data" *ngIf="!histories.length">
+          {{ "coin-purchase-history.page.no-data-message" | translate }}
+        </div>
+        <div
+          class="table-row"
+          *ngFor="let history of histories; let index = index"
+          [attr.data-cy]="'purchase-history-row-' + index"
+        >
+          <div class="row-content">
+            <ng-container *ngFor="let cell of tableCells">
+              <div
+                *ngIf="cell.type === 'text'"
+                [ngClass]="'row-cell ' + cell.key + '-cell'"
+              >
+                {{ getTextCellValue(cell, history) }}
+              </div>
+              <div
+                *ngIf="cell.type === 'method'"
+                [ngClass]="'row-cell ' + cell.key + '-cell'"
+              >
+                {{ getMethodCellValue(cell, history) }}
+              </div>
+            </ng-container>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="loading" *ngIf="isLoading">
+  {{ "common.loading" | translate }}
+</div>
