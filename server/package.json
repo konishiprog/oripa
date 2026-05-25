@@ -5,7 +5,6 @@
   "scripts": {
     "start": "ts-node -P tsconfig.json main.ts",
     "dev": "ts-node -P tsconfig.json --watch main.ts",
-    "build": "tsc",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
