@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "main": "runtime/app.ts",
   "scripts": {
-    "start": "ts-node -P tsconfig.json main.ts",
+    "start": "ts-node main.ts",
     "dev": "ts-node -P tsconfig.json --watch main.ts",
     "test": "echo \"Error: no test specified\" && exit 1"
   },

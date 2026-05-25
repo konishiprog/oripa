@@ -1,6 +1,6 @@
 module.exports = {
   async up(queryInterface: any, Sequelize: any) {
-    await queryInterface.createTable("CoinPurchaseHistories", {
+    await queryInterface.createTable("coin_purchase_histories", {
       id: {
         type: Sequelize.UUID,
         primaryKey: true,
@@ -11,7 +11,7 @@ module.exports = {
         type: Sequelize.UUID,
         allowNull: false,
         references: {
-          model: "Users",
+          model: "users",
           key: "id",
         },
       },
@@ -42,6 +42,6 @@ module.exports = {
   },
 
   async down(queryInterface: any) {
-    await queryInterface.dropTable("CoinPurchaseHistories");
+    await queryInterface.dropTable("coin_purchase_histories");
   },
 };

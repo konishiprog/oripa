@@ -2,13 +2,13 @@
 
 module.exports = {
   async up(queryInterface: any, Sequelize: any) {
-    await queryInterface.addColumn('Cards', 'exchangePoints', {
+    await queryInterface.addColumn('cards', 'exchangePoints', {
       type: Sequelize.INTEGER,
       allowNull: true,
     });
   },
 
   async down(queryInterface: any) {
-    await queryInterface.removeColumn('Cards', 'exchangePoints');
+    await queryInterface.removeColumn('cards', 'exchangePoints');
   },
 };

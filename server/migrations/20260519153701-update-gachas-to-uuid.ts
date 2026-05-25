@@ -8,7 +8,7 @@ module.exports = {
     let transaction = await queryInterface.sequelize.transaction();
     try {
       const gachas: any[] = await queryInterface.sequelize.query(
-        'SELECT * FROM "Gachas"',
+        'SELECT * FROM "gachas"',
         {
           type: Sequelize.QueryTypes.SELECT,
           transaction,
@@ -16,7 +16,7 @@ module.exports = {
       );
 
       const cards: any[] = await queryInterface.sequelize.query(
-        'SELECT * FROM "Cards"',
+        'SELECT * FROM "cards"',
         {
           type: Sequelize.QueryTypes.SELECT,
           transaction,
@@ -25,11 +25,11 @@ module.exports = {
 
       const gachaIdMap: Record<number, string> = {};
 
-      await queryInterface.dropTable("Cards", { cascade: true, transaction });
-      await queryInterface.dropTable("Gachas", { cascade: true, transaction });
+      await queryInterface.dropTable("cards", { cascade: true, transaction });
+      await queryInterface.dropTable("gachas", { cascade: true, transaction });
 
       await queryInterface.createTable(
-        "Gachas",
+        "gachas",
         {
           id: {
             allowNull: false,
@@ -68,7 +68,7 @@ module.exports = {
         gachaIdMap[gacha.id] = newId;
 
         await queryInterface.sequelize.query(
-          `INSERT INTO "Gachas" (id, "headerImage", name, "consumptionType", cost, "isPublic", "publishStart", "publishEnd") VALUES (:id, :headerImage, :name, :consumptionType, :cost, :isPublic, :publishStart, :publishEnd)`,
+          `INSERT INTO "gachas" (id, "headerImage", name, "consumptionType", cost, "isPublic", "publishStart", "publishEnd") VALUES (:id, :headerImage, :name, :consumptionType, :cost, :isPublic, :publishStart, :publishEnd)`,
           {
             replacements: {
               id: newId,
@@ -86,7 +86,7 @@ module.exports = {
       }
 
       await queryInterface.createTable(
-        "Cards",
+        "cards",
         {
           id: {
             allowNull: false,
@@ -130,7 +130,7 @@ module.exports = {
         const newGachaId = gachaIdMap[card.gachaId];
 
         await queryInterface.sequelize.query(
-          `INSERT INTO "Cards" (id, "gachaId", name, "imageFront", "imageBack", "cardType", "exchangeType", "exchangePoints", "isDrawn") VALUES (:id, :gachaId, :name, :imageFront, :imageBack, :cardType, :exchangeType, :exchangePoints, :isDrawn)`,
+          `INSERT INTO "cards" (id, "gachaId", name, "imageFront", "imageBack", "cardType", "exchangeType", "exchangePoints", "isDrawn") VALUES (:id, :gachaId, :name, :imageFront, :imageBack, :cardType, :exchangeType, :exchangePoints, :isDrawn)`,
           {
             replacements: {
               id: newCardId,
@@ -158,11 +158,11 @@ module.exports = {
   async down(queryInterface: any, Sequelize: any) {
     let transaction = await queryInterface.sequelize.transaction();
     try {
-      await queryInterface.dropTable("Cards", { cascade: true, transaction });
-      await queryInterface.dropTable("Gachas", { cascade: true, transaction });
+      await queryInterface.dropTable("cards", { cascade: true, transaction });
+      await queryInterface.dropTable("gachas", { cascade: true, transaction });
 
       await queryInterface.createTable(
-        "Gachas",
+        "gachas",
         {
           id: {
             allowNull: false,
@@ -197,7 +197,7 @@ module.exports = {
       );
 
       await queryInterface.createTable(
-        "Cards",
+        "cards",
         {
           id: {
             allowNull: false,

@@ -6,7 +6,7 @@ module.exports = {
     let transaction = await queryInterface.sequelize.transaction();
     try {
       await queryInterface.addColumn(
-        "Cards",
+        "cards",
         "userId",
         {
           type: Sequelize.UUID,
@@ -15,12 +15,12 @@ module.exports = {
         { transaction },
       );
 
-      await queryInterface.addConstraint("Cards", {
+      await queryInterface.addConstraint("cards", {
         fields: ["userId"],
         type: "foreign key",
         name: "fk_cards_userId",
         references: {
-          table: "Users",
+          table: "users",
           field: "id",
         },
         onDelete: "CASCADE",
@@ -37,11 +37,11 @@ module.exports = {
   async down(queryInterface: any, Sequelize: any) {
     let transaction = await queryInterface.sequelize.transaction();
     try {
-      await queryInterface.removeConstraint("Cards", "fk_cards_userId", {
+      await queryInterface.removeConstraint("cards", "fk_cards_userId", {
         transaction,
       });
 
-      await queryInterface.removeColumn("Cards", "userId", { transaction });
+      await queryInterface.removeColumn("cards", "userId", { transaction });
 
       await transaction.commit();
     } catch (err) {

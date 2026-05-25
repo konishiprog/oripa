@@ -8,16 +8,16 @@ module.exports = {
     let transaction = await queryInterface.sequelize.transaction();
     try {
       const users: any[] = await queryInterface.sequelize.query(
-        'SELECT * FROM "Users"',
+        'SELECT * FROM "users"',
         {
           type: Sequelize.QueryTypes.SELECT,
           transaction,
         },
       );
 
-      await queryInterface.dropTable("Users", { cascade: true, transaction });
+      await queryInterface.dropTable("users", { cascade: true, transaction });
       await queryInterface.createTable(
-        "Users",
+        "users",
         {
           id: {
             allowNull: false,
@@ -52,7 +52,7 @@ module.exports = {
       for (const user of users) {
         const newId = generateUUID();
         await queryInterface.sequelize.query(
-          `INSERT INTO "Users" (id, email, password, name, coin, address, phone) VALUES (:id, :email, :password, :name, :coin, :address, :phone)`,
+          `INSERT INTO "users" (id, email, password, name, coin, address, phone) VALUES (:id, :email, :password, :name, :coin, :address, :phone)`,
           {
             replacements: {
               id: newId,
@@ -78,9 +78,9 @@ module.exports = {
   async down(queryInterface: any, Sequelize: any) {
     let transaction = await queryInterface.sequelize.transaction();
     try {
-      await queryInterface.dropTable("Users", { cascade: true, transaction });
+      await queryInterface.dropTable("users", { cascade: true, transaction });
       await queryInterface.createTable(
-        "Users",
+        "users",
         {
           id: {
             allowNull: false,

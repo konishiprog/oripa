@@ -5,9 +5,9 @@ module.exports = {
   async up(queryInterface: any, Sequelize: any) {
     let transaction = await queryInterface.sequelize.transaction();
     try {
-      await queryInterface.dropTable('Cards', { cascade: true, transaction });
+      await queryInterface.dropTable('cards', { cascade: true, transaction });
       await queryInterface.createTable(
-        'Cards',
+        'cards',
         {
           id: {
             allowNull: false,
@@ -19,7 +19,7 @@ module.exports = {
             type: Sequelize.INTEGER,
             allowNull: false,
             references: {
-              model: 'Gachas',
+              model: 'gachas',
               key: 'id',
             },
             onUpdate: 'CASCADE',
@@ -57,9 +57,9 @@ module.exports = {
   async down(queryInterface: any, Sequelize: any) {
     let transaction = await queryInterface.sequelize.transaction();
     try {
-      await queryInterface.dropTable('Cards', { cascade: true, transaction });
+      await queryInterface.dropTable('cards', { cascade: true, transaction });
       await queryInterface.createTable(
-        'Cards',
+        'cards',
         {
           id: {
             allowNull: false,
@@ -71,7 +71,7 @@ module.exports = {
             type: Sequelize.INTEGER,
             allowNull: false,
             references: {
-              model: 'Gachas',
+              model: 'gachas',
               key: 'id',
             },
             onUpdate: 'CASCADE',
