@@ -7,7 +7,7 @@ async function initializeServer() {
   try {
     await runtime.init();
     app = runtime.app;
-  } catch (err) {
+  } catch (err: any) {
     console.error('Failed to initialize server:', err);
     app.get('/health', (req, res) => {
       res.json({ status: 'error', error: err.message });
