@@ -1,4 +1,4 @@
-import express from "express";
+import express, { Request, Response } from "express";
 import { runtime } from "./runtime/index";
 
 let app = express();
@@ -26,7 +26,7 @@ async function initializeServer() {
         credentials: true,
       }),
     );
-    app.get("/health", (req, res) => {
+    app.get("/health", (req: Request, res: Response) => {
       res.json({ status: "error", error: err.message });
     });
     const PORT = parseInt(process.env.PORT || "3000", 10);
