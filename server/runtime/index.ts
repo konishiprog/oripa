@@ -20,7 +20,7 @@ const coinPurchaseHistory = require("./coin-purchase-history");
 const coinPurchaseHistoryApi = require("../api/coin-purchase-history");
 
 let app: any;
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 
 /**
  * Initialize runtime with database and modules
