@@ -1,11 +1,15 @@
 import { runtime } from './runtime/index';
 
-async function main() {
+let app: any;
+
+async function initializeServer() {
   await runtime.init();
-  await runtime.start();
+  app = runtime.app;
 }
 
-main().catch((err) => {
-  console.error('Failed to start server:', err);
+initializeServer().catch((err) => {
+  console.error('Failed to initialize server:', err);
   process.exit(1);
 });
+
+export default app;
