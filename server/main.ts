@@ -1,11 +1,25 @@
+import express from 'express';
 import { runtime } from './runtime/index';
 
-async function main() {
-  await runtime.init();
-  await runtime.start();
+let app = express();
+
+async function initializeServer() {
+  try {
+    await runtime.init();
+    app = runtime.app;
+    await runtime.start();
+  } catch (err: any) {
+    console.error('Failed to initialize server:', err);
+    app.get('/health', (req, res) => {
+      res.json({ status: 'error', error: err.message });
+    });
+    const PORT = parseInt(process.env.PORT || '3000', 10);
+    app.listen(PORT, '0.0.0.0', () => {
+      console.log(`Server is running on port ${PORT} (error mode)`);
+    });
+  }
 }
 
-main().catch((err) => {
-  console.error('Failed to start server:', err);
-  process.exit(1);
-});
+initializeServer();
+
+export default app;
