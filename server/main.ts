@@ -30,9 +30,7 @@ async function initializeServer() {
       res.json({ status: "error", error: err.message });
     });
     const PORT = parseInt(process.env.PORT || "3000", 10);
-    app.listen(PORT, "0.0.0.0", () => {
-      console.log(`Server is running on port ${PORT} (error mode)`);
-    });
+    app.listen(PORT, "0.0.0.0", () => {});
   }
 }
 
