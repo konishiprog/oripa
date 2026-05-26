@@ -23,7 +23,7 @@ module.exports = (sequelize: any, DataTypes: any) => {
         type: DataTypes.UUID,
         allowNull: false,
         references: {
-          model: "Users",
+          model: "users",
           key: "id",
         },
       },
@@ -54,7 +54,7 @@ module.exports = (sequelize: any, DataTypes: any) => {
     {
       sequelize,
       modelName: "CoinPurchaseHistory",
-      tableName: "CoinPurchaseHistories",
+      tableName: "coin_purchase_histories",
       timestamps: false,
     },
   );
