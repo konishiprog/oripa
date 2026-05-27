@@ -81,6 +81,21 @@ export class UserService {
   }
 
   /**
+   * Verify email change token
+   * @param {string} token - Email change verification token
+   * @returns {Promise<User>} - Updated user object
+   */
+  async verifyEmailChange(token: string): Promise<User> {
+    const response = await lastValueFrom(
+      this.http.get<{ message: string; data: User }>(
+        `${this.apiConfig.domain}/api/user/verify-email-change?token=${token}`,
+        { headers: this.apiConfig.headers },
+      ),
+    );
+    return response.data;
+  }
+
+  /**
    * Get all users
    * @returns {Promise<any[]>} - Array of users
    */

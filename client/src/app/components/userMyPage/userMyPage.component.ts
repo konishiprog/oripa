@@ -210,6 +210,7 @@ export class UserMyPageComponent implements OnInit {
     this.clearMessages();
 
     try {
+      const emailChanged = changes.email && changes.email !== this.user.email;
       const updated = await this.userService.updateUser(this.user.id, {
         email: changes.email ?? this.user.email,
         password: changes.password ?? this.user.password,
@@ -222,7 +223,12 @@ export class UserMyPageComponent implements OnInit {
       this.addressInput = this.user?.address ?? '';
       this.emailInput = this.user?.email ?? '';
       this.phoneInput = this.user?.phone ?? '';
-      this.showSuccess('my-page.save-success');
+
+      if (emailChanged) {
+        this.router.navigate(['/signup-email-sent']);
+      } else {
+        this.showSuccess('my-page.save-success');
+      }
     } catch (error: any) {
       if (error?.status === 409) {
         this.showError('my-page.error-email-exists');

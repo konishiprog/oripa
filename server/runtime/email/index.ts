@@ -40,7 +40,9 @@ function renderTemplate(
 ): { subject: string; html: string } {
   const html = loadTemplateFile(name, "html");
   const css = loadTemplateFile(name, "css");
-  const templateTexts = (texts as Record<string, TemplateTexts>)[name];
+  const allTexts = texts as Record<string, any>;
+  const templateTexts = allTexts[name] as TemplateTexts;
+  const commonTexts = allTexts["common"] || {};
 
   if (!templateTexts) {
     throw new Error(`Email template texts not found for: ${name}`);
@@ -50,7 +52,7 @@ function renderTemplate(
     ? html.replace("</head>", `  <style>${css}</style>\n</head>`)
     : html;
 
-  const allVars = { ...templateTexts, ...variables };
+  const allVars = { ...commonTexts, ...templateTexts, ...variables };
   const rendered = Object.entries(allVars).reduce(
     (acc, [key, value]) =>
       acc.replace(new RegExp(`{{${key}}}`, "g"), String(value)),
@@ -89,6 +91,154 @@ export async function sendSignupEmail(
     console.log(`[EMAIL] Send result:`, result);
   } catch (error: any) {
     console.error("[EMAIL] Failed to send signup email:", error);
+    console.error("[EMAIL] Error details:", error.message || error);
+    throw new Error(messages.email.SEND_FAILURE_ERROR);
+  }
+}
+
+export async function sendPhoneChangeEmail(
+  to: string,
+  userName: string,
+  oldPhone: string,
+  newPhone: string,
+): Promise<void> {
+  if (!process.env.RESEND_API_KEY) {
+    console.error("[EMAIL] RESEND_API_KEY is not set");
+    throw new Error("RESEND_API_KEY is not configured");
+  }
+
+  try {
+    const client = getResendClient();
+    const emailFrom = process.env.EMAIL_FROM;
+    if (!emailFrom) {
+      throw new Error("EMAIL_FROM is not configured");
+    }
+
+    const { subject, html } = renderTemplate("phoneChange", {
+      userName,
+      oldPhone,
+      newPhone,
+    });
+
+    const result = await client.emails.send({
+      from: emailFrom,
+      to,
+      subject,
+      html,
+    });
+
+    console.log(`[EMAIL] Send result:`, result);
+  } catch (error: any) {
+    console.error("[EMAIL] Failed to send phone change email:", error);
+    console.error("[EMAIL] Error details:", error.message || error);
+    throw new Error(messages.email.SEND_FAILURE_ERROR);
+  }
+}
+
+export async function sendAddressChangeEmail(
+  to: string,
+  userName: string,
+  oldAddress: string,
+  newAddress: string,
+): Promise<void> {
+  if (!process.env.RESEND_API_KEY) {
+    console.error("[EMAIL] RESEND_API_KEY is not set");
+    throw new Error("RESEND_API_KEY is not configured");
+  }
+
+  try {
+    const client = getResendClient();
+    const emailFrom = process.env.EMAIL_FROM;
+    if (!emailFrom) {
+      throw new Error("EMAIL_FROM is not configured");
+    }
+
+    const { subject, html } = renderTemplate("address", {
+      userName,
+      oldAddress,
+      newAddress,
+    });
+
+    const result = await client.emails.send({
+      from: emailFrom,
+      to,
+      subject,
+      html,
+    });
+
+    console.log(`[EMAIL] Send result:`, result);
+  } catch (error: any) {
+    console.error("[EMAIL] Failed to send address change email:", error);
+    console.error("[EMAIL] Error details:", error.message || error);
+    throw new Error(messages.email.SEND_FAILURE_ERROR);
+  }
+}
+
+export async function sendPasswordChangeEmail(
+  to: string,
+  userName: string,
+): Promise<void> {
+  if (!process.env.RESEND_API_KEY) {
+    console.error("[EMAIL] RESEND_API_KEY is not set");
+    throw new Error("RESEND_API_KEY is not configured");
+  }
+
+  try {
+    const client = getResendClient();
+    const emailFrom = process.env.EMAIL_FROM;
+    if (!emailFrom) {
+      throw new Error("EMAIL_FROM is not configured");
+    }
+
+    const { subject, html } = renderTemplate("password", { userName });
+
+    const result = await client.emails.send({
+      from: emailFrom,
+      to,
+      subject,
+      html,
+    });
+
+    console.log(`[EMAIL] Send result:`, result);
+  } catch (error: any) {
+    console.error("[EMAIL] Failed to send password change email:", error);
+    console.error("[EMAIL] Error details:", error.message || error);
+    throw new Error(messages.email.SEND_FAILURE_ERROR);
+  }
+}
+
+export async function sendEmailChangeEmail(
+  to: string,
+  verifyUrl: string,
+  userName: string,
+): Promise<void> {
+  if (!process.env.RESEND_API_KEY) {
+    console.error("[EMAIL] RESEND_API_KEY is not set");
+    throw new Error("RESEND_API_KEY is not configured");
+  }
+
+  try {
+    const client = getResendClient();
+    const emailFrom = process.env.EMAIL_FROM;
+    if (!emailFrom) {
+      throw new Error("EMAIL_FROM is not configured");
+    }
+
+    const { subject, html } = renderTemplate("emailChange", {
+      userName,
+      verifyUrl,
+    });
+
+    const result = await client.emails.send({
+      from: emailFrom,
+      to,
+      subject,
+      html,
+    });
+
+    console.log(`[EMAIL] Send result:`, result);
+  } catch (error: any) {
+    console.error("[EMAIL] Failed to send email change email:", error);
     console.error("[EMAIL] Error details:", error.message || error);
     throw new Error(messages.email.SEND_FAILURE_ERROR);
   }

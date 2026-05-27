@@ -2,7 +2,7 @@
 
 export {};
 
-import { v4 as uuidv4 } from 'uuid';
+import { v4 as uuidv4 } from "uuid";
 const messages = require("../../constants/messages.json");
 
 let db: any;
@@ -64,7 +64,7 @@ async function createPending(payload: {
 
   // Check if pending verification already exists for this email
   const existing = await db.PendingVerification.findOne({
-    where: { email: payload.email },
+    where: { email: payload.email, type: "signup" },
   });
 
   if (existing) {
@@ -72,16 +72,17 @@ async function createPending(payload: {
     const newToken = uuidv4();
     await db.PendingVerification.update(
       { token: newToken, expiresAt },
-      { where: { email: payload.email } },
+      { where: { email: payload.email, type: "signup" } },
     );
     const updated = await db.PendingVerification.findOne({
-      where: { email: payload.email },
+      where: { email: payload.email, type: "signup" },
     });
     return toPlain(updated);
   }
 
   // Create new pending verification if it doesn't exist
   const pending = await db.PendingVerification.create({
+    type: "signup",
     email: payload.email,
     password: payload.password,
     name: payload.name,
@@ -102,7 +103,7 @@ async function verifyEmail(token: string) {
   const pending = await db.PendingVerification.findOne({ where: { token } });
 
   if (!pending) {
-    throw { status: 404, message: 'Invalid or expired verification link' };
+    throw { status: 404, message: "Invalid or expired verification link" };
   }
 
   const pendingPlain = toPlain(pending);
@@ -110,7 +111,7 @@ async function verifyEmail(token: string) {
   // Check if token has expired
   if (new Date() > pendingPlain.expiresAt) {
     await db.PendingVerification.destroy({ where: { id: pending.id } });
-    throw { status: 410, message: 'Verification link has expired' };
+    throw { status: 410, message: "Verification link has expired" };
   }
 
   // Create the actual user
@@ -212,7 +213,11 @@ async function charge(
     { where: { id } },
   );
 
-  const updatedUser = { ...cachedUser, coin: newCoin, specialPoint: newSpecialPoint };
+  const updatedUser = {
+    ...cachedUser,
+    coin: newCoin,
+    specialPoint: newSpecialPoint,
+  };
   userCache.set(id, updatedUser);
 
   await db.CoinPurchaseHistory.create({
@@ -220,7 +225,7 @@ async function charge(
     price,
     point,
     specialPoint,
-    status: 'completed',
+    status: "completed",
   });
 
   return {
@@ -283,7 +288,8 @@ async function update(
   if (payload.address !== undefined) updateData.address = payload.address;
   if (payload.phone !== undefined) updateData.phone = payload.phone;
   if (payload.coin !== undefined) updateData.coin = payload.coin;
-  if (payload.specialPoint !== undefined) updateData.specialPoint = payload.specialPoint;
+  if (payload.specialPoint !== undefined)
+    updateData.specialPoint = payload.specialPoint;
 
   await db.User.update(updateData, { where: { id } });
 
@@ -307,6 +313,83 @@ async function deleteUser(id: string) {
   userCache.delete(id);
 }
 
+/**
+ * Create a pending email change record
+ * @param {string} userId - User ID
+ * @param {string} newEmail - New email address
+ * @returns {Promise<any>} - Pending verification object with token
+ */
+async function createPendingEmailChange(userId: string, newEmail: string) {
+  // Check if email is already in use
+  if (
+    Array.from(userCache.values()).some((user: any) => user.email === newEmail)
+  ) {
+    throw new Error(messages.errors.EMAIL_ALREADY_EXISTS);
+  }
+
+  const expiresAt = new Date(Date.now() + 5 * 60 * 1000);
+  const existing = await db.PendingVerification.findOne({
+    where: { userId, type: "email_change" },
+  });
+
+  if (existing) {
+    const newToken = uuidv4();
+    await db.PendingVerification.update(
+      { newEmail, token: newToken, expiresAt },
+      { where: { userId, type: "email_change" } },
+    );
+    const updated = await db.PendingVerification.findOne({
+      where: { userId, type: "email_change" },
+    });
+    return toPlain(updated);
+  }
+
+  const pending = await db.PendingVerification.create({
+    type: "email_change",
+    userId,
+    newEmail,
+    expiresAt,
+  });
+
+  return toPlain(pending);
+}
+
+/**
+ * Verify email change token and update user email
+ * @param {string} token - Verification token
+ * @returns {Promise<any>} - Updated user object
+ */
+async function verifyEmailChange(token: string) {
+  const pending = await db.PendingVerification.findOne({
+    where: { token, type: "email_change" },
+  });
+
+  if (!pending) {
+    throw { status: 404, message: "Invalid or expired verification link" };
+  }
+
+  const pendingPlain = toPlain(pending);
+
+  // Check if token has expired
+  if (new Date() > pendingPlain.expiresAt) {
+    await db.PendingVerification.destroy({ where: { id: pending.id } });
+    throw { status: 410, message: "Verification link has expired" };
+  }
+
+  const user = await db.User.findByPk(pendingPlain.userId);
+  if (!user) {
+    throw { status: 404, message: "User not found" };
+  }
+
+  await user.update({ email: pendingPlain.newEmail });
+  await db.PendingVerification.destroy({ where: { id: pending.id } });
+
+  const plainUser = toPlain(user);
+  userCache.set(user.id, plainUser);
+
+  return plainUser;
+}
+
 module.exports = {
   init,
   createPending,
@@ -318,4 +401,6 @@ module.exports = {
   update,
   charge,
   delete: deleteUser,
+  createPendingEmailChange,
+  verifyEmailChange,
 };

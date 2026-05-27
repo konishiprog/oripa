@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  </head>
+  <body>
+    <div class="container">
+      <div class="header">
+        <h1>{{title}}</h1>
+      </div>
+
+      <div class="content">
+        <p>{{userName}} {{greetingSuffix}}</p>
+
+        <p>{{description}}</p>
+
+        <div class="button-container">
+          <a href="{{verifyUrl}}" class="button">{{buttonText}}</a>
+        </div>
+
+        <p>{{linkAlternativeText}}</p>
+        <div class="link-container">
+          <code>{{verifyUrl}}</code>
+        </div>
+
+        <div class="warning-box">
+          <p><span class="warning-label">{{warningLabel}}</span> {{warningMessage}}</p>
+        </div>
+
+        <p style="font-size: 14px; color: #666;">{{note}}</p>
+
+        <p>{{disclaimer}}</p>
+      </div>
+
+      <div class="footer">
+        <p>{{copyright}}</p>
+      </div>
+    </div>
+  </body>
+</html>

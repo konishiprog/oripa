@@ -13,6 +13,7 @@ import { UserGachaPageComponent } from './components/userGachaPage/userGachaPage
 import { UserManagementComponent } from './components/userManagement/userManagement.component';
 import { UserSignupComponent } from './components/userSignup/userSignup.component';
 import { EmailVerificationComponent } from './components/emailVerification/emailVerification.component';
+import { EmailChangeVerificationComponent } from './components/emailChangeVerification/emailChangeVerification.component';
 import { SignupEmailSentComponent } from './components/signupEmailSent/signupEmailSent.component';
 import { UserMyPageComponent } from './components/userMyPage/userMyPage.component';
 import { UserCardHistoryPageComponent } from './components/userCardHistoryPage/userCardHistoryPage.component';
@@ -42,6 +43,10 @@ const routes: Routes = [
   {
     path: 'verify-email',
     component: EmailVerificationComponent,
+  },
+  {
+    path: 'verify-email-change',
+    component: EmailChangeVerificationComponent,
   },
   {
     path: 'signup-email-sent',
