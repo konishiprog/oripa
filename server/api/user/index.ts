@@ -72,7 +72,7 @@ module.exports = {
     });
 
     /**
-     * Create a new user (signup)
+     * Create a pending verification (send verification email)
      * POST /api/user
      */
     router.post("/", async (req: Request, res: Response) => {
@@ -90,19 +90,60 @@ module.exports = {
       }
 
       try {
-        const user = await runtime.user.create({
+        const pending = await runtime.user.createPending({
           email,
           password,
           name,
           address,
           phone,
         });
-        return res.status(201).json({
-          message: messages.success.USER_CREATED,
-          data: user,
+
+        // Generate verification URL
+        const clientUrl = process.env.CLIENT_URL || "http://localhost:4200";
+        const verifyUrl = `${clientUrl}/verify-email?token=${pending.token}`;
+
+        await runtime.email.sendSignupEmail(email, verifyUrl, name);
+
+        return res.status(200).json({
+          message: messages.success.SIGNUP_EMAIL_SENT,
         });
       } catch (error: any) {
         const { status, message } = handleError(error, "User creation");
+        return res.status(status).json({ error: message });
+      }
+    });
+
+    /**
+     * Verify email and create user
+     * GET /api/user/verify-email?token=xxx
+     */
+    router.get("/verify-email", async (req: Request, res: Response) => {
+      const { token } = req.query;
+
+      if (!token || typeof token !== "string") {
+        return res
+          .status(400)
+          .json({ error: "Verification token is required" });
+      }
+
+      try {
+        const user = await runtime.user.verifyEmail(token);
+        return res.status(201).json({
+          message: messages.success.ACCOUNT_CREATED,
+          data: user,
+        });
+      } catch (error: any) {
+        if (error.status === 404) {
+          return res
+            .status(404)
+            .json({ error: messages.errors.INVALID_VERIFICATION_LINK });
+        }
+        if (error.status === 410) {
+          return res
+            .status(410)
+            .json({ error: messages.errors.VERIFICATION_LINK_EXPIRED });
+        }
+        const { status, message } = handleError(error, "Email verification");
         return res.status(status).json({ error: message });
       }
     });
@@ -195,9 +236,7 @@ module.exports = {
       const userId = req.headers["x-user-id"] as string;
 
       if (!userId) {
-        return res
-          .status(401)
-          .json({ error: messages.errors.UNAUTHORIZED });
+        return res.status(401).json({ error: messages.errors.UNAUTHORIZED });
       }
 
       if (!rateId) {

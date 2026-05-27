@@ -72,10 +72,7 @@ export class UserSignupComponent implements OnInit {
         address: this.address,
         phone: this.phone,
       });
-      this.showSuccess('user-signup.success');
-      setTimeout(() => {
-        this.router.navigate(['/userGachaPage']);
-      }, 1500);
+      this.router.navigate(['/signup-email-sent']);
     } catch (error: any) {
       if (error?.status === 409) {
         const errorMessage = error?.error?.error || '';

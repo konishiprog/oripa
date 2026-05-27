@@ -1,0 +1,14 @@
+{
+  "signup": {
+    "subject": "メールアドレスの確認 - oripa",
+    "title": "oripa へようこそ！",
+    "greetingSuffix": "さん",
+    "description": "アカウント作成のため、下のボタンをクリックしてメールアドレスを確認してください。",
+    "buttonText": "メールアドレスを確認",
+    "linkAlternativeText": "または、以下のリンクをコピーしてブラウザに貼り付けてください：",
+    "warningLabel": "⚠️ 重要:",
+    "warningMessage": "このリンクは5分間のみ有効です。期限が切れた場合は、もう一度サインアップしてください。",
+    "disclaimer": "このメールに心当たりがない場合は、このメールを無視してください。",
+    "copyright": "© 2026 oripa. All rights reserved."
+  }
+}

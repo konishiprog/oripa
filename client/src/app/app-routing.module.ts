@@ -12,6 +12,8 @@ import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { UserGachaPageComponent } from './components/userGachaPage/userGachaPage.component';
 import { UserManagementComponent } from './components/userManagement/userManagement.component';
 import { UserSignupComponent } from './components/userSignup/userSignup.component';
+import { EmailVerificationComponent } from './components/emailVerification/emailVerification.component';
+import { SignupEmailSentComponent } from './components/signupEmailSent/signupEmailSent.component';
 import { UserMyPageComponent } from './components/userMyPage/userMyPage.component';
 import { UserCardHistoryPageComponent } from './components/userCardHistoryPage/userCardHistoryPage.component';
 import { ShippingInfoPageComponent } from './components/shippingInfoPage/shippingInfoPage.component';
@@ -36,6 +38,14 @@ const routes: Routes = [
   {
     path: 'userSignup',
     component: UserSignupComponent,
+  },
+  {
+    path: 'verify-email',
+    component: EmailVerificationComponent,
+  },
+  {
+    path: 'signup-email-sent',
+    component: SignupEmailSentComponent,
   },
   {
     path: 'myPage',

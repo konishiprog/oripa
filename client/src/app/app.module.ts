@@ -36,6 +36,8 @@ import { UserDetailDialogComponent } from './components/userDetailDialog/userDet
 import { UserGachaPageComponent } from './components/userGachaPage/userGachaPage.component';
 import { UserManagementComponent } from './components/userManagement/userManagement.component';
 import { UserSignupComponent } from './components/userSignup/userSignup.component';
+import { EmailVerificationComponent } from './components/emailVerification/emailVerification.component';
+import { SignupEmailSentComponent } from './components/signupEmailSent/signupEmailSent.component';
 import { UserMyPageComponent } from './components/userMyPage/userMyPage.component';
 import { ConfirmUpdateDialogComponent } from './components/userMyPage/confirm-update-dialog/confirm-update-dialog.component';
 import { UserCardHistoryPageComponent } from './components/userCardHistoryPage/userCardHistoryPage.component';
@@ -75,6 +77,8 @@ import { CardTableFilterDialogComponent } from './components/cardTableFilterDial
     UserGachaPageComponent,
     UserManagementComponent,
     UserSignupComponent,
+    EmailVerificationComponent,
+    SignupEmailSentComponent,
     UserMyPageComponent,
     ConfirmUpdateDialogComponent,
     UserCardHistoryPageComponent,

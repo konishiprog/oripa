@@ -14,6 +14,7 @@ const card = require("./card");
 const cardApi = require("../api/card");
 const user = require("./user");
 const userApi = require("../api/user");
+const email = require("./email");
 const coinExchangeRate = require("./coin-exchange-rate");
 const coinExchangeRateApi = require("../api/coin-exchange-rate");
 const coinPurchaseHistory = require("./coin-purchase-history");
@@ -73,7 +74,7 @@ async function init(_db?: any) {
   await user.init(database);
   await coinExchangeRate.init(database);
   await coinPurchaseHistory.init(database);
-  userApi.init({ user, coinExchangeRate, coinPurchaseHistory });
+  userApi.init({ user, email, coinExchangeRate, coinPurchaseHistory });
   coinExchangeRateApi.init({ coinExchangeRate });
   coinPurchaseHistoryApi.init({ coinPurchaseHistory });
 
@@ -117,6 +118,7 @@ const runtime = {
   gacha,
   card,
   user,
+  email,
   coinExchangeRate,
   get db() {
     return db;

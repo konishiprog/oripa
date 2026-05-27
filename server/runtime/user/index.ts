@@ -2,6 +2,7 @@
 
 export {};
 
+import { v4 as uuidv4 } from 'uuid';
 const messages = require("../../constants/messages.json");
 
 let db: any;
@@ -31,11 +32,11 @@ async function refreshCache() {
 }
 
 /**
- * Create a new user
+ * Create a pending verification record (for email verification flow)
  * @param {object} payload - User signup attributes
- * @returns {Promise<any>} - Created user object
+ * @returns {Promise<any>} - Pending verification object with token
  */
-async function create(payload: {
+async function createPending(payload: {
   email: string;
   password: string;
   name: string;
@@ -58,16 +59,77 @@ async function create(payload: {
     throw new Error(messages.errors.PHONE_ALREADY_EXISTS);
   }
 
-  const user = await db.User.create({
+  // Calculate new expiration (5 minutes from now)
+  const expiresAt = new Date(Date.now() + 5 * 60 * 1000);
+
+  // Check if pending verification already exists for this email
+  const existing = await db.PendingVerification.findOne({
+    where: { email: payload.email },
+  });
+
+  if (existing) {
+    // Update existing record with new token and expiration
+    const newToken = uuidv4();
+    await db.PendingVerification.update(
+      { token: newToken, expiresAt },
+      { where: { email: payload.email } },
+    );
+    const updated = await db.PendingVerification.findOne({
+      where: { email: payload.email },
+    });
+    return toPlain(updated);
+  }
+
+  // Create new pending verification if it doesn't exist
+  const pending = await db.PendingVerification.create({
     email: payload.email,
     password: payload.password,
     name: payload.name,
     address: payload.address,
     phone: payload.phone,
+    expiresAt,
+  });
+
+  return toPlain(pending);
+}
+
+/**
+ * Verify email token and create user
+ * @param {string} token - Verification token from email link
+ * @returns {Promise<any>} - Created user object
+ */
+async function verifyEmail(token: string) {
+  const pending = await db.PendingVerification.findOne({ where: { token } });
+
+  if (!pending) {
+    throw { status: 404, message: 'Invalid or expired verification link' };
+  }
+
+  const pendingPlain = toPlain(pending);
+
+  // Check if token has expired
+  if (new Date() > pendingPlain.expiresAt) {
+    await db.PendingVerification.destroy({ where: { id: pending.id } });
+    throw { status: 410, message: 'Verification link has expired' };
+  }
+
+  // Create the actual user
+  const user = await db.User.create({
+    email: pendingPlain.email,
+    password: pendingPlain.password,
+    name: pendingPlain.name,
+    address: pendingPlain.address,
+    phone: pendingPlain.phone,
     coin: 0,
   });
+
+  // Delete the pending verification
+  await db.PendingVerification.destroy({ where: { id: pending.id } });
+
+  // Update cache with new user
   const plainUser = toPlain(user);
   userCache.set(user.id, plainUser);
+
   return plainUser;
 }
 
@@ -247,7 +309,8 @@ async function deleteUser(id: string) {
 
 module.exports = {
   init,
-  create,
+  createPending,
+  verifyEmail,
   verifyCredentials,
   getAll,
   getById,

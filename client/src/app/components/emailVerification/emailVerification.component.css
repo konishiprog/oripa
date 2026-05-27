@@ -1,0 +1,110 @@
+.verification-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  padding: 20px;
+  font-family: Arial, sans-serif;
+}
+
+.verification-card {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+  padding: 40px;
+  max-width: 500px;
+  width: 100%;
+  text-align: center;
+}
+
+.verifying-state,
+.success-state,
+.error-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+}
+
+.verifying-state h2 {
+  color: #333;
+  font-size: 24px;
+  margin: 0;
+}
+
+.verifying-state p {
+  color: #999;
+  font-size: 14px;
+  margin: 0;
+}
+
+.success-icon {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background-color: #4caf50;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 48px;
+  font-weight: bold;
+}
+
+.success-state h2 {
+  color: #4caf50;
+  font-size: 24px;
+  margin: 0;
+}
+
+.success-state p {
+  color: #999;
+  font-size: 14px;
+  margin: 0;
+}
+
+.error-icon {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background-color: #f44336;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 48px;
+  font-weight: bold;
+}
+
+.error-state h2 {
+  color: #f44336;
+  font-size: 24px;
+  margin: 0;
+}
+
+.error-state p {
+  color: #999;
+  font-size: 14px;
+  margin: 20px 0;
+  line-height: 1.6;
+}
+
+.back-button {
+  margin-top: 20px;
+  padding: 10px 30px !important;
+  font-size: 16px !important;
+  text-transform: none !important;
+}
+
+@media (max-width: 600px) {
+  .verification-card {
+    padding: 30px 20px;
+  }
+
+  .verifying-state h2,
+  .success-state h2,
+  .error-state h2 {
+    font-size: 20px;
+  }
+}

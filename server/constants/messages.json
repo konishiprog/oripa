@@ -28,7 +28,9 @@
     "RATE_ID_REQUIRED": "Rate ID is required",
     "RATE_NOT_FOUND": "Rate not found",
     "SERVER_ERROR": "Internal server error",
-    "MISSING_REQUIRED_FIELDS": "Missing required fields"
+    "MISSING_REQUIRED_FIELDS": "Missing required fields",
+    "INVALID_VERIFICATION_LINK": "This link is invalid.",
+    "VERIFICATION_LINK_EXPIRED": "This link has expired."
   },
   "success": {
     "ADMIN_CREATED": "Admin created successfully",
@@ -53,7 +55,9 @@
     "CHARGE_SUCCESSFUL": "Charge successful",
     "RETRIEVED": "Retrieved successfully",
     "CREATED": "Created successfully",
-    "MIGRATIONS_COMPLETED": "Migrations completed successfully"
+    "MIGRATIONS_COMPLETED": "Migrations completed successfully",
+    "SIGNUP_EMAIL_SENT": "Confirmation email has been sent. Please click the link in the email.",
+    "ACCOUNT_CREATED": "Account created successfully."
   },
   "migration": {
     "RUNNING": "Running {count} migration(s)...",
@@ -62,5 +66,8 @@
     "ICON_SUCCESS": "✅",
     "ICON_ERROR": "❌",
     "GACHA_DRAWN": "Gacha drawn successfully"
+  },
+  "email": {
+    "SEND_FAILURE_ERROR": "Failed to send email"
   }
 }
