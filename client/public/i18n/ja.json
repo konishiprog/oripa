@@ -294,6 +294,7 @@
     "submit": "登録する",
     "back": "戻る",
     "success": "アカウントを作成しました",
+    "email-sent": "確認メールを送信しました。メール内のリンクをクリックしてアカウントを完成させてください。",
     "error": "登録に失敗しました",
     "error-required": "全ての項目を入力してください",
     "error-email": "メールアドレスに@を含める必要があります",
@@ -301,6 +302,35 @@
     "error-phone": "電話番号は数字のみで入力してください",
     "error-email-exists": "このメールアドレスは既に登録されています",
     "error-phone-exists": "この電話番号は既に登録されています"
+  },
+
+  "signup-email-sent": {
+    "title": "メールを送信しました",
+    "message": "そちらからURLをクリックしてアカウント作成を完了させてください。"
+  },
+
+  "email-verification": {
+    "verifying": "メールアドレスを確認中",
+    "verifying-message": "メールアドレスを確認中です。お待ちください...",
+    "success": "メール認証が完了しました",
+    "redirecting": "ガチャページにリダイレクト中...",
+    "error-title": "エラーが発生しました",
+    "error-invalid": "このリンクは無効です。もう一度登録してください。",
+    "error-expired": "確認リンクの有効期限が切れました（有効期限：5分）。もう一度登録してください。",
+    "error-general": "メール認証中にエラーが発生しました。もう一度登録してください。",
+    "back-to-signup": "登録ページに戻る"
+  },
+
+  "email-change-verification": {
+    "verifying": "メールアドレス変更を確認中",
+    "verifying-message": "メールアドレス変更を確認中です。お待ちください...",
+    "success": "メールアドレスの変更が完了しました",
+    "redirecting": "マイページにリダイレクト中...",
+    "error-title": "エラーが発生しました",
+    "error-invalid": "このリンクは無効です。もう一度メールアドレス変更をリクエストしてください。",
+    "error-expired": "確認リンクの有効期限が切れました（有効期限：5分）。もう一度メールアドレス変更をリクエストしてください。",
+    "error-general": "メールアドレス変更中にエラーが発生しました。もう一度リクエストしてください。",
+    "back-to-mypage": "マイページに戻る"
   },
 
   "my-page": {
@@ -321,11 +351,15 @@
     "current-password": "現在のパスワード",
     "new-password": "新しいパスワード",
     "confirm-password": "新しいパスワード（確認）",
+    "phone": "電話番号の変更",
+    "phone-label": "電話番号",
+    "phone-placeholder": "09012345678",
     "save": "保存",
     "save-success": "保存しました",
     "save-error": "保存に失敗しました",
     "error-required": "全ての項目を入力してください",
     "error-email": "メールアドレスに@を含める必要があります",
+    "error-phone": "電話番号は数字のみで入力してください",
     "error-password": "パスワードは5文字以上にしてください",
     "error-password-mismatch": "新しいパスワードが一致しません",
     "error-password-same": "新しいパスワードは現在のパスワードと異なる必要があります",

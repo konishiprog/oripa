@@ -1,0 +1,29 @@
+<div class="verification-container">
+  <div class="verification-card">
+    <div *ngIf="isVerifying" class="verifying-state">
+      <mat-spinner diameter="60" strokeWidth="4"></mat-spinner>
+      <h2>{{ "email-change-verification.verifying" | translate }}</h2>
+      <p>{{ "email-change-verification.verifying-message" | translate }}</p>
+    </div>
+
+    <div *ngIf="!isVerifying && successMessage" class="success-state">
+      <div class="success-icon">✓</div>
+      <h2>{{ successMessage }}</h2>
+      <p>{{ "email-change-verification.redirecting" | translate }}</p>
+    </div>
+
+    <div *ngIf="!isVerifying && errorMessage" class="error-state">
+      <div class="error-icon">✕</div>
+      <h2>{{ "email-change-verification.error-title" | translate }}</h2>
+      <p>{{ errorMessage }}</p>
+      <button
+        class="back-button"
+        (click)="goToMyPage()"
+        mat-raised-button
+        color="primary"
+      >
+        {{ "email-change-verification.back-to-mypage" | translate }}
+      </button>
+    </div>
+  </div>
+</div>

@@ -54,11 +54,41 @@ export class UserService {
    * @param {CreateUserPayload} payload - User signup attributes
    * @returns {Promise<any>} - Created user object
    */
-  async createUser(payload: CreateUserPayload): Promise<User> {
+  async createUser(payload: CreateUserPayload): Promise<any> {
     const response = await lastValueFrom(
-      this.http.post<{ message: string; data: User }>(
+      this.http.post<{ message: string }>(
         `${this.apiConfig.domain}/api/user`,
         payload,
+        { headers: this.apiConfig.headers },
+      ),
+    );
+    return response;
+  }
+
+  /**
+   * Verify email and complete user creation
+   * @param {string} token - Verification token from email
+   * @returns {Promise<User>} - Created user object
+   */
+  async verifyEmail(token: string): Promise<User> {
+    const response = await lastValueFrom(
+      this.http.get<{ message: string; data: User }>(
+        `${this.apiConfig.domain}/api/user/verify-email?token=${token}`,
+        { headers: this.apiConfig.headers },
+      ),
+    );
+    return response.data;
+  }
+
+  /**
+   * Verify email change token
+   * @param {string} token - Email change verification token
+   * @returns {Promise<User>} - Updated user object
+   */
+  async verifyEmailChange(token: string): Promise<User> {
+    const response = await lastValueFrom(
+      this.http.get<{ message: string; data: User }>(
+        `${this.apiConfig.domain}/api/user/verify-email-change?token=${token}`,
         { headers: this.apiConfig.headers },
       ),
     );

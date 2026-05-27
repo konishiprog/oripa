@@ -72,7 +72,7 @@ module.exports = {
     });
 
     /**
-     * Create a new user (signup)
+     * Create a pending verification (send verification email)
      * POST /api/user
      */
     router.post("/", async (req: Request, res: Response) => {
@@ -90,19 +90,98 @@ module.exports = {
       }
 
       try {
-        const user = await runtime.user.create({
+        const pending = await runtime.user.createPending({
           email,
           password,
           name,
           address,
           phone,
         });
-        return res.status(201).json({
-          message: messages.success.USER_CREATED,
-          data: user,
+
+        // Generate verification URL
+        const clientUrl = process.env.CLIENT_URL || "http://localhost:4200";
+        const verifyUrl = `${clientUrl}/verify-email?token=${pending.token}`;
+
+        await runtime.email.sendSignupEmail(email, verifyUrl, name);
+
+        return res.status(200).json({
+          message: messages.success.SIGNUP_EMAIL_SENT,
         });
       } catch (error: any) {
         const { status, message } = handleError(error, "User creation");
+        return res.status(status).json({ error: message });
+      }
+    });
+
+    /**
+     * Verify email and create user
+     * GET /api/user/verify-email?token=xxx
+     */
+    router.get("/verify-email", async (req: Request, res: Response) => {
+      const { token } = req.query;
+
+      if (!token || typeof token !== "string") {
+        return res
+          .status(400)
+          .json({ error: "Verification token is required" });
+      }
+
+      try {
+        const user = await runtime.user.verifyEmail(token);
+        return res.status(201).json({
+          message: messages.success.ACCOUNT_CREATED,
+          data: user,
+        });
+      } catch (error: any) {
+        if (error.status === 404) {
+          return res
+            .status(404)
+            .json({ error: messages.errors.INVALID_VERIFICATION_LINK });
+        }
+        if (error.status === 410) {
+          return res
+            .status(410)
+            .json({ error: messages.errors.VERIFICATION_LINK_EXPIRED });
+        }
+        const { status, message } = handleError(error, "Email verification");
+        return res.status(status).json({ error: message });
+      }
+    });
+
+    /**
+     * Verify email change
+     * GET /api/user/verify-email-change?token=xxx
+     */
+    router.get("/verify-email-change", async (req: Request, res: Response) => {
+      const { token } = req.query;
+
+      if (!token || typeof token !== "string") {
+        return res
+          .status(400)
+          .json({ error: "Verification token is required" });
+      }
+
+      try {
+        const user = await runtime.user.verifyEmailChange(token);
+        return res.status(200).json({
+          message: messages.success.USER_UPDATED,
+          data: user,
+        });
+      } catch (error: any) {
+        if (error.status === 404) {
+          return res
+            .status(404)
+            .json({ error: messages.errors.INVALID_VERIFICATION_LINK });
+        }
+        if (error.status === 410) {
+          return res
+            .status(410)
+            .json({ error: messages.errors.VERIFICATION_LINK_EXPIRED });
+        }
+        const { status, message } = handleError(
+          error,
+          "Email change verification",
+        );
         return res.status(status).json({ error: message });
       }
     });
@@ -166,14 +245,59 @@ module.exports = {
       }
 
       try {
-        const user = await runtime.user.update(id, {
-          email,
+        const oldUser = await runtime.user.getById(id);
+        const updateData: any = {
           password,
           name,
           address,
           phone,
           coin,
-        });
+        };
+
+        if (!email || email === oldUser.email) {
+          updateData.email = email;
+        }
+
+        const user = await runtime.user.update(id, updateData);
+
+        if (oldUser && oldUser.phone !== phone && phone) {
+          await runtime.email.sendPhoneChangeEmail(
+            user.email,
+            user.name,
+            oldUser.phone,
+            phone,
+          );
+        }
+
+        if (oldUser && oldUser.address !== address && address) {
+          await runtime.email.sendAddressChangeEmail(
+            user.email,
+            user.name,
+            oldUser.address,
+            address,
+          );
+        }
+
+        if (oldUser && oldUser.password !== password && password) {
+          await runtime.email.sendPasswordChangeEmail(user.email, user.name);
+        }
+
+        if (oldUser && email && oldUser.email !== email) {
+          const clientUrl = process.env.CLIENT_URL || "http://localhost:4200";
+          const pending = await runtime.user.createPendingEmailChange(
+            id,
+            email,
+          );
+          const verifyUrl = `${clientUrl}/verify-email-change?token=${pending.token}`;
+
+          await runtime.email.sendEmailChangeEmail(email, verifyUrl, user.name);
+
+          return res.status(200).json({
+            message: messages.success.USER_UPDATED,
+            data: user,
+          });
+        }
+
         return res.status(200).json({
           message: messages.success.USER_UPDATED,
           data: user,
@@ -195,9 +319,7 @@ module.exports = {
       const userId = req.headers["x-user-id"] as string;
 
       if (!userId) {
-        return res
-          .status(401)
-          .json({ error: messages.errors.UNAUTHORIZED });
+        return res.status(401).json({ error: messages.errors.UNAUTHORIZED });
       }
 
       if (!rateId) {

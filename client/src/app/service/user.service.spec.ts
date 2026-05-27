@@ -1,5 +1,8 @@
 import { TestBed } from '@angular/core/testing';
-import { provideHttpClientTesting, HttpTestingController } from '@angular/common/http/testing';
+import {
+  provideHttpClientTesting,
+  HttpTestingController,
+} from '@angular/common/http/testing';
 import { provideHttpClient } from '@angular/common/http';
 import { UserService, User, CreateUserPayload } from './user.service';
 import { ApiConfigService } from './api-config.service';
@@ -17,6 +20,7 @@ describe('UserService', () => {
     address: '123 Test St',
     phone: '555-0123',
     coin: 100,
+    specialPoint: 0,
   };
 
   beforeEach(() => {
@@ -47,7 +51,7 @@ describe('UserService', () => {
   });
 
   describe('createUser', () => {
-    it('should create a user', async () => {
+    it('should send signup request and return message', async () => {
       const payload: CreateUserPayload = {
         email: 'newuser@example.com',
         password: 'password123',
@@ -60,10 +64,10 @@ describe('UserService', () => {
 
       const req = httpMock.expectOne('http://localhost:3000/api/user');
       expect(req.request.method).toBe('POST');
-      req.flush({ message: 'User created', data: mockUser });
+      req.flush({ message: 'Confirmation email sent' });
 
-      const user = await result;
-      expect(user).toEqual(mockUser);
+      const response = await result;
+      expect(response).toEqual({ message: 'Confirmation email sent' });
     });
   });
 
@@ -95,9 +99,7 @@ describe('UserService', () => {
     it('should get user by id', async () => {
       const result = service.getUserById('test-id');
 
-      const req = httpMock.expectOne(
-        'http://localhost:3000/api/user/test-id',
-      );
+      const req = httpMock.expectOne('http://localhost:3000/api/user/test-id');
       expect(req.request.method).toBe('GET');
       req.flush({ message: 'User retrieved', data: mockUser });
 
@@ -148,9 +150,7 @@ describe('UserService', () => {
     it('should login a user', async () => {
       const result = service.login('test@example.com', 'password123');
 
-      const req = httpMock.expectOne(
-        'http://localhost:3000/api/user/login',
-      );
+      const req = httpMock.expectOne('http://localhost:3000/api/user/login');
       expect(req.request.method).toBe('POST');
       expect(req.request.body).toEqual({
         identifier: 'test@example.com',

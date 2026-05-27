@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  </head>
+  <body>
+    <div class="container">
+      <div class="header">
+        <h1>{{title}}</h1>
+      </div>
+
+      <div class="content">
+        <p>{{userName}} {{greetingSuffix}}</p>
+
+        <p>{{description}}</p>
+
+        <div class="address-change-info">
+          <div class="address-line">
+            <strong>{{oldAddressLabel}}</strong>
+            <span>{{oldAddress}}</span>
+          </div>
+          <div class="address-arrow">↓</div>
+          <div class="address-line">
+            <strong>{{newAddressLabel}}</strong>
+            <span>{{newAddress}}</span>
+          </div>
+        </div>
+
+        <p>{{disclaimer}}</p>
+      </div>
+
+      <div class="footer">
+        <p>{{copyright}}</p>
+      </div>
+    </div>
+  </body>
+</html>

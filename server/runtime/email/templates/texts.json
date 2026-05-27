@@ -1,0 +1,53 @@
+{
+  "signup": {
+    "subject": "メールアドレスの確認 - oripa",
+    "title": "oripa へようこそ！",
+    "greetingSuffix": "さん",
+    "description": "アカウント作成のため、下のボタンをクリックしてメールアドレスを確認してください。",
+    "buttonText": "メールアドレスを確認",
+    "linkAlternativeText": "または、以下のリンクをコピーしてブラウザに貼り付けてください：",
+    "warningLabel": "⚠️ 重要:",
+    "warningMessage": "このリンクは5分間のみ有効です。期限が切れた場合は、もう一度サインアップしてください。",
+    "disclaimer": "このメールに心当たりがない場合は、このメールを無視してください。"
+  },
+  "phoneChange": {
+    "subject": "電話番号変更のお知らせ - oripa",
+    "title": "電話番号が変更されました",
+    "greetingSuffix": "さん",
+    "description": "ご登録いただいた電話番号が変更されました。以下の内容をご確認ください。",
+    "oldPhoneLabel": "変更前：",
+    "newPhoneLabel": "変更後：",
+    "disclaimer": "このメールに心当たりがない場合は、お問い合わせください。"
+  },
+  "address": {
+    "subject": "住所変更のお知らせ - oripa",
+    "title": "住所が変更されました",
+    "greetingSuffix": "さん",
+    "description": "ご登録いただいた住所が変更されました。以下の内容をご確認ください。",
+    "oldAddressLabel": "変更前：",
+    "newAddressLabel": "変更後：",
+    "disclaimer": "このメールに心当たりがない場合は、お問い合わせください。"
+  },
+  "password": {
+    "subject": "パスワード変更のお知らせ - oripa",
+    "title": "パスワードが変更されました",
+    "greetingSuffix": "さん",
+    "description": "あなたのアカウントのパスワードが変更されました。もし変更をされていない場合は、すぐにお問い合わせください。",
+    "disclaimer": "このメールに心当たりがない場合は、すぐにお問い合わせください。"
+  },
+  "emailChange": {
+    "subject": "メールアドレス変更のご確認 - oripa",
+    "title": "メールアドレスが変更されました",
+    "greetingSuffix": "さん",
+    "description": "アカウントのメールアドレスの変更をリクエストされました。以下のボタンをクリックして、新しいメールアドレスでの変更を確認してください。",
+    "buttonText": "メールアドレスの変更を確認",
+    "linkAlternativeText": "または、以下のリンクをコピーしてブラウザに貼り付けてください：",
+    "warningLabel": "⚠️ 重要:",
+    "warningMessage": "このリンクは5分間のみ有効です。期限が切れた場合は、もう一度メールアドレス変更をリクエストしてください。",
+    "note": "※ メールアドレスの変更は、このメールのURLをクリックして確認することで完了します。",
+    "disclaimer": "このメールに心当たりがない場合は、このメールを無視してください。"
+  },
+  "common": {
+    "copyright": "© 2026 oripa. All rights reserved."
+  }
+}
