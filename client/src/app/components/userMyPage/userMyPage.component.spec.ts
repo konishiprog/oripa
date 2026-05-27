@@ -82,6 +82,7 @@ describe('UserMyPageComponent', () => {
     expect(component.user).toEqual(mockUser);
     expect(component.addressInput).toBe(mockUser.address);
     expect(component.emailInput).toBe(mockUser.email);
+    expect(component.phoneInput).toBe(mockUser.phone);
     expect(component.isLoading).toBe(false);
   });
 
@@ -187,6 +188,38 @@ describe('UserMyPageComponent', () => {
     expect(mockTranslateService.instant).toHaveBeenCalledWith(
       'my-page.error-password-same',
     );
+  });
+
+  it('should validate phone is not empty', async () => {
+    component.user = mockUser;
+    component.phoneInput = '';
+    await component.savePhone();
+    expect(mockTranslateService.instant).toHaveBeenCalledWith(
+      'my-page.error-required',
+    );
+  });
+
+  it('should validate phone contains only digits', async () => {
+    component.user = mockUser;
+    component.phoneInput = '123-456-7890';
+    await component.savePhone();
+    expect(mockTranslateService.instant).toHaveBeenCalledWith(
+      'my-page.error-phone',
+    );
+  });
+
+  it('should save phone with valid input', async () => {
+    component.user = mockUser;
+    component.phoneInput = '09012345678';
+    mockUserService.updateUser.mockResolvedValue({
+      ...mockUser,
+      phone: '09012345678',
+    });
+    await component.savePhone();
+    expect(mockDialog.open).toHaveBeenCalledWith(ConfirmUpdateDialogComponent, {
+      width: '320px',
+      data: { labelKey: 'my-page.phone' },
+    });
   });
 
   it('should toggle password visibility', () => {

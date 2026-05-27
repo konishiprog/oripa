@@ -14,7 +14,13 @@ import {
   CoinPurchaseHistoryItem,
 } from '../../service/coin-purchase-history.service';
 
-export type MyPageSection = 'address' | 'email' | 'password' | 'point' | null;
+export type MyPageSection =
+  | 'address'
+  | 'email'
+  | 'password'
+  | 'phone'
+  | 'point'
+  | null;
 
 @Component({
   selector: 'app-user-my-page',
@@ -32,6 +38,7 @@ export class UserMyPageComponent implements OnInit {
 
   addressInput: string = '';
   emailInput: string = '';
+  phoneInput: string = '';
   currentPasswordInput: string = '';
   newPasswordInput: string = '';
   confirmPasswordInput: string = '';
@@ -80,6 +87,7 @@ export class UserMyPageComponent implements OnInit {
       this.user = await this.userService.getUserById(userId);
       this.addressInput = this.user?.address ?? '';
       this.emailInput = this.user?.email ?? '';
+      this.phoneInput = this.user?.phone ?? '';
 
       const allHistories =
         await this.coinPurchaseHistoryService.getAllHistories();
@@ -171,6 +179,22 @@ export class UserMyPageComponent implements OnInit {
     }
   }
 
+  async savePhone(): Promise<void> {
+    if (!this.phoneInput.trim()) {
+      this.showError('my-page.error-required');
+      return;
+    }
+    if (!/^\d+$/.test(this.phoneInput)) {
+      this.showError('my-page.error-phone');
+      return;
+    }
+
+    const confirm = await this.showConfirmDialog('my-page.phone');
+    if (confirm) {
+      await this.updateUser({ phone: this.phoneInput });
+    }
+  }
+
   private async updateUser(
     changes: Partial<{
       email: string;
@@ -197,6 +221,7 @@ export class UserMyPageComponent implements OnInit {
       this.user = updated;
       this.addressInput = this.user?.address ?? '';
       this.emailInput = this.user?.email ?? '';
+      this.phoneInput = this.user?.phone ?? '';
       this.showSuccess('my-page.save-success');
     } catch (error: any) {
       if (error?.status === 409) {
