@@ -539,5 +539,41 @@
       "edit": "編集",
       "delete": "削除"
     }
+  },
+
+  "terms": {
+    "title": "特定商取引法に基づく表記",
+    "back": "戻る",
+    "intro": "本サービス内で「ポイント」をご購入いただくにあたり、特定商取引に関する法律第１１条に基づき、以下のとおり表示いたします。",
+    "company-name": "販売事業者の名称",
+    "company-name-value": "株式会社ミライラボラトリー",
+    "representative": "代表者",
+    "representative-value": "中村友哉",
+    "address": "所在地",
+    "address-value": "〒101-0021 東京都千代田区外神田1丁目16-8 GEEKSAKIHABARA 2F S区画",
+    "phone": "電話番号",
+    "phone-value": "03-6824-2901",
+    "contact-email": "お問い合わせ先",
+    "contact-email-label": "メールアドレス",
+    "contact-email-value": "support@extoreca.com",
+    "contact-method-description": "本ウェブサイト内の「お問い合わせデスク」からご請求をいただいた場合、遅滞なく電子メールで電話番号を提供いたします。",
+    "sales-price": "販売価格",
+    "sales-price-description": "ポイントの購入画面に税込金額を表示いたします。",
+    "additional-cost": "販売価格以外にご負担いただく費用",
+    "additional-cost-description": "ウェブサイトの閲覧等に必要となるインターネット接続料金、通信料金等はお客様のご負担となります。",
+    "shipping": "送料について",
+    "shipping-description": "【通常配送】全国一律300pt",
+    "shipping-note": "※配送処理完了後200pt返還致します。",
+    "payment-method": "お支払時期・お支払方法",
+    "payment-method-description": "ポイントの提供前に、クレジット決済、PayPay、銀行振込、あと払い（ペイディ）、Apple Pay、Google Pay、Amazon Payでお支払いいただきます。",
+    "delivery-time": "提供時期",
+    "delivery-time-description": "お支払いの手続き完了後、直ちに提供いたします。",
+    "delivery-time-shipping": "商品の発送に関しましては、申請後１４日以内の発送手続きとさせていただいております。",
+    "delivery-time-note": "※天候や災害によって配送が遅れる場合がございます。",
+    "cancellation": "返品・キャンセル",
+    "cancellation-description": "ポイントの返品、交換、換金等はできません。",
+    "cancellation-return": "商品到着後の商品の返品・交換に関しましては、7日以内にお問い合わせフォームよりご連絡下さい。",
+    "license": "資格・免許",
+    "license-description": "神奈川県公安委員会 古物商許可 第451460010093号"
   }
 }

@@ -1,0 +1,23 @@
+.footer-links {
+  text-align: center;
+  margin-top: 20px;
+  padding-top: 16px;
+  border-top: 1px solid #e2e8f0;
+}
+
+.footer-links.hide-on-desktop {
+  display: none;
+}
+
+.footer-link {
+  font-size: 12px;
+  color: #a0aec0;
+  cursor: pointer;
+  text-decoration: none;
+  transition: color 0.15s;
+}
+
+.footer-link:hover {
+  color: #805ad5;
+  text-decoration: underline;
+}

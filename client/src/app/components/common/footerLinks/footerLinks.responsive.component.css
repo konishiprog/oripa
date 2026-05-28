@@ -1,0 +1,14 @@
+@media (max-width: 768px) {
+  .footer-links {
+    margin-top: 16px;
+    padding-top: 12px;
+  }
+
+  .footer-links.hide-on-desktop {
+    display: block;
+  }
+
+  .footer-link {
+    font-size: 11px;
+  }
+}

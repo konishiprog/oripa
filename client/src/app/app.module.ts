@@ -60,6 +60,8 @@ import { CoinPurchaseHistoryPageComponent } from './components/coinPurchaseHisto
 import { CoinPurchaseHistoryFilterDialogComponent } from './components/coinPurchaseHistoryFilterDialog/coinPurchaseHistoryFilterDialog.component';
 import { CardTableFilterDialogComponent } from './components/cardTableFilterDialog/cardTableFilterDialog.component';
 import { ForgotPasswordComponent } from './components/forgotPassword/forgot-password.component';
+import { TermsOfServiceComponent } from './components/termsOfService/termsOfService.component';
+import { FooterLinksComponent } from './components/common/footerLinks/footerLinks.component';
 
 @NgModule({
   declarations: [
@@ -103,6 +105,8 @@ import { ForgotPasswordComponent } from './components/forgotPassword/forgot-pass
     CoinPurchaseHistoryFilterDialogComponent,
     CardTableFilterDialogComponent,
     ForgotPasswordComponent,
+    TermsOfServiceComponent,
+    FooterLinksComponent,
   ],
   imports: [
     BrowserModule,

@@ -1,0 +1,79 @@
+<div class="terms-container">
+  <div class="page-header">
+    <h1>{{ "terms.title" | translate }}</h1>
+    <button class="back-btn" (click)="goBack()">
+      {{ "terms.back" | translate }}
+    </button>
+  </div>
+
+  <div class="terms-content">
+    <p class="intro-text">{{ "terms.intro" | translate }}</p>
+
+    <div class="term-item">
+      <h3>{{ "terms.company-name" | translate }}</h3>
+      <p>{{ "terms.company-name-value" | translate }}</p>
+    </div>
+
+    <div class="term-item">
+      <h3>{{ "terms.representative" | translate }}</h3>
+      <p>{{ "terms.representative-value" | translate }}</p>
+    </div>
+
+    <div class="term-item">
+      <h3>{{ "terms.address" | translate }}</h3>
+      <p>{{ "terms.address-value" | translate }}</p>
+    </div>
+
+    <div class="term-item">
+      <h3>{{ "terms.phone" | translate }}</h3>
+      <p>{{ "terms.phone-value" | translate }}</p>
+    </div>
+
+    <div class="term-item">
+      <h3>{{ "terms.contact-email" | translate }}</h3>
+      <p>
+        {{ "terms.contact-email-label" | translate }}：<a [href]="'mailto:' + ('terms.contact-email-value' | translate)" target="_blank">{{ "terms.contact-email-value" | translate }}</a>
+      </p>
+      <p>{{ "terms.contact-method-description" | translate }}</p>
+    </div>
+
+    <div class="term-item">
+      <h3>{{ "terms.sales-price" | translate }}</h3>
+      <p>{{ "terms.sales-price-description" | translate }}</p>
+    </div>
+
+    <div class="term-item">
+      <h3>{{ "terms.additional-cost" | translate }}</h3>
+      <p>{{ "terms.additional-cost-description" | translate }}</p>
+    </div>
+
+    <div class="term-item">
+      <h3>{{ "terms.shipping" | translate }}</h3>
+      <p>{{ "terms.shipping-description" | translate }}</p>
+      <p class="shipping-note">{{ "terms.shipping-note" | translate }}</p>
+    </div>
+
+    <div class="term-item">
+      <h3>{{ "terms.payment-method" | translate }}</h3>
+      <p>{{ "terms.payment-method-description" | translate }}</p>
+    </div>
+
+    <div class="term-item">
+      <h3>{{ "terms.delivery-time" | translate }}</h3>
+      <p>{{ "terms.delivery-time-description" | translate }}</p>
+      <p>{{ "terms.delivery-time-shipping" | translate }}</p>
+      <p class="shipping-note">{{ "terms.delivery-time-note" | translate }}</p>
+    </div>
+
+    <div class="term-item">
+      <h3>{{ "terms.cancellation" | translate }}</h3>
+      <p>{{ "terms.cancellation-description" | translate }}</p>
+      <p>{{ "terms.cancellation-return" | translate }}</p>
+    </div>
+
+    <div class="term-item">
+      <h3>{{ "terms.license" | translate }}</h3>
+      <p>{{ "terms.license-description" | translate }}</p>
+    </div>
+  </div>
+</div>

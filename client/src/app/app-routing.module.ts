@@ -22,6 +22,7 @@ import { CoinExchangeRateManagementComponent } from './components/coinExchangeRa
 import { CoinChargePageComponent } from './components/coinChargePage/coinChargePage.component';
 import { CoinPurchaseHistoryPageComponent } from './components/coinPurchaseHistoryPage/coinPurchaseHistoryPage.component';
 import { ForgotPasswordComponent } from './components/forgotPassword/forgot-password.component';
+import { TermsOfServiceComponent } from './components/termsOfService/termsOfService.component';
 
 const routes: Routes = [
   {
@@ -56,6 +57,10 @@ const routes: Routes = [
   {
     path: 'forgot-password',
     component: ForgotPasswordComponent,
+  },
+  {
+    path: 'terms',
+    component: TermsOfServiceComponent,
   },
   {
     path: 'myPage',
