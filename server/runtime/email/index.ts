@@ -207,6 +207,222 @@ export async function sendPasswordChangeEmail(
   }
 }
 
+export async function sendAdminCardShippingRequestEmail(
+  adminEmails: string[],
+  userName: string,
+  cardName: string,
+  gachaName: string,
+  address: string,
+  phone: string,
+): Promise<void> {
+  if (!process.env.RESEND_API_KEY) {
+    console.error("[EMAIL] RESEND_API_KEY is not set");
+    throw new Error("RESEND_API_KEY is not configured");
+  }
+
+  try {
+    const client = getResendClient();
+    const emailFrom = process.env.EMAIL_FROM;
+    if (!emailFrom) {
+      throw new Error("EMAIL_FROM is not configured");
+    }
+
+    const { subject, html } = renderTemplate(
+      "adminCardShippingRequest",
+      {
+        userName,
+        cardName,
+        gachaName,
+        address,
+        phone,
+      },
+    );
+
+    for (const adminEmail of adminEmails) {
+      const result = await client.emails.send({
+        from: emailFrom,
+        to: adminEmail,
+        subject,
+        html,
+      });
+      console.log(`[EMAIL] Send result to ${adminEmail}:`, result);
+    }
+  } catch (error: any) {
+    console.error(
+      "[EMAIL] Failed to send admin card shipping request email:",
+      error,
+    );
+    console.error("[EMAIL] Error details:", error.message || error);
+    throw new Error(messages.email.SEND_FAILURE_ERROR);
+  }
+}
+
+export async function sendCardShippingPendingEmail(
+  to: string,
+  userName: string,
+  cardName: string,
+  gachaName: string,
+  address: string,
+): Promise<void> {
+  if (!process.env.RESEND_API_KEY) {
+    console.error("[EMAIL] RESEND_API_KEY is not set");
+    throw new Error("RESEND_API_KEY is not configured");
+  }
+
+  try {
+    const client = getResendClient();
+    const emailFrom = process.env.EMAIL_FROM;
+    if (!emailFrom) {
+      throw new Error("EMAIL_FROM is not configured");
+    }
+
+    const { subject, html } = renderTemplate("cardShippingPending", {
+      userName,
+      cardName,
+      gachaName,
+      address,
+    });
+
+    const result = await client.emails.send({
+      from: emailFrom,
+      to,
+      subject,
+      html,
+    });
+
+    console.log(`[EMAIL] Send result:`, result);
+  } catch (error: any) {
+    console.error("[EMAIL] Failed to send card shipping pending email:", error);
+    console.error("[EMAIL] Error details:", error.message || error);
+    throw new Error(messages.email.SEND_FAILURE_ERROR);
+  }
+}
+
+export async function sendCardShippedEmail(
+  to: string,
+  userName: string,
+  cardName: string,
+  gachaName: string,
+  address: string,
+): Promise<void> {
+  if (!process.env.RESEND_API_KEY) {
+    console.error("[EMAIL] RESEND_API_KEY is not set");
+    throw new Error("RESEND_API_KEY is not configured");
+  }
+
+  try {
+    const client = getResendClient();
+    const emailFrom = process.env.EMAIL_FROM;
+    if (!emailFrom) {
+      throw new Error("EMAIL_FROM is not configured");
+    }
+
+    const { subject, html } = renderTemplate("cardShipped", {
+      userName,
+      cardName,
+      gachaName,
+      address,
+    });
+
+    const result = await client.emails.send({
+      from: emailFrom,
+      to,
+      subject,
+      html,
+    });
+
+    console.log(`[EMAIL] Send result:`, result);
+  } catch (error: any) {
+    console.error("[EMAIL] Failed to send card shipped email:", error);
+    console.error("[EMAIL] Error details:", error.message || error);
+    throw new Error(messages.email.SEND_FAILURE_ERROR);
+  }
+}
+
+export async function sendCardExchangeEmail(
+  to: string,
+  userName: string,
+  cardCount: number,
+  gainedPoint: number,
+  totalPoint: number,
+): Promise<void> {
+  if (!process.env.RESEND_API_KEY) {
+    console.error("[EMAIL] RESEND_API_KEY is not set");
+    throw new Error("RESEND_API_KEY is not configured");
+  }
+
+  try {
+    const client = getResendClient();
+    const emailFrom = process.env.EMAIL_FROM;
+    if (!emailFrom) {
+      throw new Error("EMAIL_FROM is not configured");
+    }
+
+    const { subject, html } = renderTemplate("cardExchange", {
+      userName,
+      cardCount: cardCount.toLocaleString("ja-JP"),
+      gainedPoint: gainedPoint.toLocaleString("ja-JP"),
+      totalPoint: totalPoint.toLocaleString("ja-JP"),
+    });
+
+    const result = await client.emails.send({
+      from: emailFrom,
+      to,
+      subject,
+      html,
+    });
+
+    console.log(`[EMAIL] Send result:`, result);
+  } catch (error: any) {
+    console.error("[EMAIL] Failed to send card exchange email:", error);
+    console.error("[EMAIL] Error details:", error.message || error);
+    throw new Error(messages.email.SEND_FAILURE_ERROR);
+  }
+}
+
+export async function sendCoinPurchaseEmail(
+  to: string,
+  userName: string,
+  price: number,
+  point: number,
+  specialPoint: number,
+  totalPoint: number,
+): Promise<void> {
+  if (!process.env.RESEND_API_KEY) {
+    console.error("[EMAIL] RESEND_API_KEY is not set");
+    throw new Error("RESEND_API_KEY is not configured");
+  }
+
+  try {
+    const client = getResendClient();
+    const emailFrom = process.env.EMAIL_FROM;
+    if (!emailFrom) {
+      throw new Error("EMAIL_FROM is not configured");
+    }
+
+    const { subject, html } = renderTemplate("coinPurchase", {
+      userName,
+      price: price.toLocaleString("ja-JP"),
+      point: point.toLocaleString("ja-JP"),
+      specialPoint: specialPoint.toLocaleString("ja-JP"),
+      totalPoint: totalPoint.toLocaleString("ja-JP"),
+    });
+
+    const result = await client.emails.send({
+      from: emailFrom,
+      to,
+      subject,
+      html,
+    });
+
+    console.log(`[EMAIL] Send result:`, result);
+  } catch (error: any) {
+    console.error("[EMAIL] Failed to send coin purchase email:", error);
+    console.error("[EMAIL] Error details:", error.message || error);
+    throw new Error(messages.email.SEND_FAILURE_ERROR);
+  }
+}
+
 export async function sendEmailChangeEmail(
   to: string,
   verifyUrl: string,

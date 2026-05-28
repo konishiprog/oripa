@@ -343,6 +343,18 @@ module.exports = {
           rate.specialPoint,
         );
 
+        const user = runtime.user.getById(userId);
+        if (user?.email) {
+          await runtime.email.sendCoinPurchaseEmail(
+            user.email,
+            user.name,
+            rate.price,
+            result.addedPoint,
+            result.addedSpecialPoint,
+            result.newCoin,
+          );
+        }
+
         return res.status(200).json({
           message: messages.success.CHARGE_SUCCESSFUL,
           data: result,
@@ -352,6 +364,68 @@ module.exports = {
         return res.status(status).json({ error: message });
       }
     });
+
+    /**
+     * Notify a user that their cards were exchanged for coins
+     * POST /api/user/notify-card-exchange
+     * Body: { cardIds: string[] }
+     * Headers: x-user-id
+     */
+    router.post(
+      "/notify-card-exchange",
+      async (req: Request, res: Response) => {
+        const userId = req.headers["x-user-id"] as string;
+        const { cardIds } = req.body as { cardIds: string[] };
+
+        if (!userId) {
+          return res.status(401).json({ error: messages.errors.UNAUTHORIZED });
+        }
+
+        if (!Array.isArray(cardIds) || cardIds.length === 0) {
+          return res
+            .status(400)
+            .json({ error: messages.errors.MISSING_REQUIRED_FIELDS });
+        }
+
+        try {
+          const user = runtime.user.getById(userId);
+          if (!user?.email) {
+            return res
+              .status(404)
+              .json({ error: messages.errors.USER_NOT_FOUND });
+          }
+
+          const allCards = await runtime.card.getAll();
+          const ownedCards = allCards.filter(
+            (card: any) =>
+              cardIds.includes(card.id) && card.userId === userId,
+          );
+
+          const gainedPoint = ownedCards.reduce(
+            (sum: number, card: any) => sum + (card.exchangePoints || 0),
+            0,
+          );
+
+          await runtime.email.sendCardExchangeEmail(
+            user.email,
+            user.name,
+            ownedCards.length,
+            gainedPoint,
+            user.coin || 0,
+          );
+
+          return res
+            .status(200)
+            .json({ message: messages.success.RETRIEVED });
+        } catch (error: any) {
+          const { status, message } = handleError(
+            error,
+            "Card exchange notification",
+          );
+          return res.status(status).json({ error: message });
+        }
+      },
+    );
 
     /**
      * Delete a user
