@@ -1,7 +1,7 @@
 /* ===== Sidebar ===== */
 .sidebar {
   width: 240px;
-  min-height: 100vh;
+  height: calc(100vh - 52px);
   background-color: #ffffff;
   border-right: 1px solid #e2e8f0;
   display: flex;
@@ -10,7 +10,7 @@
   position: fixed;
   top: 52px;
   left: 0;
-  bottom: 0;
+  overflow-y: auto;
 }
 
 .sidebar-section {
