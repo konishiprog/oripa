@@ -1,7 +1,11 @@
 .dialog-wrapper {
   padding: 28px;
-  font-family: -apple-system, BlinkMacSystemFont, "Hiragino Sans", "Noto Sans JP", sans-serif;
+  font-family:
+    -apple-system, BlinkMacSystemFont, "Hiragino Sans", "Noto Sans JP",
+    sans-serif;
   min-width: 320px;
+  overflow-x: hidden;
+  box-sizing: border-box;
 }
 
 .dialog-header {
@@ -56,7 +60,9 @@ input {
   border: 1px solid #ddd;
   border-radius: 6px;
   font-size: 14px;
-  transition: border-color 0.3s, box-shadow 0.3s;
+  transition:
+    border-color 0.3s,
+    box-shadow 0.3s;
   box-sizing: border-box;
   font-family: inherit;
 }
@@ -83,7 +89,9 @@ input:disabled {
   font-size: 14px;
   font-weight: 600;
   cursor: pointer;
-  transition: box-shadow 0.2s, opacity 0.2s;
+  transition:
+    box-shadow 0.2s,
+    opacity 0.2s;
   margin-top: 6px;
   font-family: inherit;
 }

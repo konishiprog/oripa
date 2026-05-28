@@ -8,7 +8,10 @@ import { UserService } from '../../service/user.service';
   selector: 'app-user-login-dialog',
   standalone: false,
   templateUrl: './userLoginDialog.component.html',
-  styleUrls: ['./userLoginDialog.component.css'],
+  styleUrls: [
+    './userLoginDialog.component.css',
+    './userLoginDialog.responsive.component.css',
+  ],
 })
 export class UserLoginDialogComponent implements OnInit {
   identifier: string = '';

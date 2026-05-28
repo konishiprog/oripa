@@ -52,7 +52,10 @@ const USER_TABLE_CELLS: TableCell[] = [
   selector: 'app-user-management',
   standalone: false,
   templateUrl: './userManagement.component.html',
-  styleUrls: ['./userManagement.component.css'],
+  styleUrls: [
+    './userManagement.component.css',
+    './userManagement.responsive.component.css',
+  ],
 })
 export class UserManagementComponent implements OnInit {
   users: User[] = [];

@@ -1,5 +1,7 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
+import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { MatDialog } from '@angular/material/dialog';
 import { TranslateService } from '@ngx-translate/core';
 import { UserService } from '../../service/user.service';
@@ -9,13 +11,19 @@ import { UserLoginDialogComponent } from '../userLoginDialog/userLoginDialog.com
   selector: 'app-header',
   standalone: false,
   templateUrl: './appHeader.component.html',
-  styleUrls: ['./appHeader.component.css'],
+  styleUrls: [
+    './appHeader.component.css',
+    './appHeader.responsive.component.css',
+  ],
 })
 export class AppHeaderComponent implements OnInit {
   isLoggedIn: boolean = false;
   isAdminPage: boolean = false;
   userCoin: number | null = null;
   userSpecialPoint: number | null = null;
+  isMobileMenuOpen: boolean = false;
+  menuIcon: SafeHtml = '';
+  closeIcon: SafeHtml = '';
 
   constructor(
     private userService: UserService,
@@ -23,6 +31,8 @@ export class AppHeaderComponent implements OnInit {
     private dialog: MatDialog,
     private cdr: ChangeDetectorRef,
     private translateService: TranslateService,
+    private http: HttpClient,
+    private sanitizer: DomSanitizer,
   ) {}
 
   ngOnInit(): void {
@@ -31,12 +41,44 @@ export class AppHeaderComponent implements OnInit {
     this.isLoggedIn = this.userService.isLoggedIn();
     this.userCoin = this.userService.getCoin();
     this.userSpecialPoint = this.userService.getSpecialPoint();
+    this.loadIcons();
     this.checkAdminPage();
     this.router.events.subscribe(() => {
       this.checkAdminPage();
       this.userCoin = this.userService.getCoin();
       this.userSpecialPoint = this.userService.getSpecialPoint();
+      this.isMobileMenuOpen = false;
     });
+  }
+
+  private loadIcons(): void {
+    this.http.get('assets/icons/menu.svg', { responseType: 'text' }).subscribe({
+      next: (svg) => {
+        this.menuIcon = this.sanitizer.bypassSecurityTrustHtml(svg);
+      },
+      error: (error) => {
+        console.error('Failed to load menu icon:', error);
+      },
+    });
+
+    this.http
+      .get('assets/icons/close.svg', { responseType: 'text' })
+      .subscribe({
+        next: (svg) => {
+          this.closeIcon = this.sanitizer.bypassSecurityTrustHtml(svg);
+        },
+        error: (error) => {
+          console.error('Failed to load close icon:', error);
+        },
+      });
+  }
+
+  toggleMobileMenu(): void {
+    this.isMobileMenuOpen = !this.isMobileMenuOpen;
+  }
+
+  closeMobileMenu(): void {
+    this.isMobileMenuOpen = false;
   }
 
   private checkAdminPage(): void {
@@ -44,6 +86,7 @@ export class AppHeaderComponent implements OnInit {
   }
 
   openLoginDialog(): void {
+    this.closeMobileMenu();
     const dialogRef = this.dialog.open(UserLoginDialogComponent, {
       width: '420px',
     });

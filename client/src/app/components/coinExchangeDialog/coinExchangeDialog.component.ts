@@ -8,7 +8,10 @@ export interface CoinExchangeDialogData {
 @Component({
   selector: 'app-coin-exchange-dialog',
   templateUrl: './coinExchangeDialog.component.html',
-  styleUrls: ['./coinExchangeDialog.component.css'],
+  styleUrls: [
+    './coinExchangeDialog.component.css',
+    './coinExchangeDialog.responsive.component.css',
+  ],
   standalone: false,
 })
 export class CoinExchangeDialogComponent {

@@ -17,7 +17,10 @@ export interface AdminAccount {
   selector: 'app-admin-account-list',
   standalone: false,
   templateUrl: './adminAccountList.component.html',
-  styleUrls: ['./adminAccountList.component.css'],
+  styleUrls: [
+    './adminAccountList.component.css',
+    './adminAccountList.responsive.component.css',
+  ],
 })
 export class AdminAccountListComponent implements OnInit {
   adminAccounts: AdminAccount[] = [];

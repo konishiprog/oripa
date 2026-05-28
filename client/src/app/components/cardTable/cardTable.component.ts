@@ -92,7 +92,10 @@ const CARD_TABLE_CELLS: TableCell[] = [
   selector: 'app-card-table',
   standalone: false,
   templateUrl: './cardTable.component.html',
-  styleUrls: ['./cardTable.component.css'],
+  styleUrls: [
+    './cardTable.component.css',
+    './cardTable.responsive.component.css',
+  ],
 })
 export class CardTableComponent implements OnInit, OnChanges {
   @Input() cards: Card[] = [];

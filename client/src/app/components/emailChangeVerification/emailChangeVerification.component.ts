@@ -7,7 +7,10 @@ import { UserService } from '../../service/user.service';
   selector: 'app-email-change-verification',
   standalone: false,
   templateUrl: './emailChangeVerification.component.html',
-  styleUrls: ['./emailChangeVerification.component.css'],
+  styleUrls: [
+    './emailChangeVerification.component.css',
+    './emailChangeVerification.responsive.component.css',
+  ],
 })
 export class EmailChangeVerificationComponent implements OnInit {
   isVerifying: boolean = true;

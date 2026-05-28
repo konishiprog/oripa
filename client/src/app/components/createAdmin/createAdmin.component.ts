@@ -25,7 +25,10 @@ export interface CreateAdminDialogData {
   selector: 'app-create-admin',
   standalone: false,
   templateUrl: './createAdmin.component.html',
-  styleUrls: ['./createAdmin.component.css'],
+  styleUrls: [
+    './createAdmin.component.css',
+    './createAdmin.responsive.component.css',
+  ],
 })
 export class CreateAdminComponent implements OnInit {
   email: string = '';

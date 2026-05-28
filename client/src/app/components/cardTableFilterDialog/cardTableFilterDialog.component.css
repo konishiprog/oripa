@@ -4,6 +4,8 @@
   gap: 0;
   width: 100%;
   min-width: 400px;
+  overflow-x: hidden;
+  box-sizing: border-box;
 }
 
 .dialog-header {

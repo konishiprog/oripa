@@ -44,7 +44,10 @@ interface GachaFilterDialogData {
   selector: 'app-gacha-filter-dialog',
   standalone: false,
   templateUrl: './gachaFilterDialog.component.html',
-  styleUrls: ['./gachaFilterDialog.component.css'],
+  styleUrls: [
+    './gachaFilterDialog.component.css',
+    './gachaFilterDialog.responsive.component.css',
+  ],
 })
 export class GachaFilterDialogComponent {
   criteria: GachaFilterCriteria;

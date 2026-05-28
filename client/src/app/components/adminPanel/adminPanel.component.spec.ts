@@ -257,14 +257,10 @@ describe('AdminPanelComponent', () => {
   });
 
   it('should handle multiple icon loads concurrently', (done) => {
-    const notificationIconSpy = jest
-      .spyOn(mockSanitizer, 'bypassSecurityTrustHtml')
-      .mockReturnValue('<svg class="notification"></svg>' as any);
-
     component.ngOnInit();
 
     setTimeout(() => {
-      expect(mockHttpClient.get).toHaveBeenCalledTimes(2);
+      expect(mockHttpClient.get).toHaveBeenCalledTimes(3);
       expect(mockHttpClient.get).toHaveBeenCalledWith(
         'assets/icons/notification.svg',
         { responseType: 'text' },
@@ -273,6 +269,11 @@ describe('AdminPanelComponent', () => {
         'assets/icons/search.svg',
         { responseType: 'text' },
       );
+      expect(mockHttpClient.get).toHaveBeenCalledWith(
+        'assets/icons/menu.svg',
+        { responseType: 'text' },
+      );
+      expect(mockSanitizer.bypassSecurityTrustHtml).toHaveBeenCalledTimes(3);
       done();
     }, 10);
   });

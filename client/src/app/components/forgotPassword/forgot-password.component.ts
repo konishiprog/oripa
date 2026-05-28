@@ -7,7 +7,10 @@ import { HttpClient } from '@angular/common/http';
   selector: 'app-forgot-password',
   standalone: false,
   templateUrl: './forgot-password.component.html',
-  styleUrls: ['./forgot-password.component.css'],
+  styleUrls: [
+    './forgot-password.component.css',
+    './forgot-password.responsive.component.css',
+  ],
 })
 export class ForgotPasswordComponent implements OnInit {
   email: string = '';

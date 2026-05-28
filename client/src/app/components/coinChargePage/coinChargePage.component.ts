@@ -19,7 +19,10 @@ interface ChargeOption {
   selector: 'app-coin-charge-page',
   standalone: false,
   templateUrl: './coinChargePage.component.html',
-  styleUrls: ['./coinChargePage.component.css'],
+  styleUrls: [
+    './coinChargePage.component.css',
+    './coinChargePage.responsive.component.css',
+  ],
 })
 export class CoinChargePageComponent implements OnInit {
   chargeOptions: ChargeOption[] = [];

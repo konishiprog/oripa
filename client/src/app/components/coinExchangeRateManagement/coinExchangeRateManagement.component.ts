@@ -15,7 +15,10 @@ import {
   selector: 'app-coin-exchange-rate-management',
   standalone: false,
   templateUrl: './coinExchangeRateManagement.component.html',
-  styleUrls: ['./coinExchangeRateManagement.component.css'],
+  styleUrls: [
+    './coinExchangeRateManagement.component.css',
+    './coinExchangeRateManagement.responsive.component.css',
+  ],
 })
 export class CoinExchangeRateManagementComponent implements OnInit {
   rates: CoinExchangeRate[] = [];

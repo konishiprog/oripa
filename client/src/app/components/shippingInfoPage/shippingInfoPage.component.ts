@@ -25,7 +25,10 @@ const SHIPPING_TABLE_HEADERS: TableHeader[] = [
   selector: 'app-shipping-info-page',
   standalone: false,
   templateUrl: './shippingInfoPage.component.html',
-  styleUrls: ['./shippingInfoPage.component.css'],
+  styleUrls: [
+    './shippingInfoPage.component.css',
+    './shippingInfoPage.responsive.component.css',
+  ],
 })
 export class ShippingInfoPageComponent implements OnInit {
   shippingCards: ShippingCardInfo[] = [];

@@ -44,7 +44,10 @@ const toDateInputValue = (value: string | null | undefined): string => {
   selector: 'app-create-gacha',
   standalone: false,
   templateUrl: './createGacha.component.html',
-  styleUrls: ['./createGacha.component.css'],
+  styleUrls: [
+    './createGacha.component.css',
+    './createGacha.responsive.component.css',
+  ],
 })
 export class CreateGachaComponent implements OnInit {
   name: string = '';
