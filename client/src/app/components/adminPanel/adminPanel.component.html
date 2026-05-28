@@ -1,10 +1,23 @@
 <app-header></app-header>
 <div class="container">
-  <app-sidebar></app-sidebar>
+  <app-sidebar [isOpen]="isSidebarOpen"></app-sidebar>
+  <div
+    class="sidebar-backdrop"
+    *ngIf="isSidebarOpen"
+    (click)="closeSidebar()"
+  ></div>
 
   <div class="main">
     <header class="topbar">
       <div class="breadcrumb">
+        <button
+          class="sidebar-toggle"
+          type="button"
+          (click)="toggleSidebar()"
+          [attr.aria-label]="'common.header.menu' | translate"
+        >
+          <span class="sidebar-toggle-icon" [innerHTML]="menuIcon"></span>
+        </button>
         <span>{{ 'common.console' | translate }}</span>
         <span class="breadcrumb-sep">/</span>
         <span class="breadcrumb-current">{{ breadcrumbTitle }}</span>

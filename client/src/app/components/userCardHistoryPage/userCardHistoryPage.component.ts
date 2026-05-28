@@ -40,7 +40,10 @@ export interface UserCard {
   selector: 'app-user-card-history-page',
   standalone: false,
   templateUrl: './userCardHistoryPage.component.html',
-  styleUrls: ['./userCardHistoryPage.component.css'],
+  styleUrls: [
+    './userCardHistoryPage.component.css',
+    './userCardHistoryPage.responsive.component.css',
+  ],
 })
 export class UserCardHistoryPageComponent implements OnInit {
   readonly CARD_STATUS = CARD_STATUS;

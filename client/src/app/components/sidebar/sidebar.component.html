@@ -1,5 +1,5 @@
 <!-- Sidebar -->
-<aside class="sidebar">
+<aside class="sidebar" [class.open]="isOpen">
   <div class="sidebar-section" *ngFor="let section of menuSections">
     <div class="sidebar-section-label">{{ section.title | translate }}</div>
     <a

@@ -35,7 +35,10 @@ interface FilterDialogData {
   selector: 'app-card-table-filter-dialog',
   standalone: false,
   templateUrl: './cardTableFilterDialog.component.html',
-  styleUrls: ['./cardTableFilterDialog.component.css'],
+  styleUrls: [
+    './cardTableFilterDialog.component.css',
+    './cardTableFilterDialog.responsive.component.css',
+  ],
 })
 export class CardTableFilterDialogComponent {
   criteria: CardFilterCriteria;

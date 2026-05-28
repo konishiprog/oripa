@@ -52,7 +52,10 @@ const COIN_PURCHASE_HISTORY_TABLE_CELLS: TableCell[] = [
   selector: 'app-coin-purchase-history-page',
   standalone: false,
   templateUrl: './coinPurchaseHistoryPage.component.html',
-  styleUrls: ['./coinPurchaseHistoryPage.component.css'],
+  styleUrls: [
+    './coinPurchaseHistoryPage.component.css',
+    './coinPurchaseHistoryPage.responsive.component.css',
+  ],
 })
 export class CoinPurchaseHistoryPageComponent implements OnInit {
   histories: CoinPurchaseHistoryItem[] = [];

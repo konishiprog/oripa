@@ -19,7 +19,10 @@ export type GachaTab = 'new' | 'popular';
   selector: 'app-user-gacha-page',
   standalone: false,
   templateUrl: './userGachaPage.component.html',
-  styleUrls: ['./userGachaPage.component.css'],
+  styleUrls: [
+    './userGachaPage.component.css',
+    './userGachaPage.responsive.component.css',
+  ],
 })
 export class UserGachaPageComponent implements OnInit {
   gachas: UserGacha[] = [];

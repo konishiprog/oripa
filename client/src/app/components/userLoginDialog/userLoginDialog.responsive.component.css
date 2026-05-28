@@ -1,0 +1,31 @@
+@media (max-width: 768px) {
+  .dialog-wrapper {
+    min-width: auto;
+    padding: 20px;
+  }
+
+  .dialog-header h2 {
+    font-size: 18px;
+  }
+
+  .page-desc {
+    font-size: 13px;
+  }
+
+  input {
+    padding: 10px;
+    font-size: 13px;
+  }
+
+  .submit-btn {
+    padding: 11px;
+    font-size: 13px;
+  }
+
+  .password-icon {
+    right: 8px;
+    font-size: 20px;
+    width: 20px;
+    height: 20px;
+  }
+}

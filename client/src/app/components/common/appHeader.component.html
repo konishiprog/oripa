@@ -1,6 +1,20 @@
 <header class="app-header">
   <app-logo class="header-logo"></app-logo>
-  <div class="header-right">
+
+  <button
+    class="hamburger-btn"
+    type="button"
+    (click)="toggleMobileMenu()"
+    [attr.aria-expanded]="isMobileMenuOpen"
+    [attr.aria-label]="'common.header.menu' | translate"
+  >
+    <span
+      class="hamburger-icon"
+      [innerHTML]="isMobileMenuOpen ? closeIcon : menuIcon"
+    ></span>
+  </button>
+
+  <div class="header-right" [class.open]="isMobileMenuOpen">
     <ng-container *ngIf="isAdminPage">
       <button class="header-btn header-btn-primary" (click)="goToGachaPage()">
         {{ "common.header.back-to-gacha" | translate }}
@@ -56,3 +70,8 @@
     </ng-container>
   </div>
 </header>
+<div
+  class="header-backdrop"
+  *ngIf="isMobileMenuOpen"
+  (click)="closeMobileMenu()"
+></div>

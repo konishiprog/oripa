@@ -532,7 +532,8 @@
       "my-page": "マイページ",
       "logout": "ログアウト",
       "back-to-gacha": "ガチャページに戻る",
-      "charge": "ポイントチャージ"
+      "charge": "ポイントチャージ",
+      "menu": "メニュー"
     },
     "actions": {
       "edit": "編集",

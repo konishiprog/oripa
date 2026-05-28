@@ -54,7 +54,10 @@ export const EXCHANGE_TYPES = [
   selector: 'app-create-card',
   standalone: false,
   templateUrl: './createCard.component.html',
-  styleUrls: ['./createCard.component.css'],
+  styleUrls: [
+    './createCard.component.css',
+    './createCard.responsive.component.css',
+  ],
 })
 export class CreateCardComponent implements OnInit {
   name: string = '';

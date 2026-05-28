@@ -1,0 +1,62 @@
+@media (max-width: 768px) {
+  .filter-dialog {
+    min-width: auto;
+    width: 100%;
+    max-width: calc(100vw - 32px);
+    padding: 16px;
+    max-height: 90vh;
+  }
+
+  .filter-dialog-title {
+    font-size: 16px;
+    margin-bottom: 16px;
+  }
+
+  .filter-section {
+    margin-bottom: 14px;
+  }
+
+  .filter-label {
+    font-size: 12px;
+    margin-bottom: 6px;
+  }
+
+  .range-row {
+    gap: 6px;
+  }
+
+  .range-input {
+    padding: 7px 8px;
+    font-size: 12.5px;
+  }
+
+  .option-row {
+    gap: 6px;
+  }
+
+  .option-btn {
+    padding: 6px 10px;
+    font-size: 12px;
+  }
+
+  .filter-actions {
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 16px;
+    padding-top: 12px;
+  }
+
+  .filter-actions-right {
+    width: 100%;
+    flex-direction: column;
+  }
+
+  .close-btn,
+  .apply-btn {
+    flex: 1;
+  }
+
+  .reset-btn {
+    width: 100%;
+  }
+}

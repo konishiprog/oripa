@@ -15,6 +15,8 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatButtonModule } from '@angular/material/button';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatSelectModule } from '@angular/material/select';
+import { MatFormFieldModule } from '@angular/material/form-field';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 
 import { AppComponent } from './app.component';
@@ -114,6 +116,8 @@ import { ForgotPasswordComponent } from './components/forgotPassword/forgot-pass
     MatMenuModule,
     MatButtonModule,
     MatTooltipModule,
+    MatSelectModule,
+    MatFormFieldModule,
     DragDropModule,
   ],
   providers: [

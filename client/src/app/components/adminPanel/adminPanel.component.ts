@@ -10,12 +10,17 @@ import { BREADCRUMB_MAP } from '../../config/breadcrumb.config';
   selector: 'app-admin-panel',
   standalone: false,
   templateUrl: './adminPanel.component.html',
-  styleUrls: ['./adminPanel.component.css'],
+  styleUrls: [
+    './adminPanel.component.css',
+    './adminPanel.responsive.component.css',
+  ],
 })
 export class AdminPanelComponent implements OnInit {
   breadcrumbTitle: string = '';
   notificationIcon: SafeHtml = '';
   searchIcon: SafeHtml = '';
+  menuIcon: SafeHtml = '';
+  isSidebarOpen: boolean = false;
 
   constructor(
     private router: Router,
@@ -32,11 +37,20 @@ export class AdminPanelComponent implements OnInit {
       .pipe(filter((event) => event instanceof NavigationEnd))
       .subscribe(() => {
         this.updateBreadcrumb();
+        this.isSidebarOpen = false;
       });
 
     this.translate.onLangChange.subscribe(() => {
       this.updateBreadcrumb();
     });
+  }
+
+  toggleSidebar(): void {
+    this.isSidebarOpen = !this.isSidebarOpen;
+  }
+
+  closeSidebar(): void {
+    this.isSidebarOpen = false;
   }
 
   private loadIcons(): void {
@@ -61,6 +75,15 @@ export class AdminPanelComponent implements OnInit {
           console.error('Failed to load search icon:', error);
         },
       });
+
+    this.http.get('assets/icons/menu.svg', { responseType: 'text' }).subscribe({
+      next: (svg) => {
+        this.menuIcon = this.sanitizer.bypassSecurityTrustHtml(svg);
+      },
+      error: (error) => {
+        console.error('Failed to load menu icon:', error);
+      },
+    });
   }
 
   private updateBreadcrumb(): void {

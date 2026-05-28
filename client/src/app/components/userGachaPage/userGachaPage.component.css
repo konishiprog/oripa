@@ -253,36 +253,3 @@
   box-shadow: 0 2px 8px rgba(124, 58, 237, 0.1);
   max-width: 100%;
 }
-
-@media (max-width: 1024px) {
-  .box-grid {
-    grid-template-columns: repeat(3, 1fr);
-  }
-}
-
-@media (max-width: 768px) {
-  .box-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-
-  .banner {
-    padding: 28px 20px;
-  }
-
-  .banner-title {
-    font-size: 24px;
-  }
-
-  .content {
-    padding: 16px;
-  }
-
-  .header-btn {
-    padding: 6px 10px;
-    font-size: 12px;
-  }
-
-  .header-btn-admin {
-    display: none;
-  }
-}

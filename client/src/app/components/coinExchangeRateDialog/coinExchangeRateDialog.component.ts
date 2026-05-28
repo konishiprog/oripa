@@ -26,7 +26,10 @@ export interface CoinExchangeRateDialogData {
   selector: 'app-coin-exchange-rate-dialog',
   standalone: false,
   templateUrl: './coinExchangeRateDialog.component.html',
-  styleUrls: ['./coinExchangeRateDialog.component.css'],
+  styleUrls: [
+    './coinExchangeRateDialog.component.css',
+    './coinExchangeRateDialog.responsive.component.css',
+  ],
 })
 export class CoinExchangeRateDialogComponent implements OnInit {
   point: number = 1000;

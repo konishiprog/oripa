@@ -82,7 +82,10 @@ const GACHA_TABLE_CELLS: TableCell[] = [
   selector: 'app-gacha-table',
   standalone: false,
   templateUrl: './gachaTable.component.html',
-  styleUrls: ['./gachaTable.component.css'],
+  styleUrls: [
+    './gachaTable.component.css',
+    './gachaTable.responsive.component.css',
+  ],
 })
 export class GachaTableComponent implements OnInit, OnChanges {
   @Input() gachas: Gacha[] = [];

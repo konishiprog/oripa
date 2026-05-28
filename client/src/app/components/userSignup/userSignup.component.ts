@@ -7,7 +7,10 @@ import { UserService } from '../../service/user.service';
   selector: 'app-user-signup',
   standalone: false,
   templateUrl: './userSignup.component.html',
-  styleUrls: ['./userSignup.component.css'],
+  styleUrls: [
+    './userSignup.component.css',
+    './userSignup.responsive.component.css',
+  ],
 })
 export class UserSignupComponent implements OnInit {
   email: string = '';

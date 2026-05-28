@@ -17,7 +17,10 @@ export interface UserDetailDialogData {
   selector: 'app-user-detail-dialog',
   standalone: false,
   templateUrl: './userDetailDialog.component.html',
-  styleUrls: ['./userDetailDialog.component.css'],
+  styleUrls: [
+    './userDetailDialog.component.css',
+    './userDetailDialog.responsive.component.css',
+  ],
 })
 export class UserDetailDialogComponent implements OnInit {
   readonly UserDetailMode = UserDetailMode;

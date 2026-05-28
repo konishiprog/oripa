@@ -17,7 +17,10 @@ export interface GachaBoxData {
   selector: 'app-gacha-box',
   standalone: false,
   templateUrl: './gachaBox.component.html',
-  styleUrls: ['./gachaBox.component.css'],
+  styleUrls: [
+    './gachaBox.component.css',
+    './gachaBox.responsive.component.css',
+  ],
 })
 export class GachaBoxComponent {
   @Input() gacha!: GachaBoxData;

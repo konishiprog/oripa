@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Router, NavigationEnd } from '@angular/router';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
@@ -15,9 +15,10 @@ import {
   selector: 'app-sidebar',
   standalone: false,
   templateUrl: './sidebar.component.html',
-  styleUrls: ['./sidebar.component.css'],
+  styleUrls: ['./sidebar.component.css', './sidebar.responsive.component.css'],
 })
 export class SidebarComponent implements OnInit {
+  @Input() isOpen: boolean = false;
   adminEmail: string = '';
   menuSections: MenuSection[] = SIDEBAR_MENU;
   iconCache: Map<string, SafeHtml> = new Map();

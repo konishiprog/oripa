@@ -20,7 +20,10 @@ enum ViewMode {
   selector: 'app-dashboard',
   standalone: false,
   templateUrl: './dashboard.component.html',
-  styleUrls: ['./dashboard.component.css'],
+  styleUrls: [
+    './dashboard.component.css',
+    './dashboard.responsive.component.css',
+  ],
 })
 export class DashboardComponent implements OnInit {
   readonly ViewMode = ViewMode;

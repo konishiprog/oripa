@@ -24,7 +24,10 @@ export interface GachaDrawResultDialogData {
   selector: 'app-gacha-draw-result-dialog',
   standalone: false,
   templateUrl: './gachaDrawResultDialog.component.html',
-  styleUrls: ['./gachaDrawResultDialog.component.css'],
+  styleUrls: [
+    './gachaDrawResultDialog.component.css',
+    './gachaDrawResultDialog.responsive.component.css',
+  ],
 })
 export class GachaDrawResultDialogComponent implements OnInit {
   drawnCards: DrawnCard[] = [];

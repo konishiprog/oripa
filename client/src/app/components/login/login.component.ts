@@ -12,7 +12,10 @@ import { Router } from '@angular/router';
   selector: 'app-login',
   standalone: false,
   templateUrl: './login.component.html',
-  styleUrls: ['./login.component.css'],
+  styleUrls: [
+    './login.component.css',
+    './login.responsive.component.css',
+  ],
 })
 export class LoginComponent implements OnInit {
   email: string = '';

@@ -11,7 +11,10 @@ export interface ShippingCardDetailDialogData {
   selector: 'app-shipping-card-detail-dialog',
   standalone: false,
   templateUrl: './shippingCardDetailDialog.component.html',
-  styleUrls: ['./shippingCardDetailDialog.component.css'],
+  styleUrls: [
+    './shippingCardDetailDialog.component.css',
+    './shippingCardDetailDialog.responsive.component.css',
+  ],
 })
 export class ShippingCardDetailDialogComponent implements OnInit {
   card!: ShippingCardInfo;

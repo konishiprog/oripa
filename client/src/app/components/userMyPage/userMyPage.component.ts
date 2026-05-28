@@ -26,7 +26,10 @@ export type MyPageSection =
   selector: 'app-user-my-page',
   standalone: false,
   templateUrl: './userMyPage.component.html',
-  styleUrls: ['./userMyPage.component.css'],
+  styleUrls: [
+    './userMyPage.component.css',
+    './userMyPage.responsive.component.css',
+  ],
 })
 export class UserMyPageComponent implements OnInit {
   isLoading: boolean = true;

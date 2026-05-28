@@ -104,24 +104,3 @@
 .header-btn-charge:hover {
   box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
 }
-
-@media (max-width: 768px) {
-  .header-btn {
-    padding: 6px 10px;
-    font-size: 12px;
-  }
-
-  .header-btn-admin {
-    display: none;
-  }
-
-  .user-coin-display {
-    font-size: 12px;
-    padding: 6px 10px;
-  }
-
-  .user-special-point-display {
-    font-size: 12px;
-    padding: 6px 10px;
-  }
-}
