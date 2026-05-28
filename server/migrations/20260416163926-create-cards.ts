@@ -29,8 +29,8 @@ module.exports = {
         type: Sequelize.STRING,
       },
       isDrawn: {
-        type: Sequelize.BOOLEAN,
-        defaultValue: false,
+        type: Sequelize.STRING,
+        defaultValue: '未引き',
       },
       createdAt: {
         allowNull: false,

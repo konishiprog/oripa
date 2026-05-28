@@ -62,7 +62,7 @@ async function create(payload: {
       where: {
         gachaId: payload.gachaId,
         cardType: "LAST",
-        isDrawn: false,
+        isDrawn: CARD_STATUS.NOT_DRAWN,
       },
     });
     if (existingLastCard) {

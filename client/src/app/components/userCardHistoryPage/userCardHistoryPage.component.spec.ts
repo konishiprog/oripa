@@ -2,7 +2,7 @@ import 'zone.js';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { MatDialogModule, MatDialog } from '@angular/material/dialog';
-import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { TranslateModule } from '@ngx-translate/core';
 import { Router } from '@angular/router';
 import {
   UserCardHistoryPageComponent,
@@ -19,7 +19,6 @@ describe('UserCardHistoryPageComponent', () => {
   let userService: any;
   let router: any;
   let dialog: MatDialog;
-  let translateService: TranslateService;
 
   const mockUserCards: UserCard[] = [
     {
@@ -70,6 +69,9 @@ describe('UserCardHistoryPageComponent', () => {
     const getCoinMock = jest.fn().mockReturnValue(1000);
     const updateUserMock = jest.fn().mockResolvedValue(undefined);
     const saveCoinMock = jest.fn();
+    const notifyCardExchangeMock = jest.fn().mockResolvedValue(undefined);
+    const updateCardStatusMock = jest.fn().mockResolvedValue(undefined);
+    const deleteCardMock = jest.fn().mockResolvedValue(undefined);
 
     await TestBed.configureTestingModule({
       declarations: [UserCardHistoryPageComponent],
@@ -84,6 +86,8 @@ describe('UserCardHistoryPageComponent', () => {
           useValue: {
             getCardsByUserId: getCardsByUserIdMock,
             exchangeCard: exchangeCardMock,
+            updateCardStatus: updateCardStatusMock,
+            deleteCard: deleteCardMock,
           },
         },
         {
@@ -93,6 +97,7 @@ describe('UserCardHistoryPageComponent', () => {
             getCoin: getCoinMock,
             updateUser: updateUserMock,
             saveCoin: saveCoinMock,
+            notifyCardExchange: notifyCardExchangeMock,
           },
         },
         {
@@ -106,7 +111,6 @@ describe('UserCardHistoryPageComponent', () => {
     userService = TestBed.inject(UserService) as any;
     router = TestBed.inject(Router) as any;
     dialog = TestBed.inject(MatDialog);
-    translateService = TestBed.inject(TranslateService);
 
     fixture = TestBed.createComponent(UserCardHistoryPageComponent);
     component = fixture.componentInstance;
@@ -219,7 +223,6 @@ describe('UserCardHistoryPageComponent', () => {
     fixture.detectChanges();
     await component.ngOnInit();
     const card1 = component.cards[0];
-    const card2 = mockUserCards[0];
 
     component.selectedCardIds.add(card1.id);
     component.cards[0].status = 'unselected';
