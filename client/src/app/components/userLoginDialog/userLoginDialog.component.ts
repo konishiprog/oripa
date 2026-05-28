@@ -1,6 +1,7 @@
 import { Component, ChangeDetectorRef, OnInit, Optional } from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
 import { TranslateService } from '@ngx-translate/core';
+import { Router } from '@angular/router';
 import { UserService } from '../../service/user.service';
 
 @Component({
@@ -22,6 +23,7 @@ export class UserLoginDialogComponent implements OnInit {
     private translateService: TranslateService,
     private cdr: ChangeDetectorRef,
     @Optional() private dialogRef: MatDialogRef<UserLoginDialogComponent>,
+    private router: Router,
   ) {}
 
   ngOnInit(): void {
@@ -64,6 +66,11 @@ export class UserLoginDialogComponent implements OnInit {
 
   onClose(): void {
     this.dialogRef?.close();
+  }
+
+  navigateToForgotPassword(): void {
+    this.dialogRef?.close();
+    this.router.navigate(['/forgot-password']);
   }
 
   togglePasswordVisibility(): void {

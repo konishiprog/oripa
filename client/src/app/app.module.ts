@@ -57,6 +57,7 @@ import { CoinChargePageComponent } from './components/coinChargePage/coinChargeP
 import { CoinPurchaseHistoryPageComponent } from './components/coinPurchaseHistoryPage/coinPurchaseHistoryPage.component';
 import { CoinPurchaseHistoryFilterDialogComponent } from './components/coinPurchaseHistoryFilterDialog/coinPurchaseHistoryFilterDialog.component';
 import { CardTableFilterDialogComponent } from './components/cardTableFilterDialog/cardTableFilterDialog.component';
+import { ForgotPasswordComponent } from './components/forgotPassword/forgot-password.component';
 
 @NgModule({
   declarations: [
@@ -99,6 +100,7 @@ import { CardTableFilterDialogComponent } from './components/cardTableFilterDial
     CoinPurchaseHistoryPageComponent,
     CoinPurchaseHistoryFilterDialogComponent,
     CardTableFilterDialogComponent,
+    ForgotPasswordComponent,
   ],
   imports: [
     BrowserModule,

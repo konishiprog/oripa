@@ -31,6 +31,14 @@
     "greetingSuffix": "さん",
     "description": "あなたのアカウントのパスワードが変更されました。もし変更をされていない場合は、すぐにお問い合わせください。"
   },
+  "passwordReset": {
+    "subject": "パスワードリセットのお知らせ - oripa",
+    "title": "パスワードをリセットいたしました",
+    "greetingSuffix": "さん",
+    "description": "パスワード忘却のため、新しいパスワードを発行いたしました。",
+    "newPasswordLabel": "新しいパスワード：",
+    "note": "セキュリティのため、ログイン後にパスワードを変更されることをお勧めします。"
+  },
   "adminCardShippingRequest": {
     "subject": "カード発送依頼通知 - oripa",
     "title": "新しいカード発送依頼があります",

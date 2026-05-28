@@ -390,6 +390,47 @@ async function verifyEmailChange(token: string) {
   return plainUser;
 }
 
+/**
+ * Generate a random password (8 characters: uppercase, lowercase, digits mixed)
+ * @returns {string} - Generated password
+ */
+function generateRandomPassword(): string {
+  const upper = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+  const lower = "abcdefghijklmnopqrstuvwxyz";
+  const digits = "0123456789";
+  const all = upper + lower + digits;
+  const required = [
+    upper[Math.floor(Math.random() * upper.length)],
+    lower[Math.floor(Math.random() * lower.length)],
+    digits[Math.floor(Math.random() * digits.length)],
+  ];
+  const rest = Array.from(
+    { length: 5 },
+    () => all[Math.floor(Math.random() * all.length)],
+  );
+  return [...required, ...rest].sort(() => Math.random() - 0.5).join("");
+}
+
+/**
+ * Reset user password by email and phone verification
+ * @param {string} email
+ * @param {string} phone
+ * @returns {Promise<{user: any, newPassword: string}>}
+ */
+async function forgotPassword(email: string, phone: string) {
+  const user = Array.from(userCache.values()).find(
+    (user: any) => user.email === email && user.phone === phone,
+  );
+  if (!user) {
+    throw new Error(messages.errors.EMAIL_PHONE_NOT_FOUND);
+  }
+  const newPassword = generateRandomPassword();
+  await db.User.update({ password: newPassword }, { where: { id: user.id } });
+  const updatedUser = { ...user, password: newPassword };
+  userCache.set(user.id, updatedUser);
+  return { user: updatedUser, newPassword };
+}
+
 module.exports = {
   init,
   createPending,
@@ -403,4 +444,5 @@ module.exports = {
   delete: deleteUser,
   createPendingEmailChange,
   verifyEmailChange,
+  forgotPassword,
 };
