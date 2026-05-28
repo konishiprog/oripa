@@ -428,6 +428,40 @@ module.exports = {
     );
 
     /**
+     * Reset user password by email and phone
+     * POST /api/user/forgot-password
+     */
+    router.post("/forgot-password", async (req: Request, res: Response) => {
+      const { email, phone } = req.body;
+      if (!email || !phone) {
+        return res
+          .status(400)
+          .json({ error: messages.errors.EMAIL_PHONE_REQUIRED });
+      }
+
+      try {
+        const { user, newPassword } = await runtime.user.forgotPassword(
+          email,
+          phone,
+        );
+        await runtime.email.sendPasswordResetEmail(
+          user.email,
+          user.name,
+          newPassword,
+        );
+        return res.status(200).json({
+          message: messages.success.PASSWORD_RESET_EMAIL_SENT,
+        });
+      } catch (error: any) {
+        if (error.message === messages.errors.EMAIL_PHONE_NOT_FOUND) {
+          return res.status(404).json({ error: error.message });
+        }
+        const { status, message } = handleError(error, "Password reset");
+        return res.status(status).json({ error: message });
+      }
+    });
+
+    /**
      * Delete a user
      * DELETE /api/user/:id
      */

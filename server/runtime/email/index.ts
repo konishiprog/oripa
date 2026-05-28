@@ -459,3 +459,40 @@ export async function sendEmailChangeEmail(
     throw new Error(messages.email.SEND_FAILURE_ERROR);
   }
 }
+
+export async function sendPasswordResetEmail(
+  to: string,
+  userName: string,
+  newPassword: string,
+): Promise<void> {
+  if (!process.env.RESEND_API_KEY) {
+    console.error("[EMAIL] RESEND_API_KEY is not set");
+    throw new Error("RESEND_API_KEY is not configured");
+  }
+
+  try {
+    const client = getResendClient();
+    const emailFrom = process.env.EMAIL_FROM;
+    if (!emailFrom) {
+      throw new Error("EMAIL_FROM is not configured");
+    }
+
+    const { subject, html } = renderTemplate("passwordReset", {
+      userName,
+      newPassword,
+    });
+
+    const result = await client.emails.send({
+      from: emailFrom,
+      to,
+      subject,
+      html,
+    });
+
+    console.log(`[EMAIL] Send result:`, result);
+  } catch (error: any) {
+    console.error("[EMAIL] Failed to send password reset email:", error);
+    console.error("[EMAIL] Error details:", error.message || error);
+    throw new Error(messages.email.SEND_FAILURE_ERROR);
+  }
+}

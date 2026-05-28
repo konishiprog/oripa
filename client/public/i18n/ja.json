@@ -281,7 +281,23 @@
     "success": "ログインが完了しました",
     "error": "ログインに失敗しました",
     "error-required": "全ての項目を入力してください",
-    "error-invalid-credentials": "メールアドレス/電話番号またはパスワードが正しくありません"
+    "error-invalid-credentials": "メールアドレス/電話番号またはパスワードが正しくありません",
+    "forgot-password": "パスワードをお忘れですか？"
+  },
+
+  "forgot-password": {
+    "title": "パスワードをリセット",
+    "description": "メールアドレスと電話番号を入力して、パスワードをリセットしてください。",
+    "email": "メールアドレス",
+    "email-placeholder": "example@example.com",
+    "phone": "電話番号",
+    "phone-placeholder": "09012345678",
+    "submit": "メールに送信",
+    "back": "ログインに戻る",
+    "success": "新しいパスワードをメールにお送りしました。メールをご確認ください。",
+    "error": "リセットに失敗しました",
+    "error-required": "全ての項目を入力してください",
+    "error-not-found": "入力された情報に一致するアカウントが見つかりません"
   },
 
   "user-signup": {

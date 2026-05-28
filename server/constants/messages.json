@@ -30,7 +30,9 @@
     "SERVER_ERROR": "Internal server error",
     "MISSING_REQUIRED_FIELDS": "Missing required fields",
     "INVALID_VERIFICATION_LINK": "This link is invalid.",
-    "VERIFICATION_LINK_EXPIRED": "This link has expired."
+    "VERIFICATION_LINK_EXPIRED": "This link has expired.",
+    "EMAIL_PHONE_REQUIRED": "Email and phone number are required",
+    "EMAIL_PHONE_NOT_FOUND": "User with this email and phone number not found"
   },
   "success": {
     "ADMIN_CREATED": "Admin created successfully",
@@ -57,7 +59,8 @@
     "CREATED": "Created successfully",
     "MIGRATIONS_COMPLETED": "Migrations completed successfully",
     "SIGNUP_EMAIL_SENT": "Confirmation email has been sent. Please click the link in the email.",
-    "ACCOUNT_CREATED": "Account created successfully."
+    "ACCOUNT_CREATED": "Account created successfully.",
+    "PASSWORD_RESET_EMAIL_SENT": "A password reset email has been sent"
   },
   "migration": {
     "RUNNING": "Running {count} migration(s)...",

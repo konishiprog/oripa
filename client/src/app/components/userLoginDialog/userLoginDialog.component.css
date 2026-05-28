@@ -146,3 +146,21 @@ input:disabled {
 .password-icon:hover {
   opacity: 0.7;
 }
+
+.forgot-password-container {
+  text-align: center;
+  margin-top: 16px;
+}
+
+.forgot-password-link {
+  color: #805ad5;
+  font-size: 13px;
+  text-decoration: none;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+.forgot-password-link:hover {
+  opacity: 0.7;
+  text-decoration: underline;
+}

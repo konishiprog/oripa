@@ -21,6 +21,7 @@ import { ShippingInfoPageComponent } from './components/shippingInfoPage/shippin
 import { CoinExchangeRateManagementComponent } from './components/coinExchangeRateManagement/coinExchangeRateManagement.component';
 import { CoinChargePageComponent } from './components/coinChargePage/coinChargePage.component';
 import { CoinPurchaseHistoryPageComponent } from './components/coinPurchaseHistoryPage/coinPurchaseHistoryPage.component';
+import { ForgotPasswordComponent } from './components/forgotPassword/forgot-password.component';
 
 const routes: Routes = [
   {
@@ -51,6 +52,10 @@ const routes: Routes = [
   {
     path: 'signup-email-sent',
     component: SignupEmailSentComponent,
+  },
+  {
+    path: 'forgot-password',
+    component: ForgotPasswordComponent,
   },
   {
     path: 'myPage',
