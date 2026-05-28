@@ -11,6 +11,9 @@ const { CARD_STATUS, EXCHANGE_TYPE } = require("../../constants/card");
 
 let runtime: any;
 let gacha: any;
+let user: any;
+let email: any;
+let admin: any;
 const upload = multer({ storage: multer.memoryStorage() });
 
 const validateCardPayload = (req: Request, res: Response): boolean => {
@@ -110,6 +113,9 @@ module.exports = {
   init: function (_runtime: any) {
     runtime = _runtime;
     gacha = _runtime.gacha;
+    user = _runtime.user;
+    email = _runtime.email;
+    admin = _runtime.admin;
   },
 
   /**
@@ -276,9 +282,50 @@ module.exports = {
       }
 
       try {
-        await runtime.card.update(id, { isDrawn });
         const allCards = await runtime.card.getAll();
         const card = allCards.find((foundCard: any) => foundCard.id === id);
+
+        if (!card) {
+          return res.status(404).json({ error: messages.errors.CARD_NOT_FOUND });
+        }
+
+        const cardOwner = user?.getById(card.userId);
+
+        await runtime.card.update(id, { isDrawn });
+
+        if (cardOwner?.email) {
+          if (isDrawn === CARD_STATUS.SHIPPING_PENDING) {
+            await email.sendCardShippingPendingEmail(
+              cardOwner.email,
+              cardOwner.name,
+              card.name,
+              card.gachaName,
+              cardOwner.address,
+            );
+
+            const allAdmins = await admin.getAll();
+            const adminEmails = allAdmins.map((a: any) => a.email);
+            if (adminEmails.length > 0) {
+              await email.sendAdminCardShippingRequestEmail(
+                adminEmails,
+                cardOwner.name,
+                card.name,
+                card.gachaName,
+                cardOwner.address,
+                cardOwner.phone,
+              );
+            }
+          } else if (isDrawn === CARD_STATUS.SHIPPED) {
+            await email.sendCardShippedEmail(
+              cardOwner.email,
+              cardOwner.name,
+              card.name,
+              card.gachaName,
+              cardOwner.address,
+            );
+          }
+        }
+
         if (card) {
           await gacha.refreshGachaCards(card.gachaId);
         }

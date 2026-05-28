@@ -183,6 +183,17 @@ export class UserService {
     return response.data;
   }
 
+  async notifyCardExchange(userId: string, cardIds: string[]): Promise<void> {
+    const headers = this.apiConfig.headers.set('x-user-id', userId);
+    await lastValueFrom(
+      this.http.post<{ message: string }>(
+        `${this.apiConfig.domain}/api/user/notify-card-exchange`,
+        { cardIds },
+        { headers },
+      ),
+    );
+  }
+
   /**
    * Login a user by email or phone
    * @param {string} identifier - Email address or phone number

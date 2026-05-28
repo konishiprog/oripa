@@ -70,11 +70,11 @@ async function init(_db?: any) {
   await gacha.init(database);
   gachaApi.init({ gacha });
   await card.init(database);
-  cardApi.init({ card, gacha });
   await user.init(database);
   await coinExchangeRate.init(database);
   await coinPurchaseHistory.init(database);
-  userApi.init({ user, email, coinExchangeRate, coinPurchaseHistory });
+  cardApi.init({ card, gacha, user, email, admin });
+  userApi.init({ user, email, coinExchangeRate, coinPurchaseHistory, card });
   coinExchangeRateApi.init({ coinExchangeRate });
   coinPurchaseHistoryApi.init({ coinPurchaseHistory });
 

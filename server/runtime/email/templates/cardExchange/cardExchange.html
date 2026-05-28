@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  </head>
+  <body>
+    <div class="container">
+      <div class="header">
+        <h1>{{title}}</h1>
+      </div>
+
+      <div class="content">
+        <p>{{userName}} {{greetingSuffix}}</p>
+
+        <p>{{description}}</p>
+
+        <div class="exchange-info">
+          <div class="exchange-line">
+            <strong>{{cardCountLabel}}</strong>
+            <span>{{cardCount}} {{cardCountUnit}}</span>
+          </div>
+          <div class="exchange-line">
+            <strong>{{gainedPointLabel}}</strong>
+            <span>{{gainedPoint}} {{pointUnit}}</span>
+          </div>
+          <div class="exchange-line total">
+            <strong>{{totalPointLabel}}</strong>
+            <span>{{totalPoint}} {{pointUnit}}</span>
+          </div>
+        </div>
+
+        <p>{{disclaimer}}</p>
+      </div>
+
+      <div class="footer">
+        <p>{{copyright}}</p>
+      </div>
+    </div>
+  </body>
+</html>

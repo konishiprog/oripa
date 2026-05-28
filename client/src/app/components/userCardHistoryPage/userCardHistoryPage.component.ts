@@ -200,11 +200,12 @@ export class UserCardHistoryPageComponent implements OnInit {
         return;
       }
 
-      const selectedCards = this.filteredCards.filter((c) =>
-        this.selectedCardIds.has(c.id),
+      const selectedCards = this.filteredCards.filter((card) =>
+        this.selectedCardIds.has(card.id),
       );
       const totalPoints = this.selectedTotalPoints;
       const currentCoin = this.userService.getCoin() ?? 0;
+      const exchangedCardIds = selectedCards.map((card) => card.id);
 
       for (const card of selectedCards) {
         await this.cardService.exchangeCard(card.id);
@@ -216,7 +217,11 @@ export class UserCardHistoryPageComponent implements OnInit {
       });
       this.userService.saveCoin(currentCoin + totalPoints);
 
-      this.cards = this.cards.filter((c) => !this.selectedCardIds.has(c.id));
+      await this.userService.notifyCardExchange(userId, exchangedCardIds);
+
+      this.cards = this.cards.filter(
+        (card) => !this.selectedCardIds.has(card.id),
+      );
       this.selectedCardIds.clear();
       this.cdr.markForCheck();
     } catch (error) {
