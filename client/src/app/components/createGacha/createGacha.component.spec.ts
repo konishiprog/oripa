@@ -328,7 +328,9 @@ describe('CreateGachaComponent', () => {
 
     expect(mockGachaService.createGacha).toHaveBeenCalledWith({
       name: 'Box A',
+      consumptionType: 'COIN',
       cost: 100,
+      oncePerUser: false,
       publishStart: '2026-01-01',
       publishEnd: '2026-12-31',
       isPublic: true,
@@ -386,7 +388,9 @@ describe('CreateGachaComponent', () => {
 
     expect(mockGachaService.updateGacha).toHaveBeenCalledWith(1, {
       name: 'Box Updated',
+      consumptionType: 'COIN',
       cost: 150,
+      oncePerUser: false,
       publishStart: '2026-01-01',
       publishEnd: '2026-12-31',
       isPublic: false,
@@ -409,7 +413,9 @@ describe('CreateGachaComponent', () => {
 
     expect(mockGachaService.updateGacha).toHaveBeenCalledWith(1, {
       name: 'Box Updated',
+      consumptionType: 'COIN',
       cost: 150,
+      oncePerUser: false,
       publishStart: '2026-01-01',
       publishEnd: '2026-12-31',
       isPublic: true,

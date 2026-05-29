@@ -10,6 +10,11 @@ module.exports = (sequelize: any, DataTypes: any) => {
         as: "cards",
         onDelete: "CASCADE",
       });
+      Gacha.hasMany(models.GachaUserDraw, {
+        foreignKey: "gachaId",
+        as: "userDraws",
+        onDelete: "CASCADE",
+      });
     }
   }
 
@@ -28,9 +33,14 @@ module.exports = (sequelize: any, DataTypes: any) => {
       },
       consumptionType: {
         type: DataTypes.STRING,
+        defaultValue: "COIN",
       },
       cost: {
         type: DataTypes.INTEGER,
+      },
+      oncePerUser: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: false,
       },
       isPublic: {
         type: DataTypes.BOOLEAN,

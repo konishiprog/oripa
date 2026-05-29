@@ -1,0 +1,31 @@
+@media (max-width: 640px) {
+  .sort-dialog {
+    min-width: auto;
+    width: 100%;
+    max-width: 100%;
+    padding: 20px;
+  }
+
+  .sort-dialog-title {
+    font-size: 16px;
+  }
+
+  .sort-option {
+    padding: 12px 14px;
+  }
+
+  .radio-dot {
+    width: 18px;
+    height: 18px;
+  }
+
+  .option-label {
+    font-size: 13px;
+  }
+
+  .close-icon-btn {
+    width: 36px;
+    height: 36px;
+    font-size: 24px;
+  }
+}

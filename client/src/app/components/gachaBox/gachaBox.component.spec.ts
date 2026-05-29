@@ -32,7 +32,10 @@ describe('GachaBoxComponent', () => {
       id: 'test-gacha-id',
       name: 'Test Gacha',
       headerImage: '',
+      consumptionType: 'COIN',
       cost: 500,
+      oncePerUser: false,
+      alreadyDrawn: false,
       remainingCount: 5,
     };
   });

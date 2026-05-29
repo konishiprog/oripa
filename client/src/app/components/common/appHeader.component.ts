@@ -43,10 +43,19 @@ export class AppHeaderComponent implements OnInit {
     this.userSpecialPoint = this.userService.getSpecialPoint();
     this.loadIcons();
     this.checkAdminPage();
+
+    this.userService.coin$$.subscribe((coin) => {
+      this.userCoin = coin;
+      this.cdr.markForCheck();
+    });
+
+    this.userService.specialPoint$$.subscribe((specialPoint) => {
+      this.userSpecialPoint = specialPoint;
+      this.cdr.markForCheck();
+    });
+
     this.router.events.subscribe(() => {
       this.checkAdminPage();
-      this.userCoin = this.userService.getCoin();
-      this.userSpecialPoint = this.userService.getSpecialPoint();
       this.isMobileMenuOpen = false;
     });
   }

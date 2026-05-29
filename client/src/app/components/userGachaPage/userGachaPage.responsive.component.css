@@ -1,32 +1,23 @@
-@media (max-width: 1024px) {
-  .box-grid {
-    grid-template-columns: repeat(3, 1fr);
-  }
-}
-
 @media (max-width: 768px) {
   .box-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-
-  .banner {
-    padding: 28px 20px;
-  }
-
-  .banner-title {
-    font-size: 24px;
+    grid-template-columns: 1fr;
   }
 
   .content {
     padding: 16px;
   }
 
-  .header-btn {
-    padding: 6px 10px;
-    font-size: 12px;
+  .section-title {
+    font-size: 18px;
   }
 
-  .header-btn-admin {
-    display: none;
+  .section-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .sort-btn {
+    align-self: flex-start;
   }
 }

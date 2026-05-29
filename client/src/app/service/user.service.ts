@@ -4,7 +4,7 @@
 
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { lastValueFrom } from 'rxjs';
+import { lastValueFrom, BehaviorSubject } from 'rxjs';
 import { ApiConfigService } from './api-config.service';
 
 export interface User {
@@ -46,10 +46,16 @@ export class UserService {
   private readonly COIN_STORAGE_KEY = 'userCoin';
   private readonly SPECIAL_POINT_STORAGE_KEY = 'userSpecialPoint';
 
+  private coin$ = new BehaviorSubject<number | null>(null);
+  private specialPoint$ = new BehaviorSubject<number | null>(null);
+
   constructor(
     private http: HttpClient,
     private apiConfig: ApiConfigService,
-  ) {}
+  ) {
+    this.coin$.next(this.getCoinFromStorage());
+    this.specialPoint$.next(this.getSpecialPointFromStorage());
+  }
 
   /**
    * Create a new user (signup)
@@ -248,18 +254,28 @@ export class UserService {
   }
 
   /**
-   * Save the user's coin balance to local storage
+   * Save the user's coin balance to local storage and update subject
    * @param {number} coin - User coin balance
    */
   saveCoin(coin: number): void {
     localStorage.setItem(this.COIN_STORAGE_KEY, coin.toString());
+    this.coin$.next(coin);
   }
 
   /**
-   * Get the user's coin balance from local storage
+   * Get the user's coin balance (from subject cache)
    * @returns {number | null} - User coin balance or null
    */
   getCoin(): number | null {
+    return this.coin$.value;
+  }
+
+  /**
+   * Get coin as observable for reactive updates
+   */
+  coin$$ = this.coin$.asObservable();
+
+  private getCoinFromStorage(): number | null {
     const coin = localStorage.getItem(this.COIN_STORAGE_KEY);
     return coin ? parseInt(coin, 10) : null;
   }
@@ -269,10 +285,11 @@ export class UserService {
    */
   clearCoin(): void {
     localStorage.removeItem(this.COIN_STORAGE_KEY);
+    this.coin$.next(null);
   }
 
   /**
-   * Save the user's special point balance to local storage
+   * Save the user's special point balance to local storage and update subject
    * @param {number} specialPoint - User special point balance
    */
   saveSpecialPoint(specialPoint: number): void {
@@ -280,13 +297,23 @@ export class UserService {
       this.SPECIAL_POINT_STORAGE_KEY,
       specialPoint.toString(),
     );
+    this.specialPoint$.next(specialPoint);
   }
 
   /**
-   * Get the user's special point balance from local storage
+   * Get the user's special point balance (from subject cache)
    * @returns {number | null} - User special point balance or null
    */
   getSpecialPoint(): number | null {
+    return this.specialPoint$.value;
+  }
+
+  /**
+   * Get special point as observable for reactive updates
+   */
+  specialPoint$$ = this.specialPoint$.asObservable();
+
+  private getSpecialPointFromStorage(): number | null {
     const specialPoint = localStorage.getItem(this.SPECIAL_POINT_STORAGE_KEY);
     return specialPoint ? parseInt(specialPoint, 10) : null;
   }
@@ -296,6 +323,7 @@ export class UserService {
    */
   clearSpecialPoint(): void {
     localStorage.removeItem(this.SPECIAL_POINT_STORAGE_KEY);
+    this.specialPoint$.next(null);
   }
 
   async getAddressByPostalCode(

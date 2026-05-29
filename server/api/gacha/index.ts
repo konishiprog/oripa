@@ -84,6 +84,12 @@ const handleError = (
   if (error.message === messages.errors.INSUFFICIENT_COIN) {
     return { status: 402, message: messages.errors.INSUFFICIENT_COIN };
   }
+  if (error.message === messages.errors.INSUFFICIENT_SPECIAL_POINT) {
+    return { status: 402, message: messages.errors.INSUFFICIENT_SPECIAL_POINT };
+  }
+  if (error.message === messages.errors.GACHA_ALREADY_DRAWN) {
+    return { status: 409, message: messages.errors.GACHA_ALREADY_DRAWN };
+  }
   if (error.message === messages.errors.DRAW_COUNT_INVALID) {
     return { status: 400, message: messages.errors.DRAW_COUNT_INVALID };
   }
@@ -117,12 +123,22 @@ module.exports = {
         if (!validateGachaPayload(req, res)) return;
 
         try {
-          const { name, cost, publishStart, publishEnd, isPublic } = req.body;
+          const {
+            name,
+            consumptionType,
+            cost,
+            oncePerUser,
+            publishStart,
+            publishEnd,
+            isPublic,
+          } = req.body;
           const headerImageFile = (req as any).file;
 
           const gacha = await runtime.gacha.create({
             name,
+            consumptionType,
             cost,
+            oncePerUser: oncePerUser === "true" || oncePerUser === true,
             publishStart,
             publishEnd,
             isPublic: isPublic === "true" || isPublic === true,
@@ -150,19 +166,29 @@ module.exports = {
         if (!validateGachaUpdatePayload(req, res)) return;
 
         const id = req.params.id as string;
-        if (!id || typeof id !== 'string' || id.trim() === "") {
+        if (!id || typeof id !== "string" || id.trim() === "") {
           return res
             .status(400)
             .json({ error: messages.errors.GACHA_NOT_FOUND });
         }
 
         try {
-          const { name, cost, publishStart, publishEnd, isPublic } = req.body;
+          const {
+            name,
+            consumptionType,
+            cost,
+            oncePerUser,
+            publishStart,
+            publishEnd,
+            isPublic,
+          } = req.body;
           const headerImageFile = (req as any).file;
 
           const gacha = await runtime.gacha.update(id, {
             name,
+            consumptionType,
             cost,
+            oncePerUser: oncePerUser === "true" || oncePerUser === true,
             publishStart,
             publishEnd,
             isPublic: isPublic === "true" || isPublic === true,
@@ -185,7 +211,7 @@ module.exports = {
      */
     router.delete("/:id", async (req: Request, res: Response) => {
       const id = req.params.id as string;
-      if (!id || typeof id !== 'string' || id.trim() === "") {
+      if (!id || typeof id !== "string" || id.trim() === "") {
         return res.status(400).json({ error: messages.errors.GACHA_NOT_FOUND });
       }
 
@@ -204,9 +230,11 @@ module.exports = {
      * Get all gachas
      * GET /api/gacha
      */
-    router.get("/", async (_req: Request, res: Response) => {
+    router.get("/", async (req: Request, res: Response) => {
       try {
-        const gachas = await runtime.gacha.getAll();
+        const userId =
+          typeof req.query.userId === "string" ? req.query.userId : undefined;
+        const gachas = await runtime.gacha.getAll(userId);
         return res.status(200).json({
           message: messages.success.GACHAS_RETRIEVED,
           data: gachas,
@@ -223,12 +251,14 @@ module.exports = {
      */
     router.get("/:id", async (req: Request, res: Response) => {
       const id = req.params.id as string;
-      if (!id || typeof id !== 'string' || id.trim() === "") {
+      if (!id || typeof id !== "string" || id.trim() === "") {
         return res.status(400).json({ error: messages.errors.GACHA_NOT_FOUND });
       }
 
       try {
-        const gacha = runtime.gacha.getById(id);
+        const userId =
+          typeof req.query.userId === "string" ? req.query.userId : undefined;
+        const gacha = await runtime.gacha.getById(id, userId);
         if (!gacha) {
           return res
             .status(404)
@@ -250,15 +280,15 @@ module.exports = {
      */
     router.post("/:id/draw", async (req: Request, res: Response) => {
       const gachaId = req.params.id as string;
-      if (!gachaId || typeof gachaId !== 'string' || gachaId.trim() === "") {
+      if (!gachaId || typeof gachaId !== "string" || gachaId.trim() === "") {
         return res.status(400).json({ error: messages.errors.GACHA_NOT_FOUND });
       }
 
       const { userId, drawCount } = req.body;
       if (
         !userId ||
-        typeof userId !== 'string' ||
-        userId.trim() === '' ||
+        typeof userId !== "string" ||
+        userId.trim() === "" ||
         !Number.isInteger(Number(drawCount)) ||
         Number(drawCount) <= 0
       ) {

@@ -9,7 +9,10 @@ export interface GachaBoxData {
   id: string;
   name: string;
   headerImage: string;
+  consumptionType: string;
   cost: number;
+  oncePerUser: boolean;
+  alreadyDrawn: boolean;
   remainingCount: number;
 }
 
@@ -38,16 +41,29 @@ export class GachaBoxComponent {
     return this.userService.isLoggedIn();
   }
 
+  get usesSpecialPoint(): boolean {
+    return this.gacha.consumptionType === 'SPECIAL_POINT';
+  }
+
   formatPrice(cost: number): string {
-    const pointUnit = this.translateService.instant('common.unit.point');
-    return `${cost.toLocaleString()}${pointUnit}`;
+    const unitKey = this.usesSpecialPoint
+      ? 'common.unit.special-point'
+      : 'common.unit.point';
+    const unit = this.translateService.instant(unitKey);
+    return `${cost.toLocaleString()}${unit}`;
   }
 
   /**
    * Effective draw count = min(requested, remaining).
+   * Once-per-user gachas are always a single draw.
    * Returned 0 means the button should be disabled.
    */
   effectiveDrawCount(requested: number): number {
+    if (this.gacha.oncePerUser) {
+      return this.gacha.alreadyDrawn
+        ? 0
+        : Math.min(1, this.gacha.remainingCount);
+    }
     return Math.min(requested, this.gacha.remainingCount);
   }
 
@@ -58,14 +74,33 @@ export class GachaBoxComponent {
     const userId = this.userService.getUserId();
     if (!userId) return;
 
+    if (this.gacha.oncePerUser && this.gacha.alreadyDrawn) {
+      alert(this.translateService.instant('gacha-box.error-already-drawn'));
+      return;
+    }
+
     const count = this.effectiveDrawCount(requested);
     if (count <= 0) return;
 
     const totalCost = this.gacha.cost * count;
-    const userCoin = this.userService.getCoin();
-    if (userCoin === null || userCoin < totalCost) {
-      alert(this.translateService.instant('gacha-box.error-insufficient-coin'));
-      return;
+    if (this.usesSpecialPoint) {
+      const userSpecialPoint = this.userService.getSpecialPoint();
+      if (userSpecialPoint === null || userSpecialPoint < totalCost) {
+        alert(
+          this.translateService.instant(
+            'gacha-box.error-insufficient-special-point',
+          ),
+        );
+        return;
+      }
+    } else {
+      const userCoin = this.userService.getCoin();
+      if (userCoin === null || userCoin < totalCost) {
+        alert(
+          this.translateService.instant('gacha-box.error-insufficient-coin'),
+        );
+        return;
+      }
     }
 
     this.isDrawing = true;
@@ -81,9 +116,13 @@ export class GachaBoxComponent {
       if (result.userCoin !== undefined) {
         this.userService.saveCoin(result.userCoin);
       }
+      if (result.userSpecialPoint !== undefined) {
+        this.userService.saveSpecialPoint(result.userSpecialPoint);
+      }
       this.gacha = {
         ...this.gacha,
         remainingCount: result.remainingCount ?? 0,
+        alreadyDrawn: this.gacha.oncePerUser ? true : this.gacha.alreadyDrawn,
       };
 
       if (drawnCards.length === 1) {
@@ -119,6 +158,10 @@ export class GachaBoxComponent {
 
     const errorKeyByServerMessage: Record<string, string> = {
       'Insufficient coin balance': 'gacha-box.error-insufficient-coin',
+      'Insufficient special point balance':
+        'gacha-box.error-insufficient-special-point',
+      'This gacha can only be drawn once per user':
+        'gacha-box.error-already-drawn',
       'No remaining cards in this gacha': 'gacha-box.error-out-of-stock',
       'Gacha not found': 'gacha-box.error-gacha-not-found',
       'User not found': 'gacha-box.error-user-not-found',

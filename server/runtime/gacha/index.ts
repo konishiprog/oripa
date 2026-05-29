@@ -4,6 +4,7 @@ export {};
 
 const messages = require("../../constants/messages.json");
 const { CARD_STATUS } = require("../../constants/card");
+const { CONSUMPTION_TYPE } = require("../../constants/gacha");
 const userRuntime = require("../user");
 const cardRuntime = require("../card");
 
@@ -43,7 +44,9 @@ async function refreshCache() {
  */
 async function create(payload: {
   name: string;
+  consumptionType?: string;
   cost: number;
+  oncePerUser?: boolean;
   publishStart: Date | string;
   publishEnd: Date | string;
   isPublic: boolean;
@@ -65,7 +68,9 @@ async function create(payload: {
   const gacha = await db.Gacha.create({
     name: payload.name,
     headerImage: headerImageBase64,
+    consumptionType: payload.consumptionType ?? CONSUMPTION_TYPE.COIN,
     cost: payload.cost,
+    oncePerUser: payload.oncePerUser ?? false,
     publishStart: payload.publishStart,
     publishEnd: payload.publishEnd,
     isPublic: payload.isPublic,
@@ -76,10 +81,24 @@ async function create(payload: {
 }
 
 /**
+ * Get the set of gacha ids a user has already drawn (for once-per-user gachas)
+ * @param {string} userId
+ * @returns {Promise<Set<string>>}
+ */
+async function getDrawnGachaIds(userId: string): Promise<Set<string>> {
+  const draws = await db.GachaUserDraw.findAll({ where: { userId } });
+  return new Set(draws.map((draw: any) => draw.gachaId));
+}
+
+/**
  * Get all gachas from cache with cards count and remaining count
+ * @param {string} [userId]
  * @returns {Promise<any[]>} - Array of gacha objects sorted by publishStart descending
  */
-async function getAll() {
+async function getAll(userId?: string) {
+  const drawnGachaIds = userId
+    ? await getDrawnGachaIds(userId)
+    : new Set<string>();
   return Array.from(gachaCache.values())
     .sort((gachaA: any, gachaB: any) => {
       const dateA = new Date(gachaA.publishStart).getTime();
@@ -95,26 +114,33 @@ async function getAll() {
         ...gacha,
         cardsCount: notDrawnCards.length,
         remainingCount: notDrawnCards.length,
+        alreadyDrawn: gacha.oncePerUser ? drawnGachaIds.has(gacha.id) : false,
       };
     });
 }
 
 /**
  * Get a single gacha by id with cards and remaining count
- * @param {number} id - Gacha id
- * @returns {any | null} - Gacha object or null
+ * @param {string} id - Gacha id
+ * @param {string} [userId]
+ * @returns {Promise<any | null>}
  */
-function getById(id: string) {
+async function getById(id: string, userId?: string) {
   const gacha = gachaCache.get(id);
   if (!gacha) return null;
   const cards = gacha.cards ?? [];
   const notDrawnCards = cards.filter(
     (card: any) => card.isDrawn === CARD_STATUS.NOT_DRAWN,
   );
+  const alreadyDrawn =
+    gacha.oncePerUser && userId
+      ? (await getDrawnGachaIds(userId)).has(id)
+      : false;
   return {
     ...gacha,
     cardsCount: notDrawnCards.length,
     remainingCount: notDrawnCards.length,
+    alreadyDrawn,
   };
 }
 
@@ -145,6 +171,15 @@ async function draw(payload: {
     throw new Error(messages.errors.GACHA_NOT_FOUND);
   }
 
+  if (gacha.oncePerUser) {
+    const existingDraw = await db.GachaUserDraw.findOne({
+      where: { gachaId: payload.gachaId, userId: payload.userId },
+    });
+    if (existingDraw) {
+      throw new Error(messages.errors.GACHA_ALREADY_DRAWN);
+    }
+  }
+
   const availableCards = (gacha.cards ?? []).filter(
     (card: any) => card.isDrawn === CARD_STATUS.NOT_DRAWN,
   );
@@ -152,10 +187,17 @@ async function draw(payload: {
     throw new Error(messages.errors.GACHA_OUT_OF_STOCK);
   }
 
-  const actualDrawCount = Math.min(payload.drawCount, availableCards.length);
+  const requestedDrawCount = gacha.oncePerUser ? 1 : payload.drawCount;
+  const actualDrawCount = Math.min(requestedDrawCount, availableCards.length);
   const totalCost = gacha.cost * actualDrawCount;
+  const usesSpecialPoint =
+    gacha.consumptionType === CONSUMPTION_TYPE.SPECIAL_POINT;
 
-  if (user.coin < totalCost) {
+  if (usesSpecialPoint) {
+    if ((user.specialPoint ?? 0) < totalCost) {
+      throw new Error(messages.errors.INSUFFICIENT_SPECIAL_POINT);
+    }
+  } else if (user.coin < totalCost) {
     throw new Error(messages.errors.INSUFFICIENT_COIN);
   }
 
@@ -190,10 +232,24 @@ async function draw(payload: {
   );
   gachaCache.set(payload.gachaId, gacha);
 
-  const updatedUser = await userRuntime.updateCoin(
-    payload.userId,
-    user.coin - totalCost,
-  );
+  let updatedUser;
+  if (usesSpecialPoint) {
+    updatedUser = await userRuntime.update(payload.userId, {
+      specialPoint: (user.specialPoint ?? 0) - totalCost,
+    });
+  } else {
+    updatedUser = await userRuntime.updateCoin(
+      payload.userId,
+      user.coin - totalCost,
+    );
+  }
+
+  if (gacha.oncePerUser) {
+    await db.GachaUserDraw.create({
+      gachaId: payload.gachaId,
+      userId: payload.userId,
+    });
+  }
 
   const remainingCount = gacha.cards.filter(
     (card: any) => card.isDrawn === CARD_STATUS.NOT_DRAWN,
@@ -207,6 +263,9 @@ async function draw(payload: {
     })),
     remainingCount,
     userCoin: updatedUser.coin,
+    userSpecialPoint: updatedUser.specialPoint,
+    consumptionType: gacha.consumptionType ?? CONSUMPTION_TYPE.COIN,
+    oncePerUser: !!gacha.oncePerUser,
     actualDrawCount,
   };
 }
@@ -221,7 +280,9 @@ async function update(
   id: string,
   payload: {
     name: string;
+    consumptionType?: string;
     cost: number;
+    oncePerUser?: boolean;
     publishStart: Date | string;
     publishEnd: Date | string;
     isPublic: boolean;
@@ -249,7 +310,9 @@ async function update(
   await gacha.update({
     name: payload.name,
     headerImage: headerImageBase64,
+    consumptionType: payload.consumptionType ?? gacha.consumptionType,
     cost: payload.cost,
+    oncePerUser: payload.oncePerUser ?? gacha.oncePerUser,
     publishStart: payload.publishStart,
     publishEnd: payload.publishEnd,
     isPublic: payload.isPublic,

@@ -18,6 +18,7 @@ describe('UserGachaPageComponent', () => {
     };
     const userSpy = {
       isLoggedIn: jest.fn<boolean, []>(),
+      getUserId: jest.fn<string | null, []>().mockReturnValue(null),
       clearUserId: jest.fn<void, []>(),
       clearCoin: jest.fn<void, []>(),
     };
@@ -43,10 +44,9 @@ describe('UserGachaPageComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should initialize with loading state and new tab', () => {
+  it('should initialize with loading state', () => {
     expect(component.isLoading).toBe(true);
     expect(component.gachas.length).toBe(0);
-    expect(component.activeTab).toBe('new');
   });
 
   it('should load gachas on init', async () => {
@@ -127,18 +127,8 @@ describe('UserGachaPageComponent', () => {
     expect(component.gachas[0].name).toBe('Public Gacha');
   });
 
-  it('should sort gachas by id descending (newest first)', async () => {
+  it('should preserve the order returned by the service (server sorts)', async () => {
     const mockGachas = [
-      {
-        id: 1,
-        name: 'Old',
-        headerImage: '',
-        cost: 100,
-        remainingCount: 1,
-        isPublic: true,
-        publishStart: '2026-01-01',
-        publishEnd: null,
-      },
       {
         id: 3,
         name: 'Newest',
@@ -159,6 +149,16 @@ describe('UserGachaPageComponent', () => {
         publishStart: '2026-01-02',
         publishEnd: null,
       },
+      {
+        id: 1,
+        name: 'Old',
+        headerImage: '',
+        cost: 100,
+        remainingCount: 1,
+        isPublic: true,
+        publishStart: '2026-01-01',
+        publishEnd: null,
+      },
     ];
     gachaService.getGachas.mockResolvedValue(mockGachas);
     userService.isLoggedIn.mockReturnValue(false);
@@ -177,21 +177,5 @@ describe('UserGachaPageComponent', () => {
 
     expect(component.isLoading).toBe(false);
     expect(component.gachas.length).toBe(0);
-  });
-
-  it('should switch active tab', () => {
-    component.selectTab('popular');
-    expect(component.activeTab).toBe('popular');
-
-    component.selectTab('new');
-    expect(component.activeTab).toBe('new');
-  });
-
-  it('selectTab should switch active tab', () => {
-    expect(component.activeTab).toBe('new');
-    component.selectTab('popular');
-    expect(component.activeTab).toBe('popular');
-    component.selectTab('new');
-    expect(component.activeTab).toBe('new');
   });
 });

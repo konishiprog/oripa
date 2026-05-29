@@ -1,53 +1,33 @@
 <div class="app">
   <app-header></app-header>
 
-  <div class="nav-tabs">
-    <div
-      class="nav-tab"
-      [class.active]="activeTab === 'new'"
-      (click)="selectTab('new')"
-    >
-      {{ "user-gacha.tab-new" | translate }}
-    </div>
-    <div
-      class="nav-tab"
-      [class.active]="activeTab === 'popular'"
-      (click)="selectTab('popular')"
-    >
-      {{ "user-gacha.tab-popular" | translate }}
-    </div>
-  </div>
-
   <div class="content">
     <div class="section-header">
       <div class="section-title">
         {{ "user-gacha.section-title" | translate }}
       </div>
+      <button class="sort-btn" type="button" (click)="openSortDialog()">
+        {{ "user-gacha.sort-button" | translate }}
+      </button>
     </div>
 
     <div class="exchange-guide-banner">
       {{ "gacha-draw-result.exchange-guide" | translate }}
     </div>
 
-    <ng-container *ngIf="activeTab === 'new'">
-      <div *ngIf="isLoading" class="loading-state">
-        {{ "user-gacha.loading" | translate }}
-      </div>
+    <div *ngIf="isLoading" class="loading-state">
+      {{ "user-gacha.loading" | translate }}
+    </div>
 
-      <div *ngIf="!isLoading && gachas.length === 0" class="empty-state">
-        {{ "user-gacha.empty-state" | translate }}
-      </div>
+    <div *ngIf="!isLoading && gachas.length === 0" class="empty-state">
+      {{ "user-gacha.empty-state" | translate }}
+    </div>
 
-      <div *ngIf="!isLoading && gachas.length > 0" class="box-grid">
-        <app-gacha-box
-          *ngFor="let gacha of gachas"
-          [gacha]="gacha"
-        ></app-gacha-box>
-      </div>
-    </ng-container>
-
-    <div *ngIf="activeTab === 'popular'" class="empty-state">
-      {{ "user-gacha.popular-coming-soon" | translate }}
+    <div *ngIf="!isLoading && gachas.length > 0" class="box-grid">
+      <app-gacha-box
+        *ngFor="let gacha of sortedGachas"
+        [gacha]="gacha"
+      ></app-gacha-box>
     </div>
   </div>
 

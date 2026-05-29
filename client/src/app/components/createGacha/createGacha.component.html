@@ -69,6 +69,38 @@
       </div>
 
       <div class="form-group">
+        <label>{{ "gacha-create.consumption-type" | translate }}</label>
+        <div class="radio-group">
+          <div class="radio-option">
+            <input
+              type="radio"
+              id="consumptionCoin"
+              name="consumptionType"
+              [value]="ConsumptionType.Coin"
+              [(ngModel)]="consumptionType"
+              [disabled]="isLoading"
+            />
+            <label for="consumptionCoin">{{
+              "gacha-create.consumption-type-coin" | translate
+            }}</label>
+          </div>
+          <div class="radio-option">
+            <input
+              type="radio"
+              id="consumptionSpecialPoint"
+              name="consumptionType"
+              [value]="ConsumptionType.SpecialPoint"
+              [(ngModel)]="consumptionType"
+              [disabled]="isLoading"
+            />
+            <label for="consumptionSpecialPoint">{{
+              "gacha-create.consumption-type-special-point" | translate
+            }}</label>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group">
         <label for="cost">{{ "gacha-create.cost" | translate }}</label>
         <input
           id="cost"
@@ -79,6 +111,38 @@
           required
           [disabled]="isLoading"
         />
+      </div>
+
+      <div class="form-group">
+        <label>{{ "gacha-create.once-per-user" | translate }}</label>
+        <div class="radio-group">
+          <div class="radio-option">
+            <input
+              type="radio"
+              id="oncePerUserYes"
+              name="oncePerUser"
+              [value]="true"
+              [(ngModel)]="oncePerUser"
+              [disabled]="isLoading"
+            />
+            <label for="oncePerUserYes">{{
+              "gacha-create.once-per-user-yes" | translate
+            }}</label>
+          </div>
+          <div class="radio-option">
+            <input
+              type="radio"
+              id="oncePerUserNo"
+              name="oncePerUser"
+              [value]="false"
+              [(ngModel)]="oncePerUser"
+              [disabled]="isLoading"
+            />
+            <label for="oncePerUserNo">{{
+              "gacha-create.once-per-user-no" | translate
+            }}</label>
+          </div>
+        </div>
       </div>
 
       <div class="form-group">

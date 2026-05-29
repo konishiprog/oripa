@@ -32,6 +32,7 @@ import { LoginComponent } from './components/login/login.component';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { GachaTableComponent } from './components/gachaTable/gachaTable.component';
 import { GachaFilterDialogComponent } from './components/gachaFilterDialog/gachaFilterDialog.component';
+import { GachaSortDialogComponent } from './components/gachaSortDialog/gachaSortDialog.component';
 import { CardTableComponent } from './components/cardTable/cardTable.component';
 import { SidebarComponent } from './components/sidebar/sidebar.component';
 import { UserDetailDialogComponent } from './components/userDetailDialog/userDetailDialog.component';
@@ -77,6 +78,7 @@ import { FooterLinksComponent } from './components/common/footerLinks/footerLink
     DashboardComponent,
     GachaTableComponent,
     GachaFilterDialogComponent,
+    GachaSortDialogComponent,
     CardTableComponent,
     SidebarComponent,
     UserDetailDialogComponent,

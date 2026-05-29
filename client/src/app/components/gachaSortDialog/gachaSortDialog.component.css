@@ -1,0 +1,107 @@
+.sort-dialog {
+  padding: 24px;
+  background-color: #ffffff;
+  min-width: 360px;
+  max-height: 90vh;
+  overflow-y: auto;
+  overflow-x: hidden;
+  box-sizing: border-box;
+  position: relative;
+}
+
+.sort-dialog-header {
+  position: relative;
+  margin-bottom: 20px;
+}
+
+.sort-dialog-title {
+  font-size: 18px;
+  font-weight: 700;
+  color: #1a202c;
+  margin: 0;
+}
+
+.close-icon-btn {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  background: none;
+  border: none;
+  font-size: 28px;
+  color: #718096;
+  cursor: pointer;
+  padding: 0;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color 0.15s;
+}
+
+.close-icon-btn:hover {
+  color: #4a5568;
+}
+
+.sort-options {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.sort-option {
+  padding: 14px 16px;
+  cursor: pointer;
+  transition: background-color 0.15s;
+  border-bottom: 1px solid #e2e8f0;
+  display: flex;
+  align-items: center;
+}
+
+.sort-option:last-child {
+  border-bottom: none;
+}
+
+.sort-option:hover:not(.active) {
+  background-color: #f7f8fa;
+}
+
+.sort-option.active {
+  background-color: #fffaf0;
+}
+
+.sort-option-content {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+}
+
+.radio-dot {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: 2px solid #cbd5e0;
+  flex-shrink: 0;
+  transition: all 0.15s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.sort-option.active .radio-dot {
+  border-color: #f59e0b;
+  background-color: #f59e0b;
+}
+
+.option-label {
+  font-size: 14px;
+  font-weight: 500;
+  color: #4a5568;
+  transition: color 0.15s;
+}
+
+.sort-option.active .option-label {
+  color: #f59e0b;
+  font-weight: 600;
+}

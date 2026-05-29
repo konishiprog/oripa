@@ -113,7 +113,9 @@
       "badge-active": "公開中",
       "badge-inactive": "非公開",
       "unit-cards": "{{count}}枚",
-      "no-end-date": "-"
+      "no-end-date": "-",
+      "consumption-coin": "コイン",
+      "consumption-special-point": "特別ポイント"
     },
     "card": {
       "no-exchange-points": "-",
@@ -132,7 +134,13 @@
     "header-image": "ヘッダー画像",
     "image-select": "画像を選択",
     "image-change": "画像を変更",
+    "consumption-type": "消費タイプ",
+    "consumption-type-coin": "コイン",
+    "consumption-type-special-point": "特別ポイント",
     "cost": "値段",
+    "once-per-user": "1人1回制限",
+    "once-per-user-yes": "1人1回のみ",
+    "once-per-user-no": "制限なし",
     "publish-start": "公開日",
     "publish-end": "終了日",
     "is-public": "公開状況",
@@ -239,7 +247,11 @@
     "draw-success-single": "{{name}}が当たりました！",
     "draw-success-last": "おめでとう！ラストワン賞の{{name}}が当たりました！",
     "draw-error": "ガチャ抽選に失敗しました",
+    "once-per-user-badge": "1人1回限定",
+    "already-drawn": "このガチャは既に引いています",
+    "error-already-drawn": "このガチャは1人1回までしか引けません",
     "error-insufficient-coin": "コインが足りません。チャージしてから再度お試しください。",
+    "error-insufficient-special-point": "特別ポイントが足りません。",
     "error-out-of-stock": "在庫がなくなりました",
     "error-gacha-not-found": "対象のガチャが見つかりません",
     "error-user-not-found": "ユーザー情報が見つかりません。ログインし直してください。",
@@ -262,13 +274,20 @@
   },
 
   "user-gacha": {
-    "tab-new": "新着",
-    "tab-popular": "人気",
-    "tab-my-page": "マイページ",
     "section-title": "オリパ一覧",
+    "sort-button": "並び替え",
     "loading": "読み込み中...",
     "empty-state": "現在公開中のオリパはありません",
-    "popular-coming-soon": "人気タブは現在準備中です"
+    "sort-dialog": {
+      "title": "並び替え",
+      "newest": "新着順",
+      "cost-high": "コインが高い順",
+      "cost-low": "コインが低い順",
+      "remaining-high": "残り枚数が多い順",
+      "remaining-low": "残り枚数が少ない順",
+      "close-icon": "×",
+      "close-aria-label": "ダイアログを閉じる"
+    }
   },
 
   "user-login": {
@@ -539,6 +558,7 @@
     },
     "unit": {
       "point": "P",
+      "special-point": "SP",
       "yen": "¥"
     },
     "header": {
