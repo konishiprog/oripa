@@ -28,6 +28,7 @@ export interface Gacha {
   headerImage: string;
   consumptionType: string;
   cost: number;
+  oncePerUser: boolean;
   isPublic: boolean;
   publishStart: string;
   publishEnd: string | null;
@@ -254,7 +255,18 @@ export class GachaTableComponent implements OnInit, OnChanges {
   }
 
   getTextCellValue(cell: TableCell, gacha: Gacha): any {
+    if (cell.dataKey === 'consumptionType') {
+      return this.getConsumptionTypeLabel(gacha.consumptionType);
+    }
     return cell.dataKey ? gacha[cell.dataKey as keyof Gacha] : '';
+  }
+
+  getConsumptionTypeLabel(consumptionType: string): string {
+    const key =
+      consumptionType === 'SPECIAL_POINT'
+        ? 'dashboard.gacha.consumption-special-point'
+        : 'dashboard.gacha.consumption-coin';
+    return this.translateService.instant(key);
   }
 
   editGacha(gacha: Gacha): void {
@@ -266,7 +278,9 @@ export class GachaTableComponent implements OnInit, OnChanges {
           id: gacha.id,
           name: gacha.name,
           headerImage: gacha.headerImage,
+          consumptionType: gacha.consumptionType,
           cost: gacha.cost,
+          oncePerUser: gacha.oncePerUser,
           isPublic: gacha.isPublic,
           publishStart: gacha.publishStart,
           publishEnd: gacha.publishEnd,
@@ -284,8 +298,9 @@ export class GachaTableComponent implements OnInit, OnChanges {
             id: result.data.id,
             name: result.data.name,
             headerImage: result.data.headerImage,
-            consumptionType: result.data.consumptionType ?? '',
+            consumptionType: result.data.consumptionType ?? 'COIN',
             cost: result.data.cost,
+            oncePerUser: result.data.oncePerUser ?? false,
             isPublic: result.data.isPublic ?? false,
             publishStart: result.data.publishStart,
             publishEnd: result.data.publishEnd,

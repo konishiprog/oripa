@@ -51,7 +51,9 @@ describe('GachaService', () => {
       const mockFile = new File(['content'], 'header.jpg', { type: 'image/jpeg' });
       const payload: CreateGachaPayload = {
         name: 'Test Gacha',
+        consumptionType: 'COIN',
         cost: 100,
+        oncePerUser: false,
         publishStart: '2025-01-01',
         publishEnd: '2025-12-31',
         isPublic: true,
@@ -75,7 +77,9 @@ describe('GachaService', () => {
       const mockFile = new File(['content'], 'header.jpg', { type: 'image/jpeg' });
       const payload: UpdateGachaPayload = {
         name: 'Updated Gacha',
+        consumptionType: 'COIN',
         cost: 200,
+        oncePerUser: false,
         publishStart: '2025-02-01',
         publishEnd: '2025-11-30',
         isPublic: false,
@@ -98,7 +102,9 @@ describe('GachaService', () => {
     it('should update a gacha without image', async () => {
       const payload: UpdateGachaPayload = {
         name: 'Updated Gacha',
+        consumptionType: 'COIN',
         cost: 200,
+        oncePerUser: false,
         publishStart: '2025-02-01',
         publishEnd: '2025-11-30',
         isPublic: false,

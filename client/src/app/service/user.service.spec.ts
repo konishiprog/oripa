@@ -24,6 +24,8 @@ describe('UserService', () => {
   };
 
   beforeEach(() => {
+    localStorage.clear();
+
     mockApiConfig = {
       domain: 'http://localhost:3000',
       headers: {},
@@ -200,7 +202,7 @@ describe('UserService', () => {
     });
 
     it('should get coin balance from localStorage', () => {
-      localStorage.setItem('userCoin', '100');
+      service.saveCoin(100);
       expect(service.getCoin()).toBe(100);
     });
 
@@ -209,9 +211,10 @@ describe('UserService', () => {
     });
 
     it('should clear coin balance from localStorage', () => {
-      localStorage.setItem('userCoin', '100');
+      service.saveCoin(100);
       service.clearCoin();
       expect(localStorage.getItem('userCoin')).toBeNull();
+      expect(service.getCoin()).toBeNull();
     });
   });
 });

@@ -9,7 +9,9 @@ import { ApiConfigService } from './api-config.service';
 
 export interface CreateGachaPayload {
   name: string;
+  consumptionType: string;
   cost: number;
+  oncePerUser: boolean;
   publishStart: string;
   publishEnd: string;
   isPublic: boolean;
@@ -18,7 +20,9 @@ export interface CreateGachaPayload {
 
 export interface UpdateGachaPayload {
   name: string;
+  consumptionType: string;
   cost: number;
+  oncePerUser: boolean;
   publishStart: string;
   publishEnd: string;
   isPublic: boolean;
@@ -42,7 +46,9 @@ export class GachaService {
   async createGacha(payload: CreateGachaPayload) {
     const formData = new FormData();
     formData.append('name', payload.name);
+    formData.append('consumptionType', payload.consumptionType);
     formData.append('cost', payload.cost.toString());
+    formData.append('oncePerUser', payload.oncePerUser.toString());
     formData.append('publishStart', payload.publishStart);
     formData.append('publishEnd', payload.publishEnd);
     formData.append('isPublic', payload.isPublic.toString());
@@ -65,7 +71,9 @@ export class GachaService {
   async updateGacha(id: string, payload: UpdateGachaPayload) {
     const formData = new FormData();
     formData.append('name', payload.name);
+    formData.append('consumptionType', payload.consumptionType);
     formData.append('cost', payload.cost.toString());
+    formData.append('oncePerUser', payload.oncePerUser.toString());
     formData.append('publishStart', payload.publishStart);
     formData.append('publishEnd', payload.publishEnd);
     formData.append('isPublic', payload.isPublic.toString());
@@ -98,10 +106,11 @@ export class GachaService {
    * Get all gachas
    * @returns {Promise<any[]>} - Array of gacha objects
    */
-  async getGachas(): Promise<any[]> {
+  async getGachas(userId?: string): Promise<any[]> {
+    const query = userId ? `?userId=${encodeURIComponent(userId)}` : '';
     const response = await lastValueFrom(
       this.http.get<{ message: string; data: any[] }>(
-        `${this.apiConfig.domain}/api/gacha`,
+        `${this.apiConfig.domain}/api/gacha${query}`,
         { headers: this.apiConfig.headers },
       ),
     );

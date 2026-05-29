@@ -4,8 +4,18 @@
   </div>
   <div class="box-info">
     <div class="box-name">{{ gacha.name }}</div>
+    <div class="box-badges" *ngIf="gacha.oncePerUser">
+      <span class="box-badge box-badge-once">
+        {{ "gacha-box.once-per-user-badge" | translate }}
+      </span>
+    </div>
     <div class="box-meta">
-      <span class="box-price">{{ formatPrice(gacha.cost) }}</span>
+      <span
+        class="box-price"
+        [ngClass]="{ 'box-price-special': usesSpecialPoint }"
+      >
+        {{ formatPrice(gacha.cost) }}
+      </span>
       <span class="box-remaining">
         {{ "gacha-box.remaining" | translate: { count: gacha.remainingCount } }}
       </span>
@@ -20,6 +30,7 @@
         {{ "gacha-box.draw-single" | translate }}
       </button>
       <button
+        *ngIf="!gacha.oncePerUser"
         class="draw-btn draw-btn-multi"
         type="button"
         [disabled]="!isLoggedIn || isDrawing || effectiveDrawCount(10) === 0"
@@ -43,6 +54,12 @@
     </div>
     <div *ngIf="!isLoggedIn" class="login-notice">
       {{ "gacha-box.login-required" | translate }}
+    </div>
+    <div
+      *ngIf="isLoggedIn && gacha.oncePerUser && gacha.alreadyDrawn"
+      class="already-drawn-notice"
+    >
+      {{ "gacha-box.already-drawn" | translate }}
     </div>
     <div *ngIf="isLoggedIn && gacha.remainingCount === 0" class="out-of-stock">
       {{ "gacha-box.out-of-stock" | translate }}

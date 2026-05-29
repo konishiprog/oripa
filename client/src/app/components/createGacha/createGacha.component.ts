@@ -16,11 +16,18 @@ export enum GachaFormMode {
   Edit = 'edit',
 }
 
+export enum ConsumptionType {
+  Coin = 'COIN',
+  SpecialPoint = 'SPECIAL_POINT',
+}
+
 export interface GachaDialogPayload {
   id: string;
   name: string;
   headerImage: string;
+  consumptionType: string;
   cost: number;
+  oncePerUser: boolean;
   isPublic: boolean;
   publishStart: string;
   publishEnd: string | null;
@@ -53,7 +60,9 @@ export class CreateGachaComponent implements OnInit {
   name: string = '';
   headerImageFile: File | null = null;
   headerImagePreview: SafeUrl | null = null;
+  consumptionType: ConsumptionType = ConsumptionType.Coin;
   cost: number | null = null;
+  oncePerUser: boolean = false;
   publishStart: string = '';
   publishEnd: string = '';
   isPublic: boolean = false;
@@ -61,6 +70,7 @@ export class CreateGachaComponent implements OnInit {
   errorMessage: string = '';
   isLoading: boolean = false;
   mode: GachaFormMode = GachaFormMode.Create;
+  ConsumptionType = ConsumptionType;
   private editingGachaId: string | null = null;
 
   constructor(
@@ -89,7 +99,12 @@ export class CreateGachaComponent implements OnInit {
   private prefillFromGacha(gacha: GachaDialogPayload): void {
     this.editingGachaId = gacha.id;
     this.name = gacha.name;
+    this.consumptionType =
+      gacha.consumptionType === ConsumptionType.SpecialPoint
+        ? ConsumptionType.SpecialPoint
+        : ConsumptionType.Coin;
     this.cost = gacha.cost;
+    this.oncePerUser = gacha.oncePerUser ?? false;
     this.publishStart = toDateInputValue(gacha.publishStart);
     this.publishEnd = toDateInputValue(gacha.publishEnd);
     this.isPublic = gacha.isPublic;
@@ -173,7 +188,9 @@ export class CreateGachaComponent implements OnInit {
           this.editingGachaId,
           {
             name: this.name,
+            consumptionType: this.consumptionType,
             cost: Number(this.cost),
+            oncePerUser: this.oncePerUser,
             publishStart: this.publishStart,
             publishEnd: this.publishEnd,
             isPublic: this.isPublic,
@@ -185,7 +202,9 @@ export class CreateGachaComponent implements OnInit {
       } else {
         const created = await this.gachaService.createGacha({
           name: this.name,
+          consumptionType: this.consumptionType,
           cost: Number(this.cost),
+          oncePerUser: this.oncePerUser,
           publishStart: this.publishStart,
           publishEnd: this.publishEnd,
           isPublic: this.isPublic,

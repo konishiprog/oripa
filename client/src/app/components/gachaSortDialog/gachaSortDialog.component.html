@@ -1,0 +1,31 @@
+<div class="sort-dialog">
+  <div class="sort-dialog-header">
+    <h2 class="sort-dialog-title">
+      {{ "user-gacha.sort-dialog.title" | translate }}
+    </h2>
+    <button
+      type="button"
+      class="close-icon-btn"
+      (click)="onClose()"
+      [attr.aria-label]="'user-gacha.sort-dialog.close-aria-label' | translate"
+    >
+      {{ "user-gacha.sort-dialog.close-icon" | translate }}
+    </button>
+  </div>
+
+  <div class="sort-options">
+    <div
+      *ngFor="let option of sortOptions"
+      class="sort-option"
+      [class.active]="selectedOrder === option"
+      (click)="selectOption(option)"
+    >
+      <div class="sort-option-content">
+        <div class="radio-dot"></div>
+        <span class="option-label">
+          {{ getTranslationKey(option) | translate }}
+        </span>
+      </div>
+    </div>
+  </div>
+</div>

@@ -3,9 +3,12 @@ import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 import { TranslateService, TranslateModule } from '@ngx-translate/core';
-import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
+import {
+  HttpClientTestingModule,
+  HttpTestingController,
+} from '@angular/common/http/testing';
 import { DomSanitizer } from '@angular/platform-browser';
-import { Subject, of } from 'rxjs';
+import { Subject, of, BehaviorSubject } from 'rxjs';
 import { AppHeaderComponent } from './appHeader.component';
 import { UserService } from '../../service/user.service';
 
@@ -20,15 +23,22 @@ describe('AppHeaderComponent', () => {
   let httpMock: HttpTestingController;
 
   beforeEach(async () => {
+    const coinSubject = new BehaviorSubject<number | null>(null);
+    const specialPointSubject = new BehaviorSubject<number | null>(null);
+
     mockUserService = {
       isLoggedIn: jest.fn().mockReturnValue(false),
-      getCoin: jest.fn().mockReturnValue(null),
-      getSpecialPoint: jest.fn().mockReturnValue(null),
-      saveCoin: jest.fn(),
-      saveSpecialPoint: jest.fn(),
+      getCoin: jest.fn(() => coinSubject.value),
+      getSpecialPoint: jest.fn(() => specialPointSubject.value),
+      coin$$: coinSubject.asObservable(),
+      specialPoint$$: specialPointSubject.asObservable(),
+      saveCoin: jest.fn((coin: number) => coinSubject.next(coin)),
+      saveSpecialPoint: jest.fn((sp: number) => specialPointSubject.next(sp)),
       clearUserId: jest.fn(),
-      clearCoin: jest.fn(),
-      clearSpecialPoint: jest.fn(),
+      clearCoin: jest.fn(() => coinSubject.next(null)),
+      clearSpecialPoint: jest.fn(() => specialPointSubject.next(null)),
+      _coinSubject: coinSubject,
+      _specialPointSubject: specialPointSubject,
     };
     const routerEventsSubject = new Subject();
     mockRouter = {
@@ -101,8 +111,8 @@ describe('AppHeaderComponent', () => {
   });
 
   it('should load coin and special point on init', () => {
-    mockUserService.getCoin.mockReturnValue(1000);
-    mockUserService.getSpecialPoint.mockReturnValue(100);
+    mockUserService._coinSubject.next(1000);
+    mockUserService._specialPointSubject.next(100);
     component.ngOnInit();
 
     const menuReq = httpMock.expectOne('assets/icons/menu.svg');

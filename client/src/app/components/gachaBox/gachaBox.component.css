@@ -63,6 +63,11 @@
   color: #7c3aed;
 }
 
+.box-price-special {
+  color: #f59e0b;
+  text-shadow: 0 0 8px rgba(245, 158, 11, 0.4);
+}
+
 .box-remaining {
   font-size: 12px;
   color: #4a5568;
@@ -111,7 +116,8 @@
 }
 
 .login-notice,
-.out-of-stock {
+.out-of-stock,
+.already-drawn-notice {
   font-size: 11px;
   color: #6b7280;
   text-align: center;
@@ -119,5 +125,27 @@
 }
 
 .out-of-stock {
+  color: #b45309;
+}
+
+.already-drawn-notice {
+  color: #b45309;
+}
+
+.box-badges {
+  display: flex;
+  gap: 6px;
+  margin: 4px 0;
+}
+
+.box-badge {
+  font-size: 10px;
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: 9999px;
+}
+
+.box-badge-once {
+  background: #fef3c7;
   color: #b45309;
 }
