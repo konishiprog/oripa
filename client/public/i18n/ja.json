@@ -417,7 +417,8 @@
     "no-selection": "カードを選択してください",
     "confirm-received-message": "選択したカードをリストから削除しますか？",
     "confirm-received-success": "カードを削除しました",
-    "confirm-received-error": "カード削除に失敗しました"
+    "confirm-received-error": "カード削除に失敗しました",
+    "select-all": "すべて選択"
   },
 
   "user-management": {
