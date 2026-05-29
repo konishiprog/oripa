@@ -46,6 +46,7 @@ describe('UserSignupComponent', () => {
     expect(component.name).toBe('');
     expect(component.address).toBe('');
     expect(component.phone).toBe('');
+    expect(component.postalCode).toBe('');
     expect(component.isLoading).toBe(false);
   });
 
@@ -69,6 +70,7 @@ describe('UserSignupComponent', () => {
     component.name = '';
     component.address = '';
     component.phone = '';
+    component.postalCode = '';
 
     await component.onSubmit();
 
@@ -82,6 +84,7 @@ describe('UserSignupComponent', () => {
     component.name = 'Test User';
     component.address = 'Test Address';
     component.phone = '09012345678';
+    component.postalCode = '123-4567';
     userService.createUser.mockResolvedValue({});
 
     await component.onSubmit();
@@ -92,6 +95,7 @@ describe('UserSignupComponent', () => {
       name: 'Test User',
       address: 'Test Address',
       phone: '09012345678',
+      postalCode: '123-4567',
     });
   });
 
@@ -101,6 +105,7 @@ describe('UserSignupComponent', () => {
     component.name = 'Test User';
     component.address = 'Test Address';
     component.phone = '09012345678';
+    component.postalCode = '123-4567';
 
     await component.onSubmit();
 
@@ -114,6 +119,7 @@ describe('UserSignupComponent', () => {
     component.name = 'Test User';
     component.address = 'Test Address';
     component.phone = '09012345678';
+    component.postalCode = '123-4567';
 
     await component.onSubmit();
 
@@ -127,6 +133,7 @@ describe('UserSignupComponent', () => {
     component.name = 'Test User';
     component.address = 'Test Address';
     component.phone = 'not-a-number';
+    component.postalCode = '123-4567';
 
     await component.onSubmit();
 

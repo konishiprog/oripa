@@ -46,6 +46,10 @@ module.exports = (sequelize: any, DataTypes: any) => {
         type: DataTypes.STRING,
         allowNull: true,
       },
+      postalCode: {
+        type: DataTypes.STRING,
+        allowNull: true,
+      },
       newEmail: {
         type: DataTypes.STRING,
       },

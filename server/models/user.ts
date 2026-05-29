@@ -38,6 +38,9 @@ module.exports = (sequelize: any, DataTypes: any) => {
       phone: {
         type: DataTypes.STRING,
       },
+      postalCode: {
+        type: DataTypes.STRING,
+      },
     },
     {
       sequelize,

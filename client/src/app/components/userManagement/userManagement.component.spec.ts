@@ -24,6 +24,7 @@ describe('UserManagementComponent', () => {
       coin: 1000,
       address: '123 Main St',
       phone: '09012345678',
+      postalCode: '100-0001',
     },
     {
       id: 'user-uuid-2',
@@ -33,6 +34,7 @@ describe('UserManagementComponent', () => {
       coin: 2000,
       address: '456 Oak Ave',
       phone: '09087654321',
+      postalCode: '200-0002',
     },
     {
       id: 'user-uuid-3',
@@ -42,6 +44,7 @@ describe('UserManagementComponent', () => {
       coin: 3000,
       address: '789 Pine Rd',
       phone: '09011223344',
+      postalCode: '300-0003',
     },
   ];
 

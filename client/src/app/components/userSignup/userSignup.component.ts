@@ -18,9 +18,11 @@ export class UserSignupComponent implements OnInit {
   name: string = '';
   address: string = '';
   phone: string = '';
+  postalCode: string = '';
   successMessage: string = '';
   errorMessage: string = '';
   isLoading: boolean = false;
+  isLookingUpAddress: boolean = false;
   passwordVisible: boolean = false;
   private readonly MIN_PASSWORD_LENGTH = 5;
 
@@ -42,7 +44,8 @@ export class UserSignupComponent implements OnInit {
       !this.password ||
       !this.name ||
       !this.address ||
-      !this.phone
+      !this.phone ||
+      !this.postalCode
     ) {
       this.showError('user-signup.error-required');
       return;
@@ -74,6 +77,7 @@ export class UserSignupComponent implements OnInit {
         name: this.name,
         address: this.address,
         phone: this.phone,
+        postalCode: this.postalCode,
       });
       this.router.navigate(['/signup-email-sent']);
     } catch (error: any) {
@@ -119,5 +123,46 @@ export class UserSignupComponent implements OnInit {
   private showError(key: string): void {
     this.errorMessage = this.translateService.instant(key);
     this.cdr.detectChanges();
+  }
+
+  async lookupAddress(): Promise<void> {
+    if (!this.postalCode) {
+      this.showError('user-signup.error-postal-code');
+      return;
+    }
+
+    this.isLookingUpAddress = true;
+    this.successMessage = '';
+    this.errorMessage = '';
+
+    try {
+      const result = await this.userService.getAddressByPostalCode(
+        this.postalCode,
+      );
+      if (result) {
+        this.address = result.address;
+        this.successMessage = this.translateService.instant(
+          'user-signup.success-address-lookup',
+        );
+      } else {
+        this.showError('user-signup.error-address-not-found');
+      }
+    } catch (error) {
+      this.showError('user-signup.error-address-lookup');
+    } finally {
+      this.isLookingUpAddress = false;
+      this.cdr.detectChanges();
+    }
+  }
+
+  formatPostalCode(event: any): void {
+    let value = event.target.value.replace(/\D/g, '');
+    if (value.length > 7) {
+      value = value.slice(0, 7);
+    }
+    if (value.length > 3) {
+      value = value.slice(0, 3) + '-' + value.slice(3);
+    }
+    this.postalCode = value;
   }
 }

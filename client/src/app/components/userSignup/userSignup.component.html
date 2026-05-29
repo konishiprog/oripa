@@ -56,6 +56,37 @@
       </div>
 
       <div class="form-group">
+        <label for="postalCode">{{
+          "user-signup.postal-code" | translate
+        }}</label>
+        <div class="postal-code-input-wrapper">
+          <input
+            id="postalCode"
+            type="text"
+            [(ngModel)]="postalCode"
+            (input)="formatPostalCode($event)"
+            name="postalCode"
+            required
+            placeholder="123-4567"
+            maxlength="8"
+            [disabled]="isLoading || isLookingUpAddress"
+          />
+          <button
+            type="button"
+            class="lookup-btn"
+            [disabled]="isLoading || isLookingUpAddress || !postalCode"
+            (click)="lookupAddress()"
+          >
+            {{
+              isLookingUpAddress
+                ? ("user-signup.loading" | translate)
+                : ("user-signup.lookup-address" | translate)
+            }}
+          </button>
+        </div>
+      </div>
+
+      <div class="form-group">
         <label for="address">{{ "user-signup.address" | translate }}</label>
         <input
           id="address"

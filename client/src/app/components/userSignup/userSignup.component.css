@@ -162,3 +162,39 @@ input:disabled {
 .password-icon:hover {
   opacity: 0.7;
 }
+
+.postal-code-input-wrapper {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.postal-code-input-wrapper input {
+  flex: 1;
+  min-width: 0;
+}
+
+.lookup-btn {
+  padding: 10px 16px;
+  background: linear-gradient(135deg, #805ad5, #6b46c1);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition:
+    box-shadow 0.2s,
+    opacity 0.2s;
+  white-space: nowrap;
+  font-family: inherit;
+}
+
+.lookup-btn:hover:not(:disabled) {
+  box-shadow: 0 4px 12px rgba(128, 90, 213, 0.35);
+}
+
+.lookup-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}

@@ -167,6 +167,25 @@ export class UserCardHistoryPageComponent implements OnInit {
     }
   }
 
+  isAllSelected(): boolean {
+    const selectableCards = this.filteredCards.filter((card) =>
+      this.isSelectableForCurrentMode(card),
+    );
+    if (selectableCards.length === 0) return false;
+    return selectableCards.every((card) => this.selectedCardIds.has(card.id));
+  }
+
+  toggleSelectAll(): void {
+    const selectableCards = this.filteredCards.filter((card) =>
+      this.isSelectableForCurrentMode(card),
+    );
+    if (this.isAllSelected()) {
+      selectableCards.forEach((card) => this.selectedCardIds.delete(card.id));
+    } else {
+      selectableCards.forEach((card) => this.selectedCardIds.add(card.id));
+    }
+  }
+
   switchMode(newMode: 'exchange' | 'shipping'): void {
     this.mode = newMode;
     this.selectedCardIds.clear();

@@ -156,6 +156,39 @@
   font-size: 14px;
 }
 
+.card-list-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.select-all-section {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px;
+  background: #f8f9fa;
+  border: 1px solid #e9ecef;
+  border-radius: 8px;
+  margin-bottom: 8px;
+}
+
+.select-all-checkbox {
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+  accent-color: #6b46c1;
+  flex-shrink: 0;
+}
+
+.select-all-label {
+  font-size: 14px;
+  font-weight: 500;
+  color: #1a202c;
+  cursor: pointer;
+  margin: 0;
+}
+
 .card-list {
   display: flex;
   flex-direction: column;

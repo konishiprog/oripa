@@ -15,6 +15,7 @@ export interface User {
   coin: number;
   address: string;
   phone: string;
+  postalCode: string;
 }
 
 interface TableHeader {
@@ -35,6 +36,7 @@ const USER_TABLE_HEADERS: TableHeader[] = [
   { key: 'password', labelKey: 'user-management.table.password' },
   { key: 'name', labelKey: 'user-management.table.name' },
   { key: 'coin', labelKey: 'user-management.table.coin' },
+  { key: 'postalCode', labelKey: 'user-management.table.postal-code' },
   { key: 'address', labelKey: 'user-management.table.address' },
   { key: 'phone', labelKey: 'user-management.table.phone' },
 ];
@@ -44,6 +46,7 @@ const USER_TABLE_CELLS: TableCell[] = [
   { key: 'password', dataKey: 'password', masked: true },
   { key: 'name', dataKey: 'name' },
   { key: 'coin', dataKey: 'coin' },
+  { key: 'postalCode', dataKey: 'postalCode', masked: true },
   { key: 'address', dataKey: 'address', masked: true },
   { key: 'phone', dataKey: 'phone', masked: true },
 ];
@@ -93,6 +96,7 @@ export class UserManagementComponent implements OnInit {
         coin: user.coin ?? 0,
         address: user.address ?? '',
         phone: user.phone ?? '',
+        postalCode: user.postalCode ?? '',
       }));
       this.applyFilters();
     } catch (error) {
@@ -172,6 +176,7 @@ export class UserManagementComponent implements OnInit {
         name: updatedUser.name,
         address: updatedUser.address,
         phone: updatedUser.phone,
+        postalCode: updatedUser.postalCode,
         coin: updatedUser.coin,
       });
       const index = this.users.findIndex((u) => u.id === updatedUser.id);

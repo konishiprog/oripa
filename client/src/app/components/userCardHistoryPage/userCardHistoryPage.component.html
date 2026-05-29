@@ -63,8 +63,18 @@
         {{ emptyMessageKey | translate }}
       </div>
 
-      <div *ngIf="!isLoading && filteredCards.length > 0" class="card-list">
-        <div class="card-item" *ngFor="let card of filteredCards">
+      <div *ngIf="!isLoading && filteredCards.length > 0" class="card-list-wrapper">
+        <div class="select-all-section">
+          <input
+            type="checkbox"
+            class="select-all-checkbox"
+            [checked]="isAllSelected()"
+            (change)="toggleSelectAll()"
+          />
+          <label class="select-all-label">{{ "card-history.select-all" | translate }}</label>
+        </div>
+        <div class="card-list">
+          <div class="card-item" *ngFor="let card of filteredCards">
           <div
             *ngIf="
               activeTab === CARD_HISTORY_TABS.UNSELECTED ||
@@ -101,6 +111,7 @@
               {{ "card-history.status-exchanged" | translate }}
             </div>
           </div>
+        </div>
         </div>
       </div>
     </div>

@@ -38,6 +38,13 @@
 
       <div class="detail-row">
         <div class="detail-label">
+          {{ "user-management.table.postal-code" | translate }}
+        </div>
+        <div class="detail-value">{{ user.postalCode }}</div>
+      </div>
+
+      <div class="detail-row">
+        <div class="detail-label">
           {{ "user-management.table.address" | translate }}
         </div>
         <div class="detail-value">{{ user.address }}</div>
@@ -99,6 +106,19 @@
           type="number"
           [(ngModel)]="user.coin"
           name="coin"
+          [disabled]="isLoading"
+        />
+      </div>
+
+      <div class="form-group">
+        <label for="postalCode">
+          {{ "user-management.table.postal-code" | translate }}
+        </label>
+        <input
+          id="postalCode"
+          type="text"
+          [(ngModel)]="user.postalCode"
+          name="postalCode"
           [disabled]="isLoading"
         />
       </div>
