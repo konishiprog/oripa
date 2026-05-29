@@ -42,9 +42,11 @@ export class UserMyPageComponent implements OnInit {
   addressInput: string = '';
   emailInput: string = '';
   phoneInput: string = '';
+  postalCodeInput: string = '';
   currentPasswordInput: string = '';
   newPasswordInput: string = '';
   confirmPasswordInput: string = '';
+  isLookingUpAddress: boolean = false;
 
   currentPasswordVisible: boolean = false;
   newPasswordVisible: boolean = false;
@@ -55,6 +57,7 @@ export class UserMyPageComponent implements OnInit {
   isSaving: boolean = false;
 
   private readonly MIN_PASSWORD_LENGTH = 5;
+  readonly POSTAL_CODE_MAX_LENGTH = 8;
 
   constructor(
     private userService: UserService,
@@ -91,6 +94,7 @@ export class UserMyPageComponent implements OnInit {
       this.addressInput = this.user?.address ?? '';
       this.emailInput = this.user?.email ?? '';
       this.phoneInput = this.user?.phone ?? '';
+      this.postalCodeInput = this.user?.postalCode ?? '';
 
       const allHistories =
         await this.coinPurchaseHistoryService.getAllHistories();
@@ -119,7 +123,11 @@ export class UserMyPageComponent implements OnInit {
     this.clearMessages();
   }
 
-  async saveAddress(): Promise<void> {
+  async saveAddressAndPostalCode(): Promise<void> {
+    if (!this.postalCodeInput.trim()) {
+      this.showError('my-page.error-postal-code');
+      return;
+    }
     if (!this.addressInput.trim()) {
       this.showError('my-page.error-required');
       return;
@@ -127,7 +135,10 @@ export class UserMyPageComponent implements OnInit {
 
     const confirm = await this.showConfirmDialog('my-page.address');
     if (confirm) {
-      await this.updateUser({ address: this.addressInput });
+      await this.updateUser({
+        address: this.addressInput,
+        postalCode: this.postalCodeInput,
+      });
     }
   }
 
@@ -198,6 +209,44 @@ export class UserMyPageComponent implements OnInit {
     }
   }
 
+  async lookupAddressFromPostalCode(): Promise<void> {
+    if (!this.postalCodeInput) {
+      this.showError('my-page.error-postal-code');
+      return;
+    }
+
+    this.isLookingUpAddress = true;
+    this.clearMessages();
+
+    try {
+      const result = await this.userService.getAddressByPostalCode(
+        this.postalCodeInput,
+      );
+      if (result) {
+        this.addressInput = result.address;
+        this.showSuccess('my-page.success-address-lookup');
+      } else {
+        this.showError('my-page.error-address-not-found');
+      }
+    } catch (error) {
+      this.showError('my-page.error-address-lookup');
+    } finally {
+      this.isLookingUpAddress = false;
+      this.cdr.markForCheck();
+    }
+  }
+
+  formatPostalCode(event: any): void {
+    let value = event.target.value.replace(/\D/g, '');
+    if (value.length > 7) {
+      value = value.slice(0, 7);
+    }
+    if (value.length > 3) {
+      value = value.slice(0, 3) + '-' + value.slice(3);
+    }
+    this.postalCodeInput = value;
+  }
+
   private async updateUser(
     changes: Partial<{
       email: string;
@@ -205,6 +254,7 @@ export class UserMyPageComponent implements OnInit {
       name: string;
       address: string;
       phone: string;
+      postalCode: string;
     }>,
   ): Promise<void> {
     if (!this.user) return;
@@ -220,12 +270,14 @@ export class UserMyPageComponent implements OnInit {
         name: changes.name ?? this.user.name,
         address: changes.address ?? this.user.address,
         phone: changes.phone ?? this.user.phone,
+        postalCode: changes.postalCode ?? this.user.postalCode,
         coin: this.user.coin,
       });
       this.user = updated;
       this.addressInput = this.user?.address ?? '';
       this.emailInput = this.user?.email ?? '';
       this.phoneInput = this.user?.phone ?? '';
+      this.postalCodeInput = this.user?.postalCode ?? '';
 
       if (emailChanged) {
         this.router.navigate(['/signup-email-sent']);

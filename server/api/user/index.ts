@@ -4,12 +4,53 @@
 export {};
 
 import express, { Request, Response, Router } from "express";
+const https = require("https");
 const messages = require("../../constants/messages.json");
 
 let runtime: any;
 
 const isValidPhone = (phone: string): boolean => {
   return /^\d+$/.test(phone);
+};
+
+const isValidEmail = (email: string): boolean => {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+};
+
+const getAddressByPostalCode = (
+  postalCode: string,
+): Promise<{ address: string; prefcode: string } | null> => {
+  return new Promise((resolve) => {
+    const cleanedPostalCode = postalCode.replace(/-/g, "");
+    const url = `https://zipcloud.ibsnet.co.jp/api/search?zipcode=${cleanedPostalCode}`;
+
+    https
+      .get(url, (res: any) => {
+        let data = "";
+        res.on("data", (chunk: string) => {
+          data += chunk;
+        });
+        res.on("end", () => {
+          try {
+            const result = JSON.parse(data);
+            if (result.results && result.results.length > 0) {
+              const r = result.results[0];
+              const address = `${r.address1}${r.address2}${r.address3}`;
+              resolve({ address, prefcode: r.prefcode });
+            } else {
+              resolve(null);
+            }
+          } catch (error) {
+            console.error("Error parsing zipcloud response:", error);
+            resolve(null);
+          }
+        });
+      })
+      .on("error", (error: any) => {
+        console.error("Error fetching from zipcloud:", error);
+        resolve(null);
+      });
+  });
 };
 
 const handleError = (
@@ -76,11 +117,15 @@ module.exports = {
      * POST /api/user
      */
     router.post("/", async (req: Request, res: Response) => {
-      const { email, password, name, address, phone } = req.body;
-      if (!email || !password || !name || !address || !phone) {
+      const { email, password, name, address, phone, postalCode } = req.body;
+      if (!email || !password || !name || !address || !phone || !postalCode) {
         return res
           .status(400)
           .json({ error: messages.errors.USER_FIELDS_REQUIRED });
+      }
+
+      if (!isValidEmail(email)) {
+        return res.status(400).json({ error: "Invalid email format" });
       }
 
       if (!isValidPhone(phone)) {
@@ -96,6 +141,7 @@ module.exports = {
           name,
           address,
           phone,
+          postalCode,
         });
 
         // Generate verification URL
@@ -204,6 +250,38 @@ module.exports = {
     });
 
     /**
+     * Get address by postal code
+     * GET /api/user/postal-code/:postalCode
+     */
+    router.get(
+      "/postal-code/:postalCode",
+      async (req: Request, res: Response) => {
+        const postalCode = req.params.postalCode as string;
+
+        if (!postalCode || typeof postalCode !== "string") {
+          return res.status(400).json({ error: "Postal code is required" });
+        }
+
+        try {
+          const result = await getAddressByPostalCode(postalCode);
+          if (result) {
+            return res.status(200).json({
+              message: messages.success.ADDRESS_FOUND,
+              data: result,
+            });
+          } else {
+            return res.status(404).json({
+              error: "Address not found for the given postal code",
+            });
+          }
+        } catch (error: any) {
+          const { status, message } = handleError(error, "Postal code lookup");
+          return res.status(status).json({ error: message });
+        }
+      },
+    );
+
+    /**
      * Get a single user by id
      * GET /api/user/:id
      */
@@ -236,12 +314,17 @@ module.exports = {
      */
     router.put("/:id", async (req: Request, res: Response) => {
       const { id } = req.params;
-      const { email, password, name, address, phone, coin } = req.body;
+      const { email, password, name, address, phone, postalCode, coin } =
+        req.body;
 
       if (!id) {
         return res
           .status(400)
           .json({ error: messages.errors.USER_ID_REQUIRED });
+      }
+
+      if (email && !isValidEmail(email)) {
+        return res.status(400).json({ error: "Invalid email format" });
       }
 
       try {
@@ -251,6 +334,7 @@ module.exports = {
           name,
           address,
           phone,
+          postalCode,
           coin,
         };
 
@@ -397,8 +481,7 @@ module.exports = {
 
           const allCards = await runtime.card.getAll();
           const ownedCards = allCards.filter(
-            (card: any) =>
-              cardIds.includes(card.id) && card.userId === userId,
+            (card: any) => cardIds.includes(card.id) && card.userId === userId,
           );
 
           const gainedPoint = ownedCards.reduce(
@@ -414,9 +497,7 @@ module.exports = {
             user.coin || 0,
           );
 
-          return res
-            .status(200)
-            .json({ message: messages.success.RETRIEVED });
+          return res.status(200).json({ message: messages.success.RETRIEVED });
         } catch (error: any) {
           const { status, message } = handleError(
             error,
@@ -437,6 +518,10 @@ module.exports = {
         return res
           .status(400)
           .json({ error: messages.errors.EMAIL_PHONE_REQUIRED });
+      }
+
+      if (!isValidEmail(email)) {
+        return res.status(400).json({ error: "Invalid email format" });
       }
 
       try {

@@ -305,6 +305,7 @@
     "email": "メールアドレス",
     "password": "パスワード",
     "name": "お名前",
+    "postal-code": "郵便番号",
     "address": "住所",
     "phone": "電話番号",
     "submit": "登録する",
@@ -315,9 +316,15 @@
     "error-required": "全ての項目を入力してください",
     "error-email": "メールアドレスに@を含める必要があります",
     "error-password": "パスワードは5文字以上にしてください",
+    "error-postal-code": "郵便番号を入力してください",
     "error-phone": "電話番号は数字のみで入力してください",
     "error-email-exists": "このメールアドレスは既に登録されています",
-    "error-phone-exists": "この電話番号は既に登録されています"
+    "error-phone-exists": "この電話番号は既に登録されています",
+    "error-address-not-found": "郵便番号に対応する住所が見つかりません",
+    "error-address-lookup": "住所検索に失敗しました",
+    "success-address-lookup": "住所を自動入力しました",
+    "lookup-address": "住所を検索",
+    "loading": "検索中..."
   },
 
   "signup-email-sent": {
@@ -364,6 +371,8 @@
     "address-placeholder": "東京都港区...",
     "email-label": "メールアドレス",
     "email-placeholder": "example@example.com",
+    "postal-code-label": "郵便番号",
+    "postal-code-placeholder": "123-4567",
     "current-password": "現在のパスワード",
     "new-password": "新しいパスワード",
     "confirm-password": "新しいパスワード（確認）",
@@ -376,11 +385,16 @@
     "error-required": "全ての項目を入力してください",
     "error-email": "メールアドレスに@を含める必要があります",
     "error-phone": "電話番号は数字のみで入力してください",
+    "error-postal-code": "郵便番号を入力してください",
     "error-password": "パスワードは5文字以上にしてください",
     "error-password-mismatch": "新しいパスワードが一致しません",
     "error-password-same": "新しいパスワードは現在のパスワードと異なる必要があります",
     "error-current-password": "現在のパスワードが正しくありません",
-    "error-email-exists": "このメールアドレスは既に登録されています"
+    "error-email-exists": "このメールアドレスは既に登録されています",
+    "error-address-not-found": "郵便番号に対応する住所が見つかりません",
+    "error-address-lookup": "住所検索に失敗しました",
+    "success-address-lookup": "住所を自動入力しました",
+    "lookup-address": "住所を検索"
   },
 
   "card-history": {
@@ -416,6 +430,7 @@
       "password": "パスワード",
       "name": "名前",
       "coin": "コイン数",
+      "postal-code": "郵便番号",
       "address": "住所",
       "phone": "電話番号"
     },

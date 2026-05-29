@@ -21,6 +21,7 @@ describe('UserDetailDialogComponent', () => {
     coin: 1000,
     address: '123 Main St',
     phone: '09012345678',
+    postalCode: '123-4567',
   };
 
   beforeEach(async () => {

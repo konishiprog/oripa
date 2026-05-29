@@ -20,6 +20,14 @@ function getResendClient(): Resend {
   return resend;
 }
 
+function validateEmail(email: string): boolean {
+  if (!email || typeof email !== "string") {
+    return false;
+  }
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  return emailRegex.test(email);
+}
+
 function loadTemplateFile(name: string, ext: "html" | "css"): string {
   const cacheKey = `${name}.${ext}`;
   const cached = fileCache.get(cacheKey);
@@ -72,6 +80,11 @@ export async function sendSignupEmail(
     throw new Error("RESEND_API_KEY is not configured");
   }
 
+  if (!validateEmail(to)) {
+    console.error("[EMAIL] Invalid email address:", to);
+    throw new Error("Invalid email address format");
+  }
+
   try {
     const client = getResendClient();
     const emailFrom = process.env.EMAIL_FROM;
@@ -105,6 +118,11 @@ export async function sendPhoneChangeEmail(
   if (!process.env.RESEND_API_KEY) {
     console.error("[EMAIL] RESEND_API_KEY is not set");
     throw new Error("RESEND_API_KEY is not configured");
+  }
+
+  if (!validateEmail(to)) {
+    console.error("[EMAIL] Invalid email address:", to);
+    throw new Error("Invalid email address format");
   }
 
   try {
@@ -146,6 +164,11 @@ export async function sendAddressChangeEmail(
     throw new Error("RESEND_API_KEY is not configured");
   }
 
+  if (!validateEmail(to)) {
+    console.error("[EMAIL] Invalid email address:", to);
+    throw new Error("Invalid email address format");
+  }
+
   try {
     const client = getResendClient();
     const emailFrom = process.env.EMAIL_FROM;
@@ -181,6 +204,11 @@ export async function sendPasswordChangeEmail(
   if (!process.env.RESEND_API_KEY) {
     console.error("[EMAIL] RESEND_API_KEY is not set");
     throw new Error("RESEND_API_KEY is not configured");
+  }
+
+  if (!validateEmail(to)) {
+    console.error("[EMAIL] Invalid email address:", to);
+    throw new Error("Invalid email address format");
   }
 
   try {
@@ -220,6 +248,12 @@ export async function sendAdminCardShippingRequestEmail(
     throw new Error("RESEND_API_KEY is not configured");
   }
 
+  const invalidEmails = adminEmails.filter((email) => !validateEmail(email));
+  if (invalidEmails.length > 0) {
+    console.error("[EMAIL] Invalid email addresses:", invalidEmails);
+    throw new Error("Invalid email address format");
+  }
+
   try {
     const client = getResendClient();
     const emailFrom = process.env.EMAIL_FROM;
@@ -227,16 +261,13 @@ export async function sendAdminCardShippingRequestEmail(
       throw new Error("EMAIL_FROM is not configured");
     }
 
-    const { subject, html } = renderTemplate(
-      "adminCardShippingRequest",
-      {
-        userName,
-        cardName,
-        gachaName,
-        address,
-        phone,
-      },
-    );
+    const { subject, html } = renderTemplate("adminCardShippingRequest", {
+      userName,
+      cardName,
+      gachaName,
+      address,
+      phone,
+    });
 
     for (const adminEmail of adminEmails) {
       const result = await client.emails.send({
@@ -267,6 +298,11 @@ export async function sendCardShippingPendingEmail(
   if (!process.env.RESEND_API_KEY) {
     console.error("[EMAIL] RESEND_API_KEY is not set");
     throw new Error("RESEND_API_KEY is not configured");
+  }
+
+  if (!validateEmail(to)) {
+    console.error("[EMAIL] Invalid email address:", to);
+    throw new Error("Invalid email address format");
   }
 
   try {
@@ -310,6 +346,11 @@ export async function sendCardShippedEmail(
     throw new Error("RESEND_API_KEY is not configured");
   }
 
+  if (!validateEmail(to)) {
+    console.error("[EMAIL] Invalid email address:", to);
+    throw new Error("Invalid email address format");
+  }
+
   try {
     const client = getResendClient();
     const emailFrom = process.env.EMAIL_FROM;
@@ -349,6 +390,11 @@ export async function sendCardExchangeEmail(
   if (!process.env.RESEND_API_KEY) {
     console.error("[EMAIL] RESEND_API_KEY is not set");
     throw new Error("RESEND_API_KEY is not configured");
+  }
+
+  if (!validateEmail(to)) {
+    console.error("[EMAIL] Invalid email address:", to);
+    throw new Error("Invalid email address format");
   }
 
   try {
@@ -393,6 +439,11 @@ export async function sendCoinPurchaseEmail(
     throw new Error("RESEND_API_KEY is not configured");
   }
 
+  if (!validateEmail(to)) {
+    console.error("[EMAIL] Invalid email address:", to);
+    throw new Error("Invalid email address format");
+  }
+
   try {
     const client = getResendClient();
     const emailFrom = process.env.EMAIL_FROM;
@@ -433,6 +484,11 @@ export async function sendEmailChangeEmail(
     throw new Error("RESEND_API_KEY is not configured");
   }
 
+  if (!validateEmail(to)) {
+    console.error("[EMAIL] Invalid email address:", to);
+    throw new Error("Invalid email address format");
+  }
+
   try {
     const client = getResendClient();
     const emailFrom = process.env.EMAIL_FROM;
@@ -468,6 +524,11 @@ export async function sendPasswordResetEmail(
   if (!process.env.RESEND_API_KEY) {
     console.error("[EMAIL] RESEND_API_KEY is not set");
     throw new Error("RESEND_API_KEY is not configured");
+  }
+
+  if (!validateEmail(to)) {
+    console.error("[EMAIL] Invalid email address:", to);
+    throw new Error("Invalid email address format");
   }
 
   try {

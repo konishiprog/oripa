@@ -27,6 +27,7 @@ describe('UserMyPageComponent', () => {
     name: 'Test User',
     address: '123 Test St',
     phone: '555-0123',
+    postalCode: '123-4567',
     coin: 100,
     specialPoint: 0,
   };
@@ -83,6 +84,7 @@ describe('UserMyPageComponent', () => {
     expect(component.addressInput).toBe(mockUser.address);
     expect(component.emailInput).toBe(mockUser.email);
     expect(component.phoneInput).toBe(mockUser.phone);
+    expect(component.postalCodeInput).toBe(mockUser.postalCode);
     expect(component.isLoading).toBe(false);
   });
 
@@ -107,10 +109,22 @@ describe('UserMyPageComponent', () => {
     expect(component.errorMessage).toBe('');
   });
 
+  it('should validate postal code input', async () => {
+    component.user = mockUser;
+    component.postalCodeInput = '';
+    component.addressInput = '123 Test St';
+    await component.saveAddressAndPostalCode();
+    expect(mockTranslateService.instant).toHaveBeenCalledWith(
+      'my-page.error-postal-code',
+    );
+    expect(component.errorMessage).toBe('my-page.error-postal-code');
+  });
+
   it('should validate address input', async () => {
     component.user = mockUser;
+    component.postalCodeInput = '123-4567';
     component.addressInput = '';
-    await component.saveAddress();
+    await component.saveAddressAndPostalCode();
     expect(mockTranslateService.instant).toHaveBeenCalledWith(
       'my-page.error-required',
     );

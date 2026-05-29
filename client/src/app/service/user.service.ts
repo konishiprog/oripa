@@ -14,6 +14,7 @@ export interface User {
   name: string;
   address: string;
   phone: string;
+  postalCode: string;
   coin: number;
   specialPoint: number;
 }
@@ -24,6 +25,7 @@ export interface CreateUserPayload {
   name: string;
   address: string;
   phone: string;
+  postalCode?: string;
 }
 
 export interface ChargeResult {
@@ -138,6 +140,7 @@ export class UserService {
       name: string;
       address: string;
       phone: string;
+      postalCode: string;
       coin: number;
     }>,
   ): Promise<User> {
@@ -293,5 +296,24 @@ export class UserService {
    */
   clearSpecialPoint(): void {
     localStorage.removeItem(this.SPECIAL_POINT_STORAGE_KEY);
+  }
+
+  async getAddressByPostalCode(
+    postalCode: string,
+  ): Promise<{ address: string; prefcode: string } | null> {
+    try {
+      const response = await lastValueFrom(
+        this.http.get<{
+          message: string;
+          data: { address: string; prefcode: string };
+        }>(`${this.apiConfig.domain}/api/user/postal-code/${postalCode}`, {
+          headers: this.apiConfig.headers,
+        }),
+      );
+      return response.data;
+    } catch (error) {
+      console.error('Failed to fetch address:', error);
+      return null;
+    }
   }
 }

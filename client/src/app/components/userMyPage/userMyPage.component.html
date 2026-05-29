@@ -79,6 +79,34 @@
             {{ errorMessage }}
           </div>
           <div class="form-group">
+            <label for="postalCode">{{
+              "my-page.postal-code-label" | translate
+            }}</label>
+            <div class="postal-code-input-wrapper">
+              <input
+                id="postalCode"
+                type="text"
+                [(ngModel)]="postalCodeInput"
+                (input)="formatPostalCode($event)"
+                [placeholder]="'my-page.postal-code-placeholder' | translate"
+                [maxlength]="POSTAL_CODE_MAX_LENGTH"
+                [disabled]="isSaving || isLookingUpAddress"
+              />
+              <button
+                type="button"
+                class="lookup-btn"
+                [disabled]="isSaving || isLookingUpAddress || !postalCodeInput"
+                (click)="lookupAddressFromPostalCode()"
+              >
+                {{
+                  isLookingUpAddress
+                    ? ("my-page.loading" | translate)
+                    : ("my-page.lookup-address" | translate)
+                }}
+              </button>
+            </div>
+          </div>
+          <div class="form-group">
             <label for="address">{{
               "my-page.address-label" | translate
             }}</label>
@@ -94,7 +122,7 @@
             type="button"
             class="save-btn"
             [disabled]="isSaving"
-            (click)="saveAddress()"
+            (click)="saveAddressAndPostalCode()"
           >
             {{ "my-page.save" | translate }}
           </button>
@@ -239,9 +267,7 @@
             {{ errorMessage }}
           </div>
           <div class="form-group">
-            <label for="phone">{{
-              "my-page.phone-label" | translate
-            }}</label>
+            <label for="phone">{{ "my-page.phone-label" | translate }}</label>
             <input
               id="phone"
               type="tel"

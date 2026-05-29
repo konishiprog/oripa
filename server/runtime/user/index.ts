@@ -42,6 +42,7 @@ async function createPending(payload: {
   name: string;
   address: string;
   phone: string;
+  postalCode?: string;
 }) {
   if (
     Array.from(userCache.values()).some(
@@ -88,6 +89,7 @@ async function createPending(payload: {
     name: payload.name,
     address: payload.address,
     phone: payload.phone,
+    postalCode: payload.postalCode,
     expiresAt,
   });
 
@@ -121,6 +123,7 @@ async function verifyEmail(token: string) {
     name: pendingPlain.name,
     address: pendingPlain.address,
     phone: pendingPlain.phone,
+    postalCode: pendingPlain.postalCode,
     coin: 0,
   });
 
@@ -254,6 +257,7 @@ async function update(
     name?: string;
     address?: string;
     phone?: string;
+    postalCode?: string;
     coin?: number;
     specialPoint?: number;
   },
@@ -287,6 +291,7 @@ async function update(
   if (payload.name !== undefined) updateData.name = payload.name;
   if (payload.address !== undefined) updateData.address = payload.address;
   if (payload.phone !== undefined) updateData.phone = payload.phone;
+  if (payload.postalCode !== undefined) updateData.postalCode = payload.postalCode;
   if (payload.coin !== undefined) updateData.coin = payload.coin;
   if (payload.specialPoint !== undefined)
     updateData.specialPoint = payload.specialPoint;
