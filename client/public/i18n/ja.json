@@ -410,7 +410,7 @@
     "page-title": "ユーザー管理",
     "desc": "登録ユーザーの一覧を表示",
     "total-users": "総ユーザー数",
-    "search-placeholder": "メールアドレス・名前・電話番号",
+    "search-placeholder": "名前・電話番号・住所",
     "table": {
       "email": "メールアドレス",
       "password": "パスワード",
@@ -504,8 +504,8 @@
   },
 
   "common": {
-    "app-name": "net-oripa",
     "console": "Console",
+    "optional": "オプション",
     "confirm": "確認",
     "confirm-update": "を変更します。よろしいですか？",
     "ok": "はい",

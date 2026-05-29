@@ -115,14 +115,6 @@ describe('UserManagementComponent', () => {
       await component.loadUsers();
     });
 
-    it('should filter users by email', () => {
-      component.searchQuery = 'user1@example.com';
-      component.applyFilters();
-
-      expect(component.filteredUsers.length).toBe(1);
-      expect(component.filteredUsers[0].email).toBe('user1@example.com');
-    });
-
     it('should filter users by name', () => {
       component.searchQuery = 'User Two';
       component.applyFilters();
@@ -137,6 +129,14 @@ describe('UserManagementComponent', () => {
 
       expect(component.filteredUsers.length).toBe(1);
       expect(component.filteredUsers[0].phone).toBe('09012345678');
+    });
+
+    it('should filter users by address', () => {
+      component.searchQuery = '456 Oak Ave';
+      component.applyFilters();
+
+      expect(component.filteredUsers.length).toBe(1);
+      expect(component.filteredUsers[0].address).toBe('456 Oak Ave');
     });
 
     it('should reset to page 1 after filtering', () => {

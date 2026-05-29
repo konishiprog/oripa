@@ -117,9 +117,9 @@ export class UserManagementComponent implements OnInit {
     this.filteredUsers = query
       ? this.users.filter(
           (user) =>
-            user.email.toLowerCase().includes(query) ||
+            user.phone.toLowerCase().includes(query) ||
             user.name.toLowerCase().includes(query) ||
-            user.phone.toLowerCase().includes(query),
+            user.address.toLowerCase().includes(query),
         )
       : [...this.users];
     this.currentPage = 1;

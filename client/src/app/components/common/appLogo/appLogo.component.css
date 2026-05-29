@@ -5,8 +5,8 @@
 }
 
 .header-logo-icon {
-  width: 36px;
-  height: 36px;
+  width: 52px;
+  height: 52px;
   background: linear-gradient(135deg, #805ad5, #6b46c1);
   border-radius: 9px;
   display: flex;
@@ -16,15 +16,10 @@
 }
 
 .header-logo-icon svg {
-  width: 18px;
-  height: 18px;
+  width: 28px;
+  height: 28px;
 }
 
-.header-logo-text {
-  font-size: 15px;
-  font-weight: 700;
-  color: #1a202c;
-}
 
 .sidebar-logo {
   display: flex;
@@ -50,11 +45,6 @@
   height: 24px;
 }
 
-.sidebar-logo-text {
-  font-size: 16px;
-  font-weight: 700;
-  color: #1a202c;
-}
 
 .logo {
   display: flex;
@@ -78,8 +68,3 @@
   height: 18px;
 }
 
-.logo-text {
-  font-size: 15px;
-  font-weight: 700;
-  color: #1a202c;
-}

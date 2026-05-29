@@ -229,7 +229,12 @@ describe('CreateCardComponent', () => {
     expect(mockCardService.createCard).not.toHaveBeenCalled();
   });
 
-  it('should show error when imageBackFile is missing on submit', async () => {
+  it('should use no-image.svg when imageBackFile is missing on submit', async () => {
+    (globalThis as any).fetch = jest.fn().mockResolvedValue({
+      blob: () =>
+        Promise.resolve(new Blob(['<svg></svg>'], { type: 'image/svg+xml' })),
+    });
+
     component.name = 'Test Card';
     component.cardType = 'SSR';
     component.exchangeType = 'SHIPPING_ONLY';
@@ -238,8 +243,9 @@ describe('CreateCardComponent', () => {
 
     await component.onSubmit();
 
-    expect(component.errorMessage).toBe('card-create.error-required');
-    expect(mockCardService.createCard).not.toHaveBeenCalled();
+    expect(mockCardService.createCard).toHaveBeenCalled();
+    const callArgs = mockCardService.createCard.mock.calls[0][0];
+    expect(callArgs.imageBackFile).toBeDefined();
   });
 
   it('should call createCard and close dialog on success', async () => {

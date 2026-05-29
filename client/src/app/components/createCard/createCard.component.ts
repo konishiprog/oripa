@@ -191,7 +191,7 @@ export class CreateCardComponent implements OnInit {
       !this.name ||
       !this.cardType ||
       !this.exchangeType ||
-      (requiresNewImages && (!this.imageFrontFile || !this.imageBackFile))
+      (requiresNewImages && !this.imageFrontFile)
     ) {
       this.showError('card-create.error-required');
       return;
@@ -212,6 +212,9 @@ export class CreateCardComponent implements OnInit {
     this.errorMessage = '';
 
     try {
+      const imageBackFileToUse =
+        this.imageBackFile || (await this.loadNoImageFile());
+
       if (this.isEditMode) {
         if (this.editingCardId === null) {
           this.showError('card-create.error');
@@ -235,7 +238,7 @@ export class CreateCardComponent implements OnInit {
           exchangeType: this.exchangeType,
           exchangePoints: this.isPointExchangeable ? this.exchangePoints : null,
           imageFrontFile: this.imageFrontFile!,
-          imageBackFile: this.imageBackFile!,
+          imageBackFile: imageBackFileToUse,
         });
         this.showSuccess('card-create.success');
         this.dialogRef?.close({ mode: 'create', data: created.data });
@@ -251,6 +254,12 @@ export class CreateCardComponent implements OnInit {
     } finally {
       this.isLoading = false;
     }
+  }
+
+  private async loadNoImageFile(): Promise<File> {
+    const response = await fetch('/assets/icons/no-image.svg');
+    const blob = await response.blob();
+    return new File([blob], 'no-image.svg', { type: 'image/svg+xml' });
   }
 
   private showSuccess(key: string): void {
