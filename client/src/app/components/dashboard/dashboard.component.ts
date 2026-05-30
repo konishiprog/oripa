@@ -5,8 +5,13 @@ import {
   GachaFormMode,
 } from '../createGacha/createGacha.component';
 import { CreateCardComponent } from '../createCard/createCard.component';
+import {
+  CreateGenreComponent,
+  GenreFormMode,
+} from '../createGenre/createGenre.component';
 import { GachaService } from '../../service/gacha.service';
 import { CardService } from '../../service/card.service';
+import { GenreService, Genre } from '../../service/genre.service';
 import { Gacha } from '../gachaTable/gachaTable.component';
 import { Card } from '../cardTable/cardTable.component';
 import { CARD_STATUS } from '../../constants/card';
@@ -14,6 +19,7 @@ import { CARD_STATUS } from '../../constants/card';
 enum ViewMode {
   Gacha = 'gacha',
   Card = 'card',
+  Genre = 'genre',
 }
 
 @Component({
@@ -30,17 +36,29 @@ export class DashboardComponent implements OnInit {
 
   gachas: Gacha[] = [];
   cards: Card[] = [];
+  genres: Genre[] = [];
   viewMode: ViewMode = ViewMode.Gacha;
 
   constructor(
     private dialog: MatDialog,
     private gachaService: GachaService,
     private cardService: CardService,
+    private genreService: GenreService,
     private cdr: ChangeDetectorRef,
   ) {}
 
   ngOnInit(): void {
     this.loadGachas();
+    this.loadGenres();
+  }
+
+  async loadGenres(): Promise<void> {
+    try {
+      this.genres = await this.genreService.getAllGenres();
+      this.cdr.markForCheck();
+    } catch (error) {
+      console.error('Failed to load genres:', error);
+    }
   }
 
   async loadGachas(): Promise<void> {
@@ -49,6 +67,8 @@ export class DashboardComponent implements OnInit {
       this.gachas = data.map((gacha: any) => ({
         id: gacha.id,
         name: gacha.name,
+        genreId: gacha.genreId ?? null,
+        genreName: gacha.genreName ?? '',
         headerImage: gacha.headerImage,
         consumptionType: gacha.consumptionType ?? 'COIN',
         cost: gacha.cost,
@@ -82,6 +102,31 @@ export class DashboardComponent implements OnInit {
     this.viewMode = view;
   }
 
+  get primaryActionLabel(): string {
+    switch (this.viewMode) {
+      case ViewMode.Card:
+        return 'dashboard.create-card';
+      case ViewMode.Genre:
+        return 'dashboard.create-genre';
+      default:
+        return 'dashboard.create-box';
+    }
+  }
+
+  onPrimaryAction(): void {
+    switch (this.viewMode) {
+      case ViewMode.Card:
+        this.createNewCard();
+        break;
+      case ViewMode.Genre:
+        this.createNewGenre();
+        break;
+      default:
+        this.createNewGacha();
+        break;
+    }
+  }
+
   getTotalGachaCount(): number {
     return this.gachas.length;
   }
@@ -108,6 +153,8 @@ export class DashboardComponent implements OnInit {
             {
               id: result.data.id,
               name: result.data.name,
+              genreId: result.data.genreId ?? null,
+              genreName: result.data.genreName ?? '',
               headerImage: result.data.headerImage,
               consumptionType: result.data.consumptionType ?? 'COIN',
               cost: result.data.cost,
@@ -128,12 +175,46 @@ export class DashboardComponent implements OnInit {
     this.loadGachas();
   }
 
+  createNewCard(): void {
+    const dialogRef = this.dialog.open(CreateCardComponent, {
+      width: '500px',
+      data: {
+        gachaId: null,
+        gachaName: null,
+        gachas: this.gachas,
+      },
+    });
+
+    dialogRef.afterClosed().subscribe(async (result) => {
+      if (result?.mode === 'create' && result?.data) {
+        await this.refreshCardsForGacha(
+          result.data.gachaId,
+          result.data.gachaName,
+        );
+      }
+    });
+  }
+
+  createNewGenre(): void {
+    const dialogRef = this.dialog.open(CreateGenreComponent, {
+      width: '480px',
+      data: { mode: GenreFormMode.Create },
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result?.mode === 'create' && result?.data) {
+        this.loadGenres();
+      }
+    });
+  }
+
   openCardRegistration(gacha: Gacha): void {
     const dialogRef = this.dialog.open(CreateCardComponent, {
       width: '500px',
       data: {
         gachaId: gacha.id,
         gachaName: gacha.name,
+        gachas: this.gachas,
       },
     });
 
@@ -150,9 +231,13 @@ export class DashboardComponent implements OnInit {
   ): Promise<void> {
     try {
       const cards = await this.cardService.getCardsByGachaId(gachaId);
-      const notDrawnCards = cards.filter((card: any) => card.isDrawn === CARD_STATUS.NOT_DRAWN);
+      const notDrawnCards = cards.filter(
+        (card: any) => card.isDrawn === CARD_STATUS.NOT_DRAWN,
+      );
       this.gachas = this.gachas.map((gacha) =>
-        gacha.id === gachaId ? { ...gacha, cards: notDrawnCards.length } : gacha,
+        gacha.id === gachaId
+          ? { ...gacha, cards: notDrawnCards.length }
+          : gacha,
       );
       this.cards = [
         ...this.cards.filter((card) => card.gachaId !== gachaId),

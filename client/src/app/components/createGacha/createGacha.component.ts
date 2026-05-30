@@ -9,6 +9,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { GachaService } from '../../service/gacha.service';
+import { GenreService, Genre } from '../../service/genre.service';
 import { ApiConfigService } from '../../service/api-config.service';
 
 export enum GachaFormMode {
@@ -24,6 +25,7 @@ export enum ConsumptionType {
 export interface GachaDialogPayload {
   id: string;
   name: string;
+  genreId?: string | null;
   headerImage: string;
   consumptionType: string;
   cost: number;
@@ -58,6 +60,8 @@ const toDateInputValue = (value: string | null | undefined): string => {
 })
 export class CreateGachaComponent implements OnInit {
   name: string = '';
+  genres: Genre[] = [];
+  selectedGenreId: string = '';
   headerImageFile: File | null = null;
   headerImagePreview: SafeUrl | null = null;
   consumptionType: ConsumptionType = ConsumptionType.Coin;
@@ -75,6 +79,7 @@ export class CreateGachaComponent implements OnInit {
 
   constructor(
     private gachaService: GachaService,
+    private genreService: GenreService,
     private translateService: TranslateService,
     private cdr: ChangeDetectorRef,
     private sanitizer: DomSanitizer,
@@ -87,6 +92,8 @@ export class CreateGachaComponent implements OnInit {
     this.translateService.setDefaultLang('ja');
     this.translateService.use('ja');
 
+    this.loadGenres();
+
     if (this.data?.mode) {
       this.mode = this.data.mode;
     }
@@ -96,9 +103,19 @@ export class CreateGachaComponent implements OnInit {
     }
   }
 
+  private async loadGenres(): Promise<void> {
+    try {
+      this.genres = await this.genreService.getAllGenres();
+      this.cdr.detectChanges();
+    } catch (error) {
+      console.error('Failed to load genres:', error);
+    }
+  }
+
   private prefillFromGacha(gacha: GachaDialogPayload): void {
     this.editingGachaId = gacha.id;
     this.name = gacha.name;
+    this.selectedGenreId = gacha.genreId ?? '';
     this.consumptionType =
       gacha.consumptionType === ConsumptionType.SpecialPoint
         ? ConsumptionType.SpecialPoint
@@ -188,6 +205,7 @@ export class CreateGachaComponent implements OnInit {
           this.editingGachaId,
           {
             name: this.name,
+            genreId: this.selectedGenreId || null,
             consumptionType: this.consumptionType,
             cost: Number(this.cost),
             oncePerUser: this.oncePerUser,
@@ -202,6 +220,7 @@ export class CreateGachaComponent implements OnInit {
       } else {
         const created = await this.gachaService.createGacha({
           name: this.name,
+          genreId: this.selectedGenreId || null,
           consumptionType: this.consumptionType,
           cost: Number(this.cost),
           oncePerUser: this.oncePerUser,

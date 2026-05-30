@@ -2,6 +2,7 @@ import 'zone.js';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { CreateGachaComponent, GachaFormMode } from './createGacha.component';
 import { GachaService } from '../../service/gacha.service';
+import { GenreService } from '../../service/genre.service';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { DomSanitizer } from '@angular/platform-browser';
@@ -13,6 +14,7 @@ describe('CreateGachaComponent', () => {
   let component: CreateGachaComponent;
   let fixture: ComponentFixture<CreateGachaComponent>;
   let mockGachaService: any;
+  let mockGenreService: any;
   let mockTranslateService: any;
   let mockDialogRef: any;
   let mockSanitizer: any;
@@ -42,12 +44,16 @@ describe('CreateGachaComponent', () => {
       bypassSecurityTrustHtml: jest.fn((value) => value),
     };
     mockApiConfigService = { domain: 'http://localhost:3000' };
+    mockGenreService = {
+      getAllGenres: jest.fn().mockResolvedValue([]),
+    };
 
     await TestBed.configureTestingModule({
       declarations: [CreateGachaComponent],
       imports: [TranslateModule.forRoot(), FormsModule],
       providers: [
         { provide: GachaService, useValue: mockGachaService },
+        { provide: GenreService, useValue: mockGenreService },
         { provide: TranslateService, useValue: mockTranslateService },
         { provide: MatDialogRef, useValue: mockDialogRef },
         { provide: DomSanitizer, useValue: mockSanitizer },
@@ -99,6 +105,7 @@ describe('CreateGachaComponent', () => {
       imports: [TranslateModule.forRoot(), FormsModule],
       providers: [
         { provide: GachaService, useValue: mockGachaService },
+        { provide: GenreService, useValue: mockGenreService },
         { provide: TranslateService, useValue: mockTranslateService },
         { provide: MatDialogRef, useValue: mockDialogRef },
         { provide: DomSanitizer, useValue: mockSanitizer },
@@ -138,6 +145,7 @@ describe('CreateGachaComponent', () => {
       imports: [TranslateModule.forRoot(), FormsModule],
       providers: [
         { provide: GachaService, useValue: mockGachaService },
+        { provide: GenreService, useValue: mockGenreService },
         { provide: TranslateService, useValue: mockTranslateService },
         { provide: MatDialogRef, useValue: mockDialogRef },
         { provide: DomSanitizer, useValue: mockSanitizer },
@@ -173,6 +181,7 @@ describe('CreateGachaComponent', () => {
       imports: [TranslateModule.forRoot(), FormsModule],
       providers: [
         { provide: GachaService, useValue: mockGachaService },
+        { provide: GenreService, useValue: mockGenreService },
         { provide: TranslateService, useValue: mockTranslateService },
         { provide: MatDialogRef, useValue: mockDialogRef },
         { provide: DomSanitizer, useValue: mockSanitizer },
@@ -209,6 +218,7 @@ describe('CreateGachaComponent', () => {
       imports: [TranslateModule.forRoot(), FormsModule],
       providers: [
         { provide: GachaService, useValue: mockGachaService },
+        { provide: GenreService, useValue: mockGenreService },
         { provide: TranslateService, useValue: mockTranslateService },
         { provide: MatDialogRef, useValue: mockDialogRef },
         { provide: DomSanitizer, useValue: mockSanitizer },
@@ -328,6 +338,7 @@ describe('CreateGachaComponent', () => {
 
     expect(mockGachaService.createGacha).toHaveBeenCalledWith({
       name: 'Box A',
+      genreId: null,
       consumptionType: 'COIN',
       cost: 100,
       oncePerUser: false,
@@ -359,9 +370,7 @@ describe('CreateGachaComponent', () => {
   });
 
   it('should show generic error on other API errors during create', async () => {
-    mockGachaService.createGacha.mockRejectedValueOnce(
-      new Error('API Error'),
-    );
+    mockGachaService.createGacha.mockRejectedValueOnce(new Error('API Error'));
     component.mode = GachaFormMode.Create;
     component.name = 'Box';
     component.cost = 100;
@@ -388,6 +397,7 @@ describe('CreateGachaComponent', () => {
 
     expect(mockGachaService.updateGacha).toHaveBeenCalledWith(1, {
       name: 'Box Updated',
+      genreId: null,
       consumptionType: 'COIN',
       cost: 150,
       oncePerUser: false,
@@ -413,6 +423,7 @@ describe('CreateGachaComponent', () => {
 
     expect(mockGachaService.updateGacha).toHaveBeenCalledWith(1, {
       name: 'Box Updated',
+      genreId: null,
       consumptionType: 'COIN',
       cost: 150,
       oncePerUser: false,

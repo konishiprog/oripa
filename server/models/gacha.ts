@@ -15,6 +15,10 @@ module.exports = (sequelize: any, DataTypes: any) => {
         as: "userDraws",
         onDelete: "CASCADE",
       });
+      Gacha.belongsTo(models.Genre, {
+        foreignKey: "genreId",
+        as: "genre",
+      });
     }
   }
 
@@ -30,6 +34,10 @@ module.exports = (sequelize: any, DataTypes: any) => {
       },
       name: {
         type: DataTypes.STRING,
+      },
+      genreId: {
+        type: DataTypes.UUID,
+        allowNull: true,
       },
       consumptionType: {
         type: DataTypes.STRING,

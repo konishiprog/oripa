@@ -29,6 +29,23 @@
       </div>
 
       <div class="form-group">
+        <label for="genre">{{ "gacha-create.genre" | translate }}</label>
+        <select
+          id="genre"
+          [(ngModel)]="selectedGenreId"
+          name="genre"
+          [disabled]="isLoading"
+        >
+          <option value="">
+            {{ "gacha-create.genre-placeholder" | translate }}
+          </option>
+          <option *ngFor="let genre of genres" [value]="genre.id">
+            {{ genre.name }}
+          </option>
+        </select>
+      </div>
+
+      <div class="form-group">
         <label for="headerImage">{{
           "gacha-create.header-image" | translate
         }}</label>

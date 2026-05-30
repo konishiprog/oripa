@@ -1,0 +1,34 @@
+<app-table-controls
+  [placeholder]="'dashboard.genre-table.search-placeholder' | translate"
+  [showFilterButton]="false"
+  [currentPage]="currentPage"
+  [totalItems]="filteredGenres.length"
+  [itemsPerPage]="itemsPerPage"
+  (search)="onSearchInput($event)"
+  (pageChange)="onPageChange($event)"
+  (itemsPerPageChange)="onItemsPerPageChange($event)"
+></app-table-controls>
+
+<div class="table-card">
+  <div class="table-scroll">
+    <table>
+      <thead>
+        <tr>
+          <th>{{ "dashboard.genre-table.name" | translate }}</th>
+          <th class="table-header-action"></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let genre of getDisplayedGenres()">
+          <td>{{ genre.name }}</td>
+          <td class="table-action-cell">
+            <app-action-menu
+              (edit)="editGenre(genre)"
+              (delete)="deleteGenre(genre)"
+            ></app-action-menu>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

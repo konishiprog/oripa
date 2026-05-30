@@ -3,8 +3,8 @@
     <div class="page-title">{{ "dashboard.page-title" | translate }}</div>
     <div class="page-desc">{{ "dashboard.desc" | translate }}</div>
   </div>
-  <button class="btn btn-primary" (click)="createNewGacha()">
-    {{ "dashboard.create-box" | translate }}
+  <button class="btn btn-primary" (click)="onPrimaryAction()">
+    {{ primaryActionLabel | translate }}
   </button>
 </div>
 
@@ -40,6 +40,16 @@
   >
     {{ "dashboard.view-toggle.card" | translate }}
   </button>
+  <button
+    type="button"
+    role="tab"
+    class="view-toggle-btn"
+    [class.active]="viewMode === ViewMode.Genre"
+    [attr.aria-selected]="viewMode === ViewMode.Genre"
+    (click)="setViewMode(ViewMode.Genre)"
+  >
+    {{ "dashboard.view-toggle.genre" | translate }}
+  </button>
 </div>
 
 <app-gacha-table
@@ -54,3 +64,9 @@
   [cards]="cards"
   (cardsUpdated)="onCardsUpdated()"
 ></app-card-table>
+
+<app-genre-table
+  *ngIf="viewMode === ViewMode.Genre"
+  [genres]="genres"
+  (genresUpdated)="loadGenres()"
+></app-genre-table>

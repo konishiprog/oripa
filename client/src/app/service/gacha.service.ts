@@ -9,6 +9,7 @@ import { ApiConfigService } from './api-config.service';
 
 export interface CreateGachaPayload {
   name: string;
+  genreId?: string | null;
   consumptionType: string;
   cost: number;
   oncePerUser: boolean;
@@ -20,6 +21,7 @@ export interface CreateGachaPayload {
 
 export interface UpdateGachaPayload {
   name: string;
+  genreId?: string | null;
   consumptionType: string;
   cost: number;
   oncePerUser: boolean;
@@ -46,6 +48,9 @@ export class GachaService {
   async createGacha(payload: CreateGachaPayload) {
     const formData = new FormData();
     formData.append('name', payload.name);
+    if (payload.genreId) {
+      formData.append('genreId', payload.genreId);
+    }
     formData.append('consumptionType', payload.consumptionType);
     formData.append('cost', payload.cost.toString());
     formData.append('oncePerUser', payload.oncePerUser.toString());
@@ -71,6 +76,7 @@ export class GachaService {
   async updateGacha(id: string, payload: UpdateGachaPayload) {
     const formData = new FormData();
     formData.append('name', payload.name);
+    formData.append('genreId', payload.genreId ?? '');
     formData.append('consumptionType', payload.consumptionType);
     formData.append('cost', payload.cost.toString());
     formData.append('oncePerUser', payload.oncePerUser.toString());

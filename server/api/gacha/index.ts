@@ -125,6 +125,7 @@ module.exports = {
         try {
           const {
             name,
+            genreId,
             consumptionType,
             cost,
             oncePerUser,
@@ -136,6 +137,7 @@ module.exports = {
 
           const gacha = await runtime.gacha.create({
             name,
+            genreId: genreId || null,
             consumptionType,
             cost,
             oncePerUser: oncePerUser === "true" || oncePerUser === true,
@@ -175,6 +177,7 @@ module.exports = {
         try {
           const {
             name,
+            genreId,
             consumptionType,
             cost,
             oncePerUser,
@@ -186,6 +189,7 @@ module.exports = {
 
           const gacha = await runtime.gacha.update(id, {
             name,
+            genreId: genreId !== undefined ? genreId || null : undefined,
             consumptionType,
             cost,
             oncePerUser: oncePerUser === "true" || oncePerUser === true,
