@@ -586,6 +586,20 @@
     "error-load": "購入履歴の読み込みに失敗しました"
   },
 
+  "contact": {
+    "title": "お問い合わせ",
+    "description": "ご質問・ご要望などをお送りください。内容を確認のうえ、ご登録のメールアドレスへご返信いたします。",
+    "subject": "題名",
+    "subject-placeholder": "お問い合わせの題名を入力してください",
+    "content": "お問い合わせ内容",
+    "content-placeholder": "お問い合わせ内容を入力してください",
+    "submit": "送信する",
+    "back": "戻る",
+    "success": "お問い合わせを送信しました。",
+    "error": "送信に失敗しました。時間をおいて再度お試しください。",
+    "error-required": "題名とお問い合わせ内容を入力してください"
+  },
+
   "common": {
     "console": "Console",
     "optional": "オプション",
@@ -616,7 +630,8 @@
       "logout": "ログアウト",
       "back-to-gacha": "ガチャページに戻る",
       "charge": "ポイントチャージ",
-      "menu": "メニュー"
+      "menu": "メニュー",
+      "contact": "お問い合わせ"
     },
     "actions": {
       "edit": "編集",

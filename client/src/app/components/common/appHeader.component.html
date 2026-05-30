@@ -40,6 +40,13 @@
         <button
           class="header-btn header-btn-outline"
           type="button"
+          (click)="goToContact()"
+        >
+          {{ "common.header.contact" | translate }}
+        </button>
+        <button
+          class="header-btn header-btn-outline"
+          type="button"
           (click)="logout()"
         >
           {{ "common.header.logout" | translate }}

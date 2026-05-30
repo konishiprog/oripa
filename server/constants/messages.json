@@ -62,7 +62,8 @@
     "MIGRATIONS_COMPLETED": "Migrations completed successfully",
     "SIGNUP_EMAIL_SENT": "Confirmation email has been sent. Please click the link in the email.",
     "ACCOUNT_CREATED": "Account created successfully.",
-    "PASSWORD_RESET_EMAIL_SENT": "A password reset email has been sent"
+    "PASSWORD_RESET_EMAIL_SENT": "A password reset email has been sent",
+    "CONTACT_EMAIL_SENT": "Your inquiry has been sent"
   },
   "migration": {
     "RUNNING": "Running {count} migration(s)...",

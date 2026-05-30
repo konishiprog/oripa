@@ -557,3 +557,52 @@ export async function sendPasswordResetEmail(
     throw new Error(messages.email.SEND_FAILURE_ERROR);
   }
 }
+
+export async function sendContactEmail(
+  adminEmails: string[],
+  userName: string,
+  userEmail: string,
+  title: string,
+  content: string,
+): Promise<void> {
+  if (!process.env.RESEND_API_KEY) {
+    console.error("[EMAIL] RESEND_API_KEY is not set");
+    throw new Error("RESEND_API_KEY is not configured");
+  }
+
+  const invalidEmails = adminEmails.filter((email) => !validateEmail(email));
+  if (invalidEmails.length > 0) {
+    console.error("[EMAIL] Invalid email addresses:", invalidEmails);
+    throw new Error("Invalid email address format");
+  }
+
+  try {
+    const client = getResendClient();
+    const emailFrom = process.env.EMAIL_FROM;
+    if (!emailFrom) {
+      throw new Error("EMAIL_FROM is not configured");
+    }
+
+    const { subject, html } = renderTemplate("contact", {
+      userName,
+      userEmail,
+      inquiryTitle: title,
+      content,
+    });
+
+    for (const adminEmail of adminEmails) {
+      const result = await client.emails.send({
+        from: emailFrom,
+        to: adminEmail,
+        replyTo: userEmail,
+        subject,
+        html,
+      });
+      console.log(`[EMAIL] Send result to ${adminEmail}:`, result);
+    }
+  } catch (error: any) {
+    console.error("[EMAIL] Failed to send contact email:", error);
+    console.error("[EMAIL] Error details:", error.message || error);
+    throw new Error(messages.email.SEND_FAILURE_ERROR);
+  }
+}
