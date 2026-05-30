@@ -12,6 +12,7 @@ export interface User {
   email: string;
   password: string;
   name: string;
+  nickname: string;
   coin: number;
   address: string;
   phone: string;
@@ -34,6 +35,7 @@ const MASKED_VALUE = '*****';
 const USER_TABLE_HEADERS: TableHeader[] = [
   { key: 'email', labelKey: 'user-management.table.email' },
   { key: 'password', labelKey: 'user-management.table.password' },
+  { key: 'nickname', labelKey: 'user-management.table.nickname' },
   { key: 'name', labelKey: 'user-management.table.name' },
   { key: 'coin', labelKey: 'user-management.table.coin' },
   { key: 'postalCode', labelKey: 'user-management.table.postal-code' },
@@ -44,6 +46,7 @@ const USER_TABLE_HEADERS: TableHeader[] = [
 const USER_TABLE_CELLS: TableCell[] = [
   { key: 'email', dataKey: 'email' },
   { key: 'password', dataKey: 'password', masked: true },
+  { key: 'nickname', dataKey: 'nickname' },
   { key: 'name', dataKey: 'name' },
   { key: 'coin', dataKey: 'coin' },
   { key: 'postalCode', dataKey: 'postalCode', masked: true },
@@ -93,6 +96,7 @@ export class UserManagementComponent implements OnInit {
         email: user.email ?? '',
         password: user.password ?? '',
         name: user.name ?? '',
+        nickname: user.nickname ?? '',
         coin: user.coin ?? 0,
         address: user.address ?? '',
         phone: user.phone ?? '',
@@ -123,6 +127,7 @@ export class UserManagementComponent implements OnInit {
           (user) =>
             user.phone.toLowerCase().includes(query) ||
             user.name.toLowerCase().includes(query) ||
+            user.nickname.toLowerCase().includes(query) ||
             user.address.toLowerCase().includes(query),
         )
       : [...this.users];
@@ -174,6 +179,7 @@ export class UserManagementComponent implements OnInit {
         email: updatedUser.email,
         password: updatedUser.password,
         name: updatedUser.name,
+        nickname: updatedUser.nickname,
         address: updatedUser.address,
         phone: updatedUser.phone,
         postalCode: updatedUser.postalCode,

@@ -29,6 +29,46 @@
         <button
           type="button"
           class="menu-item"
+          [class.expanded]="expandedSection === 'nickname'"
+          (click)="toggleSection('nickname')"
+        >
+          <span class="menu-label">{{ "my-page.nickname" | translate }}</span>
+          <span [innerHTML]="chevronSvg" class="menu-icon"></span>
+        </button>
+        <div *ngIf="expandedSection === 'nickname'" class="menu-detail">
+          <div *ngIf="successMessage" class="success-message">
+            {{ successMessage }}
+          </div>
+          <div *ngIf="errorMessage" class="error-message">
+            {{ errorMessage }}
+          </div>
+          <div class="form-group">
+            <label for="nickname">{{
+              "my-page.nickname-label" | translate
+            }}</label>
+            <input
+              id="nickname"
+              type="text"
+              [(ngModel)]="nicknameInput"
+              [placeholder]="'my-page.nickname-placeholder' | translate"
+              [disabled]="isSaving"
+            />
+          </div>
+          <button
+            type="button"
+            class="save-btn"
+            [disabled]="isSaving"
+            (click)="saveNickname()"
+          >
+            {{ "my-page.save" | translate }}
+          </button>
+        </div>
+      </div>
+
+      <div class="menu-item-wrapper">
+        <button
+          type="button"
+          class="menu-item"
           [class.expanded]="expandedSection === 'point'"
           (click)="toggleSection('point')"
         >

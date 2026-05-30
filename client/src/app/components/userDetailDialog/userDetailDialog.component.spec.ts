@@ -18,6 +18,7 @@ describe('UserDetailDialogComponent', () => {
     email: 'user@example.com',
     password: 'password123',
     name: 'Test User',
+    nickname: 'Tester',
     coin: 1000,
     address: '123 Main St',
     phone: '09012345678',

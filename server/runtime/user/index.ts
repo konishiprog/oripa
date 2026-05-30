@@ -40,6 +40,7 @@ async function createPending(payload: {
   email: string;
   password: string;
   name: string;
+  nickname?: string;
   address: string;
   phone: string;
   postalCode?: string;
@@ -87,6 +88,7 @@ async function createPending(payload: {
     email: payload.email,
     password: payload.password,
     name: payload.name,
+    nickname: payload.nickname,
     address: payload.address,
     phone: payload.phone,
     postalCode: payload.postalCode,
@@ -121,6 +123,7 @@ async function verifyEmail(token: string) {
     email: pendingPlain.email,
     password: pendingPlain.password,
     name: pendingPlain.name,
+    nickname: pendingPlain.nickname,
     address: pendingPlain.address,
     phone: pendingPlain.phone,
     postalCode: pendingPlain.postalCode,
@@ -255,6 +258,7 @@ async function update(
     email?: string;
     password?: string;
     name?: string;
+    nickname?: string;
     address?: string;
     phone?: string;
     postalCode?: string;
@@ -289,6 +293,7 @@ async function update(
   if (payload.email !== undefined) updateData.email = payload.email;
   if (payload.password !== undefined) updateData.password = payload.password;
   if (payload.name !== undefined) updateData.name = payload.name;
+  if (payload.nickname !== undefined) updateData.nickname = payload.nickname;
   if (payload.address !== undefined) updateData.address = payload.address;
   if (payload.phone !== undefined) updateData.phone = payload.phone;
   if (payload.postalCode !== undefined) updateData.postalCode = payload.postalCode;

@@ -20,6 +20,7 @@ export type MyPageSection =
   | 'password'
   | 'phone'
   | 'point'
+  | 'nickname'
   | null;
 
 @Component({
@@ -43,6 +44,7 @@ export class UserMyPageComponent implements OnInit {
   emailInput: string = '';
   phoneInput: string = '';
   postalCodeInput: string = '';
+  nicknameInput: string = '';
   currentPasswordInput: string = '';
   newPasswordInput: string = '';
   confirmPasswordInput: string = '';
@@ -95,6 +97,7 @@ export class UserMyPageComponent implements OnInit {
       this.emailInput = this.user?.email ?? '';
       this.phoneInput = this.user?.phone ?? '';
       this.postalCodeInput = this.user?.postalCode ?? '';
+      this.nicknameInput = this.user?.nickname ?? '';
 
       const allHistories =
         await this.coinPurchaseHistoryService.getAllHistories();
@@ -193,6 +196,13 @@ export class UserMyPageComponent implements OnInit {
     }
   }
 
+  async saveNickname(): Promise<void> {
+    const confirm = await this.showConfirmDialog('my-page.nickname');
+    if (confirm) {
+      await this.updateUser({ nickname: this.nicknameInput.trim() });
+    }
+  }
+
   async savePhone(): Promise<void> {
     if (!this.phoneInput.trim()) {
       this.showError('my-page.error-required');
@@ -252,6 +262,7 @@ export class UserMyPageComponent implements OnInit {
       email: string;
       password: string;
       name: string;
+      nickname: string;
       address: string;
       phone: string;
       postalCode: string;
@@ -268,6 +279,7 @@ export class UserMyPageComponent implements OnInit {
         email: changes.email ?? this.user.email,
         password: changes.password ?? this.user.password,
         name: changes.name ?? this.user.name,
+        nickname: changes.nickname ?? this.user.nickname,
         address: changes.address ?? this.user.address,
         phone: changes.phone ?? this.user.phone,
         postalCode: changes.postalCode ?? this.user.postalCode,
@@ -278,6 +290,7 @@ export class UserMyPageComponent implements OnInit {
       this.emailInput = this.user?.email ?? '';
       this.phoneInput = this.user?.phone ?? '';
       this.postalCodeInput = this.user?.postalCode ?? '';
+      this.nicknameInput = this.user?.nickname ?? '';
 
       if (emailChanged) {
         this.router.navigate(['/signup-email-sent']);

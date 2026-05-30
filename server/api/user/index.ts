@@ -117,7 +117,8 @@ module.exports = {
      * POST /api/user
      */
     router.post("/", async (req: Request, res: Response) => {
-      const { email, password, name, address, phone, postalCode } = req.body;
+      const { email, password, name, nickname, address, phone, postalCode } =
+        req.body;
       if (!email || !password || !name || !address || !phone || !postalCode) {
         return res
           .status(400)
@@ -139,6 +140,7 @@ module.exports = {
           email,
           password,
           name,
+          nickname,
           address,
           phone,
           postalCode,
@@ -314,7 +316,7 @@ module.exports = {
      */
     router.put("/:id", async (req: Request, res: Response) => {
       const { id } = req.params;
-      const { email, password, name, address, phone, postalCode, coin } =
+      const { email, password, name, nickname, address, phone, postalCode, coin } =
         req.body;
 
       if (!id) {
@@ -332,6 +334,7 @@ module.exports = {
         const updateData: any = {
           password,
           name,
+          nickname,
           address,
           phone,
           postalCode,

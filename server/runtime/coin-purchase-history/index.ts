@@ -18,7 +18,7 @@ async function getAll() {
     include: [
       {
         model: db.User,
-        attributes: ["name"],
+        attributes: ["name", "nickname"],
         required: false,
       },
     ],
@@ -43,7 +43,7 @@ async function getByUserId(userId: string) {
     include: [
       {
         model: db.User,
-        attributes: ["name"],
+        attributes: ["name", "nickname"],
         required: false,
       },
     ],

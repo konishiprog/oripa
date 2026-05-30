@@ -16,6 +16,7 @@ export class UserSignupComponent implements OnInit {
   email: string = '';
   password: string = '';
   name: string = '';
+  nickname: string = '';
   address: string = '';
   phone: string = '';
   postalCode: string = '';
@@ -75,6 +76,7 @@ export class UserSignupComponent implements OnInit {
         email: this.email,
         password: this.password,
         name: this.name,
+        nickname: this.nickname,
         address: this.address,
         phone: this.phone,
         postalCode: this.postalCode,
