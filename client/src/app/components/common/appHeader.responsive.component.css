@@ -63,6 +63,10 @@
     text-align: center;
   }
 
+  .header-btn-mypage {
+    align-self: center;
+  }
+
   .user-coin-section {
     flex-direction: column;
     align-items: stretch;
@@ -70,7 +74,15 @@
     width: 100%;
   }
 
-  .user-coin-display,
+  .user-coin-section {
+    justify-content: center;
+  }
+
+  .user-coin-group {
+    justify-content: center;
+    gap: 4px;
+  }
+
   .user-special-point-display {
     text-align: center;
   }

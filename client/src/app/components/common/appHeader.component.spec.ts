@@ -88,6 +88,10 @@ describe('AppHeaderComponent', () => {
     menuReq.flush('<svg></svg>');
     const closeReq = httpMock.expectOne('assets/icons/close.svg');
     closeReq.flush('<svg></svg>');
+    const myPageReq = httpMock.expectOne('assets/icons/user-profile.svg');
+    myPageReq.flush('<svg></svg>');
+    const coinReq = httpMock.expectOne('assets/icons/coin-gold.svg');
+    coinReq.flush('<svg></svg>');
 
     expect(component.isLoggedIn).toBe(true);
   });
@@ -119,6 +123,10 @@ describe('AppHeaderComponent', () => {
     menuReq.flush('<svg></svg>');
     const closeReq = httpMock.expectOne('assets/icons/close.svg');
     closeReq.flush('<svg></svg>');
+    const myPageReq = httpMock.expectOne('assets/icons/user-profile.svg');
+    myPageReq.flush('<svg></svg>');
+    const coinReq = httpMock.expectOne('assets/icons/coin-gold.svg');
+    coinReq.flush('<svg></svg>');
 
     expect(component.userCoin).toBe(1000);
     expect(component.userSpecialPoint).toBe(100);
@@ -135,7 +143,15 @@ describe('AppHeaderComponent', () => {
     expect(closeReq.request.method).toBe('GET');
     closeReq.flush('<svg>close</svg>');
 
-    expect(mockSanitizer.bypassSecurityTrustHtml).toHaveBeenCalledTimes(2);
+    const myPageReq = httpMock.expectOne('assets/icons/user-profile.svg');
+    expect(myPageReq.request.method).toBe('GET');
+    myPageReq.flush('<svg>my-page</svg>');
+
+    const coinReq = httpMock.expectOne('assets/icons/coin-gold.svg');
+    expect(coinReq.request.method).toBe('GET');
+    coinReq.flush('<svg>coin</svg>');
+
+    expect(mockSanitizer.bypassSecurityTrustHtml).toHaveBeenCalledTimes(4);
   });
 
   it('should toggle mobile menu', () => {
@@ -160,6 +176,10 @@ describe('AppHeaderComponent', () => {
     menuReq.flush('<svg></svg>');
     const closeReq = httpMock.expectOne('assets/icons/close.svg');
     closeReq.flush('<svg></svg>');
+    const myPageReq = httpMock.expectOne('assets/icons/user-profile.svg');
+    myPageReq.flush('<svg></svg>');
+    const coinReq = httpMock.expectOne('assets/icons/coin-gold.svg');
+    coinReq.flush('<svg></svg>');
 
     expect(component.isAdminPage).toBe(true);
   });
