@@ -20,4 +20,9 @@
   .sort-btn {
     align-self: flex-start;
   }
+
+  .exchange-guide-banner {
+    display: block;
+    padding: 14px 16px;
+  }
 }
