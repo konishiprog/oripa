@@ -38,13 +38,6 @@
       </ng-container>
       <ng-container *ngIf="isLoggedIn">
         <button
-          class="header-btn header-btn-primary"
-          type="button"
-          (click)="goToMyPage()"
-        >
-          {{ "common.header.my-page" | translate }}
-        </button>
-        <button
           class="header-btn header-btn-outline"
           type="button"
           (click)="logout()"
@@ -52,20 +45,33 @@
           {{ "common.header.logout" | translate }}
         </button>
         <div class="user-coin-section">
-          <div class="user-coin-display">
-            {{ userCoin }}{{ "common.unit.point" | translate }}
+          <div class="user-coin-group">
+            <span class="user-coin-icon" [innerHTML]="coinIcon"></span>
+            <span class="user-coin-amount">
+              {{ userCoin }}{{ "common.unit.point" | translate }}
+            </span>
+            <button
+              class="header-btn-charge"
+              type="button"
+              (click)="goToCharge()"
+              [attr.aria-label]="'common.header.charge' | translate"
+            >
+              +
+            </button>
           </div>
           <div class="user-special-point-display">
-            +{{ userSpecialPoint || 0 }}{{ "common.unit.special-point" | translate }}
+            +{{ userSpecialPoint || 0
+            }}{{ "common.unit.special-point" | translate }}
           </div>
-          <button
-            class="header-btn header-btn-charge"
-            type="button"
-            (click)="goToCharge()"
-          >
-            {{ "common.header.charge" | translate }}
-          </button>
         </div>
+        <button
+          class="header-btn-mypage"
+          type="button"
+          (click)="goToMyPage()"
+          [attr.aria-label]="'common.header.my-page' | translate"
+        >
+          <span class="header-mypage-icon" [innerHTML]="myPageIcon"></span>
+        </button>
       </ng-container>
     </ng-container>
 

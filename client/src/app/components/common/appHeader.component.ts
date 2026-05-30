@@ -24,6 +24,8 @@ export class AppHeaderComponent implements OnInit {
   isMobileMenuOpen: boolean = false;
   menuIcon: SafeHtml = '';
   closeIcon: SafeHtml = '';
+  myPageIcon: SafeHtml = '';
+  coinIcon: SafeHtml = '';
 
   constructor(
     private userService: UserService,
@@ -78,6 +80,28 @@ export class AppHeaderComponent implements OnInit {
         },
         error: (error) => {
           console.error('Failed to load close icon:', error);
+        },
+      });
+
+    this.http
+      .get('assets/icons/user-profile.svg', { responseType: 'text' })
+      .subscribe({
+        next: (svg) => {
+          this.myPageIcon = this.sanitizer.bypassSecurityTrustHtml(svg);
+        },
+        error: (error) => {
+          console.error('Failed to load my page icon:', error);
+        },
+      });
+
+    this.http
+      .get('assets/icons/coin-gold.svg', { responseType: 'text' })
+      .subscribe({
+        next: (svg) => {
+          this.coinIcon = this.sanitizer.bypassSecurityTrustHtml(svg);
+        },
+        error: (error) => {
+          console.error('Failed to load coin icon:', error);
         },
       });
   }
