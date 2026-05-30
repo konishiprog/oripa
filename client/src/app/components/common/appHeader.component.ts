@@ -170,4 +170,9 @@ export class AppHeaderComponent implements OnInit {
   goToCharge(): void {
     this.router.navigate(['/coinCharge']);
   }
+
+  goToContact(): void {
+    this.closeMobileMenu();
+    this.router.navigate(['/contact']);
+  }
 }

@@ -21,6 +21,7 @@ const coinExchangeRate = require("./coin-exchange-rate");
 const coinExchangeRateApi = require("../api/coin-exchange-rate");
 const coinPurchaseHistory = require("./coin-purchase-history");
 const coinPurchaseHistoryApi = require("../api/coin-purchase-history");
+const contactApi = require("../api/contact");
 
 let app: any;
 const PORT = process.env.PORT || 3000;
@@ -81,6 +82,7 @@ async function init(_db?: any) {
   userApi.init({ user, email, coinExchangeRate, coinPurchaseHistory, card });
   coinExchangeRateApi.init({ coinExchangeRate });
   coinPurchaseHistoryApi.init({ coinPurchaseHistory });
+  contactApi.init({ user, admin, email });
 
   // Register routes
   app.use("/api/admin", adminApi.app());
@@ -90,6 +92,7 @@ async function init(_db?: any) {
   app.use("/api/user", userApi.app());
   app.use("/api/coin-exchange-rate", coinExchangeRateApi.app());
   app.use("/api/coin-purchase-history", coinPurchaseHistoryApi.app());
+  app.use("/api/contact", contactApi.app());
 }
 
 /**

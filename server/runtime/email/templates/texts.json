@@ -105,6 +105,18 @@
     "warningMessage": "このリンクは5分間のみ有効です。期限が切れた場合は、もう一度メールアドレス変更をリクエストしてください。",
     "note": "※ メールアドレスの変更は、このメールのURLをクリックして確認することで完了します。"
   },
+  "contact": {
+    "subject": "oripaサイトのお問い合わせ",
+    "title": "新しいお問い合わせがあります",
+    "greeting": "いつもお疲れ様です。",
+    "message": "ユーザーから新しいお問い合わせが届きました。以下の内容をご確認ください。",
+    "userNameLabel": "お名前：",
+    "userEmailLabel": "メールアドレス：",
+    "titleLabel": "題名：",
+    "contentLabel": "お問い合わせ内容",
+    "action": "このメールに返信すると、お問い合わせをされたユーザーへ直接返信されます。"
+  },
+
   "common": {
     "copyright": "© 2026 oripa. All rights reserved.",
     "disclaimer": "このメールに心当たりがない場合は、このメールを無視してください。"

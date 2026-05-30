@@ -1,0 +1,59 @@
+<app-header></app-header>
+<div class="container">
+  <div class="form-wrapper">
+    <h1>{{ "contact.title" | translate }}</h1>
+
+    <p class="description">{{ "contact.description" | translate }}</p>
+
+    <div class="success-message" *ngIf="successMessage">
+      {{ successMessage }}
+    </div>
+
+    <div class="error-message" *ngIf="errorMessage">
+      {{ errorMessage }}
+    </div>
+
+    <form (ngSubmit)="onSubmit()">
+      <div class="form-group">
+        <label for="title">{{ "contact.subject" | translate }}</label>
+        <input
+          id="title"
+          type="text"
+          [(ngModel)]="title"
+          name="title"
+          [placeholder]="'contact.subject-placeholder' | translate"
+          required
+          [disabled]="isLoading"
+        />
+      </div>
+
+      <div class="form-group">
+        <label for="content">{{ "contact.content" | translate }}</label>
+        <textarea
+          id="content"
+          [(ngModel)]="content"
+          name="content"
+          rows="8"
+          [placeholder]="'contact.content-placeholder' | translate"
+          required
+          [disabled]="isLoading"
+        ></textarea>
+      </div>
+
+      <button type="submit" [disabled]="isLoading" class="submit-btn">
+        {{ "contact.submit" | translate }}
+      </button>
+
+      <button
+        type="button"
+        class="back-btn"
+        (click)="goBack()"
+        [disabled]="isLoading"
+      >
+        {{ "contact.back" | translate }}
+      </button>
+    </form>
+
+    <app-footer-links></app-footer-links>
+  </div>
+</div>

@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  </head>
+  <body>
+    <div class="container">
+      <div class="header">
+        <h1>{{title}}</h1>
+      </div>
+
+      <div class="content">
+        <p>{{greeting}}</p>
+
+        <p>{{message}}</p>
+
+        <div class="request-info">
+          <div class="request-line">
+            <strong>{{userNameLabel}}</strong>
+            <span>{{userName}}</span>
+          </div>
+          <div class="request-line">
+            <strong>{{userEmailLabel}}</strong>
+            <span>{{userEmail}}</span>
+          </div>
+          <div class="request-line">
+            <strong>{{titleLabel}}</strong>
+            <span>{{inquiryTitle}}</span>
+          </div>
+        </div>
+
+        <div class="message-block">
+          <strong>{{contentLabel}}</strong>
+          <div class="message-body">{{content}}</div>
+        </div>
+
+        <p>{{action}}</p>
+      </div>
+
+      <div class="footer">
+        <p>{{copyright}}</p>
+      </div>
+    </div>
+  </body>
+</html>
