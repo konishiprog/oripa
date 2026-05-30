@@ -25,6 +25,8 @@ import { GachaService } from '../../service/gacha.service';
 export interface Gacha {
   id: string;
   name: string;
+  genreId?: string | null;
+  genreName?: string;
   headerImage: string;
   consumptionType: string;
   cost: number;
@@ -53,6 +55,7 @@ interface TableCell {
 
 const GACHA_TABLE_HEADERS: TableHeader[] = [
   { key: 'name', labelKey: 'dashboard.gacha-table.name' },
+  { key: 'genre', labelKey: 'dashboard.gacha-table.genre' },
   {
     key: 'consumption-type',
     labelKey: 'dashboard.gacha-table.consumption-type',
@@ -66,6 +69,7 @@ const GACHA_TABLE_HEADERS: TableHeader[] = [
 
 const GACHA_TABLE_CELLS: TableCell[] = [
   { key: 'name', type: 'name-with-tooltip' },
+  { key: 'genre', type: 'text', dataKey: 'genreName' },
   { key: 'consumption-type', type: 'text', dataKey: 'consumptionType' },
   { key: 'cost', type: 'text', dataKey: 'cost' },
   { key: 'cards', type: 'method', methodName: 'getCardUnitLabel' },
@@ -277,6 +281,7 @@ export class GachaTableComponent implements OnInit, OnChanges {
         gacha: {
           id: gacha.id,
           name: gacha.name,
+          genreId: gacha.genreId,
           headerImage: gacha.headerImage,
           consumptionType: gacha.consumptionType,
           cost: gacha.cost,

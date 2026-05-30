@@ -63,6 +63,8 @@ import { CardTableFilterDialogComponent } from './components/cardTableFilterDial
 import { ForgotPasswordComponent } from './components/forgotPassword/forgot-password.component';
 import { TermsOfServiceComponent } from './components/termsOfService/termsOfService.component';
 import { FooterLinksComponent } from './components/common/footerLinks/footerLinks.component';
+import { GenreTableComponent } from './components/genreTable/genreTable.component';
+import { CreateGenreComponent } from './components/createGenre/createGenre.component';
 
 @NgModule({
   declarations: [
@@ -80,6 +82,8 @@ import { FooterLinksComponent } from './components/common/footerLinks/footerLink
     GachaFilterDialogComponent,
     GachaSortDialogComponent,
     CardTableComponent,
+    GenreTableComponent,
+    CreateGenreComponent,
     SidebarComponent,
     UserDetailDialogComponent,
     UserGachaPageComponent,

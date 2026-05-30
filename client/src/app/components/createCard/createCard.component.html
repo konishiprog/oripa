@@ -3,7 +3,7 @@
     <h1>
       {{
         (isEditMode ? "card-create.title-edit" : "card-create.title")
-          | translate: { name: data.gachaName }
+          | translate: { name: data.gachaName || selectedGachaName }
       }}
     </h1>
 
@@ -16,6 +16,23 @@
     </div>
 
     <form (ngSubmit)="onSubmit()">
+      <div class="form-group" *ngIf="!isEditMode && data?.gachas">
+        <label for="selectedGacha">{{ "card-create.gacha" | translate }}</label>
+        <select
+          id="selectedGacha"
+          [(ngModel)]="selectedGachaId"
+          name="selectedGachaId"
+          required
+          [disabled]="isLoading || !!data.gachaId"
+          class="card-type-select"
+        >
+          <option value="">{{ "card-create.gacha-placeholder" | translate }}</option>
+          <option *ngFor="let gacha of data.gachas" [value]="gacha.id">
+            {{ gacha.name }}
+          </option>
+        </select>
+      </div>
+
       <div class="form-group">
         <label for="name">{{ "card-create.name" | translate }}</label>
         <input

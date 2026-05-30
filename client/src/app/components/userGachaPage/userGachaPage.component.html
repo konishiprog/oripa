@@ -11,6 +11,24 @@
       </button>
     </div>
 
+    <div class="genre-slider">
+      <button
+        class="genre-tab"
+        [class.genre-tab--active]="selectedGenreId === ''"
+        (click)="selectGenre('')"
+      >
+        {{ "user-gacha.genre-all" | translate }}
+      </button>
+      <button
+        *ngFor="let genre of genres"
+        class="genre-tab"
+        [class.genre-tab--active]="selectedGenreId === genre.id"
+        (click)="selectGenre(genre.id)"
+      >
+        {{ genre.name }}
+      </button>
+    </div>
+
     <div class="exchange-guide-banner">
       {{ "gacha-draw-result.exchange-guide" | translate }}
     </div>
@@ -25,7 +43,7 @@
 
     <div *ngIf="!isLoading && gachas.length > 0" class="box-grid">
       <app-gacha-box
-        *ngFor="let gacha of sortedGachas"
+        *ngFor="let gacha of filteredAndSortedGachas"
         [gacha]="gacha"
       ></app-gacha-box>
     </div>

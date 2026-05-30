@@ -7,6 +7,7 @@ const { CARD_STATUS } = require("../../constants/card");
 const { CONSUMPTION_TYPE } = require("../../constants/gacha");
 const userRuntime = require("../user");
 const cardRuntime = require("../card");
+const genreRuntime = require("../genre");
 
 let db: any;
 let gachaCache: Map<string, any> = new Map();
@@ -27,13 +28,17 @@ async function init(_db: any) {
  */
 async function refreshCache() {
   const gachas = await db.Gacha.findAll({
-    include: [{ model: db.Card, as: "cards" }],
+    include: [
+      { model: db.Card, as: "cards" },
+      { model: db.Genre, as: "genre" },
+    ],
   });
   gachaCache.clear();
   gachas.forEach((gacha: any) => {
     const plainGacha = toPlain(gacha);
     const cards = (gacha.cards || []).map((card: any) => toPlain(card));
-    gachaCache.set(plainGacha.id, { ...plainGacha, cards });
+    const genreName = gacha.genre ? gacha.genre.name : null;
+    gachaCache.set(plainGacha.id, { ...plainGacha, cards, genreName });
   });
 }
 
@@ -44,6 +49,7 @@ async function refreshCache() {
  */
 async function create(payload: {
   name: string;
+  genreId?: string | null;
   consumptionType?: string;
   cost: number;
   oncePerUser?: boolean;
@@ -67,6 +73,7 @@ async function create(payload: {
 
   const gacha = await db.Gacha.create({
     name: payload.name,
+    genreId: payload.genreId ?? null,
     headerImage: headerImageBase64,
     consumptionType: payload.consumptionType ?? CONSUMPTION_TYPE.COIN,
     cost: payload.cost,
@@ -75,7 +82,10 @@ async function create(payload: {
     publishEnd: payload.publishEnd,
     isPublic: payload.isPublic,
   });
-  const plainGacha = { ...toPlain(gacha), cards: [] };
+  const genreName = payload.genreId
+    ? (genreRuntime.getById(payload.genreId)?.name ?? null)
+    : null;
+  const plainGacha = { ...toPlain(gacha), cards: [], genreName };
   gachaCache.set(plainGacha.id, plainGacha);
   return { ...plainGacha, cardsCount: 0 };
 }
@@ -280,6 +290,7 @@ async function update(
   id: string,
   payload: {
     name: string;
+    genreId?: string | null;
     consumptionType?: string;
     cost: number;
     oncePerUser?: boolean;
@@ -307,8 +318,12 @@ async function update(
     headerImageBase64 = `data:${payload.headerImageFile.mimetype};base64,${payload.headerImageFile.buffer.toString("base64")}`;
   }
 
+  const genreId =
+    payload.genreId !== undefined ? payload.genreId : gacha.genreId;
+
   await gacha.update({
     name: payload.name,
+    genreId,
     headerImage: headerImageBase64,
     consumptionType: payload.consumptionType ?? gacha.consumptionType,
     cost: payload.cost,
@@ -319,7 +334,14 @@ async function update(
   });
 
   const cached = gachaCache.get(id);
-  const plainGacha = { ...toPlain(gacha), cards: cached?.cards ?? [] };
+  const genreName = genreId
+    ? (genreRuntime.getById(genreId)?.name ?? null)
+    : null;
+  const plainGacha = {
+    ...toPlain(gacha),
+    cards: cached?.cards ?? [],
+    genreName,
+  };
   gachaCache.set(id, plainGacha);
   return { ...plainGacha, cardsCount: plainGacha.cards.length };
 }

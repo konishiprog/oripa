@@ -67,16 +67,20 @@
     "page-title": "ダッシュボード",
     "desc": "システムの概要と統計情報を表示",
     "create-box": "+ 新規ガチャ作成",
+    "create-card": "+ 新規カード作成",
+    "create-genre": "+ 新規ジャンル作成",
     "total-boxes": "総ボックス数",
     "active": "公開中",
     "delete-confirm": "このガチャ ({{name}}) を削除してもよろしいですか？\nこのガチャを削除するとそれに紐づけられているカードも消えてしまいます",
     "delete-confirm-card": "このカード ({{name}}) を削除してもよろしいですか？",
+    "delete-confirm-genre": "このジャンル ({{name}}) を削除してもよろしいですか？",
     "delete-error": "削除に失敗しました",
     "search-placeholder": "ボックス名",
     "search-placeholder-card": "カード名",
     "view-toggle": {
       "gacha": "ガチャ一覧",
-      "card": "カード一覧"
+      "card": "カード一覧",
+      "genre": "ジャンル一覧"
     },
     "filter": {
       "status-label": "ステータス：全て",
@@ -93,12 +97,17 @@
     },
     "gacha-table": {
       "name": "名前",
+      "genre": "ジャンル",
       "consumption-type": "消費タイプ",
       "cost": "価格",
       "cards": "カード枚数",
       "is-public": "公開",
       "publish-start": "開始日",
       "publish-end": "終了日"
+    },
+    "genre-table": {
+      "name": "ジャンル名",
+      "search-placeholder": "ジャンル名"
     },
     "card-table": {
       "gacha-name": "ガチャ名",
@@ -131,6 +140,8 @@
     "title": "ガチャ作成",
     "title-edit": "ガチャ編集",
     "name": "ガチャ名",
+    "genre": "ジャンル",
+    "genre-placeholder": "ジャンルを選択（任意）",
     "header-image": "ヘッダー画像",
     "image-select": "画像を選択",
     "image-change": "画像を変更",
@@ -159,9 +170,23 @@
     "error-name-exists": "この名前のガチャは既に存在しています"
   },
 
+  "genre-create": {
+    "title": "ジャンル作成",
+    "title-edit": "ジャンル編集",
+    "name": "ジャンル名",
+    "close": "閉じる",
+    "submit": "登録",
+    "submit-edit": "更新",
+    "error": "登録に失敗しました",
+    "error-required": "ジャンル名を入力してください",
+    "error-name-exists": "この名前のジャンルは既に存在しています"
+  },
+
   "card-create": {
     "title": "{{name}} のカード登録",
     "title-edit": "{{name}} のカード編集",
+    "gacha": "ガチャ",
+    "gacha-placeholder": "ガチャを選択してください",
     "name": "カード名",
     "image-front": "画像（表）",
     "image-back": "画像（裏）",
@@ -276,6 +301,7 @@
   "user-gacha": {
     "section-title": "オリパ一覧",
     "sort-button": "並び替え",
+    "genre-all": "ALL",
     "loading": "読み込み中...",
     "empty-state": "現在公開中のオリパはありません",
     "sort-dialog": {

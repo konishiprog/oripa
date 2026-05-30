@@ -28,8 +28,9 @@ export interface CardDialogPayload {
 }
 
 export interface CreateCardDialogData {
-  gachaId: string;
-  gachaName: string;
+  gachaId: string | null;
+  gachaName: string | null;
+  gachas?: Array<{ id: string; name: string }>;
   mode?: CardFormMode;
   card?: CardDialogPayload;
 }
@@ -74,6 +75,7 @@ export class CreateCardComponent implements OnInit {
   cardTypes = CARD_TYPES;
   exchangeTypes = EXCHANGE_TYPES;
   mode: CardFormMode = CardFormMode.Create;
+  selectedGachaId: string = '';
   private editingCardId: string | null = null;
 
   readonly minExchangePoints = 1;
@@ -85,6 +87,12 @@ export class CreateCardComponent implements OnInit {
 
   get isEditMode(): boolean {
     return this.mode === CardFormMode.Edit;
+  }
+
+  get selectedGachaName(): string {
+    if (!this.selectedGachaId || !this.data?.gachas) return '';
+    const gacha = this.data.gachas.find((gacha) => gacha.id === this.selectedGachaId);
+    return gacha?.name || '';
   }
 
   onExchangeTypeChange(): void {
@@ -109,6 +117,10 @@ export class CreateCardComponent implements OnInit {
 
     if (this.data?.mode) {
       this.mode = this.data.mode;
+    }
+
+    if (this.data?.gachaId) {
+      this.selectedGachaId = this.data.gachaId;
     }
 
     if (this.isEditMode && this.data?.card) {
@@ -187,11 +199,14 @@ export class CreateCardComponent implements OnInit {
 
   async onSubmit(): Promise<void> {
     const requiresNewImages = !this.isEditMode;
+    const requiresGachaSelection = !this.isEditMode && !this.data?.gachaId;
+
     if (
       !this.name ||
       !this.cardType ||
       !this.exchangeType ||
-      (requiresNewImages && !this.imageFrontFile)
+      (requiresNewImages && !this.imageFrontFile) ||
+      (requiresGachaSelection && !this.selectedGachaId)
     ) {
       this.showError('card-create.error-required');
       return;
@@ -231,8 +246,11 @@ export class CreateCardComponent implements OnInit {
         this.showSuccess('card-create.success-edit');
         this.dialogRef?.close({ mode: 'edit', data: updated.data });
       } else {
+        const gachaIdToUse = this.data?.gachaId || this.selectedGachaId;
+        const gachaNameToUse = this.data?.gachaName || this.selectedGachaName;
+
         const created = await this.cardService.createCard({
-          gachaId: this.data.gachaId,
+          gachaId: gachaIdToUse,
           name: this.name,
           cardType: this.cardType,
           exchangeType: this.exchangeType,
@@ -241,7 +259,14 @@ export class CreateCardComponent implements OnInit {
           imageBackFile: imageBackFileToUse,
         });
         this.showSuccess('card-create.success');
-        this.dialogRef?.close({ mode: 'create', data: created.data });
+        this.dialogRef?.close({
+          mode: 'create',
+          data: {
+            ...created.data,
+            gachaId: gachaIdToUse,
+            gachaName: gachaNameToUse,
+          },
+        });
       }
     } catch (error: any) {
       const errorMsg = error.error?.error || error.message || '';

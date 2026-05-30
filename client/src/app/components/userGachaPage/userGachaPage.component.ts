@@ -2,6 +2,7 @@ import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { TranslateService } from '@ngx-translate/core';
 import { GachaService } from '../../service/gacha.service';
+import { GenreService, Genre } from '../../service/genre.service';
 import { UserService } from '../../service/user.service';
 import {
   GachaSortDialogComponent,
@@ -11,6 +12,7 @@ import {
 export interface UserGacha {
   id: string;
   name: string;
+  genreId?: string | null;
   headerImage: string;
   consumptionType: string;
   cost: number;
@@ -33,11 +35,14 @@ export interface UserGacha {
 })
 export class UserGachaPageComponent implements OnInit {
   gachas: UserGacha[] = [];
+  genres: Genre[] = [];
+  selectedGenreId: string = '';
   isLoading: boolean = true;
   sortOrder: GachaSortOrder = 'newest';
 
   constructor(
     private gachaService: GachaService,
+    private genreService: GenreService,
     private userService: UserService,
     private dialog: MatDialog,
     private cdr: ChangeDetectorRef,
@@ -48,6 +53,7 @@ export class UserGachaPageComponent implements OnInit {
     this.translateService.setDefaultLang('ja');
     this.translateService.use('ja');
     this.loadGachas();
+    this.loadGenres();
   }
 
   async loadGachas(): Promise<void> {
@@ -59,6 +65,7 @@ export class UserGachaPageComponent implements OnInit {
         .map((gacha: any) => ({
           id: gacha.id,
           name: gacha.name,
+          genreId: gacha.genreId ?? null,
           headerImage: gacha.headerImage,
           consumptionType: gacha.consumptionType ?? 'COIN',
           cost: gacha.cost,
@@ -77,8 +84,25 @@ export class UserGachaPageComponent implements OnInit {
     }
   }
 
-  get sortedGachas(): UserGacha[] {
-    return sortGachas(this.gachas, this.sortOrder);
+  private async loadGenres(): Promise<void> {
+    try {
+      this.genres = await this.genreService.getAllGenres();
+      this.cdr.markForCheck();
+    } catch (error) {
+      console.error('Failed to load genres:', error);
+    }
+  }
+
+  selectGenre(genreId: string): void {
+    this.selectedGenreId = genreId;
+    this.cdr.markForCheck();
+  }
+
+  get filteredAndSortedGachas(): UserGacha[] {
+    const base = this.selectedGenreId
+      ? this.gachas.filter((gacha) => gacha.genreId === this.selectedGenreId)
+      : this.gachas;
+    return sortGachas(base, this.sortOrder);
   }
 
   openSortDialog(): void {

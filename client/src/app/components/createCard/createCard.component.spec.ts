@@ -275,6 +275,7 @@ describe('CreateCardComponent', () => {
       data: {
         id: 'test-uuid-1',
         gachaId: 'test-uuid-1',
+        gachaName: 'Test Gacha',
         name: 'Test Card',
         cardType: 'SSR',
         exchangeType: 'SHIPPING_ONLY',

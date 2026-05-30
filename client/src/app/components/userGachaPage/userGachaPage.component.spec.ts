@@ -4,6 +4,7 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { TranslateModule } from '@ngx-translate/core';
 import { UserGachaPageComponent } from './userGachaPage.component';
 import { GachaService } from '../../service/gacha.service';
+import { GenreService } from '../../service/genre.service';
 import { UserService } from '../../service/user.service';
 
 describe('UserGachaPageComponent', () => {
@@ -15,6 +16,9 @@ describe('UserGachaPageComponent', () => {
   beforeEach(async () => {
     const gachaSpy = {
       getGachas: jest.fn<Promise<any[]>, []>(),
+    };
+    const genreSpy = {
+      getAllGenres: jest.fn<Promise<any[]>, []>().mockResolvedValue([]),
     };
     const userSpy = {
       isLoggedIn: jest.fn<boolean, []>(),
@@ -28,6 +32,7 @@ describe('UserGachaPageComponent', () => {
       imports: [TranslateModule.forRoot(), MatDialogModule],
       providers: [
         { provide: GachaService, useValue: gachaSpy },
+        { provide: GenreService, useValue: genreSpy },
         { provide: UserService, useValue: userSpy },
       ],
       schemas: [NO_ERRORS_SCHEMA],

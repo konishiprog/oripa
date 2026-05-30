@@ -1,0 +1,45 @@
+<div class="container">
+  <div class="form-wrapper">
+    <h1>
+      {{
+        (isEditMode ? "genre-create.title-edit" : "genre-create.title")
+          | translate
+      }}
+    </h1>
+
+    <div class="error-message" *ngIf="errorMessage">
+      {{ errorMessage }}
+    </div>
+
+    <form (ngSubmit)="onSubmit()">
+      <div class="form-group">
+        <label for="name">{{ "genre-create.name" | translate }}</label>
+        <input
+          id="name"
+          type="text"
+          [(ngModel)]="name"
+          name="name"
+          required
+          [disabled]="isLoading"
+        />
+      </div>
+
+      <div class="button-group">
+        <button
+          type="button"
+          (click)="onClose()"
+          [disabled]="isLoading"
+          class="close-btn"
+        >
+          {{ "genre-create.close" | translate }}
+        </button>
+        <button type="submit" [disabled]="isLoading" class="submit-btn">
+          {{
+            (isEditMode ? "genre-create.submit-edit" : "genre-create.submit")
+              | translate
+          }}
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

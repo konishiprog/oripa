@@ -3,6 +3,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { DashboardComponent } from './dashboard.component';
 import { GachaService } from '../../service/gacha.service';
 import { CardService } from '../../service/card.service';
+import { GenreService } from '../../service/genre.service';
 import { TranslateModule } from '@ngx-translate/core';
 import { FormsModule } from '@angular/forms';
 
@@ -11,6 +12,7 @@ describe('DashboardComponent', () => {
   let fixture: ComponentFixture<DashboardComponent>;
   let mockGachaService: any;
   let mockCardService: any;
+  let mockGenreService: any;
 
   const buildServerGacha = (overrides: Partial<any> = {}) => ({
     id: 1,
@@ -33,6 +35,9 @@ describe('DashboardComponent', () => {
       getGachas: jest.fn().mockResolvedValue([]),
     };
     mockCardService = {};
+    mockGenreService = {
+      getAllGenres: jest.fn().mockResolvedValue([]),
+    };
 
     await TestBed.configureTestingModule({
       declarations: [DashboardComponent],
@@ -40,6 +45,7 @@ describe('DashboardComponent', () => {
       providers: [
         { provide: GachaService, useValue: mockGachaService },
         { provide: CardService, useValue: mockCardService },
+        { provide: GenreService, useValue: mockGenreService },
       ],
     }).compileComponents();
 
