@@ -56,6 +56,18 @@
       </div>
 
       <div class="form-group">
+        <label for="nickname">{{ "user-signup.nickname" | translate }}</label>
+        <input
+          id="nickname"
+          type="text"
+          [(ngModel)]="nickname"
+          name="nickname"
+          [placeholder]="'user-signup.nickname-placeholder' | translate"
+          [disabled]="isLoading"
+        />
+      </div>
+
+      <div class="form-group">
         <label for="postalCode">{{
           "user-signup.postal-code" | translate
         }}</label>

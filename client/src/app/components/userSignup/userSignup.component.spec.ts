@@ -82,6 +82,7 @@ describe('UserSignupComponent', () => {
     component.email = 'test@example.com';
     component.password = 'password123';
     component.name = 'Test User';
+    component.nickname = 'Tester';
     component.address = 'Test Address';
     component.phone = '09012345678';
     component.postalCode = '123-4567';
@@ -93,6 +94,7 @@ describe('UserSignupComponent', () => {
       email: 'test@example.com',
       password: 'password123',
       name: 'Test User',
+      nickname: 'Tester',
       address: 'Test Address',
       phone: '09012345678',
       postalCode: '123-4567',

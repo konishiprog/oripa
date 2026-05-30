@@ -149,7 +149,11 @@ export class CoinPurchaseHistoryPageComponent implements OnInit {
   }
 
   private getUserName(history: CoinPurchaseHistoryItem): string {
-    return (history as any)['User.name'] || history.userId;
+    return (
+      (history as any)['User.nickname'] ||
+      (history as any)['User.name'] ||
+      history.userId
+    );
   }
 
   private getPrice(history: CoinPurchaseHistoryItem): string {
@@ -214,7 +218,9 @@ export class CoinPurchaseHistoryPageComponent implements OnInit {
       const query = this.searchQuery.toLowerCase();
       filtered = filtered.filter((history) => {
         const userName = (
-          (history as any)['User.name'] || history.userId
+          (history as any)['User.nickname'] ||
+          (history as any)['User.name'] ||
+          history.userId
         ).toLowerCase();
         return userName.includes(query);
       });

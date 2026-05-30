@@ -25,6 +25,7 @@ describe('UserMyPageComponent', () => {
     email: 'test@example.com',
     password: 'password123',
     name: 'Test User',
+    nickname: 'Tester',
     address: '123 Test St',
     phone: '555-0123',
     postalCode: '123-4567',

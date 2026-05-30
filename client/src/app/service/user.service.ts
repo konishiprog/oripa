@@ -12,6 +12,7 @@ export interface User {
   email: string;
   password: string;
   name: string;
+  nickname: string;
   address: string;
   phone: string;
   postalCode: string;
@@ -23,6 +24,7 @@ export interface CreateUserPayload {
   email: string;
   password: string;
   name: string;
+  nickname?: string;
   address: string;
   phone: string;
   postalCode?: string;
@@ -144,6 +146,7 @@ export class UserService {
       email: string;
       password: string;
       name: string;
+      nickname: string;
       address: string;
       phone: string;
       postalCode: string;

@@ -38,6 +38,10 @@ module.exports = (sequelize: any, DataTypes: any) => {
         type: DataTypes.STRING,
         allowNull: true,
       },
+      nickname: {
+        type: DataTypes.STRING,
+        allowNull: true,
+      },
       address: {
         type: DataTypes.STRING,
         allowNull: true,

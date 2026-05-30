@@ -24,6 +24,9 @@ module.exports = (sequelize: any, DataTypes: any) => {
       name: {
         type: DataTypes.STRING,
       },
+      nickname: {
+        type: DataTypes.STRING,
+      },
       coin: {
         type: DataTypes.INTEGER,
         defaultValue: 0,
