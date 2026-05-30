@@ -9,6 +9,7 @@
   box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
   display: flex;
   flex-direction: column;
+  cursor: pointer;
 }
 
 .box-card:hover {

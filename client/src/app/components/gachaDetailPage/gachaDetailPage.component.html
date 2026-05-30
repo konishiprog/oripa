@@ -1,0 +1,148 @@
+<div class="app">
+  <app-header></app-header>
+
+  <div class="content">
+    <div *ngIf="isLoading" class="loading-state">
+      {{ "user-gacha.loading" | translate }}
+    </div>
+
+    <div *ngIf="!isLoading && gacha" class="detail-container">
+      <div class="detail-header">
+        <button class="back-btn" type="button" (click)="goBack()">
+          <span class="back-icon">{{
+            "gacha-detail.back-icon" | translate
+          }}</span>
+        </button>
+        <h1 class="detail-title">{{ gacha.name }}</h1>
+        <div class="header-spacer"></div>
+      </div>
+
+      <div class="banner-section">
+        <img
+          [src]="gacha.headerImage"
+          [alt]="gacha.name"
+          class="banner-image"
+        />
+      </div>
+
+      <div class="info-section">
+        <div class="deadline-badge" *ngIf="gacha.publishEnd">
+          <span class="deadline-icon">{{
+            "gacha-detail.deadline-icon" | translate
+          }}</span>
+          {{ formatDate(gacha.publishEnd) }}
+          {{ "gacha-detail.until" | translate }}
+        </div>
+
+        <div class="guarantees-section">
+          <div class="guarantee-badge">
+            {{
+              "gacha-detail.minimum-guarantee" | translate: { cost: gacha.cost }
+            }}
+          </div>
+        </div>
+
+        <div class="caution-section" [class.open]="cautionState.isOpen">
+          <div class="caution-header" (click)="toggleCaution()">
+            <span class="caution-icon">{{
+              "gacha-detail.caution-icon" | translate
+            }}</span>
+            <span>{{ "gacha-detail.caution-title" | translate }}</span>
+            <span class="caution-toggle">{{
+              "gacha-detail.caution-toggle" | translate
+            }}</span>
+          </div>
+          <div class="caution-content">
+            <p class="caution-law-title">
+              {{ "gacha-detail.law-title" | translate }}
+            </p>
+            <p class="caution-law-text">
+              {{ "gacha-detail.law-text" | translate }}
+              <a class="caution-law-link" (click)="navigateToTerms()">
+                {{ "gacha-detail.law-link" | translate }}
+              </a>
+            </p>
+          </div>
+        </div>
+
+        <div class="prize-section">
+          <h2 class="prize-label">{{ "gacha-detail.jackpot" | translate }}</h2>
+        </div>
+
+        <div class="jackpot-cards" *ngIf="jackpotCards.length > 0">
+          <div class="jackpot-card" *ngFor="let card of jackpotCards">
+            <div class="jackpot-card-thumb">
+              <img
+                [src]="card.imageFront"
+                [alt]="card.name"
+                class="jackpot-card-image"
+              />
+            </div>
+            <div class="jackpot-card-name">{{ card.name }}</div>
+          </div>
+        </div>
+
+        <div class="jackpot-empty" *ngIf="jackpotCards.length === 0">
+          {{ "gacha-detail.jackpot-empty" | translate }}
+        </div>
+
+        <div class="draw-buttons">
+          <button
+            class="draw-btn draw-btn-single"
+            type="button"
+            [disabled]="!isLoggedIn || isDrawing || effectiveDrawCount(1) === 0"
+            (click)="draw(1)"
+          >
+            {{ "gacha-box.draw-single" | translate }}
+          </button>
+          <button
+            *ngIf="!gacha.oncePerUser"
+            class="draw-btn draw-btn-ten"
+            type="button"
+            [disabled]="
+              !isLoggedIn || isDrawing || effectiveDrawCount(10) === 0
+            "
+            (click)="draw(10)"
+          >
+            <ng-container *ngIf="effectiveDrawCount(10) === 10">
+              {{ "gacha-box.draw-ten" | translate }}
+            </ng-container>
+            <ng-container
+              *ngIf="effectiveDrawCount(10) > 0 && effectiveDrawCount(10) < 10"
+            >
+              {{
+                "gacha-box.draw-remaining"
+                  | translate: { count: effectiveDrawCount(10) }
+              }}
+            </ng-container>
+            <ng-container *ngIf="effectiveDrawCount(10) === 0">
+              {{ "gacha-box.draw-ten" | translate }}
+            </ng-container>
+          </button>
+        </div>
+
+        <div *ngIf="!isLoggedIn" class="login-notice">
+          {{ "gacha-box.login-required" | translate }}
+        </div>
+        <div
+          *ngIf="isLoggedIn && gacha.oncePerUser && gacha.alreadyDrawn"
+          class="already-drawn-notice"
+        >
+          {{ "gacha-box.already-drawn" | translate }}
+        </div>
+        <div
+          *ngIf="isLoggedIn && gacha.remainingCount === 0"
+          class="out-of-stock"
+        >
+          {{ "gacha-box.out-of-stock" | translate }}
+        </div>
+      </div>
+    </div>
+
+    <div *ngIf="!isLoading && !gacha" class="error-state">
+      {{ "gacha-detail.error-load" | translate }}
+    </div>
+  </div>
+
+  <app-footer-links></app-footer-links>
+</div>
