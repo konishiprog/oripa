@@ -283,6 +283,22 @@
     "error-invalid-draw-count": "引く枚数が正しくありません"
   },
 
+  "gacha-detail": {
+    "back-icon": "<",
+    "until": "まで",
+    "minimum-guarantee": "最低保証{{cost}}P",
+    "deadline-icon": "⏰",
+    "caution-title": "注意事項・ご利用条件",
+    "caution-icon": "⚠️",
+    "caution-toggle": ">",
+    "law-title": "■ 特定商取引法に基づく表記について",
+    "law-text": "お支払い・ご提供・キャンセル等は",
+    "law-link": "こちら",
+    "jackpot": "大当たり",
+    "jackpot-empty": "大当たりのカードはありません",
+    "error-load": "ガチャの詳細情報の読み込みに失敗しました"
+  },
+
   "gacha-draw-result": {
     "progress": "{{current}} / {{total}}",
     "summary-title": "{{count}}枚の結果",

@@ -65,6 +65,7 @@ import { TermsOfServiceComponent } from './components/termsOfService/termsOfServ
 import { FooterLinksComponent } from './components/common/footerLinks/footerLinks.component';
 import { GenreTableComponent } from './components/genreTable/genreTable.component';
 import { CreateGenreComponent } from './components/createGenre/createGenre.component';
+import { GachaDetailPageComponent } from './components/gachaDetailPage/gachaDetailPage.component';
 
 @NgModule({
   declarations: [
@@ -113,6 +114,7 @@ import { CreateGenreComponent } from './components/createGenre/createGenre.compo
     ForgotPasswordComponent,
     TermsOfServiceComponent,
     FooterLinksComponent,
+    GachaDetailPageComponent,
   ],
   imports: [
     BrowserModule,

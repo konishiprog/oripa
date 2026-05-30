@@ -1,0 +1,67 @@
+@media (min-width: 768px) {
+  .jackpot-cards {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+@media (max-width: 480px) {
+  .detail-header {
+    padding: 12px;
+  }
+
+  .back-btn {
+    width: 36px;
+    height: 36px;
+    font-size: 20px;
+  }
+
+  .detail-title {
+    font-size: 14px;
+  }
+
+  .header-spacer {
+    width: 36px;
+  }
+
+  .info-section {
+    padding: 12px;
+  }
+
+  .deadline-badge {
+    font-size: 12px;
+    padding: 8px 10px;
+    gap: 6px;
+  }
+
+  .guarantee-badge {
+    font-size: 12px;
+    padding: 8px 12px;
+  }
+
+  .caution-header {
+    padding: 12px;
+    gap: 10px;
+  }
+
+  .caution-header > span:nth-child(2) {
+    font-size: 12px;
+  }
+
+  .caution-content {
+    padding: 0 12px 12px;
+    font-size: 12px;
+  }
+
+  .prize-label {
+    font-size: 24px;
+  }
+
+  .jackpot-card-name {
+    font-size: 10px;
+  }
+
+  .draw-btn {
+    padding: 12px 12px;
+    font-size: 13px;
+  }
+}
