@@ -1,0 +1,47 @@
+@media (max-width: 640px) {
+  .winners-dialog {
+    min-width: auto;
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .winners-header {
+    padding: 16px 20px;
+  }
+
+  .winners-title {
+    font-size: 19px;
+  }
+
+  .winners-subtitle {
+    font-size: 12px;
+  }
+
+  .winners-body {
+    padding: 14px 18px;
+    gap: 20px;
+  }
+
+  .section-banner {
+    font-size: 16px;
+    padding: 10px 14px;
+  }
+
+  .winners-grid {
+    gap: 14px 10px;
+  }
+
+  .winner-avatar {
+    width: 32px;
+    height: 32px;
+  }
+
+  .winner-name {
+    font-size: 14px;
+  }
+
+  .close-btn {
+    padding: 11px 40px;
+    font-size: 14px;
+  }
+}
