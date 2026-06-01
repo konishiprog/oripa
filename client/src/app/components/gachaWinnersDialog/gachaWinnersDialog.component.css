@@ -1,0 +1,133 @@
+.winners-dialog {
+  background-color: #ffffff;
+  min-width: 360px;
+  max-height: 90vh;
+  overflow-y: auto;
+  overflow-x: hidden;
+  box-sizing: border-box;
+  position: relative;
+}
+
+.winners-header {
+  background: linear-gradient(135deg, #f97316, #ec4899);
+  color: #ffffff;
+  padding: 20px 24px;
+  text-align: center;
+}
+
+.winners-title {
+  font-size: 22px;
+  font-weight: 800;
+  margin: 0;
+}
+
+.winners-subtitle {
+  font-size: 13px;
+  font-weight: 500;
+  margin: 6px 0 0;
+  opacity: 0.95;
+}
+
+.winners-loading {
+  padding: 40px 24px;
+  text-align: center;
+  font-size: 14px;
+  color: #718096;
+}
+
+.winners-body {
+  padding: 16px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.winners-section {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.section-banner {
+  border-radius: 8px;
+  padding: 12px 16px;
+  text-align: center;
+  font-size: 18px;
+  font-weight: 800;
+  color: #ffffff;
+}
+
+.section-banner--ssr {
+  background: linear-gradient(135deg, #fde68a, #d4af37, #b8860b);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.25);
+}
+
+.section-banner--sr {
+  background: linear-gradient(135deg, #fb923c, #d97706);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+.winners-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px 12px;
+}
+
+.winner-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.winner-avatar {
+  width: 36px;
+  height: 36px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.winner-avatar svg {
+  width: 100%;
+  height: 100%;
+}
+
+.winner-name {
+  font-size: 15px;
+  font-weight: 600;
+  color: #1a202c;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.winners-empty {
+  text-align: center;
+  font-size: 13px;
+  color: #a0aec0;
+  padding: 8px 0;
+}
+
+.winners-footer {
+  padding: 16px 24px 24px;
+  display: flex;
+  justify-content: center;
+  border-top: 1px solid #edf2f7;
+}
+
+.close-btn {
+  background: #e2e8f0;
+  color: #4a5568;
+  border: none;
+  border-radius: 8px;
+  padding: 12px 48px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.15s;
+}
+
+.close-btn:hover {
+  background: #cbd5e0;
+}

@@ -12,9 +12,29 @@
   cursor: pointer;
 }
 
+.box-card.box-card--expired {
+  cursor: default;
+}
+
 .box-card:hover {
   transform: translateY(-2px);
   box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
+}
+
+.box-card--expired {
+  cursor: default;
+}
+
+.box-card--expired:hover {
+  transform: none;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
+}
+
+.box-card--expired .box-thumb,
+.box-card--expired .box-name,
+.box-card--expired .box-badges,
+.box-card--expired .box-meta {
+  opacity: 0.5;
 }
 
 .box-thumb {
@@ -118,7 +138,8 @@
 
 .login-notice,
 .out-of-stock,
-.already-drawn-notice {
+.already-drawn-notice,
+.expired-notice {
   font-size: 11px;
   color: #6b7280;
   text-align: center;
@@ -131,6 +152,37 @@
 
 .already-drawn-notice {
   color: #b45309;
+}
+
+.expired-notice {
+  color: #dc2626;
+  font-weight: 600;
+  background: rgba(255, 255, 255, 1);
+  padding: 2px 6px;
+  border-radius: 4px;
+  display: inline-block;
+  margin: 0 auto;
+  width: fit-content;
+}
+
+.winners-btn {
+  margin-top: 4px;
+  padding: 8px 6px;
+  border-radius: 8px;
+  border: 1px solid #d4af37;
+  background: linear-gradient(135deg, #fde68a, #d4af37);
+  color: #6b4e00;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  transition:
+    transform 0.1s,
+    box-shadow 0.15s;
+}
+
+.winners-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 10px rgba(212, 175, 55, 0.4);
 }
 
 .box-badges {

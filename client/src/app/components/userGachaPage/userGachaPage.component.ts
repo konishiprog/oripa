@@ -120,25 +120,37 @@ export class UserGachaPageComponent implements OnInit {
 }
 
 function sortGachas(gachas: UserGacha[], order: GachaSortOrder): UserGacha[] {
-  const sorted = [...gachas];
-  switch (order) {
-    case 'newest':
-      return sorted.sort(
-        (gacha1, gacha2) =>
-          new Date(gacha2.publishStart).getTime() -
-          new Date(gacha1.publishStart).getTime(),
-      );
-    case 'cost-high':
-      return sorted.sort((gacha1, gacha2) => gacha2.cost - gacha1.cost);
-    case 'cost-low':
-      return sorted.sort((gacha1, gacha2) => gacha1.cost - gacha2.cost);
-    case 'remaining-high':
-      return sorted.sort(
-        (gacha1, gacha2) => gacha2.remainingCount - gacha1.remainingCount,
-      );
-    case 'remaining-low':
-      return sorted.sort(
-        (gacha1, gacha2) => gacha1.remainingCount - gacha2.remainingCount,
-      );
-  }
+  const isExpired = (gacha: UserGacha): boolean => {
+    if (!gacha.publishEnd) return false;
+    return new Date() > new Date(gacha.publishEnd);
+  };
+
+  const active = gachas.filter((gacha) => !isExpired(gacha));
+  const expired = gachas.filter((gacha) => isExpired(gacha));
+
+  const sortByOrder = (list: UserGacha[]): UserGacha[] => {
+    const sorted = [...list];
+    switch (order) {
+      case 'newest':
+        return sorted.sort(
+          (gacha1, gacha2) =>
+            new Date(gacha2.publishStart).getTime() -
+            new Date(gacha1.publishStart).getTime(),
+        );
+      case 'cost-high':
+        return sorted.sort((gacha1, gacha2) => gacha2.cost - gacha1.cost);
+      case 'cost-low':
+        return sorted.sort((gacha1, gacha2) => gacha1.cost - gacha2.cost);
+      case 'remaining-high':
+        return sorted.sort(
+          (gacha1, gacha2) => gacha2.remainingCount - gacha1.remainingCount,
+        );
+      case 'remaining-low':
+        return sorted.sort(
+          (gacha1, gacha2) => gacha1.remainingCount - gacha2.remainingCount,
+        );
+    }
+  };
+
+  return [...sortByOrder(active), ...sortByOrder(expired)];
 }

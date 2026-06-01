@@ -1,4 +1,8 @@
-<div class="box-card" (click)="navigateToDetail()">
+<div
+  class="box-card"
+  [class.box-card--expired]="isExpired"
+  (click)="!isExpired && navigateToDetail()"
+>
   <div class="box-thumb">
     <img [src]="gacha.headerImage" [alt]="gacha.name" class="box-image" />
   </div>
@@ -20,7 +24,7 @@
         {{ "gacha-box.remaining" | translate: { count: gacha.remainingCount } }}
       </span>
     </div>
-    <div class="box-actions">
+    <div *ngIf="!isExpired" class="box-actions">
       <button
         class="draw-btn draw-btn-single"
         type="button"
@@ -52,16 +56,32 @@
         </ng-container>
       </button>
     </div>
-    <div *ngIf="!isLoggedIn" class="login-notice">
+    <div *ngIf="isExpired" class="expired-notice">
+      {{ "gacha-box.expired" | translate }}
+    </div>
+    <button
+      *ngIf="isExpired"
+      type="button"
+      class="winners-btn"
+      (click)="$event.stopPropagation(); openWinnersDialog()"
+    >
+      {{ "gacha-box.winners-button" | translate }}
+    </button>
+    <div *ngIf="!isLoggedIn && !isExpired" class="login-notice">
       {{ "gacha-box.login-required" | translate }}
     </div>
     <div
-      *ngIf="isLoggedIn && gacha.oncePerUser && gacha.alreadyDrawn"
+      *ngIf="
+        !isExpired && isLoggedIn && gacha.oncePerUser && gacha.alreadyDrawn
+      "
       class="already-drawn-notice"
     >
       {{ "gacha-box.already-drawn" | translate }}
     </div>
-    <div *ngIf="isLoggedIn && gacha.remainingCount === 0" class="out-of-stock">
+    <div
+      *ngIf="!isExpired && isLoggedIn && gacha.remainingCount === 0"
+      class="out-of-stock"
+    >
       {{ "gacha-box.out-of-stock" | translate }}
     </div>
   </div>

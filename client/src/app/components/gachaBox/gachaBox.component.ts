@@ -5,6 +5,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { GachaService } from '../../service/gacha.service';
 import { UserService } from '../../service/user.service';
 import { GachaDrawResultDialogComponent } from '../gachaDrawResultDialog/gachaDrawResultDialog.component';
+import { GachaWinnersDialogComponent } from '../gachaWinnersDialog/gachaWinnersDialog.component';
 
 export interface GachaBoxData {
   id: string;
@@ -15,6 +16,7 @@ export interface GachaBoxData {
   oncePerUser: boolean;
   alreadyDrawn: boolean;
   remainingCount: number;
+  publishEnd: string | null;
 }
 
 @Component({
@@ -45,6 +47,11 @@ export class GachaBoxComponent {
 
   get usesSpecialPoint(): boolean {
     return this.gacha.consumptionType === 'SPECIAL_POINT';
+  }
+
+  get isExpired(): boolean {
+    if (!this.gacha.publishEnd) return false;
+    return new Date() > new Date(this.gacha.publishEnd);
   }
 
   formatPrice(cost: number): string {
@@ -182,5 +189,13 @@ export class GachaBoxComponent {
 
   navigateToDetail(): void {
     this.router.navigate(['/gacha', this.gacha.id]);
+  }
+
+  openWinnersDialog(): void {
+    this.dialog.open(GachaWinnersDialogComponent, {
+      width: '520px',
+      maxWidth: '95vw',
+      data: { gachaId: this.gacha.id, gachaName: this.gacha.name },
+    });
   }
 }

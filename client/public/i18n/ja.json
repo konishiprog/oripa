@@ -268,6 +268,8 @@
     "draw-remaining": "残り{{count}}回引く",
     "login-required": "ログインすると引けます",
     "out-of-stock": "在庫なし",
+    "expired": "このガチャは終了しました。",
+    "winners-button": "当選者リスト",
     "draw-success": "{{count}}枚引きました！",
     "draw-success-single": "{{name}}が当たりました！",
     "draw-success-last": "おめでとう！ラストワン賞の{{name}}が当たりました！",
@@ -281,6 +283,18 @@
     "error-gacha-not-found": "対象のガチャが見つかりません",
     "error-user-not-found": "ユーザー情報が見つかりません。ログインし直してください。",
     "error-invalid-draw-count": "引く枚数が正しくありません"
+  },
+
+  "gacha-winners": {
+    "title": "当選者情報",
+    "subtitle": "このオリパの当選者一覧です（R賞以下は省略）",
+    "section-ssr": "大当たり",
+    "section-sr": "あたり",
+    "empty": "まだ当選者がいません",
+    "loading": "読み込み中...",
+    "close": "閉じる",
+    "close-icon": "×",
+    "close-aria-label": "ダイアログを閉じる"
   },
 
   "gacha-detail": {

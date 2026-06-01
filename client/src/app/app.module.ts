@@ -51,6 +51,7 @@ import { AppHeaderComponent } from './components/common/appHeader.component';
 import { TableControlsComponent } from './components/common/tableControls/tableControls.component';
 import { GachaBoxComponent } from './components/gachaBox/gachaBox.component';
 import { GachaDrawResultDialogComponent } from './components/gachaDrawResultDialog/gachaDrawResultDialog.component';
+import { GachaWinnersDialogComponent } from './components/gachaWinnersDialog/gachaWinnersDialog.component';
 import { CoinExchangeDialogComponent } from './components/coinExchangeDialog/coinExchangeDialog.component';
 import { ShippingInfoPageComponent } from './components/shippingInfoPage/shippingInfoPage.component';
 import { ShippingCardDetailDialogComponent } from './components/shippingCardDetailDialog/shippingCardDetailDialog.component';
@@ -103,6 +104,7 @@ import { ContactPageComponent } from './components/contactPage/contactPage.compo
     TableControlsComponent,
     GachaBoxComponent,
     GachaDrawResultDialogComponent,
+    GachaWinnersDialogComponent,
     CoinExchangeDialogComponent,
     ShippingInfoPageComponent,
     ShippingCardDetailDialogComponent,

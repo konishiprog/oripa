@@ -1,0 +1,52 @@
+<div class="winners-dialog">
+  <div class="winners-header">
+    <h2 class="winners-title">
+      {{ "gacha-winners.title" | translate }}
+    </h2>
+    <p class="winners-subtitle">
+      {{ "gacha-winners.subtitle" | translate }}
+    </p>
+  </div>
+
+  <div *ngIf="isLoading" class="winners-loading">
+    {{ "gacha-winners.loading" | translate }}
+  </div>
+
+  <div *ngIf="!isLoading" class="winners-body">
+    <div class="winners-section">
+      <div class="section-banner section-banner--ssr">
+        {{ "gacha-winners.section-ssr" | translate }}
+      </div>
+      <div *ngIf="ssrWinners.length > 0" class="winners-grid">
+        <div *ngFor="let winner of ssrWinners" class="winner-item">
+          <span class="winner-avatar" [innerHTML]="avatarIcon"></span>
+          <span class="winner-name">{{ winner.nickname }}</span>
+        </div>
+      </div>
+      <div *ngIf="ssrWinners.length === 0" class="winners-empty">
+        {{ "gacha-winners.empty" | translate }}
+      </div>
+    </div>
+
+    <div class="winners-section">
+      <div class="section-banner section-banner--sr">
+        {{ "gacha-winners.section-sr" | translate }}
+      </div>
+      <div *ngIf="srWinners.length > 0" class="winners-grid">
+        <div *ngFor="let winner of srWinners" class="winner-item">
+          <span class="winner-avatar" [innerHTML]="avatarIcon"></span>
+          <span class="winner-name">{{ winner.nickname }}</span>
+        </div>
+      </div>
+      <div *ngIf="srWinners.length === 0" class="winners-empty">
+        {{ "gacha-winners.empty" | translate }}
+      </div>
+    </div>
+  </div>
+
+  <div class="winners-footer">
+    <button type="button" class="close-btn" (click)="onClose()">
+      {{ "gacha-winners.close" | translate }}
+    </button>
+  </div>
+</div>
