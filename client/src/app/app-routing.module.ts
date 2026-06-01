@@ -8,6 +8,7 @@ import { CreateAdminComponent } from './components/createAdmin/createAdmin.compo
 import { AdminAccountListComponent } from './components/adminAccountList/adminAccountList.component';
 import { AdminPanelComponent } from './components/adminPanel/adminPanel.component';
 import { LoginComponent } from './components/login/login.component';
+import { AdminAuthGuard } from './guards/admin-auth.guard';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { UserGachaPageComponent } from './components/userGachaPage/userGachaPage.component';
 import { GachaDetailPageComponent } from './components/gachaDetailPage/gachaDetailPage.component';
@@ -87,6 +88,8 @@ const routes: Routes = [
   {
     path: 'adminPanel',
     component: AdminPanelComponent,
+    canActivate: [AdminAuthGuard],
+    canActivateChild: [AdminAuthGuard],
     children: [
       {
         path: '',
