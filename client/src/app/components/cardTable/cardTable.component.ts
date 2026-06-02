@@ -37,6 +37,8 @@ export interface Card {
   cardType: string;
   exchangeType: string;
   exchangePoints: number | null;
+  effectId: string | null;
+  effectName: string;
   imageFront: string;
   imageBack: string;
   isDrawn: string;
@@ -53,6 +55,7 @@ const CARD_TABLE_HEADERS: TableHeader[] = [
   { key: 'card-type', labelKey: 'dashboard.card-table.card-type' },
   { key: 'exchange-type', labelKey: 'dashboard.card-table.exchange-type' },
   { key: 'exchange-points', labelKey: 'dashboard.card-table.exchange-points' },
+  { key: 'effect', labelKey: 'dashboard.card-table.effect' },
   { key: 'is-drawn', labelKey: 'dashboard.card-table.is-drawn' },
 ];
 
@@ -85,6 +88,7 @@ const CARD_TABLE_CELLS: TableCell[] = [
     type: 'method',
     methodName: 'getExchangePointsDisplay',
   },
+  { key: 'effect', type: 'text', dataKey: 'effectName' },
   { key: 'is-drawn', type: 'method', methodName: 'getIsDrawnLabel' },
 ];
 
@@ -266,6 +270,7 @@ export class CardTableComponent implements OnInit, OnChanges {
           cardType: card.cardType,
           exchangeType: card.exchangeType,
           exchangePoints: card.exchangePoints,
+          effectId: card.effectId,
           imageFront: card.imageFront,
           imageBack: card.imageBack,
         },
@@ -284,6 +289,8 @@ export class CardTableComponent implements OnInit, OnChanges {
             cardType: result.data.cardType ?? '',
             exchangeType: result.data.exchangeType ?? '',
             exchangePoints: result.data.exchangePoints ?? null,
+            effectId: result.data.effectId ?? null,
+            effectName: result.data.effectName ?? '',
             imageFront: result.data.imageFront ?? '',
             imageBack: result.data.imageBack ?? '',
             isDrawn: result.data.isDrawn ?? CARD_STATUS.NOT_DRAWN,

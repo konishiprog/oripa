@@ -35,6 +35,7 @@ describe('GachaDrawResultDialogComponent', () => {
   beforeEach(async () => {
     const dialogRefSpy = {
       close: jest.fn<void, []>(),
+      updateSize: jest.fn(),
     };
 
     await TestBed.configureTestingModule({

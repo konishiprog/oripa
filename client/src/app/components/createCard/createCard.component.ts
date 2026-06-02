@@ -9,6 +9,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { CardService } from '../../service/card.service';
+import { EffectService, Effect } from '../../service/effect.service';
 import { ApiConfigService } from '../../service/api-config.service';
 import { EXCHANGE_TYPE } from '../../constants/card';
 
@@ -23,6 +24,7 @@ export interface CardDialogPayload {
   cardType: string;
   exchangeType: string;
   exchangePoints: number | null;
+  effectId: string | null;
   imageFront: string;
   imageBack: string;
 }
@@ -65,6 +67,8 @@ export class CreateCardComponent implements OnInit {
   cardType: string = 'SSR';
   exchangeType: string = EXCHANGE_TYPE.SHIPPING_ONLY;
   exchangePoints: number | null = null;
+  effectId: string = '';
+  effects: Effect[] = [];
   imageFrontFile: File | null = null;
   imageFrontPreview: SafeUrl | null = null;
   imageBackFile: File | null = null;
@@ -103,6 +107,7 @@ export class CreateCardComponent implements OnInit {
 
   constructor(
     private cardService: CardService,
+    private effectService: EffectService,
     private translateService: TranslateService,
     private cdr: ChangeDetectorRef,
     private sanitizer: DomSanitizer,
@@ -114,6 +119,8 @@ export class CreateCardComponent implements OnInit {
   ngOnInit(): void {
     this.translateService.setDefaultLang('ja');
     this.translateService.use('ja');
+
+    this.loadEffects();
 
     if (this.data?.mode) {
       this.mode = this.data.mode;
@@ -128,12 +135,22 @@ export class CreateCardComponent implements OnInit {
     }
   }
 
+  private async loadEffects(): Promise<void> {
+    try {
+      this.effects = await this.effectService.getAllEffects();
+      this.cdr.detectChanges();
+    } catch (error) {
+      console.error('Failed to load effects:', error);
+    }
+  }
+
   private prefillFromCard(card: CardDialogPayload): void {
     this.editingCardId = card.id;
     this.name = card.name;
     this.cardType = card.cardType;
     this.exchangeType = card.exchangeType;
     this.exchangePoints = card.exchangePoints;
+    this.effectId = card.effectId ?? '';
     this.imageFrontPreview = this.buildImagePreview(card.imageFront);
     this.imageBackPreview = this.buildImagePreview(card.imageBack);
   }
@@ -240,6 +257,7 @@ export class CreateCardComponent implements OnInit {
           cardType: this.cardType,
           exchangeType: this.exchangeType,
           exchangePoints: this.isPointExchangeable ? this.exchangePoints : null,
+          effectId: this.effectId || null,
           imageFrontFile: this.imageFrontFile,
           imageBackFile: this.imageBackFile,
         });
@@ -255,6 +273,7 @@ export class CreateCardComponent implements OnInit {
           cardType: this.cardType,
           exchangeType: this.exchangeType,
           exchangePoints: this.isPointExchangeable ? this.exchangePoints : null,
+          effectId: this.effectId || null,
           imageFrontFile: this.imageFrontFile!,
           imageBackFile: imageBackFileToUse,
         });

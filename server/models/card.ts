@@ -10,6 +10,10 @@ module.exports = (sequelize: any, DataTypes: any) => {
         foreignKey: "gachaId",
         as: "gacha",
       });
+      Card.belongsTo(models.Effect, {
+        foreignKey: "effectId",
+        as: "effect",
+      });
     }
   }
 
@@ -45,6 +49,10 @@ module.exports = (sequelize: any, DataTypes: any) => {
       },
       exchangePoints: {
         type: DataTypes.INTEGER,
+        allowNull: true,
+      },
+      effectId: {
+        type: DataTypes.UUID,
         allowNull: true,
       },
       isDrawn: {

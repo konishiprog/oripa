@@ -66,6 +66,8 @@ import { TermsOfServiceComponent } from './components/termsOfService/termsOfServ
 import { FooterLinksComponent } from './components/common/footerLinks/footerLinks.component';
 import { GenreTableComponent } from './components/genreTable/genreTable.component';
 import { CreateGenreComponent } from './components/createGenre/createGenre.component';
+import { EffectTableComponent } from './components/effectTable/effectTable.component';
+import { CreateEffectComponent } from './components/createEffect/createEffect.component';
 import { GachaDetailPageComponent } from './components/gachaDetailPage/gachaDetailPage.component';
 import { ContactPageComponent } from './components/contactPage/contactPage.component';
 
@@ -87,6 +89,8 @@ import { ContactPageComponent } from './components/contactPage/contactPage.compo
     CardTableComponent,
     GenreTableComponent,
     CreateGenreComponent,
+    EffectTableComponent,
+    CreateEffectComponent,
     SidebarComponent,
     UserDetailDialogComponent,
     UserGachaPageComponent,

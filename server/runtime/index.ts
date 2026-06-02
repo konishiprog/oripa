@@ -10,6 +10,8 @@ const admin = require("./admin");
 const adminApi = require("../api/admin");
 const genre = require("./genre");
 const genreApi = require("../api/genre");
+const effect = require("./effect");
+const effectApi = require("../api/effect");
 const gacha = require("./gacha");
 const gachaApi = require("../api/gacha");
 const card = require("./card");
@@ -72,6 +74,8 @@ async function init(_db?: any) {
   adminApi.init({ admin });
   await genre.init(database);
   genreApi.init({ genre });
+  await effect.init(database);
+  effectApi.init({ effect });
   await gacha.init(database);
   gachaApi.init({ gacha });
   await card.init(database);
@@ -87,6 +91,7 @@ async function init(_db?: any) {
   // Register routes
   app.use("/api/admin", adminApi.app());
   app.use("/api/genre", genreApi.app());
+  app.use("/api/effect", effectApi.app());
   app.use("/api/gacha", gachaApi.app());
   app.use("/api/card", cardApi.app());
   app.use("/api/user", userApi.app());
@@ -124,6 +129,7 @@ const runtime = {
   start,
   admin,
   genre,
+  effect,
   gacha,
   card,
   user,

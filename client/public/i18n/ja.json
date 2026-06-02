@@ -69,18 +69,21 @@
     "create-box": "+ 新規ガチャ作成",
     "create-card": "+ 新規カード作成",
     "create-genre": "+ 新規ジャンル作成",
+    "create-effect": "+ 新規演出作成",
     "total-boxes": "総ボックス数",
     "active": "公開中",
     "delete-confirm": "このガチャ ({{name}}) を削除してもよろしいですか？\nこのガチャを削除するとそれに紐づけられているカードも消えてしまいます",
     "delete-confirm-card": "このカード ({{name}}) を削除してもよろしいですか？",
     "delete-confirm-genre": "このジャンル ({{name}}) を削除してもよろしいですか？",
+    "delete-confirm-effect": "この演出 ({{name}}) を削除してもよろしいですか？",
     "delete-error": "削除に失敗しました",
     "search-placeholder": "ボックス名",
     "search-placeholder-card": "カード名",
     "view-toggle": {
       "gacha": "ガチャ一覧",
       "card": "カード一覧",
-      "genre": "ジャンル一覧"
+      "genre": "ジャンル一覧",
+      "effect": "演出一覧"
     },
     "filter": {
       "status-label": "ステータス：全て",
@@ -109,12 +112,18 @@
       "name": "ジャンル名",
       "search-placeholder": "ジャンル名"
     },
+    "effect-table": {
+      "name": "演出名",
+      "url": "演出URL",
+      "search-placeholder": "演出名"
+    },
     "card-table": {
       "gacha-name": "ガチャ名",
       "card-name": "カード名",
       "card-type": "カードタイプ",
       "exchange-type": "交換タイプ",
       "exchange-points": "交換コイン",
+      "effect": "演出",
       "is-drawn": "引かれた"
     },
     "card-registration": "{{name}} のカード登録",
@@ -182,6 +191,21 @@
     "error-name-exists": "この名前のジャンルは既に存在しています"
   },
 
+  "effect-create": {
+    "title": "演出作成",
+    "title-edit": "演出編集",
+    "name": "演出名",
+    "url": "演出URL",
+    "url-placeholder": "演出動画のURLを入力してください",
+    "close": "閉じる",
+    "submit": "登録",
+    "submit-edit": "更新",
+    "error": "登録に失敗しました",
+    "error-required": "演出名を入力してください",
+    "error-url-required": "演出URLを入力してください",
+    "error-name-exists": "この名前の演出は既に存在しています"
+  },
+
   "card-create": {
     "title": "{{name}} のカード登録",
     "title-edit": "{{name}} のカード編集",
@@ -202,6 +226,8 @@
     "exchange-type-shipping-only": "発送のみ",
     "exchange-type-both": "コイン返還/発送",
     "exchange-points": "返還ポイント数",
+    "effect": "演出",
+    "effect-placeholder": "演出を選択（任意）",
     "close": "閉じる",
     "submit": "登録",
     "submit-edit": "更新",
@@ -320,6 +346,7 @@
     "back-alt": "カード裏面",
     "reveal": "めくる",
     "reveal-all": "全部めくる",
+    "skip-effect": "演出をスキップ",
     "next": "次へ",
     "finish": "結果を見る",
     "close": "閉じる",

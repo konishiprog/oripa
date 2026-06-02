@@ -8,6 +8,7 @@ const { CONSUMPTION_TYPE } = require("../../constants/gacha");
 const userRuntime = require("../user");
 const cardRuntime = require("../card");
 const genreRuntime = require("../genre");
+const effectRuntime = require("../effect");
 
 let db: any;
 let gachaCache: Map<string, any> = new Map();
@@ -36,7 +37,17 @@ async function refreshCache() {
   gachaCache.clear();
   gachas.forEach((gacha: any) => {
     const plainGacha = toPlain(gacha);
-    const cards = (gacha.cards || []).map((card: any) => toPlain(card));
+    const cards = (gacha.cards || []).map((card: any) => {
+      const plainCard = toPlain(card);
+      const effect = plainCard.effectId
+        ? effectRuntime.getById(plainCard.effectId)
+        : null;
+      return {
+        ...plainCard,
+        effectName: effect?.name ?? null,
+        effectUrl: effect?.url ?? null,
+      };
+    });
     const genreName = gacha.genre ? gacha.genre.name : null;
     gachaCache.set(plainGacha.id, { ...plainGacha, cards, genreName });
   });
@@ -266,11 +277,18 @@ async function draw(payload: {
   ).length;
 
   return {
-    drawnCards: drawnCards.map((card: any) => ({
-      ...card,
-      isDrawn: CARD_STATUS.DRAWN,
-      userId: payload.userId,
-    })),
+    drawnCards: drawnCards.map((card: any) => {
+      const effect = card.effectId
+        ? effectRuntime.getById(card.effectId)
+        : null;
+      return {
+        ...card,
+        effectName: effect?.name ?? null,
+        effectUrl: effect?.url ?? null,
+        isDrawn: CARD_STATUS.DRAWN,
+        userId: payload.userId,
+      };
+    }),
     remainingCount,
     userCoin: updatedUser.coin,
     userSpecialPoint: updatedUser.specialPoint,
@@ -373,7 +391,17 @@ async function refreshGachaCards(gachaId: string) {
   const cached = gachaCache.get(gachaId);
   if (!cached) return;
 
-  const cards = (gacha.cards || []).map((card: any) => toPlain(card));
+  const cards = (gacha.cards || []).map((card: any) => {
+    const plainCard = toPlain(card);
+    const effect = plainCard.effectId
+      ? effectRuntime.getById(plainCard.effectId)
+      : null;
+    return {
+      ...plainCard,
+      effectName: effect?.name ?? null,
+      effectUrl: effect?.url ?? null,
+    };
+  });
   gachaCache.set(gachaId, { ...cached, cards });
 }
 
