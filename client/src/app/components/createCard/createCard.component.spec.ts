@@ -2,6 +2,7 @@ import 'zone.js';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { CreateCardComponent } from './createCard.component';
 import { CardService } from '../../service/card.service';
+import { EffectService } from '../../service/effect.service';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { DomSanitizer } from '@angular/platform-browser';
@@ -12,6 +13,7 @@ describe('CreateCardComponent', () => {
   let component: CreateCardComponent;
   let fixture: ComponentFixture<CreateCardComponent>;
   let mockCardService: any;
+  let mockEffectService: any;
   let mockTranslateService: any;
   let mockDialogRef: any;
   let mockSanitizer: any;
@@ -33,6 +35,9 @@ describe('CreateCardComponent', () => {
         },
       }),
     };
+    mockEffectService = {
+      getAllEffects: jest.fn().mockResolvedValue([]),
+    };
     mockTranslateService = {
       setDefaultLang: jest.fn(),
       use: jest.fn(),
@@ -51,6 +56,7 @@ describe('CreateCardComponent', () => {
       imports: [TranslateModule.forRoot(), FormsModule],
       providers: [
         { provide: CardService, useValue: mockCardService },
+        { provide: EffectService, useValue: mockEffectService },
         { provide: TranslateService, useValue: mockTranslateService },
         { provide: MatDialogRef, useValue: mockDialogRef },
         { provide: DomSanitizer, useValue: mockSanitizer },
@@ -266,6 +272,7 @@ describe('CreateCardComponent', () => {
       cardType: 'SSR',
       exchangeType: 'SHIPPING_ONLY',
       exchangePoints: null,
+      effectId: null,
       imageFrontFile: frontFile,
       imageBackFile: backFile,
     });

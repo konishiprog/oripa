@@ -139,8 +139,14 @@ module.exports = {
         if (!validateCardPayload(req, res)) return;
 
         try {
-          const { gachaId, name, cardType, exchangeType, exchangePoints } =
-            req.body;
+          const {
+            gachaId,
+            name,
+            cardType,
+            exchangeType,
+            exchangePoints,
+            effectId,
+          } = req.body;
           const files = (req as any).files;
           const imageFrontFile = files.imageFront[0];
           const imageBackFile = files.imageBack[0];
@@ -154,6 +160,7 @@ module.exports = {
               exchangeType === EXCHANGE_TYPE.BOTH
                 ? Number(exchangePoints)
                 : null,
+            effectId: effectId || null,
             imageFrontFile,
             imageBackFile,
           });
@@ -190,7 +197,8 @@ module.exports = {
         }
 
         try {
-          const { name, cardType, exchangeType, exchangePoints } = req.body;
+          const { name, cardType, exchangeType, exchangePoints, effectId } =
+            req.body;
           const files = (req as any).files;
           const imageFrontFile = files?.imageFront?.[0];
           const imageBackFile = files?.imageBack?.[0];
@@ -203,6 +211,7 @@ module.exports = {
               exchangeType === EXCHANGE_TYPE.BOTH
                 ? Number(exchangePoints)
                 : null,
+            effectId: effectId || null,
             imageFrontFile,
             imageBackFile,
           });

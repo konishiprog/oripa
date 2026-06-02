@@ -4,6 +4,7 @@ import { DashboardComponent } from './dashboard.component';
 import { GachaService } from '../../service/gacha.service';
 import { CardService } from '../../service/card.service';
 import { GenreService } from '../../service/genre.service';
+import { EffectService } from '../../service/effect.service';
 import { TranslateModule } from '@ngx-translate/core';
 import { FormsModule } from '@angular/forms';
 
@@ -13,6 +14,7 @@ describe('DashboardComponent', () => {
   let mockGachaService: any;
   let mockCardService: any;
   let mockGenreService: any;
+  let mockEffectService: any;
 
   const buildServerGacha = (overrides: Partial<any> = {}) => ({
     id: 1,
@@ -38,6 +40,9 @@ describe('DashboardComponent', () => {
     mockGenreService = {
       getAllGenres: jest.fn().mockResolvedValue([]),
     };
+    mockEffectService = {
+      getAllEffects: jest.fn().mockResolvedValue([]),
+    };
 
     await TestBed.configureTestingModule({
       declarations: [DashboardComponent],
@@ -46,6 +51,7 @@ describe('DashboardComponent', () => {
         { provide: GachaService, useValue: mockGachaService },
         { provide: CardService, useValue: mockCardService },
         { provide: GenreService, useValue: mockGenreService },
+        { provide: EffectService, useValue: mockEffectService },
       ],
     }).compileComponents();
 
@@ -88,6 +94,8 @@ describe('DashboardComponent', () => {
             cardType: 'SSR',
             exchangeType: 'BOTH',
             exchangePoints: 100,
+            effectId: null,
+            effectName: null,
             imageFront: '/img/front.png',
             imageBack: '/img/back.png',
           },

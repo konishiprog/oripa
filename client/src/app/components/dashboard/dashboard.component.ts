@@ -9,9 +9,14 @@ import {
   CreateGenreComponent,
   GenreFormMode,
 } from '../createGenre/createGenre.component';
+import {
+  CreateEffectComponent,
+  EffectFormMode,
+} from '../createEffect/createEffect.component';
 import { GachaService } from '../../service/gacha.service';
 import { CardService } from '../../service/card.service';
 import { GenreService, Genre } from '../../service/genre.service';
+import { EffectService, Effect } from '../../service/effect.service';
 import { Gacha } from '../gachaTable/gachaTable.component';
 import { Card } from '../cardTable/cardTable.component';
 import { CARD_STATUS } from '../../constants/card';
@@ -20,6 +25,7 @@ enum ViewMode {
   Gacha = 'gacha',
   Card = 'card',
   Genre = 'genre',
+  Effect = 'effect',
 }
 
 @Component({
@@ -37,6 +43,7 @@ export class DashboardComponent implements OnInit {
   gachas: Gacha[] = [];
   cards: Card[] = [];
   genres: Genre[] = [];
+  effects: Effect[] = [];
   viewMode: ViewMode = ViewMode.Gacha;
 
   constructor(
@@ -44,12 +51,14 @@ export class DashboardComponent implements OnInit {
     private gachaService: GachaService,
     private cardService: CardService,
     private genreService: GenreService,
+    private effectService: EffectService,
     private cdr: ChangeDetectorRef,
   ) {}
 
   ngOnInit(): void {
     this.loadGachas();
     this.loadGenres();
+    this.loadEffects();
   }
 
   async loadGenres(): Promise<void> {
@@ -58,6 +67,15 @@ export class DashboardComponent implements OnInit {
       this.cdr.markForCheck();
     } catch (error) {
       console.error('Failed to load genres:', error);
+    }
+  }
+
+  async loadEffects(): Promise<void> {
+    try {
+      this.effects = await this.effectService.getAllEffects();
+      this.cdr.markForCheck();
+    } catch (error) {
+      console.error('Failed to load effects:', error);
     }
   }
 
@@ -87,6 +105,8 @@ export class DashboardComponent implements OnInit {
           cardType: card.cardType ?? '',
           exchangeType: card.exchangeType ?? '',
           exchangePoints: card.exchangePoints ?? null,
+          effectId: card.effectId ?? null,
+          effectName: card.effectName ?? '',
           imageFront: card.imageFront ?? '',
           imageBack: card.imageBack ?? '',
           isDrawn: card.isDrawn ?? CARD_STATUS.NOT_DRAWN,
@@ -108,6 +128,8 @@ export class DashboardComponent implements OnInit {
         return 'dashboard.create-card';
       case ViewMode.Genre:
         return 'dashboard.create-genre';
+      case ViewMode.Effect:
+        return 'dashboard.create-effect';
       default:
         return 'dashboard.create-box';
     }
@@ -120,6 +142,9 @@ export class DashboardComponent implements OnInit {
         break;
       case ViewMode.Genre:
         this.createNewGenre();
+        break;
+      case ViewMode.Effect:
+        this.createNewEffect();
         break;
       default:
         this.createNewGacha();
@@ -208,6 +233,19 @@ export class DashboardComponent implements OnInit {
     });
   }
 
+  createNewEffect(): void {
+    const dialogRef = this.dialog.open(CreateEffectComponent, {
+      width: '480px',
+      data: { mode: EffectFormMode.Create },
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result?.mode === 'create' && result?.data) {
+        this.loadEffects();
+      }
+    });
+  }
+
   openCardRegistration(gacha: Gacha): void {
     const dialogRef = this.dialog.open(CreateCardComponent, {
       width: '500px',
@@ -249,6 +287,8 @@ export class DashboardComponent implements OnInit {
           cardType: card.cardType ?? '',
           exchangeType: card.exchangeType ?? '',
           exchangePoints: card.exchangePoints ?? null,
+          effectId: card.effectId ?? null,
+          effectName: card.effectName ?? '',
           imageFront: card.imageFront ?? '',
           imageBack: card.imageBack ?? '',
           isDrawn: card.isDrawn ?? CARD_STATUS.NOT_DRAWN,

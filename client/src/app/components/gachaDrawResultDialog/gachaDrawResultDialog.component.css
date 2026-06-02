@@ -7,6 +7,12 @@
   max-width: 480px;
 }
 
+.dialog-wrapper.showing-effect {
+  max-width: 100%;
+  width: 100%;
+  padding: 12px;
+}
+
 .dialog-header {
   display: flex;
   align-items: center;
@@ -24,11 +30,16 @@
 .close-icon {
   background: none;
   border: none;
-  font-size: 26px;
+  font-size: 24px;
   line-height: 1;
   color: #a0aec0;
   cursor: pointer;
-  padding: 0 4px;
+  padding: 4px;
+  min-width: 32px;
+  min-height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   transition: color 0.15s;
 }
 
@@ -41,6 +52,39 @@
   flex-direction: column;
   align-items: center;
   gap: 18px;
+}
+
+.effect-stage {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+}
+
+.effect-video {
+  width: 100%;
+  max-width: 480px;
+  border-radius: 14px;
+  background: #000;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.18);
+}
+
+.showing-effect .effect-video {
+  width: 100%;
+  max-width: 100%;
+  height: auto;
+  aspect-ratio: auto;
+}
+
+.showing-effect .effect-stage {
+  width: 100%;
+}
+
+.effect-name {
+  font-size: 14px;
+  font-weight: 700;
+  color: #1a202c;
+  text-align: center;
 }
 
 .card-flip {
@@ -128,7 +172,7 @@
 
 .reveal-btn {
   flex: 1;
-  padding: 10px 12px;
+  padding: 12px 16px;
   border-radius: 8px;
   border: none;
   font-size: 13px;
@@ -139,6 +183,12 @@
     box-shadow 0.15s,
     opacity 0.15s,
     transform 0.1s;
+  max-width: 100%;
+}
+
+.summary .reveal-btn {
+  width: 100%;
+  max-width: 400px;
 }
 
 .reveal-btn-skip {
@@ -164,6 +214,7 @@
   display: flex;
   flex-direction: column;
   gap: 16px;
+  align-items: center;
 }
 
 .summary-grid {
@@ -173,6 +224,8 @@
   max-height: 360px;
   overflow-y: auto;
   padding: 4px;
+  max-width: 500px;
+  width: 100%;
 }
 
 .summary-card {
@@ -182,6 +235,7 @@
   background: #fff;
   display: flex;
   flex-direction: column;
+  max-width: 150px;
 }
 
 .summary-card img {

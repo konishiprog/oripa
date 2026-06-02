@@ -1,5 +1,5 @@
-<div class="dialog-wrapper">
-  <div class="dialog-header">
+<div class="dialog-wrapper" [class.showing-effect]="isShowingEffect">
+  <div class="dialog-header" *ngIf="!hasEffectUrl || showSummary">
     <h2>
       <ng-container *ngIf="!showSummary">
         {{
@@ -24,7 +24,33 @@
     </button>
   </div>
 
-  <div class="reveal-stage" *ngIf="!showSummary && currentCard">
+  <div
+    class="effect-stage"
+    *ngIf="!showSummary && currentCard && (isPlayingEffect || hasEffectUrl)"
+  >
+    <video
+      class="effect-video"
+      [src]="currentCard.effectUrl"
+      autoplay
+      playsinline
+      (ended)="onEffectEnded()"
+      (error)="onEffectEnded()"
+      *ngIf="isPlayingEffect"
+    ></video>
+    <button
+      type="button"
+      class="reveal-btn reveal-btn-skip"
+      (click)="onEffectEnded()"
+      *ngIf="isPlayingEffect"
+    >
+      {{ "gacha-draw-result.skip-effect" | translate }}
+    </button>
+  </div>
+
+  <div
+    class="reveal-stage"
+    *ngIf="!showSummary && currentCard && !isPlayingEffect && !hasEffectUrl"
+  >
     <div
       class="card-flip"
       [class.is-flipped]="isCurrentRevealed"

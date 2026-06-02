@@ -199,21 +199,11 @@ export class GachaDetailPageComponent implements OnInit {
         };
       }
 
-      if (drawnCards.length === 1) {
-        const card = drawnCards[0];
-        const messageKey =
-          card.cardType === 'LAST'
-            ? 'gacha-box.draw-success-last'
-            : 'gacha-box.draw-success-single';
-        alert(
-          this.translateService.instant(messageKey, {
-            name: card.name,
-          }),
-        );
-      } else {
+      if (drawnCards.length > 0) {
+        const hasEffect = drawnCards.some((card: any) => card.effectUrl);
         this.dialog.open(GachaDrawResultDialogComponent, {
-          width: '520px',
-          maxWidth: '95vw',
+          width: hasEffect ? '80vw' : '520px',
+          maxWidth: hasEffect ? '1000px' : '95vw',
           disableClose: true,
           data: { drawnCards },
         });

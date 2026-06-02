@@ -50,6 +50,16 @@
   >
     {{ "dashboard.view-toggle.genre" | translate }}
   </button>
+  <button
+    type="button"
+    role="tab"
+    class="view-toggle-btn"
+    [class.active]="viewMode === ViewMode.Effect"
+    [attr.aria-selected]="viewMode === ViewMode.Effect"
+    (click)="setViewMode(ViewMode.Effect)"
+  >
+    {{ "dashboard.view-toggle.effect" | translate }}
+  </button>
 </div>
 
 <app-gacha-table
@@ -70,3 +80,9 @@
   [genres]="genres"
   (genresUpdated)="loadGenres()"
 ></app-genre-table>
+
+<app-effect-table
+  *ngIf="viewMode === ViewMode.Effect"
+  [effects]="effects"
+  (effectsUpdated)="loadEffects()"
+></app-effect-table>

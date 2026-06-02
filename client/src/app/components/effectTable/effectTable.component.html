@@ -1,0 +1,40 @@
+<app-table-controls
+  [placeholder]="'dashboard.effect-table.search-placeholder' | translate"
+  [showFilterButton]="false"
+  [currentPage]="currentPage"
+  [totalItems]="filteredEffects.length"
+  [itemsPerPage]="itemsPerPage"
+  (search)="onSearchInput($event)"
+  (pageChange)="onPageChange($event)"
+  (itemsPerPageChange)="onItemsPerPageChange($event)"
+></app-table-controls>
+
+<div class="table-card">
+  <div class="table-scroll">
+    <table>
+      <thead>
+        <tr>
+          <th>{{ "dashboard.effect-table.name" | translate }}</th>
+          <th>{{ "dashboard.effect-table.url" | translate }}</th>
+          <th class="table-header-action"></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let effect of getDisplayedEffects()">
+          <td>{{ effect.name }}</td>
+          <td>
+            <a [href]="effect.url" target="_blank" rel="noopener noreferrer">
+              {{ effect.url }}
+            </a>
+          </td>
+          <td class="table-action-cell">
+            <app-action-menu
+              (edit)="editEffect(effect)"
+              (delete)="deleteEffect(effect)"
+            ></app-action-menu>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

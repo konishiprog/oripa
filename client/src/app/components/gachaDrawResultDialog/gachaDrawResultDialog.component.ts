@@ -14,6 +14,8 @@ export interface DrawnCard {
   imageFront: string;
   imageBack: string;
   cardType?: string;
+  effectName?: string;
+  effectUrl?: string;
 }
 
 export interface GachaDrawResultDialogData {
@@ -34,6 +36,7 @@ export class GachaDrawResultDialogComponent implements OnInit {
   revealed: boolean[] = [];
   currentIndex: number = 0;
   showSummary: boolean = false;
+  isPlayingEffect: boolean = false;
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: GachaDrawResultDialogData,
@@ -47,10 +50,27 @@ export class GachaDrawResultDialogComponent implements OnInit {
     this.translateService.use('ja');
     this.drawnCards = this.data?.drawnCards ?? [];
     this.revealed = this.drawnCards.map(() => false);
+    this.startEffectForCurrent();
   }
 
   get currentCard(): DrawnCard | null {
     return this.drawnCards[this.currentIndex] ?? null;
+  }
+
+  private startEffectForCurrent(): void {
+    const card = this.currentCard;
+    this.isPlayingEffect = !!card?.effectUrl && !this.isCurrentRevealed;
+    this.cdr.markForCheck();
+  }
+
+  onEffectEnded(): void {
+    if (!this.isPlayingEffect) return;
+    this.isPlayingEffect = false;
+    this.revealed[this.currentIndex] = true;
+    this.cdr.markForCheck();
+    if (this.hasEffectUrl) {
+      setTimeout(() => this.next(), 300);
+    }
   }
 
   get isCurrentRevealed(): boolean {
@@ -61,29 +81,48 @@ export class GachaDrawResultDialogComponent implements OnInit {
     return this.currentIndex >= this.drawnCards.length - 1;
   }
 
+  get hasEffectUrl(): boolean {
+    return !!this.currentCard?.effectUrl;
+  }
+
+  get isShowingEffect(): boolean {
+    return (
+      !this.showSummary &&
+      !!this.currentCard &&
+      (this.isPlayingEffect || this.hasEffectUrl)
+    );
+  }
+
   reveal(): void {
-    if (this.isCurrentRevealed) return;
+    if (this.isPlayingEffect || this.isCurrentRevealed) return;
     this.revealed[this.currentIndex] = true;
     this.cdr.markForCheck();
   }
 
   next(): void {
+    if (this.isPlayingEffect) return;
     if (!this.isCurrentRevealed) {
       this.reveal();
       return;
     }
     if (this.isLast) {
-      this.showSummary = true;
-      this.cdr.markForCheck();
+      this.enterSummary();
       return;
     }
     this.currentIndex += 1;
+    this.startEffectForCurrent();
     this.cdr.markForCheck();
   }
 
   revealAll(): void {
+    this.isPlayingEffect = false;
     this.revealed = this.drawnCards.map(() => true);
+    this.enterSummary();
+  }
+
+  private enterSummary(): void {
     this.showSummary = true;
+    this.dialogRef?.updateSize('520px', '');
     this.cdr.markForCheck();
   }
 

@@ -13,6 +13,7 @@ export interface CreateCardPayload {
   cardType: string;
   exchangeType: string;
   exchangePoints: number | null;
+  effectId: string | null;
   imageFrontFile: File;
   imageBackFile: File;
 }
@@ -22,6 +23,7 @@ export interface UpdateCardPayload {
   cardType: string;
   exchangeType: string;
   exchangePoints: number | null;
+  effectId: string | null;
   imageFrontFile?: File | null;
   imageBackFile?: File | null;
 }
@@ -49,6 +51,9 @@ export class CardService {
     if (payload.exchangePoints !== null) {
       formData.append('exchangePoints', payload.exchangePoints.toString());
     }
+    if (payload.effectId !== null) {
+      formData.append('effectId', payload.effectId);
+    }
     formData.append('imageFront', payload.imageFrontFile);
     formData.append('imageBack', payload.imageBackFile);
 
@@ -73,6 +78,9 @@ export class CardService {
     formData.append('exchangeType', payload.exchangeType);
     if (payload.exchangePoints !== null) {
       formData.append('exchangePoints', payload.exchangePoints.toString());
+    }
+    if (payload.effectId !== null) {
+      formData.append('effectId', payload.effectId);
     }
     if (payload.imageFrontFile) {
       formData.append('imageFront', payload.imageFrontFile);

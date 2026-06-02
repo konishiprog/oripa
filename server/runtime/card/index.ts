@@ -4,11 +4,25 @@ export {};
 
 const messages = require("../../constants/messages.json");
 const { CARD_STATUS, EXCHANGE_TYPE } = require("../../constants/card");
+const effectRuntime = require("../effect");
 
 let db: any;
 let cardCache: Map<string, any> = new Map();
 
 const toPlain = (card: any) => card?.get({ plain: true }) || null;
+
+/**
+ * Resolve effect name/url for a card from the effect cache
+ * @param {string | null} effectId
+ * @returns {{effectName: string | null, effectUrl: string | null}}
+ */
+function resolveEffect(effectId: string | null | undefined) {
+  const effect = effectId ? effectRuntime.getById(effectId) : null;
+  return {
+    effectName: effect?.name ?? null,
+    effectUrl: effect?.url ?? null,
+  };
+}
 
 /**
  * Initialize card module with database connection
@@ -33,6 +47,7 @@ async function refreshCache() {
     const cardWithGacha = {
       ...plainCard,
       gachaName: card.gacha?.name ?? null,
+      ...resolveEffect(plainCard.effectId),
     };
     cardCache.set(plainCard.id, cardWithGacha);
   });
@@ -49,6 +64,7 @@ async function create(payload: {
   cardType: string;
   exchangeType: string;
   exchangePoints?: number | null;
+  effectId?: string | null;
   imageFrontFile?: any;
   imageBackFile?: any;
 }) {
@@ -89,15 +105,20 @@ async function create(payload: {
       payload.exchangeType === EXCHANGE_TYPE.BOTH
         ? (payload.exchangePoints ?? null)
         : null,
+    effectId: payload.effectId ?? null,
     imageFront: imageFrontBase64,
     imageBack: imageBackBase64,
     isDrawn: CARD_STATUS.NOT_DRAWN,
   });
 
   const plainCard = toPlain(card);
-  const plainCardWithGacha = { ...plainCard, gachaName: gacha.name };
+  const plainCardWithGacha = {
+    ...plainCard,
+    gachaName: gacha.name,
+    ...resolveEffect(plainCard.effectId),
+  };
   cardCache.set(plainCard.id, plainCardWithGacha);
-  return plainCard;
+  return plainCardWithGacha;
 }
 
 /**
@@ -124,6 +145,7 @@ async function update(
     cardType?: string;
     exchangeType?: string;
     exchangePoints?: number | null;
+    effectId?: string | null;
     imageFrontFile?: any;
     imageBackFile?: any;
     userId?: string;
@@ -170,6 +192,9 @@ async function update(
         ? (payload.exchangePoints ?? null)
         : null;
   }
+  if (payload.effectId !== undefined) {
+    updateData.effectId = payload.effectId;
+  }
   if (payload.isDrawn !== undefined) updateData.isDrawn = payload.isDrawn;
   if (payload.userId !== undefined) updateData.userId = payload.userId;
 
@@ -177,9 +202,13 @@ async function update(
 
   const plainCard = toPlain(card);
   const cachedCard = cardCache.get(id);
-  const plainCardWithGacha = { ...plainCard, gachaName: cachedCard?.gachaName };
+  const plainCardWithGacha = {
+    ...plainCard,
+    gachaName: cachedCard?.gachaName,
+    ...resolveEffect(plainCard.effectId),
+  };
   cardCache.set(id, plainCardWithGacha);
-  return plainCard;
+  return plainCardWithGacha;
 }
 
 /**
