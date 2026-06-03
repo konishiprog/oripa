@@ -15,6 +15,13 @@ let gachaCache: Map<string, any> = new Map();
 
 const toPlain = (gacha: any) => gacha?.get({ plain: true }) || null;
 
+const ensureMidnightTime = (dateString: string | Date): Date => {
+  if (dateString instanceof Date) return dateString;
+  const date = new Date(dateString);
+  date.setHours(0, 0, 0, 0);
+  return date;
+};
+
 /**
  * Initialize gacha module with database connection
  * @param {*} _db - Sequelize database instance
@@ -89,8 +96,8 @@ async function create(payload: {
     consumptionType: payload.consumptionType ?? CONSUMPTION_TYPE.COIN,
     cost: payload.cost,
     oncePerUser: payload.oncePerUser ?? false,
-    publishStart: payload.publishStart,
-    publishEnd: payload.publishEnd,
+    publishStart: ensureMidnightTime(payload.publishStart),
+    publishEnd: ensureMidnightTime(payload.publishEnd),
     isPublic: payload.isPublic,
   });
   const genreName = payload.genreId
@@ -346,8 +353,8 @@ async function update(
     consumptionType: payload.consumptionType ?? gacha.consumptionType,
     cost: payload.cost,
     oncePerUser: payload.oncePerUser ?? gacha.oncePerUser,
-    publishStart: payload.publishStart,
-    publishEnd: payload.publishEnd,
+    publishStart: ensureMidnightTime(payload.publishStart),
+    publishEnd: ensureMidnightTime(payload.publishEnd),
     isPublic: payload.isPublic,
   });
 

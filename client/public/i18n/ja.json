@@ -217,10 +217,10 @@
     "image-select": "画像を選択",
     "image-change": "画像を変更",
     "card-type": "カードタイプ",
-    "card-type-ssr": "大当たり",
-    "card-type-sr": "あたり",
-    "card-type-r": "普通",
-    "card-type-n": "ハズレ",
+    "card-type-ssr": "S賞",
+    "card-type-sr": "A賞",
+    "card-type-r": "B賞",
+    "card-type-n": "C賞",
     "card-type-last": "ラストワン賞",
     "exchange-type": "交換タイプ",
     "exchange-type-shipping-only": "発送のみ",
@@ -313,9 +313,9 @@
 
   "gacha-winners": {
     "title": "当選者情報",
-    "subtitle": "このオリパの当選者一覧です（R賞以下は省略）",
-    "section-ssr": "大当たり",
-    "section-sr": "あたり",
+    "subtitle": "このオリパの当選者一覧です（B賞以下は省略）",
+    "section-ssr": "S賞",
+    "section-sr": "A賞",
     "empty": "まだ当選者がいません",
     "loading": "読み込み中...",
     "close": "閉じる",
@@ -334,8 +334,8 @@
     "law-title": "■ 特定商取引法に基づく表記について",
     "law-text": "お支払い・ご提供・キャンセル等は",
     "law-link": "こちら",
-    "jackpot": "大当たり",
-    "jackpot-empty": "大当たりのカードはありません",
+    "jackpot": "S賞",
+    "jackpot-empty": "S賞のカードはありません",
     "error-load": "ガチャの詳細情報の読み込みに失敗しました"
   },
 
