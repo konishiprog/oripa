@@ -1,20 +1,53 @@
 <header class="app-header">
   <app-logo class="header-logo"></app-logo>
 
-  <button
-    class="hamburger-btn"
-    type="button"
-    (click)="toggleMobileMenu()"
-    [attr.aria-expanded]="isMobileMenuOpen"
-    [attr.aria-label]="'common.header.menu' | translate"
-  >
-    <span
-      class="hamburger-icon"
-      [innerHTML]="isMobileMenuOpen ? closeIcon : menuIcon"
-    ></span>
-  </button>
+  <div class="header-right-wrapper">
+    <ng-container *ngIf="!isAdminPage && isLoggedIn">
+      <div class="user-coin-section">
+        <div class="user-coin-group">
+          <span class="user-coin-icon" [innerHTML]="coinIcon"></span>
+          <span class="user-coin-amount">
+            {{ userCoin }}{{ "common.unit.point" | translate }}
+          </span>
+          <button
+            class="header-btn-charge"
+            type="button"
+            (click)="goToCharge()"
+            [attr.aria-label]="'common.header.charge' | translate"
+          >
+            +
+          </button>
+        </div>
+        <div class="user-special-point-display">
+          +{{ userSpecialPoint || 0
+          }}{{ "common.unit.special-point" | translate }}
+        </div>
+      </div>
+      <button
+        class="header-btn-mypage"
+        type="button"
+        (click)="goToMyPage()"
+        [attr.aria-label]="'common.header.my-page' | translate"
+      >
+        <span class="header-mypage-icon" [innerHTML]="myPageIcon"></span>
+      </button>
+    </ng-container>
 
-  <div class="header-right" [class.open]="isMobileMenuOpen">
+    <button
+      class="hamburger-btn"
+      type="button"
+      (click)="toggleMobileMenu()"
+      [attr.aria-expanded]="isMobileMenuOpen"
+      [attr.aria-label]="'common.header.menu' | translate"
+    >
+      <span
+        class="hamburger-icon"
+        [innerHTML]="isMobileMenuOpen ? closeIcon : menuIcon"
+      ></span>
+    </button>
+  </div>
+
+  <div class="header-menu" [class.open]="isMobileMenuOpen">
     <ng-container *ngIf="isAdminPage">
       <button class="header-btn header-btn-primary" (click)="goToGachaPage()">
         {{ "common.header.back-to-gacha" | translate }}
@@ -50,34 +83,6 @@
           (click)="logout()"
         >
           {{ "common.header.logout" | translate }}
-        </button>
-        <div class="user-coin-section">
-          <div class="user-coin-group">
-            <span class="user-coin-icon" [innerHTML]="coinIcon"></span>
-            <span class="user-coin-amount">
-              {{ userCoin }}{{ "common.unit.point" | translate }}
-            </span>
-            <button
-              class="header-btn-charge"
-              type="button"
-              (click)="goToCharge()"
-              [attr.aria-label]="'common.header.charge' | translate"
-            >
-              +
-            </button>
-          </div>
-          <div class="user-special-point-display">
-            +{{ userSpecialPoint || 0
-            }}{{ "common.unit.special-point" | translate }}
-          </div>
-        </div>
-        <button
-          class="header-btn-mypage"
-          type="button"
-          (click)="goToMyPage()"
-          [attr.aria-label]="'common.header.my-page' | translate"
-        >
-          <span class="header-mypage-icon" [innerHTML]="myPageIcon"></span>
         </button>
       </ng-container>
     </ng-container>

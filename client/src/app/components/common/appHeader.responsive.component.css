@@ -1,3 +1,9 @@
+.header-right-wrapper {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
 .hamburger-btn {
   display: none;
   width: 40px;
@@ -29,16 +35,52 @@
   height: 100%;
 }
 
+.header-menu {
+  display: flex;
+  gap: 8px;
+}
+
 .header-backdrop {
   display: none;
 }
 
 @media (max-width: 768px) {
-  .hamburger-btn {
-    display: flex;
+  .header-right-wrapper {
+    width: 100%;
+    justify-content: space-between;
+    gap: 8px;
   }
 
-  .header-right {
+  .hamburger-btn {
+    display: flex;
+    flex-shrink: 0;
+  }
+
+  .user-coin-section {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex: 1;
+  }
+
+  .user-coin-group {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+
+  .user-special-point-display {
+    display: none;
+  }
+
+  .header-btn-mypage {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .header-menu {
     position: absolute;
     top: 100%;
     right: 0;
@@ -54,36 +96,12 @@
     z-index: 25;
   }
 
-  .header-right.open {
+  .header-menu.open {
     display: flex;
   }
 
   .header-btn {
     width: 100%;
-    text-align: center;
-  }
-
-  .header-btn-mypage {
-    align-self: center;
-  }
-
-  .user-coin-section {
-    flex-direction: column;
-    align-items: stretch;
-    gap: 8px;
-    width: 100%;
-  }
-
-  .user-coin-section {
-    justify-content: center;
-  }
-
-  .user-coin-group {
-    justify-content: center;
-    gap: 4px;
-  }
-
-  .user-special-point-display {
     text-align: center;
   }
 
