@@ -475,31 +475,6 @@ module.exports = {
         }
 
         try {
-          const user = runtime.user.getById(userId);
-          if (!user?.email) {
-            return res
-              .status(404)
-              .json({ error: messages.errors.USER_NOT_FOUND });
-          }
-
-          const allCards = await runtime.card.getAll();
-          const ownedCards = allCards.filter(
-            (card: any) => cardIds.includes(card.id) && card.userId === userId,
-          );
-
-          const gainedPoint = ownedCards.reduce(
-            (sum: number, card: any) => sum + (card.exchangePoints || 0),
-            0,
-          );
-
-          await runtime.email.sendCardExchangeEmail(
-            user.email,
-            user.name,
-            ownedCards.length,
-            gainedPoint,
-            user.coin || 0,
-          );
-
           return res.status(200).json({ message: messages.success.RETRIEVED });
         } catch (error: any) {
           const { status, message } = handleError(
