@@ -26,6 +26,7 @@ import { CoinPurchaseHistoryPageComponent } from './components/coinPurchaseHisto
 import { ForgotPasswordComponent } from './components/forgotPassword/forgot-password.component';
 import { TermsOfServiceComponent } from './components/termsOfService/termsOfService.component';
 import { ContactPageComponent } from './components/contactPage/contactPage.component';
+import { ChargeResultPageComponent } from './components/chargeResultPage/chargeResultPage.component';
 
 const routes: Routes = [
   {
@@ -84,6 +85,10 @@ const routes: Routes = [
   {
     path: 'coinCharge',
     component: CoinChargePageComponent,
+  },
+  {
+    path: 'charge-result',
+    component: ChargeResultPageComponent,
   },
   {
     path: 'adminPanel',

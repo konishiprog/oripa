@@ -1,6 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { MatIconRegistry } from '@angular/material/icon';
 import { DomSanitizer } from '@angular/platform-browser';
+import { TranslateService } from '@ngx-translate/core';
 
 /**
  * App Root Component
@@ -12,12 +13,13 @@ import { DomSanitizer } from '@angular/platform-browser';
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
   protected title = 'app';
 
   constructor(
     private iconRegistry: MatIconRegistry,
     private domSanitizer: DomSanitizer,
+    private translate: TranslateService,
   ) {
     const pathIcons = 'assets/icons/';
 
@@ -33,5 +35,10 @@ export class AppComponent {
         domSanitizer.bypassSecurityTrustResourceUrl(icons[i][1]),
       );
     }
+  }
+
+  ngOnInit(): void {
+    this.translate.setDefaultLang('ja');
+    this.translate.use('ja');
   }
 }

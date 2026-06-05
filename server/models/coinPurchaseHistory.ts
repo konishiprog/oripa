@@ -45,6 +45,19 @@ module.exports = (sequelize: any, DataTypes: any) => {
         allowNull: false,
         defaultValue: "completed",
       },
+      stripePaymentIntentId: {
+        type: DataTypes.STRING,
+        allowNull: true,
+        unique: true,
+      },
+      paymentMethod: {
+        type: DataTypes.STRING,
+        allowNull: true,
+      },
+      failureReason: {
+        type: DataTypes.TEXT,
+        allowNull: true,
+      },
       createdAt: {
         type: DataTypes.DATE,
         allowNull: false,

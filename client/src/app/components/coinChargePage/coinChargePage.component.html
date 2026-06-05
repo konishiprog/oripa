@@ -54,9 +54,62 @@
         </div>
       </div>
 
-      <button class="charge-btn" (click)="onCharge()">
-        {{ "coin-charge.charge-button" | translate }}
+      <button
+        class="charge-btn"
+        (click)="onCharge()"
+        [disabled]="isLoading || isProcessing"
+        *ngIf="!showPaymentForm"
+      >
+        {{
+          isLoading
+            ? ("common.loading" | translate)
+            : ("coin-charge.charge-button" | translate)
+        }}
       </button>
+
+      <div *ngIf="showPaymentForm" class="payment-form">
+        <h3>{{ "coin-charge.payment-method" | translate }}</h3>
+        <div id="payment-element"></div>
+
+        <div
+          *ngIf="paymentMessage"
+          class="message"
+          [ngClass]="getMessageClass()"
+        >
+          {{ paymentMessage }}
+        </div>
+
+        <div class="payment-actions">
+          <button
+            class="submit-btn"
+            (click)="onSubmitPayment()"
+            [disabled]="isProcessing"
+          >
+            {{
+              isProcessing
+                ? ("common.loading" | translate)
+                : ("coin-charge.pay-button" | translate)
+            }}
+          </button>
+          <button
+            class="cancel-btn"
+            (click)="onCancelPayment()"
+            [disabled]="isProcessing"
+          >
+            {{ "coin-charge.cancel" | translate }}
+          </button>
+        </div>
+      </div>
+
+      <div
+        *ngIf="paymentMessage && !showPaymentForm"
+        class="message"
+        [ngClass]="
+          'message-' + (paymentMessage.includes('エラー') ? 'error' : 'info')
+        "
+      >
+        {{ paymentMessage }}
+      </div>
     </div>
   </div>
 </div>

@@ -81,7 +81,16 @@ async function init(_db?: any) {
   await card.init(database);
   await user.init(database);
   await coinExchangeRate.init(database);
-  await coinPurchaseHistory.init(database);
+
+  const runtimeContext = {
+    user,
+    card,
+    gacha,
+    email,
+    admin,
+    coinExchangeRate,
+  };
+  await coinPurchaseHistory.init(database, runtimeContext);
   cardApi.init({ card, gacha, user, email, admin });
   userApi.init({ user, email, coinExchangeRate, coinPurchaseHistory, card });
   coinExchangeRateApi.init({ coinExchangeRate });
@@ -135,6 +144,7 @@ const runtime = {
   user,
   email,
   coinExchangeRate,
+  coinPurchaseHistory,
   get db() {
     return db;
   },

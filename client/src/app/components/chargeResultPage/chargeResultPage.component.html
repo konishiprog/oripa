@@ -1,0 +1,46 @@
+<div class="result-container">
+  <div *ngIf="loading" class="loading">
+    <p>{{ "common.loading" | translate }}</p>
+  </div>
+
+  <div *ngIf="!loading && status === 'succeeded'" class="success">
+    <div class="icon" [innerHTML]="icons['success']"></div>
+    <h2>{{ "charge-result.success-title" | translate }}</h2>
+    <p>{{ "charge-result.success-message" | translate }}</p>
+    <div class="amount">
+      支払額：{{ "common.unit.yen" | translate }}{{ amount | number }}
+    </div>
+    <div class="coin-info">
+      <div>
+        獲得ポイント：{{ coinAmount }}{{ "common.unit.point" | translate }}
+      </div>
+      <div *ngIf="specialPointAmount > 0">
+        獲得特別ポイント：{{ specialPointAmount
+        }}{{ "common.unit.point" | translate }}
+      </div>
+    </div>
+    <div class="actions">
+      <button class="btn btn-primary" (click)="goToUserGachaPage()">
+        {{ "charge-result.go-gacha" | translate }}
+      </button>
+    </div>
+  </div>
+
+  <div *ngIf="!loading && status === 'failed'" class="error">
+    <div class="icon" [innerHTML]="icons['error']"></div>
+    <h2>{{ "charge-result.error-title" | translate }}</h2>
+    <p>{{ "charge-result.error-message" | translate }}</p>
+    <p class="error-detail" *ngIf="errorMessage">{{ errorMessage }}</p>
+    <div class="actions">
+      <button class="btn btn-primary" (click)="goToCoinChargePage()">
+        {{ "charge-result.retry" | translate }}
+      </button>
+    </div>
+  </div>
+
+  <div *ngIf="!loading && status === 'processing'" class="pending">
+    <div class="icon" [innerHTML]="icons['processing']"></div>
+    <h2>{{ "charge-result.processing-title" | translate }}</h2>
+    <p>{{ "charge-result.processing-message" | translate }}</p>
+  </div>
+</div>

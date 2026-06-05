@@ -246,4 +246,127 @@ describe('CoinPurchaseHistoryService', () => {
       expect(response[0].status).toBeDefined();
     });
   });
+
+  describe('createPaymentIntent', () => {
+    it('should create payment intent', async () => {
+      const mockPaymentResponse = {
+        clientSecret: 'pi_test_secret',
+        chargeHistoryId: 'charge-history-123',
+      };
+
+      const result = service.createPaymentIntent('user-123', 450, 500, 50);
+
+      const req = httpMock.expectOne(
+        'http://localhost:3000/api/coin-purchase-history/charge/create-payment-intent',
+      );
+      expect(req.request.method).toBe('POST');
+      expect(req.request.body).toEqual({
+        userId: 'user-123',
+        amount: 450,
+        point: 500,
+        specialPoint: 50,
+      });
+      req.flush({ message: 'Payment intent created', data: mockPaymentResponse });
+
+      const response = await result;
+      expect(response.clientSecret).toBe('pi_test_secret');
+      expect(response.chargeHistoryId).toBe('charge-history-123');
+    });
+
+    it('should create payment intent without special point', async () => {
+      const mockPaymentResponse = {
+        clientSecret: 'pi_test_secret_2',
+        chargeHistoryId: 'charge-history-124',
+      };
+
+      const result = service.createPaymentIntent('user-456', 99, 100);
+
+      const req = httpMock.expectOne(
+        'http://localhost:3000/api/coin-purchase-history/charge/create-payment-intent',
+      );
+      expect(req.request.body).toEqual({
+        userId: 'user-456',
+        amount: 99,
+        point: 100,
+        specialPoint: 0,
+      });
+      req.flush({ message: 'Payment intent created', data: mockPaymentResponse });
+
+      const response = await result;
+      expect(response.clientSecret).toBe('pi_test_secret_2');
+    });
+
+    it('should handle error when creating payment intent', async () => {
+      const result = service.createPaymentIntent('user-123', 450, 500, 50);
+
+      const req = httpMock.expectOne(
+        'http://localhost:3000/api/coin-purchase-history/charge/create-payment-intent',
+      );
+      req.error(new ErrorEvent('Network error'));
+
+      try {
+        await result;
+        fail('should have thrown error');
+      } catch (error: any) {
+        expect(error).toBeTruthy();
+      }
+    });
+  });
+
+  describe('getChargeHistory', () => {
+    it('should fetch charge history for a user', async () => {
+      const chargeHistories = mockHistories.filter((h) => h.userId === 'user-1');
+      const result = service.getChargeHistory('user-1');
+
+      const req = httpMock.expectOne(
+        'http://localhost:3000/api/coin-purchase-history/charge/history/user-1',
+      );
+      expect(req.request.method).toBe('GET');
+      req.flush({ message: 'Charge history fetched', data: chargeHistories });
+
+      const response = await result;
+      expect(response).toEqual(chargeHistories);
+      expect(response.every((h) => h.userId === 'user-1')).toBe(true);
+    });
+
+    it('should handle empty charge history', async () => {
+      const result = service.getChargeHistory('user-nonexistent');
+
+      const req = httpMock.expectOne(
+        'http://localhost:3000/api/coin-purchase-history/charge/history/user-nonexistent',
+      );
+      req.flush({ message: 'Charge history fetched', data: [] });
+
+      const response = await result;
+      expect(response).toEqual([]);
+    });
+
+    it('should return empty array if response data is null', async () => {
+      const result = service.getChargeHistory('user-1');
+
+      const req = httpMock.expectOne(
+        'http://localhost:3000/api/coin-purchase-history/charge/history/user-1',
+      );
+      req.flush({ message: 'Charge history fetched', data: null });
+
+      const response = await result;
+      expect(response).toEqual([]);
+    });
+
+    it('should handle HTTP error when fetching charge history', async () => {
+      const result = service.getChargeHistory('user-1');
+
+      const req = httpMock.expectOne(
+        'http://localhost:3000/api/coin-purchase-history/charge/history/user-1',
+      );
+      req.error(new ErrorEvent('Network error'));
+
+      try {
+        await result;
+        fail('should have thrown error');
+      } catch (error: any) {
+        expect(error).toBeTruthy();
+      }
+    });
+  });
 });
