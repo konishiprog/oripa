@@ -30,7 +30,6 @@ function resolveEffect(effectId: string | null | undefined) {
  */
 async function init(_db: any) {
   db = _db;
-  await refreshCache();
 }
 
 /**
@@ -125,9 +124,12 @@ async function create(payload: {
  * Get all cards from cache
  * @returns {Promise<any[]>} - Array of all card objects
  */
-function getAll() {
+async function getAll() {
+  if (cardCache.size === 0) {
+    await refreshCache();
+  }
   const cards = Array.from(cardCache.values());
-  return Promise.resolve(cards);
+  return cards;
 }
 
 /**
@@ -152,6 +154,9 @@ async function update(
     isDrawn?: string;
   },
 ) {
+  if (cardCache.size === 0) {
+    await refreshCache();
+  }
   if (Array.isArray(id)) {
     id.forEach((cardId: string) => {
       const card = cardCache.get(cardId);
@@ -216,6 +221,9 @@ async function update(
  * @param {string} id - Card id to delete
  */
 async function deleteById(id: string) {
+  if (cardCache.size === 0) {
+    await refreshCache();
+  }
   const cachedCard = cardCache.get(id);
   if (!cachedCard) {
     throw new Error(messages.errors.CARD_NOT_FOUND);

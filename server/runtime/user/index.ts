@@ -16,7 +16,6 @@ const toPlain = (user: any) => user?.get({ plain: true }) || null;
  */
 async function init(_db: any) {
   db = _db;
-  await refreshCache();
 }
 
 /**
@@ -45,6 +44,9 @@ async function createPending(payload: {
   phone: string;
   postalCode?: string;
 }) {
+  if (userCache.size === 0) {
+    await refreshCache();
+  }
   if (
     Array.from(userCache.values()).some(
       (user: any) => user.email === payload.email,
@@ -147,6 +149,9 @@ async function verifyEmail(token: string) {
  * @returns {Promise<any>} - User object if credentials are valid, null otherwise
  */
 async function verifyCredentials(identifier: string, password: string) {
+  if (userCache.size === 0) {
+    await refreshCache();
+  }
   const user = Array.from(userCache.values()).find(
     (user: any) => user.email === identifier || user.phone === identifier,
   );
@@ -161,6 +166,9 @@ async function verifyCredentials(identifier: string, password: string) {
  * @returns {Promise<any[]>} - Array of user objects
  */
 async function getAll() {
+  if (userCache.size === 0) {
+    await refreshCache();
+  }
   return Array.from(userCache.values());
 }
 
@@ -169,7 +177,10 @@ async function getAll() {
  * @param {string} id - User id
  * @returns {any | null} - User object or null
  */
-function getById(id: string) {
+async function getById(id: string) {
+  if (userCache.size === 0) {
+    await refreshCache();
+  }
   return userCache.get(id) || null;
 }
 
@@ -180,6 +191,9 @@ function getById(id: string) {
  * @returns {Promise<any>} - Updated user object
  */
 async function updateCoin(id: string, newCoin: number) {
+  if (userCache.size === 0) {
+    await refreshCache();
+  }
   const cachedUser = userCache.get(id);
   if (!cachedUser) {
     throw new Error(messages.errors.USER_NOT_FOUND);

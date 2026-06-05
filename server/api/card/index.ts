@@ -298,7 +298,7 @@ module.exports = {
           return res.status(404).json({ error: messages.errors.CARD_NOT_FOUND });
         }
 
-        const cardOwner = user?.getById(card.userId);
+        const cardOwner = await user?.getById(card.userId);
 
         await runtime.card.update(id, { isDrawn });
 

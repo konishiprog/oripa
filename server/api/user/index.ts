@@ -294,7 +294,7 @@ module.exports = {
       }
 
       try {
-        const user = runtime.user.getById(id);
+        const user = await runtime.user.getById(id);
         if (!user) {
           return res
             .status(404)
@@ -430,7 +430,7 @@ module.exports = {
           rate.specialPoint,
         );
 
-        const user = runtime.user.getById(userId);
+        const user = await runtime.user.getById(userId);
         if (user?.email) {
           await runtime.email.sendCoinPurchaseEmail(
             user.email,

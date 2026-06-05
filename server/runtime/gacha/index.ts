@@ -28,7 +28,6 @@ const ensureMidnightTime = (dateString: string | Date): Date => {
  */
 async function init(_db: any) {
   db = _db;
-  await refreshCache();
 }
 
 /**
@@ -124,6 +123,9 @@ async function getDrawnGachaIds(userId: string): Promise<Set<string>> {
  * @returns {Promise<any[]>} - Array of gacha objects sorted by publishStart descending
  */
 async function getAll(userId?: string) {
+  if (gachaCache.size === 0) {
+    await refreshCache();
+  }
   const drawnGachaIds = userId
     ? await getDrawnGachaIds(userId)
     : new Set<string>();
@@ -154,6 +156,9 @@ async function getAll(userId?: string) {
  * @returns {Promise<any | null>}
  */
 async function getById(id: string, userId?: string) {
+  if (gachaCache.size === 0) {
+    await refreshCache();
+  }
   const gacha = gachaCache.get(id);
   if (!gacha) return null;
   const cards = gacha.cards ?? [];
@@ -189,11 +194,14 @@ async function draw(payload: {
     throw new Error(messages.errors.DRAW_COUNT_INVALID);
   }
 
-  const user = userRuntime.getById(payload.userId);
+  const user = await userRuntime.getById(payload.userId);
   if (!user) {
     throw new Error(messages.errors.USER_NOT_FOUND);
   }
 
+  if (gachaCache.size === 0) {
+    await refreshCache();
+  }
   const gacha = gachaCache.get(payload.gachaId);
   if (!gacha) {
     throw new Error(messages.errors.GACHA_NOT_FOUND);

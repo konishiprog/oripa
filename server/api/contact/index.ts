@@ -39,7 +39,7 @@ module.exports = {
       }
 
       try {
-        const user = runtime.user.getById(userId);
+        const user = await runtime.user.getById(userId);
         if (!user) {
           return res
             .status(404)
