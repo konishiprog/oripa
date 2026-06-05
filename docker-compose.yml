@@ -18,7 +18,7 @@ services:
     build: ./server
     container_name: oripa-server
     ports:
-      - "3001:3000"
+      - "3000:3000"
     depends_on:
       - db
     environment:
@@ -27,12 +27,13 @@ services:
       DB_USER: user
       DB_PASS: pass
       DB_NAME: oripa
+      ALLOWED_ORIGINS: http://localhost:4200
 
   client:
     build: ./client
     container_name: oripa-client
     ports:
-      - "4300:4200"
+      - "4200:4200"
     depends_on:
       - server
 
