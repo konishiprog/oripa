@@ -574,7 +574,10 @@
     "error-save": "レート設定の保存に失敗しました",
     "error-delete": "レート設定の削除に失敗しました",
     "error-create": "レート設定の作成に失敗しました",
-    "error-invalid-input": "ポイントと金額は1以上の整数で入力してください",
+    "error-invalid-input": "入力値が無効です",
+    "error-point-invalid": "ポイントは1以上の整数で入力してください",
+    "error-price-invalid": "金額は50円以上の整数で入力してください",
+    "error-special-point-invalid": "特別ポイントは0以上の整数で入力してください",
     "no-data": "レート設定はまだ登録されていません"
   },
 
@@ -585,10 +588,28 @@
     "select-option": "チャージオプションを選択",
     "price": "金額",
     "charge-button": "チャージする",
+    "payment-method": "支払い方法を選択",
+    "pay-button": "支払う",
+    "cancel": "キャンセル",
     "error-load": "チャージオプションの読み込みに失敗しました",
     "error-no-option": "チャージオプションを選択してください",
     "error-charge": "チャージに失敗しました",
     "success-charge": "{{addedPoint}}ポイント チャージしました。現在のポイント: {{newCoin}}P"
+  },
+
+  "charge-result": {
+    "success-title": "✓ チャージが完了しました",
+    "success-message": "ポイントが付与されました",
+    "error-title": "✗ チャージに失敗しました",
+    "error-message": "申し訳ございませんが、チャージ処理を完了することができませんでした。",
+    "processing-title": "⏳ 処理中です",
+    "processing-message": "お待ちください",
+    "acquired": "が付与されました",
+    "go-gacha": "ガチャページへ",
+    "retry": "もう一度試す",
+    "error-no-secret": "支払い情報が見つかりません",
+    "error-stripe-load": "Stripe の読み込みに失敗しました",
+    "error-payment-intent": "Payment Intent を取得できません"
   },
 
   "coin-purchase-history": {

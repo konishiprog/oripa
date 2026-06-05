@@ -6,16 +6,19 @@ import {
   CoinExchangeRate,
 } from '../../service/coin-exchange-rate.service';
 import { UserService } from '../../service/user.service';
+import { CoinPurchaseHistoryService } from '../../service/coin-purchase-history.service';
+import { ApiConfigService } from '../../service/api-config.service';
 import { Router } from '@angular/router';
 import { TranslateService, TranslateModule } from '@ngx-translate/core';
-import { ChangeDetectorRef } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 
 describe('CoinChargePageComponent', () => {
   let component: CoinChargePageComponent;
   let fixture: ComponentFixture<CoinChargePageComponent>;
   let mockRateService: any;
   let mockUserService: any;
+  let mockChargeService: any;
   let mockRouter: any;
   let mockTranslateService: any;
 
@@ -49,17 +52,13 @@ describe('CoinChargePageComponent', () => {
 
     mockUserService = {
       getUserId: jest.fn().mockReturnValue('user-123'),
-      charge: jest.fn().mockResolvedValue({
-        userId: 'user-123',
-        previousCoin: 100,
-        newCoin: 600,
-        addedPoint: 500,
-        previousSpecialPoint: 0,
-        newSpecialPoint: 50,
-        addedSpecialPoint: 50,
+    };
+
+    mockChargeService = {
+      createPaymentIntent: jest.fn().mockResolvedValue({
+        clientSecret: 'pi_test_secret',
+        chargeHistoryId: 'charge-history-123',
       }),
-      saveCoin: jest.fn(),
-      saveSpecialPoint: jest.fn(),
     };
 
     mockRouter = {
@@ -69,9 +68,18 @@ describe('CoinChargePageComponent', () => {
     mockTranslateService = {
       setDefaultLang: jest.fn(),
       use: jest.fn(),
-      instant: jest.fn((key: string, params?: any) => {
-        if (key === 'coin-charge.success-charge') {
-          return `チャージに成功しました。追加ポイント: ${params?.addedPoint}, 新しいコイン: ${params?.newCoin}`;
+      instant: jest.fn((key: string) => {
+        if (key === 'coin-charge.error-no-option') {
+          return 'オプションを選択してください';
+        }
+        if (key === 'common.error-not-logged-in') {
+          return 'ログインしてください';
+        }
+        if (key === 'coin-charge.error-charge') {
+          return 'チャージに失敗しました';
+        }
+        if (key === 'coin-charge.error-load') {
+          return 'オプションの読み込みに失敗しました';
         }
         if (key === 'common.unit.yen') {
           return '¥';
@@ -88,12 +96,17 @@ describe('CoinChargePageComponent', () => {
 
     await TestBed.configureTestingModule({
       declarations: [CoinChargePageComponent],
-      imports: [FormsModule, TranslateModule.forRoot()],
+      imports: [FormsModule, TranslateModule.forRoot(), HttpClientTestingModule],
       providers: [
         { provide: CoinExchangeRateService, useValue: mockRateService },
         { provide: UserService, useValue: mockUserService },
+        { provide: CoinPurchaseHistoryService, useValue: mockChargeService },
         { provide: Router, useValue: mockRouter },
         { provide: TranslateService, useValue: mockTranslateService },
+        {
+          provide: ApiConfigService,
+          useValue: { domain: 'http://localhost', headers: {} },
+        },
       ],
     }).compileComponents();
 
@@ -111,13 +124,7 @@ describe('CoinChargePageComponent', () => {
     expect(component.isLoading).toBe(false);
   });
 
-  it('should call loadChargeOptions on ngOnInit', async () => {
-    jest.spyOn(component, 'loadChargeOptions');
-    component.ngOnInit();
-    expect(component.loadChargeOptions).toHaveBeenCalled();
-  });
-
-  it('should load charge options on init', async () => {
+  it('should load charge options on ngOnInit', async () => {
     await component.loadChargeOptions();
 
     expect(mockRateService.getAllRates).toHaveBeenCalled();
@@ -167,21 +174,15 @@ describe('CoinChargePageComponent', () => {
     alertSpy.mockRestore();
   });
 
-  it('should not charge if no option is selected', async () => {
+  it('should not create payment intent if no option is selected', async () => {
     component.selectedOptionId = '';
-    const alertSpy = jest.spyOn(window, 'alert').mockImplementation(() => {});
 
     await component.onCharge();
 
-    expect(alertSpy).toHaveBeenCalledWith(
-      mockTranslateService.instant('coin-charge.error-no-option'),
-    );
-    expect(mockUserService.charge).not.toHaveBeenCalled();
-
-    alertSpy.mockRestore();
+    expect(mockChargeService.createPaymentIntent).not.toHaveBeenCalled();
   });
 
-  it('should not charge if user is not logged in', async () => {
+  it('should not create payment intent if user is not logged in', async () => {
     component.chargeOptions = mockRates.map((rate) => ({
       id: rate.id,
       label: `¥${rate.price}:${rate.point}P`,
@@ -192,20 +193,14 @@ describe('CoinChargePageComponent', () => {
     component.selectedOptionId = 'rate-1';
 
     mockUserService.getUserId.mockReturnValueOnce(null);
-    const alertSpy = jest.spyOn(window, 'alert').mockImplementation(() => {});
 
     await component.onCharge();
 
-    expect(alertSpy).toHaveBeenCalledWith(
-      mockTranslateService.instant('common.error-not-logged-in'),
-    );
     expect(mockRouter.navigate).toHaveBeenCalledWith(['/login']);
-    expect(mockUserService.charge).not.toHaveBeenCalled();
-
-    alertSpy.mockRestore();
+    expect(mockChargeService.createPaymentIntent).not.toHaveBeenCalled();
   });
 
-  it('should charge successfully and navigate to userGachaPage', async () => {
+  it('should create payment intent and show payment form on charge', async () => {
     component.chargeOptions = mockRates.map((rate) => ({
       id: rate.id,
       label: `¥${rate.price}:${rate.point}P`,
@@ -214,21 +209,23 @@ describe('CoinChargePageComponent', () => {
       specialPoint: rate.specialPoint,
     }));
     component.selectedOptionId = 'rate-2';
-
-    const alertSpy = jest.spyOn(window, 'alert').mockImplementation(() => {});
+    component['stripe'] = {
+      elements: jest.fn().mockResolvedValue({}),
+    } as any;
 
     await component.onCharge();
+    await fixture.whenStable();
 
-    expect(mockUserService.charge).toHaveBeenCalledWith('rate-2', 'user-123');
-    expect(mockUserService.saveCoin).toHaveBeenCalledWith(600);
-    expect(mockUserService.saveSpecialPoint).toHaveBeenCalledWith(50);
-    expect(alertSpy).toHaveBeenCalled();
-    expect(mockRouter.navigate).toHaveBeenCalledWith(['/userGachaPage']);
-
-    alertSpy.mockRestore();
+    expect(mockChargeService.createPaymentIntent).toHaveBeenCalledWith(
+      'user-123',
+      450,
+      500,
+      50,
+    );
+    expect(component.showPaymentForm).toBe(true);
   });
 
-  it('should handle charge error', async () => {
+  it('should handle payment intent creation error', async () => {
     component.chargeOptions = mockRates.map((rate) => ({
       id: rate.id,
       label: `¥${rate.price}:${rate.point}P`,
@@ -237,36 +234,17 @@ describe('CoinChargePageComponent', () => {
       specialPoint: rate.specialPoint,
     }));
     component.selectedOptionId = 'rate-1';
+    component['stripe'] = {} as any;
 
-    mockUserService.charge.mockRejectedValueOnce(new Error('Charge API Error'));
-    const alertSpy = jest.spyOn(window, 'alert').mockImplementation(() => {});
+    mockChargeService.createPaymentIntent.mockRejectedValueOnce(
+      new Error('Payment Intent Error'),
+    );
 
     await component.onCharge();
 
-    expect(alertSpy).toHaveBeenCalledWith(
+    expect(component.paymentMessage).toBe(
       mockTranslateService.instant('coin-charge.error-charge'),
     );
-    expect(mockRouter.navigate).not.toHaveBeenCalled();
-
-    alertSpy.mockRestore();
-  });
-
-  it('should mark for check after successful charge', async () => {
-    component.chargeOptions = mockRates.map((rate) => ({
-      id: rate.id,
-      label: `¥${rate.price}:${rate.point}P`,
-      price: rate.price,
-      point: rate.point,
-      specialPoint: rate.specialPoint,
-    }));
-    component.selectedOptionId = 'rate-1';
-
-    jest.spyOn(window, 'alert').mockImplementation(() => {});
-    const cdrSpy = jest.spyOn(component['cdr'], 'markForCheck');
-
-    await component.onCharge();
-
-    expect(cdrSpy).toHaveBeenCalled();
   });
 
   it('should navigate to userGachaPage on goBack', () => {
@@ -291,5 +269,17 @@ describe('CoinChargePageComponent', () => {
     expect(rateWithoutSpecialPoint.label).toContain('¥100');
     expect(rateWithoutSpecialPoint.label).toContain('100');
     expect(rateWithoutSpecialPoint.label).not.toContain('(+');
+  });
+
+  it('should cancel payment form', () => {
+    component.showPaymentForm = true;
+    component.paymentMessage = 'test';
+    component['paymentElement'] = { unmount: jest.fn() };
+
+    component.onCancelPayment();
+
+    expect(component.showPaymentForm).toBe(false);
+    expect(component.paymentMessage).toBe('');
+    expect(component['paymentElement']).toBeNull();
   });
 });

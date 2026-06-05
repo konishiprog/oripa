@@ -455,4 +455,5 @@ module.exports = {
   createPendingEmailChange,
   verifyEmailChange,
   forgotPassword,
+  refreshCache,
 };

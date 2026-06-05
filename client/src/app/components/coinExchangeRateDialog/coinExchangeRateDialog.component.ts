@@ -67,15 +67,15 @@ export class CoinExchangeRateDialogComponent implements OnInit {
 
   async onSubmit(): Promise<void> {
     if (!Number.isInteger(this.point) || this.point <= 0) {
-      this.showError('coin-exchange-rate.error-invalid-input');
+      this.showError('coin-exchange-rate.error-point-invalid');
       return;
     }
-    if (!Number.isInteger(this.price) || this.price <= 0) {
-      this.showError('coin-exchange-rate.error-invalid-input');
+    if (!Number.isInteger(this.price) || this.price < 50) {
+      this.showError('coin-exchange-rate.error-price-invalid');
       return;
     }
     if (!Number.isInteger(this.specialPoint) || this.specialPoint < 0) {
-      this.showError('coin-exchange-rate.error-invalid-input');
+      this.showError('coin-exchange-rate.error-special-point-invalid');
       return;
     }
 

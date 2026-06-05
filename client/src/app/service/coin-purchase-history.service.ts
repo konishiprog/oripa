@@ -11,7 +11,15 @@ export interface CoinPurchaseHistoryItem {
   point: number;
   specialPoint: number;
   status: string;
+  paymentMethod?: string;
+  stripePaymentIntentId?: string;
+  failureReason?: string;
   createdAt: Date;
+}
+
+export interface PaymentIntentResponse {
+  clientSecret: string;
+  chargeHistoryId: string;
 }
 
 @Injectable({
@@ -37,6 +45,32 @@ export class CoinPurchaseHistoryService {
     const response = await lastValueFrom(
       this.http.get<{ message: string; data: CoinPurchaseHistoryItem[] }>(
         `${this.apiConfig.domain}/api/coin-purchase-history/user/${userId}`,
+        { headers: this.apiConfig.headers },
+      ),
+    );
+    return response.data || [];
+  }
+
+  async createPaymentIntent(
+    userId: string,
+    amount: number,
+    point: number,
+    specialPoint: number = 0,
+  ): Promise<PaymentIntentResponse> {
+    const response = await lastValueFrom(
+      this.http.post<{ message: string; data: PaymentIntentResponse }>(
+        `${this.apiConfig.domain}/api/coin-purchase-history/charge/create-payment-intent`,
+        { userId, amount, point, specialPoint },
+        { headers: this.apiConfig.headers },
+      ),
+    );
+    return response.data;
+  }
+
+  async getChargeHistory(userId: string): Promise<CoinPurchaseHistoryItem[]> {
+    const response = await lastValueFrom(
+      this.http.get<{ message: string; data: CoinPurchaseHistoryItem[] }>(
+        `${this.apiConfig.domain}/api/coin-purchase-history/charge/history/${userId}`,
         { headers: this.apiConfig.headers },
       ),
     );
