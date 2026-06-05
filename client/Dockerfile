@@ -10,4 +10,4 @@ COPY . .
 
 EXPOSE 4200
 
-CMD ["npm", "start"]
+CMD ["npx", "ng", "serve", "--host", "0.0.0.0"]

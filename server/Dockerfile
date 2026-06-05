@@ -6,4 +6,4 @@ COPY . .
 
 RUN npm install
 
-CMD ["node", "runtime/app.js"]
+CMD ["npx", "ts-node", "-P", "tsconfig.json", "main.ts"]
