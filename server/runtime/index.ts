@@ -40,7 +40,7 @@ async function init(_db?: any) {
 
   // Initialize Express app
   app = express();
-  const allowedOrigins = process.env.ALLOWED_ORIGINS?.split(",") || [
+  const allowedOrigins = process.env.ALLOWED_ORIGINS?.split(",").map((o) => o.trim()) || [
     "http://localhost:4200",
   ];
 
