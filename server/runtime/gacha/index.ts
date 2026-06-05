@@ -36,14 +36,24 @@ async function init(_db: any) {
 async function refreshCache() {
   const gachas = await db.Gacha.findAll({
     include: [
-      { model: db.Card, as: "cards" },
       { model: db.Genre, as: "genre" },
     ],
   });
   gachaCache.clear();
   gachas.forEach((gacha: any) => {
     const plainGacha = toPlain(gacha);
-    const cards = (gacha.cards || []).map((card: any) => {
+    const genreName = gacha.genre ? gacha.genre.name : null;
+    gachaCache.set(plainGacha.id, { ...plainGacha, cards: [], genreName });
+  });
+}
+
+async function enrichGachaWithCards(gacha: any) {
+  const cards = await db.Card.findAll({
+    where: { gachaId: gacha.id },
+  });
+  return {
+    ...gacha,
+    cards: cards.map((card: any) => {
       const plainCard = toPlain(card);
       const effect = plainCard.effectId
         ? effectRuntime.getById(plainCard.effectId)
@@ -53,10 +63,8 @@ async function refreshCache() {
         effectName: effect?.name ?? null,
         effectUrl: effect?.url ?? null,
       };
-    });
-    const genreName = gacha.genre ? gacha.genre.name : null;
-    gachaCache.set(plainGacha.id, { ...plainGacha, cards, genreName });
-  });
+    }),
+  };
 }
 
 /**
@@ -129,7 +137,14 @@ async function getAll(userId?: string) {
   const drawnGachaIds = userId
     ? await getDrawnGachaIds(userId)
     : new Set<string>();
-  return Array.from(gachaCache.values())
+
+  const gachas = await Promise.all(
+    Array.from(gachaCache.values()).map((gacha: any) =>
+      enrichGachaWithCards(gacha)
+    )
+  );
+
+  return gachas
     .sort((gachaA: any, gachaB: any) => {
       const dateA = new Date(gachaA.publishStart).getTime();
       const dateB = new Date(gachaB.publishStart).getTime();
@@ -161,7 +176,9 @@ async function getById(id: string, userId?: string) {
   }
   const gacha = gachaCache.get(id);
   if (!gacha) return null;
-  const cards = gacha.cards ?? [];
+
+  const enrichedGacha = await enrichGachaWithCards(gacha);
+  const cards = enrichedGacha.cards ?? [];
   const notDrawnCards = cards.filter(
     (card: any) => card.isDrawn === CARD_STATUS.NOT_DRAWN,
   );
@@ -170,7 +187,7 @@ async function getById(id: string, userId?: string) {
       ? (await getDrawnGachaIds(userId)).has(id)
       : false;
   return {
-    ...gacha,
+    ...enrichedGacha,
     cardsCount: notDrawnCards.length,
     remainingCount: notDrawnCards.length,
     alreadyDrawn,
@@ -202,10 +219,12 @@ async function draw(payload: {
   if (gachaCache.size === 0) {
     await refreshCache();
   }
-  const gacha = gachaCache.get(payload.gachaId);
+  let gacha = gachaCache.get(payload.gachaId);
   if (!gacha) {
     throw new Error(messages.errors.GACHA_NOT_FOUND);
   }
+
+  gacha = await enrichGachaWithCards(gacha);
 
   if (gacha.oncePerUser) {
     const existingDraw = await db.GachaUserDraw.findOne({
