@@ -2,8 +2,12 @@ FROM node:20
 
 WORKDIR /app
 
+COPY package*.json ./
+
+RUN npm install --legacy-peer-deps
+
 COPY . .
 
-RUN npm install
+EXPOSE 3000
 
-CMD ["node", "runtime/app.js"]
+CMD ["npm", "start"]

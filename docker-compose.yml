@@ -22,10 +22,9 @@ services:
     depends_on:
       - db
     environment:
-      DB_HOST: db
-      DB_USER: user
-      DB_PASS: pass
-      DB_NAME: oripa
+      DATABASE_URL: postgres://user:pass@db:5432/oripa
+      NODE_ENV: development
+      ALLOWED_ORIGINS: http://localhost:4200,http://localhost:4300
 
   client:
     build: ./client
