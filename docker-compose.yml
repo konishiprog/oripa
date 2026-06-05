@@ -19,13 +19,8 @@ services:
       - "3000:3000"
     depends_on:
       - db
-    environment:
-      DB_HOST: db
-      DB_PORT: 5432
-      DB_USER: user
-      DB_PASS: pass
-      DB_NAME: oripa
-      ALLOWED_ORIGINS: http://localhost:4200
+    env_file:
+      - ./server/.env
 
   client:
     build: ./client
