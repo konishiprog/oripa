@@ -107,7 +107,7 @@ export class UserSignupComponent implements OnInit {
   }
 
   private isValidEmail(email: string): boolean {
-    return email.includes('@');
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
   }
 
   private isValidPassword(password: string): boolean {
