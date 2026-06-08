@@ -34,26 +34,32 @@
         {{ "gacha-box.draw-single" | translate }}
       </button>
       <button
-        *ngIf="!gacha.oncePerUser"
-        class="draw-btn draw-btn-multi"
+        class="draw-btn draw-btn-ten"
         type="button"
         [disabled]="!isLoggedIn || isDrawing || effectiveDrawCount(10) === 0"
         (click)="draw(10)"
       >
-        <ng-container *ngIf="effectiveDrawCount(10) === 10">
-          {{ "gacha-box.draw-ten" | translate }}
-        </ng-container>
-        <ng-container
-          *ngIf="effectiveDrawCount(10) > 0 && effectiveDrawCount(10) < 10"
-        >
-          {{
-            "gacha-box.draw-remaining"
-              | translate: { count: effectiveDrawCount(10) }
-          }}
-        </ng-container>
-        <ng-container *ngIf="effectiveDrawCount(10) === 0">
-          {{ "gacha-box.draw-ten" | translate }}
-        </ng-container>
+        {{ "gacha-box.draw-ten" | translate }}
+      </button>
+      <button
+        class="draw-btn draw-btn-hundred"
+        type="button"
+        [disabled]="
+          !isLoggedIn || isDrawing || effectiveDrawCount(100) === 0 || gacha.remainingCount < 100
+        "
+        (click)="draw(100)"
+      >
+        {{ "gacha-box.draw-hundred" | translate }}
+      </button>
+      <button
+        class="draw-btn draw-btn-all"
+        type="button"
+        [disabled]="!isLoggedIn || isDrawing || effectiveDrawCount(gacha.remainingCount) === 0"
+        (click)="draw(gacha.remainingCount)"
+      >
+        {{
+          "gacha-box.draw-all" | translate: { count: gacha.remainingCount }
+        }}
       </button>
     </div>
     <div *ngIf="isExpired" class="expired-notice">
