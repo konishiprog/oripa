@@ -63,6 +63,7 @@ import { CoinPurchaseHistoryFilterDialogComponent } from './components/coinPurch
 import { CardTableFilterDialogComponent } from './components/cardTableFilterDialog/cardTableFilterDialog.component';
 import { ForgotPasswordComponent } from './components/forgotPassword/forgot-password.component';
 import { TermsOfServiceComponent } from './components/termsOfService/termsOfService.component';
+import { PrivacyPolicyComponent } from './components/privacyPolicy/privacyPolicy.component';
 import { FooterLinksComponent } from './components/common/footerLinks/footerLinks.component';
 import { GenreTableComponent } from './components/genreTable/genreTable.component';
 import { CreateGenreComponent } from './components/createGenre/createGenre.component';
@@ -120,6 +121,7 @@ import { ContactPageComponent } from './components/contactPage/contactPage.compo
     CardTableFilterDialogComponent,
     ForgotPasswordComponent,
     TermsOfServiceComponent,
+    PrivacyPolicyComponent,
     FooterLinksComponent,
     GachaDetailPageComponent,
     ContactPageComponent,
