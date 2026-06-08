@@ -11,7 +11,7 @@ import {
 let db: any;
 let runtime: any;
 
-async function getAll(limit: number = 100, offset: number = 0) {
+async function getAll() {
   const histories = await db.CoinPurchaseHistory.findAll({
     attributes: [
       "id",
@@ -30,8 +30,6 @@ async function getAll(limit: number = 100, offset: number = 0) {
       },
     ],
     order: [["createdAt", "DESC"]],
-    limit,
-    offset,
     raw: true,
   });
   return histories || [];
@@ -108,7 +106,7 @@ async function createCharge(
   };
 }
 
-async function getChargeHistory(userId: string, limit: number = 50, offset: number = 0) {
+async function getChargeHistory(userId: string) {
   const histories = await db.CoinPurchaseHistory.findAll({
     where: { userId },
     attributes: [
@@ -124,8 +122,6 @@ async function getChargeHistory(userId: string, limit: number = 50, offset: numb
       "createdAt",
     ],
     order: [["createdAt", "DESC"]],
-    limit,
-    offset,
     raw: true,
   });
   return histories || [];

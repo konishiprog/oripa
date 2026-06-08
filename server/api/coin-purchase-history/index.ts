@@ -22,13 +22,11 @@ module.exports = {
 
     /**
      * Get all coin purchase histories (admin only)
-     * GET /api/coin-purchase-history?limit=100&offset=0
+     * GET /api/coin-purchase-history
      */
-    router.get("/", async (req: Request, res: Response) => {
+    router.get("/", async (_req: Request, res: Response) => {
       try {
-        const limit = Math.min(parseInt(req.query.limit as string) || 100, 500);
-        const offset = parseInt(req.query.offset as string) || 0;
-        const histories = await runtime.coinPurchaseHistory.getAll(limit, offset);
+        const histories = await runtime.coinPurchaseHistory.getAll();
         res.status(200).json({
           message: messages.success.RETRIEVED,
           data: histories,
@@ -133,7 +131,7 @@ module.exports = {
 
     /**
      * Get charge history for a specific user
-     * GET /api/coin-purchase-history/charge/history/:userId?limit=50&offset=0
+     * GET /api/coin-purchase-history/charge/history/:userId
      */
     router.get(
       "/charge/history/:userId",
@@ -147,11 +145,8 @@ module.exports = {
             });
           }
 
-          const limit = Math.min(parseInt(req.query.limit as string) || 50, 500);
-          const offset = parseInt(req.query.offset as string) || 0;
-
           const histories =
-            await runtime.coinPurchaseHistory.getChargeHistory(userId, limit, offset);
+            await runtime.coinPurchaseHistory.getChargeHistory(userId);
 
           res.status(200).json({
             message: messages.success.RETRIEVED,
