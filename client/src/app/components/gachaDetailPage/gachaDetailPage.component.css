@@ -264,7 +264,7 @@
 
 .draw-buttons {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: repeat(2, 1fr);
   gap: 12px;
   margin-bottom: 16px;
 }
@@ -280,7 +280,7 @@
 }
 
 .draw-btn:disabled {
-  opacity: 0.5;
+  opacity: 0.3;
   cursor: not-allowed;
 }
 
@@ -300,6 +300,24 @@
 
 .draw-btn-ten:hover:not(:disabled) {
   background-color: #c62828;
+}
+
+.draw-btn-hundred {
+  background-color: #1976d2;
+  color: #fff;
+}
+
+.draw-btn-hundred:hover:not(:disabled) {
+  background-color: #1565c0;
+}
+
+.draw-btn-all {
+  background-color: #388e3c;
+  color: #fff;
+}
+
+.draw-btn-all:hover:not(:disabled) {
+  background-color: #2e7d32;
 }
 
 .login-notice,

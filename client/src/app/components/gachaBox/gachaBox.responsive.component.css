@@ -1,3 +1,6 @@
-@media (max-width: 768px) {
-  /* Add responsive styles here */
+@media (max-width: 480px) {
+  .draw-btn {
+    padding: 6px 4px;
+    font-size: 11px;
+  }
 }

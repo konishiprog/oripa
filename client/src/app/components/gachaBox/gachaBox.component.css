@@ -98,13 +98,13 @@
 }
 
 .box-actions {
-  display: flex;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
   gap: 6px;
   margin-top: 4px;
 }
 
 .draw-btn {
-  flex: 1;
   padding: 8px 6px;
   border-radius: 8px;
   border: none;
@@ -119,7 +119,7 @@
 }
 
 .draw-btn:disabled {
-  opacity: 0.45;
+  opacity: 0.3;
   cursor: not-allowed;
 }
 
@@ -132,8 +132,16 @@
   background: linear-gradient(135deg, #805ad5, #6b46c1);
 }
 
-.draw-btn-multi {
+.draw-btn-ten {
   background: linear-gradient(135deg, #f59e0b, #d97706);
+}
+
+.draw-btn-hundred {
+  background: linear-gradient(135deg, #3b82f6, #2563eb);
+}
+
+.draw-btn-all {
+  background: linear-gradient(135deg, #10b981, #059669);
 }
 
 .login-notice,
