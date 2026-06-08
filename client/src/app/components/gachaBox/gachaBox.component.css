@@ -97,72 +97,9 @@
   border-radius: 6px;
 }
 
-.box-actions {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 6px;
-  margin-top: 4px;
-}
-
-.draw-btn {
-  padding: 8px 6px;
-  border-radius: 8px;
-  border: none;
-  font-size: 12px;
-  font-weight: 700;
-  cursor: pointer;
-  color: #fff;
-  transition:
-    transform 0.1s,
-    box-shadow 0.15s,
-    opacity 0.15s;
-}
-
-.draw-btn:disabled {
-  opacity: 0.3;
-  cursor: not-allowed;
-}
-
-.draw-btn:not(:disabled):hover {
-  transform: translateY(-1px);
-  box-shadow: 0 4px 10px rgba(128, 90, 213, 0.3);
-}
-
-.draw-btn-single {
-  background: linear-gradient(135deg, #805ad5, #6b46c1);
-}
-
-.draw-btn-ten {
-  background: linear-gradient(135deg, #f59e0b, #d97706);
-}
-
-.draw-btn-hundred {
-  background: linear-gradient(135deg, #3b82f6, #2563eb);
-}
-
-.draw-btn-all {
-  background: linear-gradient(135deg, #10b981, #059669);
-}
-
-.login-notice,
-.out-of-stock,
-.already-drawn-notice,
 .expired-notice {
   font-size: 11px;
-  color: #6b7280;
   text-align: center;
-  padding: 2px 0;
-}
-
-.out-of-stock {
-  color: #b45309;
-}
-
-.already-drawn-notice {
-  color: #b45309;
-}
-
-.expired-notice {
   color: #dc2626;
   font-weight: 600;
   background: rgba(255, 255, 255, 1);

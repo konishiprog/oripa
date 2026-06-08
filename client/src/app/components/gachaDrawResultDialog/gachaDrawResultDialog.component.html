@@ -45,19 +45,6 @@
       >
         {{ "gacha-draw-result.skip-effect" | translate }}
       </button>
-      <button
-        type="button"
-        class="reveal-btn reveal-btn-toggle"
-        [class.active]="skipAllEffectsEnabled"
-        (click)="toggleSkipAllEffects()"
-      >
-        <ng-container *ngIf="!skipAllEffectsEnabled">
-          {{ "gacha-draw-result.skip-all-effects" | translate }}
-        </ng-container>
-        <ng-container *ngIf="skipAllEffectsEnabled">
-          {{ "gacha-draw-result.skip-all-effects-enabled" | translate }}
-        </ng-container>
-      </button>
     </div>
   </div>
 
@@ -93,19 +80,6 @@
         (click)="revealAll()"
       >
         {{ "gacha-draw-result.reveal-all" | translate }}
-      </button>
-      <button
-        type="button"
-        class="reveal-btn reveal-btn-toggle"
-        [class.active]="skipAllEffectsEnabled"
-        (click)="toggleSkipAllEffects()"
-      >
-        <ng-container *ngIf="!skipAllEffectsEnabled">
-          {{ "gacha-draw-result.skip-all-effects" | translate }}
-        </ng-container>
-        <ng-container *ngIf="skipAllEffectsEnabled">
-          {{ "gacha-draw-result.skip-all-effects-enabled" | translate }}
-        </ng-container>
       </button>
       <button type="button" class="reveal-btn reveal-btn-next" (click)="next()">
         <ng-container *ngIf="!isCurrentRevealed">

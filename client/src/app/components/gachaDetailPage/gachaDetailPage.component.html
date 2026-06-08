@@ -86,72 +86,13 @@
           {{ "gacha-detail.jackpot-empty" | translate }}
         </div>
 
-        <div class="draw-buttons">
-          <button
-            class="draw-btn draw-btn-single"
-            type="button"
-            [disabled]="!isLoggedIn || isDrawing || effectiveDrawCount(1) === 0"
-            (click)="draw(1)"
-          >
-            {{ "gacha-box.draw-single" | translate }}
-          </button>
-          <button
-            class="draw-btn draw-btn-ten"
-            type="button"
-            [disabled]="
-              !isLoggedIn ||
-              isDrawing ||
-              effectiveDrawCount(10) === 0 ||
-              gacha.remainingCount < 10
-            "
-            (click)="draw(10)"
-          >
-            {{ "gacha-box.draw-ten" | translate }}
-          </button>
-          <button
-            class="draw-btn draw-btn-hundred"
-            type="button"
-            [disabled]="
-              !isLoggedIn ||
-              isDrawing ||
-              effectiveDrawCount(100) === 0 ||
-              gacha.remainingCount < 100
-            "
-            (click)="draw(100)"
-          >
-            {{ "gacha-box.draw-hundred" | translate }}
-          </button>
-          <button
-            class="draw-btn draw-btn-all"
-            type="button"
-            [disabled]="
-              !isLoggedIn ||
-              isDrawing ||
-              effectiveDrawCount(gacha.remainingCount) === 0
-            "
-            (click)="draw(gacha.remainingCount)"
-          >
-            {{
-              "gacha-box.draw-all" | translate: { count: gacha.remainingCount }
-            }}
-          </button>
-        </div>
-
-        <div *ngIf="!isLoggedIn" class="login-notice">
-          {{ "gacha-box.login-required" | translate }}
-        </div>
-        <div
-          *ngIf="isLoggedIn && gacha.oncePerUser && gacha.alreadyDrawn"
-          class="already-drawn-notice"
-        >
-          {{ "gacha-box.already-drawn" | translate }}
-        </div>
-        <div
-          *ngIf="isLoggedIn && gacha.remainingCount === 0"
-          class="out-of-stock"
-        >
-          {{ "gacha-box.out-of-stock" | translate }}
-        </div>
+        <app-gacha-draw-buttons
+          [gacha]="gacha"
+          [isLoggedIn]="isLoggedIn"
+          [isDrawing]="isDrawing"
+          variant="full"
+          (drawRequested)="draw($event)"
+        ></app-gacha-draw-buttons>
       </div>
     </div>
 

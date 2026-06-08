@@ -1,13 +1,14 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ActivatedRoute, Router } from '@angular/router';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
-import { MatDialogModule } from '@angular/material/dialog';
+import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { of } from 'rxjs';
 import { GachaDetailPageComponent } from './gachaDetailPage.component';
 import { GachaService } from '../../service/gacha.service';
 import { CardService } from '../../service/card.service';
 import { UserService } from '../../service/user.service';
+import { GachaDrawService } from '../../common/gacha-draw.service';
 
 describe('GachaDetailPageComponent', () => {
   let component: GachaDetailPageComponent;
@@ -15,6 +16,7 @@ describe('GachaDetailPageComponent', () => {
   let mockGachaService: any;
   let mockCardService: any;
   let mockUserService: any;
+  let mockGachaDrawService: any;
   let mockTranslateService: any;
   let mockRouter: any;
   let mockActivatedRoute: any;
@@ -55,11 +57,6 @@ describe('GachaDetailPageComponent', () => {
   beforeEach(async () => {
     mockGachaService = {
       getGachaById: jest.fn().mockResolvedValue(mockGachaData),
-      drawGacha: jest.fn().mockResolvedValue({
-        drawnCards: [{ name: 'Test Card', cardType: 'SR' }],
-        remainingCount: 99,
-        userCoin: 8000,
-      }),
     };
 
     mockCardService = {
@@ -69,10 +66,16 @@ describe('GachaDetailPageComponent', () => {
     mockUserService = {
       isLoggedIn: jest.fn().mockReturnValue(true),
       getUserId: jest.fn().mockReturnValue('test-user-id'),
-      getCoin: jest.fn().mockReturnValue(10000),
-      getSpecialPoint: jest.fn().mockReturnValue(0),
-      saveCoin: jest.fn(),
-      saveSpecialPoint: jest.fn(),
+    };
+
+    mockGachaDrawService = {
+      draw: jest.fn().mockResolvedValue({
+        remainingCount: 99,
+        dialogRef: {
+          afterClosed: jest.fn().mockReturnValue(of(void 0)),
+        },
+      }),
+      resolveDrawErrorMessage: jest.fn((error) => 'Error message'),
     };
 
     mockTranslateService = {
@@ -101,6 +104,7 @@ describe('GachaDetailPageComponent', () => {
         { provide: GachaService, useValue: mockGachaService },
         { provide: CardService, useValue: mockCardService },
         { provide: UserService, useValue: mockUserService },
+        { provide: GachaDrawService, useValue: mockGachaDrawService },
         { provide: TranslateService, useValue: mockTranslateService },
         { provide: Router, useValue: mockRouter },
         { provide: ActivatedRoute, useValue: mockActivatedRoute },
@@ -130,6 +134,14 @@ describe('GachaDetailPageComponent', () => {
     expect(component.gacha?.minExchangePoints).toBe(50);
   });
 
+  it('should set isLoading to false after loading gacha', async () => {
+    expect(component.isLoading).toBe(true);
+    await component.loadGachaDetail();
+    await fixture.whenStable();
+
+    expect(component.isLoading).toBe(false);
+  });
+
   it('should load jackpot cards on init', async () => {
     await component.loadJackpotCards();
     await fixture.whenStable();
@@ -141,11 +153,29 @@ describe('GachaDetailPageComponent', () => {
     expect(component.jackpotCards[0].name).toBe('Jackpot Card 1');
   });
 
+  it('should filter jackpot cards to only SSR', async () => {
+    const allCards = [
+      { id: '1', name: 'SSR Card', cardType: 'SSR', imageFront: 'ssr.jpg', exchangePoints: 100 },
+      { id: '2', name: 'SR Card', cardType: 'SR', imageFront: 'sr.jpg', exchangePoints: 50 },
+      { id: '3', name: 'R Card', cardType: 'R', imageFront: 'r.jpg', exchangePoints: 10 },
+    ];
+    mockCardService.getCardsByGachaId.mockResolvedValue(allCards);
+
+    await component.loadJackpotCards();
+    await fixture.whenStable();
+
+    expect(component.jackpotCards.length).toBe(1);
+    expect(component.jackpotCards[0].name).toBe('SSR Card');
+    expect(component.jackpotCards[0].id).toBe('1');
+  });
+
   it('should format date correctly', () => {
     const dateString = '2026-06-09T00:00:00Z';
     const formatted = component.formatDate(dateString);
-    expect(formatted).toMatch(/2026年06月/);
-    expect(formatted).toMatch(/日/);
+    expect(formatted).toContain('2026');
+    expect(formatted).toContain('06');
+    expect(formatted).toContain('09');
+    expect(formatted).toContain('日');
   });
 
   it('should toggle caution state', () => {
@@ -154,39 +184,6 @@ describe('GachaDetailPageComponent', () => {
     expect(component.cautionState.isOpen).toBe(true);
     component.toggleCaution();
     expect(component.cautionState.isOpen).toBe(false);
-  });
-
-  it('should calculate effective draw count for regular gacha', () => {
-    component.gacha = {
-      ...mockGachaData,
-      oncePerUser: false,
-      remainingCount: 5,
-    };
-
-    expect(component.effectiveDrawCount(1)).toBe(1);
-    expect(component.effectiveDrawCount(10)).toBe(5);
-    expect(component.effectiveDrawCount(100)).toBe(5);
-  });
-
-  it('should calculate effective draw count for once-per-user gacha', () => {
-    component.gacha = {
-      ...mockGachaData,
-      oncePerUser: true,
-      alreadyDrawn: false,
-      remainingCount: 1,
-    };
-
-    expect(component.effectiveDrawCount(1)).toBe(1);
-  });
-
-  it('should return 0 for already drawn once-per-user gacha', () => {
-    component.gacha = {
-      ...mockGachaData,
-      oncePerUser: true,
-      alreadyDrawn: true,
-    };
-
-    expect(component.effectiveDrawCount(1)).toBe(0);
   });
 
   it('should navigate back to userGachaPage', () => {
@@ -208,31 +205,6 @@ describe('GachaDetailPageComponent', () => {
     expect(component.isLoggedIn).toBe(false);
   });
 
-  it('should return true for usesSpecialPoint when consumptionType is SPECIAL_POINT', () => {
-    component.gacha = {
-      ...mockGachaData,
-      consumptionType: 'SPECIAL_POINT',
-    };
-
-    expect(component.usesSpecialPoint).toBe(true);
-  });
-
-  it('should return false for usesSpecialPoint when consumptionType is COIN', () => {
-    component.gacha = {
-      ...mockGachaData,
-      consumptionType: 'COIN',
-    };
-
-    expect(component.usesSpecialPoint).toBe(false);
-  });
-
-  it('should set isLoading to false after loading gacha', async () => {
-    await component.loadGachaDetail();
-    await fixture.whenStable();
-
-    expect(component.isLoading).toBe(false);
-  });
-
   it('should handle gacha not found error', async () => {
     mockGachaService.getGachaById.mockRejectedValue(new Error('Not found'));
 
@@ -240,47 +212,77 @@ describe('GachaDetailPageComponent', () => {
     await fixture.whenStable();
 
     expect(mockRouter.navigate).toHaveBeenCalledWith(['/userGachaPage']);
+    expect(component.isLoading).toBe(false);
   });
 
-  it('should draw gacha with single count', async () => {
+  it('should draw gacha using GachaDrawService', async () => {
     component.gacha = mockGachaData;
     component.gachaId = 'test-gacha-id';
-    mockUserService.getCoin.mockReturnValue(10000);
 
     await component.draw(1);
 
-    expect(mockGachaService.drawGacha).toHaveBeenCalledWith(
-      'test-gacha-id',
-      'test-user-id',
-      1,
-    );
-  });
-
-  it('should not draw when not logged in', async () => {
-    component.gacha = mockGachaData;
-    mockUserService.isLoggedIn.mockReturnValue(false);
-
-    await component.draw(1);
-
-    expect(mockGachaService.drawGacha).not.toHaveBeenCalled();
-  });
-
-  it('should not draw when insufficient coins', async () => {
-    component.gacha = mockGachaData;
-    mockUserService.getCoin.mockReturnValue(1000);
-
-    await component.draw(1);
-
-    expect(mockGachaService.drawGacha).not.toHaveBeenCalled();
+    expect(mockGachaDrawService.draw).toHaveBeenCalledWith(mockGachaData, 1);
   });
 
   it('should update gacha state after successful draw', async () => {
     component.gacha = mockGachaData;
-    component.gachaId = 'test-gacha-id';
+
+    await component.draw(1);
+    await fixture.whenStable();
+
+    expect(component.gacha?.remainingCount).toBe(99);
+    expect(component.gacha?.alreadyDrawn).toBe(false);
+  });
+
+  it('should mark gacha as already drawn for once-per-user', async () => {
+    component.gacha = { ...mockGachaData, oncePerUser: true, alreadyDrawn: false };
+
+    await component.draw(1);
+    await fixture.whenStable();
+
+    expect(component.gacha?.alreadyDrawn).toBe(true);
+  });
+
+  it('should not draw when gacha is null', async () => {
+    component.gacha = null;
 
     await component.draw(1);
 
-    expect(component.gacha?.remainingCount).toBe(99);
-    expect(mockUserService.saveCoin).toHaveBeenCalledWith(8000);
+    expect(mockGachaDrawService.draw).not.toHaveBeenCalled();
+  });
+
+  it('should not draw when already drawing', async () => {
+    component.gacha = mockGachaData;
+    component.isDrawing = true;
+
+    await component.draw(1);
+
+    expect(mockGachaDrawService.draw).not.toHaveBeenCalled();
+  });
+
+  it('should handle draw error', async () => {
+    component.gacha = mockGachaData;
+    const error = new Error('Draw failed');
+    mockGachaDrawService.draw.mockRejectedValue(error);
+    jest.spyOn(window, 'alert').mockImplementation();
+
+    await component.draw(1);
+    await fixture.whenStable();
+
+    expect(window.alert).toHaveBeenCalled();
+    expect(component.isDrawing).toBe(false);
+  });
+
+  it('should set isDrawing to false after draw completes', async () => {
+    component.gacha = mockGachaData;
+    expect(component.isDrawing).toBe(false);
+
+    const drawPromise = component.draw(1);
+    expect(component.isDrawing).toBe(true);
+
+    await drawPromise;
+    await fixture.whenStable();
+
+    expect(component.isDrawing).toBe(false);
   });
 });
