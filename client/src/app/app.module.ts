@@ -71,6 +71,7 @@ import { EffectTableComponent } from './components/effectTable/effectTable.compo
 import { CreateEffectComponent } from './components/createEffect/createEffect.component';
 import { GachaDetailPageComponent } from './components/gachaDetailPage/gachaDetailPage.component';
 import { ContactPageComponent } from './components/contactPage/contactPage.component';
+import { GachaDrawButtonsComponent } from './common/gachaDrawButtons/gachaDrawButtons.component';
 
 @NgModule({
   declarations: [
@@ -125,6 +126,7 @@ import { ContactPageComponent } from './components/contactPage/contactPage.compo
     FooterLinksComponent,
     GachaDetailPageComponent,
     ContactPageComponent,
+    GachaDrawButtonsComponent,
   ],
   imports: [
     BrowserModule,

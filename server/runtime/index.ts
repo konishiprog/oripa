@@ -38,11 +38,10 @@ async function init(_db?: any) {
   // Run migrations
   await runMigrations(database);
 
-  // Initialize Express app
   app = express();
-  const allowedOrigins = process.env.ALLOWED_ORIGINS?.split(",").map((o) => o.trim()) || [
-    "http://localhost:4200",
-  ];
+  const allowedOrigins = process.env.ALLOWED_ORIGINS?.split(",").map((o) =>
+    o.trim(),
+  ) || ["http://localhost:4200"];
 
   app.use(
     cors({
@@ -58,18 +57,16 @@ async function init(_db?: any) {
   );
   app.use(express.json());
   app.use("/uploads", express.static(path.join(__dirname, "../uploads")));
+  app.use("/public", express.static(path.join(__dirname, "../public")));
 
-  // Health check endpoint
   app.get("/health", (_req: Request, res: Response) => {
     res.json({ status: "ok", timestamp: new Date().toISOString() });
   });
 
-  // Test endpoint
   app.get("/api/test", (_req: Request, res: Response) => {
     res.json({ message: "Server is running!" });
   });
 
-  // Initialize modules
   admin.init(database);
   adminApi.init({ admin });
   await genre.init(database);
@@ -97,7 +94,6 @@ async function init(_db?: any) {
   coinPurchaseHistoryApi.init({ coinPurchaseHistory });
   contactApi.init({ user, admin, email });
 
-  // Register routes
   app.use("/api/admin", adminApi.app());
   app.use("/api/genre", genreApi.app());
   app.use("/api/effect", effectApi.app());

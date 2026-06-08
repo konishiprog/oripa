@@ -37,6 +37,7 @@ describe('GachaBoxComponent', () => {
       oncePerUser: false,
       alreadyDrawn: false,
       remainingCount: 5,
+      publishEnd: null,
     };
   });
 
@@ -46,10 +47,5 @@ describe('GachaBoxComponent', () => {
 
   it('formatPrice should format with P suffix and commas', () => {
     expect(component.formatPrice(12345)).toBe('12,345P');
-  });
-
-  it('effectiveDrawCount returns min of requested and remaining', () => {
-    expect(component.effectiveDrawCount(1)).toBe(1);
-    expect(component.effectiveDrawCount(10)).toBe(5);
   });
 });

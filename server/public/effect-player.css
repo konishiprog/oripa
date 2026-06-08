@@ -1,0 +1,45 @@
+html,
+body {
+  margin: 0;
+  height: 100%;
+  background: #000;
+  overflow: hidden;
+}
+
+video {
+  width: 100vw;
+  height: 100vh;
+  object-fit: contain;
+  background: #000;
+}
+
+.skip-button {
+  position: fixed;
+  bottom: 40px;
+  right: 40px;
+  padding: 12px 20px;
+  background: rgba(255, 255, 255, 0.15);
+  color: rgba(255, 255, 255, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 24px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  z-index: 1000;
+  backdrop-filter: blur(6px);
+  transition:
+    opacity 0.2s,
+    background 0.2s,
+    color 0.2s;
+  opacity: 0.6;
+}
+
+.skip-button:hover {
+  opacity: 1;
+  background: rgba(255, 255, 255, 0.25);
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.skip-button:active {
+  opacity: 0.9;
+}

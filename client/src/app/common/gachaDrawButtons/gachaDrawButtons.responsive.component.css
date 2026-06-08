@@ -1,0 +1,105 @@
+/* Mobile devices (< 640px) */
+@media (max-width: 639px) {
+  .draw-buttons {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .compact .draw-btn {
+    padding: 6px 4px;
+    font-size: 10px;
+  }
+
+  .full .draw-btn {
+    padding: 12px 12px;
+    font-size: 12px;
+  }
+
+  .draw-buttons-wrapper.compact {
+    gap: 8px;
+  }
+
+  .draw-buttons-wrapper.full {
+    gap: 12px;
+  }
+
+  .full .login-notice,
+  .full .already-drawn-notice,
+  .full .out-of-stock {
+    font-size: 12px;
+    padding: 10px;
+    margin-top: 10px;
+  }
+}
+
+/* Tablet devices (640px - 1024px) */
+@media (min-width: 640px) and (max-width: 1024px) {
+  .draw-buttons {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .compact .draw-btn {
+    padding: 8px 6px;
+    font-size: 12px;
+  }
+
+  .full .draw-btn {
+    padding: 14px 16px;
+    font-size: 13px;
+  }
+
+  .draw-buttons-wrapper.compact {
+    gap: 10px;
+  }
+
+  .draw-buttons-wrapper.full {
+    gap: 16px;
+  }
+}
+
+/* Desktop devices (> 1024px) */
+@media (min-width: 1025px) {
+  .draw-buttons {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .compact .draw-btn {
+    padding: 8px 6px;
+    font-size: 12px;
+  }
+
+  .full .draw-btn {
+    padding: 14px 16px;
+    font-size: 14px;
+  }
+
+  .draw-buttons-wrapper.compact {
+    gap: 10px;
+  }
+
+  .draw-buttons-wrapper.full {
+    gap: 16px;
+  }
+}
+
+/* Small portrait devices */
+@media (max-height: 600px) and (orientation: landscape) {
+  .compact .draw-btn {
+    padding: 4px 4px;
+    font-size: 10px;
+  }
+
+  .full .draw-btn {
+    padding: 10px 12px;
+    font-size: 12px;
+  }
+
+  .draw-buttons-wrapper.compact {
+    gap: 6px;
+    margin-top: 2px;
+  }
+
+  .draw-buttons-wrapper.full {
+    gap: 12px;
+    margin-bottom: 12px;
+  }
+}

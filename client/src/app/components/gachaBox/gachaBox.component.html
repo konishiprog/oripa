@@ -20,48 +20,15 @@
       >
         {{ formatPrice(gacha.cost) }}
       </span>
-      <span class="box-remaining">
-        {{ "gacha-box.remaining" | translate: { count: gacha.remainingCount } }}
-      </span>
     </div>
-    <div *ngIf="!isExpired" class="box-actions">
-      <button
-        class="draw-btn draw-btn-single"
-        type="button"
-        [disabled]="!isLoggedIn || isDrawing || effectiveDrawCount(1) === 0"
-        (click)="$event.stopPropagation(); draw(1)"
-      >
-        {{ "gacha-box.draw-single" | translate }}
-      </button>
-      <button
-        class="draw-btn draw-btn-ten"
-        type="button"
-        [disabled]="!isLoggedIn || isDrawing || effectiveDrawCount(10) === 0"
-        (click)="$event.stopPropagation(); draw(10)"
-      >
-        {{ "gacha-box.draw-ten" | translate }}
-      </button>
-      <button
-        class="draw-btn draw-btn-hundred"
-        type="button"
-        [disabled]="
-          !isLoggedIn || isDrawing || effectiveDrawCount(100) === 0 || gacha.remainingCount < 100
-        "
-        (click)="$event.stopPropagation(); draw(100)"
-      >
-        {{ "gacha-box.draw-hundred" | translate }}
-      </button>
-      <button
-        class="draw-btn draw-btn-all"
-        type="button"
-        [disabled]="!isLoggedIn || isDrawing || effectiveDrawCount(gacha.remainingCount) === 0"
-        (click)="$event.stopPropagation(); draw(gacha.remainingCount)"
-      >
-        {{
-          "gacha-box.draw-all" | translate: { count: gacha.remainingCount }
-        }}
-      </button>
-    </div>
+    <app-gacha-draw-buttons
+      *ngIf="!isExpired"
+      [gacha]="gacha"
+      [isLoggedIn]="isLoggedIn"
+      [isDrawing]="isDrawing"
+      variant="compact"
+      (drawRequested)="draw($event)"
+    ></app-gacha-draw-buttons>
     <div *ngIf="isExpired" class="expired-notice">
       {{ "gacha-box.expired" | translate }}
     </div>
@@ -73,22 +40,5 @@
     >
       {{ "gacha-box.winners-button" | translate }}
     </button>
-    <div *ngIf="!isLoggedIn && !isExpired" class="login-notice">
-      {{ "gacha-box.login-required" | translate }}
-    </div>
-    <div
-      *ngIf="
-        !isExpired && isLoggedIn && gacha.oncePerUser && gacha.alreadyDrawn
-      "
-      class="already-drawn-notice"
-    >
-      {{ "gacha-box.already-drawn" | translate }}
-    </div>
-    <div
-      *ngIf="!isExpired && isLoggedIn && gacha.remainingCount === 0"
-      class="out-of-stock"
-    >
-      {{ "gacha-box.out-of-stock" | translate }}
-    </div>
   </div>
 </div>
