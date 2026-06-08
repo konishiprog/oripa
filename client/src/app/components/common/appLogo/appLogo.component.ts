@@ -1,6 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-logo',
@@ -12,7 +13,7 @@ export class AppLogoComponent implements OnInit {
   @Input() class: string = '';
   logoSvg: SafeHtml = '';
 
-  constructor(private http: HttpClient, private sanitizer: DomSanitizer) {}
+  constructor(private http: HttpClient, private sanitizer: DomSanitizer, private router: Router) {}
 
   ngOnInit() {
     this.http.get('assets/icons/logo.svg', { responseType: 'text' }).subscribe({
@@ -23,5 +24,9 @@ export class AppLogoComponent implements OnInit {
         console.error('Failed to load logo SVG', error);
       }
     });
+  }
+
+  goToGachaPage(): void {
+    this.router.navigate(['/userGachaPage']);
   }
 }
