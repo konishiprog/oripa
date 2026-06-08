@@ -24,7 +24,15 @@
           class="charge-select"
         >
           <mat-option *ngFor="let option of chargeOptions" [value]="option.id">
-            {{ option.label }}
+            {{ "common.unit.yen" | translate }}{{ option.price }}:{{
+              option.point
+            }}{{ "common.unit.point" | translate
+            }}<span *ngIf="option.specialPoint > 0"
+              >{{ "common.symbol.paren-open" | translate
+              }}{{ "common.symbol.plus" | translate }}{{ option.specialPoint
+              }}{{ "coin-exchange-rate.special-point" | translate
+              }}{{ "common.symbol.paren-close" | translate }}</span
+            >
           </mat-option>
         </mat-select>
       </mat-form-field>

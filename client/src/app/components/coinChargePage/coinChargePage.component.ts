@@ -19,7 +19,6 @@ import { environment } from '../../../environments/environment';
 
 interface ChargeOption {
   id: string;
-  label: string;
   price: number;
   point: number;
   specialPoint: number;
@@ -98,7 +97,6 @@ export class CoinChargePageComponent implements OnInit, OnDestroy {
       const rates = await this.rateService.getAllRates();
       this.chargeOptions = rates.map((rate) => ({
         id: rate.id,
-        label: this.formatChargeLabel(rate),
         price: rate.price,
         point: rate.point,
         specialPoint: rate.specialPoint,
@@ -114,20 +112,6 @@ export class CoinChargePageComponent implements OnInit, OnDestroy {
     } finally {
       this.isLoading = false;
     }
-  }
-
-  private formatChargeLabel(rate: CoinExchangeRate): string {
-    const priceLabel = this.translateService.instant('common.unit.yen');
-    const pointLabel = this.translateService.instant('common.unit.point');
-
-    if (rate.specialPoint > 0) {
-      const specialLabel = this.translateService.instant(
-        'coin-exchange-rate.special-point',
-      );
-      return `${priceLabel}${rate.price}:${rate.point}${pointLabel}(+${rate.specialPoint}${specialLabel})`;
-    }
-
-    return `${priceLabel}${rate.price}:${rate.point}${pointLabel}`;
   }
 
   async onCharge(): Promise<void> {

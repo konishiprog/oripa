@@ -263,6 +263,14 @@
   cursor: not-allowed;
 }
 
+.card-exchange-points {
+  font-size: 14px;
+  font-weight: 600;
+  color: #6b46c1;
+  margin-left: auto;
+  flex-shrink: 0;
+}
+
 .exchange-footer {
   position: sticky;
   bottom: 0;

@@ -20,6 +20,7 @@ export interface GachaDetail {
   publishStart: string;
   publishEnd: string | null;
   isPublic: boolean;
+  minExchangePoints: number;
 }
 
 export interface JackpotCard {
@@ -73,6 +74,7 @@ export class GachaDetailPageComponent implements OnInit {
   async loadGachaDetail(): Promise<void> {
     try {
       const data = await this.gachaService.getGachaById(this.gachaId);
+      const minExchangePoints = await this.getMinExchangePoints();
       this.gacha = {
         id: data.id,
         name: data.name,
@@ -86,6 +88,7 @@ export class GachaDetailPageComponent implements OnInit {
         publishStart: data.publishStart,
         publishEnd: data.publishEnd,
         isPublic: data.isPublic ?? false,
+        minExchangePoints: minExchangePoints,
       };
     } catch (error) {
       console.error('Failed to load gacha detail:', error);
@@ -93,6 +96,20 @@ export class GachaDetailPageComponent implements OnInit {
     } finally {
       this.isLoading = false;
       this.cdr.markForCheck();
+    }
+  }
+
+  private async getMinExchangePoints(): Promise<number> {
+    try {
+      const cards = await this.cardService.getCardsByGachaId(this.gachaId);
+      if (cards.length === 0) return 0;
+      const exchangePoints = cards
+        .map((card: any) => card.exchangePoints ?? 0)
+        .filter((points: number) => points > 0);
+      return exchangePoints.length > 0 ? Math.min(...exchangePoints) : 0;
+    } catch (error) {
+      console.error('Failed to get minimum exchange points:', error);
+      return 0;
     }
   }
 
@@ -201,11 +218,14 @@ export class GachaDetailPageComponent implements OnInit {
 
       if (drawnCards.length > 0) {
         const hasEffect = drawnCards.some((card: any) => card.effectUrl);
-        this.dialog.open(GachaDrawResultDialogComponent, {
+        const dialogRef = this.dialog.open(GachaDrawResultDialogComponent, {
           width: hasEffect ? '80vw' : '520px',
           maxWidth: hasEffect ? '1000px' : '95vw',
           disableClose: true,
           data: { drawnCards },
+        });
+        dialogRef.afterClosed().subscribe(() => {
+          this.router.navigate(['/userGachaPage']);
         });
       }
     } catch (error: any) {

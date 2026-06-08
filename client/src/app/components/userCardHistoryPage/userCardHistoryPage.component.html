@@ -35,7 +35,10 @@
       </div>
     </div>
 
-    <div class="mode-buttons" *ngIf="activeTab === CARD_HISTORY_TABS.UNSELECTED">
+    <div
+      class="mode-buttons"
+      *ngIf="activeTab === CARD_HISTORY_TABS.UNSELECTED"
+    >
       <button
         type="button"
         class="mode-btn"
@@ -63,55 +66,75 @@
         {{ emptyMessageKey | translate }}
       </div>
 
-      <div *ngIf="!isLoading && filteredCards.length > 0" class="card-list-wrapper">
-        <div class="select-all-section">
+      <div
+        *ngIf="!isLoading && filteredCards.length > 0"
+        class="card-list-wrapper"
+      >
+        <div
+          class="select-all-section"
+          *ngIf="!isAllSelected() && activeTab !== CARD_HISTORY_TABS.PENDING"
+        >
           <input
             type="checkbox"
             class="select-all-checkbox"
             [checked]="isAllSelected()"
             (change)="toggleSelectAll()"
           />
-          <label class="select-all-label">{{ "card-history.select-all" | translate }}</label>
+          <label class="select-all-label">{{
+            "card-history.select-all" | translate
+          }}</label>
         </div>
         <div class="card-list">
           <div class="card-item" *ngFor="let card of filteredCards">
-          <div
-            *ngIf="
-              activeTab === CARD_HISTORY_TABS.UNSELECTED ||
-              activeTab === CARD_HISTORY_TABS.SHIPPED
-            "
-            class="checkbox-wrapper"
-            [class.disabled]="!isSelectableForCurrentMode(card)"
-          >
-            <input
-              type="checkbox"
-              class="card-checkbox"
-              [checked]="selectedCardIds.has(card.id)"
-              [disabled]="!isSelectableForCurrentMode(card)"
-              (change)="toggleSelect(card)"
+            <div
+              *ngIf="
+                activeTab === CARD_HISTORY_TABS.UNSELECTED ||
+                activeTab === CARD_HISTORY_TABS.SHIPPED
+              "
+              class="checkbox-wrapper"
+              [class.disabled]="!isSelectableForCurrentMode(card)"
+            >
+              <input
+                type="checkbox"
+                class="card-checkbox"
+                [checked]="selectedCardIds.has(card.id)"
+                [disabled]="!isSelectableForCurrentMode(card)"
+                (change)="toggleSelect(card)"
+              />
+            </div>
+            <img
+              *ngIf="card.imageFront"
+              [src]="card.imageFront"
+              [alt]="card.name"
+              class="card-image"
             />
-          </div>
-          <img
-            *ngIf="card.imageFront"
-            [src]="card.imageFront"
-            [alt]="card.name"
-            class="card-image"
-          />
-          <div class="card-info">
-            <div class="card-name">{{ card.name }}</div>
-            <div *ngIf="card.gachaName" class="card-gacha">
-              {{
-                "card-history.from-gacha" | translate: { name: card.gachaName }
-              }}
+            <div class="card-info">
+              <div class="card-name">{{ card.name }}</div>
+              <div *ngIf="card.gachaName" class="card-gacha">
+                {{
+                  "card-history.from-gacha"
+                    | translate: { name: card.gachaName }
+                }}
+              </div>
+              <div
+                *ngIf="card.isDrawn === CARD_STATUS.REFUNDED"
+                class="card-status"
+              >
+                {{ "card-history.status-exchanged" | translate }}
+              </div>
             </div>
             <div
-              *ngIf="card.isDrawn === CARD_STATUS.REFUNDED"
-              class="card-status"
+              *ngIf="
+                activeTab === CARD_HISTORY_TABS.UNSELECTED &&
+                isExchangeable(card) &&
+                card.exchangePoints &&
+                card.exchangePoints > 0
+              "
+              class="card-exchange-points"
             >
-              {{ "card-history.status-exchanged" | translate }}
+              {{ card.exchangePoints }}{{ "common.unit.point" | translate }}
             </div>
           </div>
-        </div>
         </div>
       </div>
     </div>
@@ -126,7 +149,9 @@
       class="exchange-footer"
     >
       <ng-container
-        *ngIf="activeTab === CARD_HISTORY_TABS.UNSELECTED && mode === 'exchange'"
+        *ngIf="
+          activeTab === CARD_HISTORY_TABS.UNSELECTED && mode === 'exchange'
+        "
       >
         <button
           type="button"
@@ -141,7 +166,9 @@
         </button>
       </ng-container>
       <ng-container
-        *ngIf="activeTab === CARD_HISTORY_TABS.UNSELECTED && mode === 'shipping'"
+        *ngIf="
+          activeTab === CARD_HISTORY_TABS.UNSELECTED && mode === 'shipping'
+        "
       >
         <button
           type="button"

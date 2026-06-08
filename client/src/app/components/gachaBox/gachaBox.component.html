@@ -29,7 +29,7 @@
         class="draw-btn draw-btn-single"
         type="button"
         [disabled]="!isLoggedIn || isDrawing || effectiveDrawCount(1) === 0"
-        (click)="draw(1)"
+        (click)="$event.stopPropagation(); draw(1)"
       >
         {{ "gacha-box.draw-single" | translate }}
       </button>
@@ -37,7 +37,7 @@
         class="draw-btn draw-btn-ten"
         type="button"
         [disabled]="!isLoggedIn || isDrawing || effectiveDrawCount(10) === 0"
-        (click)="draw(10)"
+        (click)="$event.stopPropagation(); draw(10)"
       >
         {{ "gacha-box.draw-ten" | translate }}
       </button>
@@ -47,7 +47,7 @@
         [disabled]="
           !isLoggedIn || isDrawing || effectiveDrawCount(100) === 0 || gacha.remainingCount < 100
         "
-        (click)="draw(100)"
+        (click)="$event.stopPropagation(); draw(100)"
       >
         {{ "gacha-box.draw-hundred" | translate }}
       </button>
@@ -55,7 +55,7 @@
         class="draw-btn draw-btn-all"
         type="button"
         [disabled]="!isLoggedIn || isDrawing || effectiveDrawCount(gacha.remainingCount) === 0"
-        (click)="draw(gacha.remainingCount)"
+        (click)="$event.stopPropagation(); draw(gacha.remainingCount)"
       >
         {{
           "gacha-box.draw-all" | translate: { count: gacha.remainingCount }

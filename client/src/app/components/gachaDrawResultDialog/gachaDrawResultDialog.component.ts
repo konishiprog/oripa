@@ -37,6 +37,7 @@ export class GachaDrawResultDialogComponent implements OnInit {
   currentIndex: number = 0;
   showSummary: boolean = false;
   isPlayingEffect: boolean = false;
+  skipAllEffectsEnabled: boolean = false;
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: GachaDrawResultDialogData,
@@ -50,6 +51,7 @@ export class GachaDrawResultDialogComponent implements OnInit {
     this.translateService.use('ja');
     this.drawnCards = this.data?.drawnCards ?? [];
     this.revealed = this.drawnCards.map(() => false);
+    this.skipAllEffectsEnabled = false;
     this.startEffectForCurrent();
   }
 
@@ -61,6 +63,9 @@ export class GachaDrawResultDialogComponent implements OnInit {
     const card = this.currentCard;
     this.isPlayingEffect = !!card?.effectUrl && !this.isCurrentRevealed;
     this.cdr.markForCheck();
+    if (this.isPlayingEffect && this.skipAllEffectsEnabled) {
+      setTimeout(() => this.skipCurrentEffect(), 0);
+    }
   }
 
   onEffectEnded(): void {
@@ -123,6 +128,17 @@ export class GachaDrawResultDialogComponent implements OnInit {
   private enterSummary(): void {
     this.showSummary = true;
     this.dialogRef?.updateSize('520px', '');
+    this.cdr.markForCheck();
+  }
+
+  skipCurrentEffect(): void {
+    if (this.isPlayingEffect) {
+      this.onEffectEnded();
+    }
+  }
+
+  toggleSkipAllEffects(): void {
+    this.skipAllEffectsEnabled = !this.skipAllEffectsEnabled;
     this.cdr.markForCheck();
   }
 

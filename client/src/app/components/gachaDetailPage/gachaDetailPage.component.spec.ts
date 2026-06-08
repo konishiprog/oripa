@@ -32,6 +32,7 @@ describe('GachaDetailPageComponent', () => {
     publishStart: '2026-05-01T00:00:00Z',
     publishEnd: '2026-06-09T23:59:00Z',
     isPublic: true,
+    minExchangePoints: 50,
   };
 
   const mockJackpotCards = [
@@ -40,12 +41,14 @@ describe('GachaDetailPageComponent', () => {
       name: 'Jackpot Card 1',
       cardType: 'SSR',
       imageFront: 'card1.jpg',
+      exchangePoints: 100,
     },
     {
       id: 'card-2',
       name: 'Jackpot Card 2',
       cardType: 'SSR',
       imageFront: 'card2.jpg',
+      exchangePoints: 50,
     },
   ];
 
@@ -110,6 +113,7 @@ describe('GachaDetailPageComponent', () => {
 
     fixture = TestBed.createComponent(GachaDetailPageComponent);
     component = fixture.componentInstance;
+    component.gachaId = 'test-gacha-id';
   });
 
   it('should create', () => {
@@ -117,16 +121,17 @@ describe('GachaDetailPageComponent', () => {
   });
 
   it('should load gacha detail on init', async () => {
-    fixture.detectChanges();
+    await component.loadGachaDetail();
     await fixture.whenStable();
 
     expect(mockGachaService.getGachaById).toHaveBeenCalledWith('test-gacha-id');
     expect(component.gacha?.name).toBe('Test Gacha');
     expect(component.gacha?.cost).toBe(2000);
+    expect(component.gacha?.minExchangePoints).toBe(50);
   });
 
   it('should load jackpot cards on init', async () => {
-    fixture.detectChanges();
+    await component.loadJackpotCards();
     await fixture.whenStable();
 
     expect(mockCardService.getCardsByGachaId).toHaveBeenCalledWith(
@@ -222,7 +227,7 @@ describe('GachaDetailPageComponent', () => {
   });
 
   it('should set isLoading to false after loading gacha', async () => {
-    fixture.detectChanges();
+    await component.loadGachaDetail();
     await fixture.whenStable();
 
     expect(component.isLoading).toBe(false);
@@ -231,7 +236,7 @@ describe('GachaDetailPageComponent', () => {
   it('should handle gacha not found error', async () => {
     mockGachaService.getGachaById.mockRejectedValue(new Error('Not found'));
 
-    fixture.detectChanges();
+    await component.loadGachaDetail();
     await fixture.whenStable();
 
     expect(mockRouter.navigate).toHaveBeenCalledWith(['/userGachaPage']);
