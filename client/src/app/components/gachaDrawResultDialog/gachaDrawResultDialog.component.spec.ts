@@ -137,4 +137,23 @@ describe('GachaDrawResultDialogComponent', () => {
     expect(component.currentCard).toBe(null);
     expect(component.isLast).toBe(true);
   });
+
+  it('should initialize with skipAllEffectsEnabled set to false', () => {
+    expect(component.skipAllEffectsEnabled).toBe(false);
+  });
+
+  it('skipCurrentEffect should call onEffectEnded if playing effect', () => {
+    const onEffectEndedSpy = jest.spyOn(component, 'onEffectEnded');
+    component.isPlayingEffect = true;
+    component.skipCurrentEffect();
+    expect(onEffectEndedSpy).toHaveBeenCalled();
+  });
+
+  it('toggleSkipAllEffects should toggle skipAllEffectsEnabled', () => {
+    expect(component.skipAllEffectsEnabled).toBe(false);
+    component.toggleSkipAllEffects();
+    expect(component.skipAllEffectsEnabled).toBe(true);
+    component.toggleSkipAllEffects();
+    expect(component.skipAllEffectsEnabled).toBe(false);
+  });
 });

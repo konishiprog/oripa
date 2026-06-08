@@ -129,7 +129,7 @@ describe('CoinChargePageComponent', () => {
 
     expect(mockRateService.getAllRates).toHaveBeenCalled();
     expect(component.chargeOptions.length).toBe(3);
-    expect(component.chargeOptions[0].label).toBeTruthy();
+    expect(component.chargeOptions[0].id).toBe('rate-1');
     expect(component.isLoading).toBe(false);
   });
 
@@ -151,7 +151,6 @@ describe('CoinChargePageComponent', () => {
   it('should return undefined for selectedOption when no option is selected', () => {
     component.chargeOptions = mockRates.map((rate) => ({
       id: rate.id,
-      label: `¥${rate.price}:${rate.point}P`,
       price: rate.price,
       point: rate.point,
       specialPoint: rate.specialPoint,
@@ -185,7 +184,6 @@ describe('CoinChargePageComponent', () => {
   it('should not create payment intent if user is not logged in', async () => {
     component.chargeOptions = mockRates.map((rate) => ({
       id: rate.id,
-      label: `¥${rate.price}:${rate.point}P`,
       price: rate.price,
       point: rate.point,
       specialPoint: rate.specialPoint,
@@ -203,7 +201,6 @@ describe('CoinChargePageComponent', () => {
   it('should create payment intent and show payment form on charge', async () => {
     component.chargeOptions = mockRates.map((rate) => ({
       id: rate.id,
-      label: `¥${rate.price}:${rate.point}P`,
       price: rate.price,
       point: rate.point,
       specialPoint: rate.specialPoint,
@@ -228,7 +225,6 @@ describe('CoinChargePageComponent', () => {
   it('should handle payment intent creation error', async () => {
     component.chargeOptions = mockRates.map((rate) => ({
       id: rate.id,
-      label: `¥${rate.price}:${rate.point}P`,
       price: rate.price,
       point: rate.point,
       specialPoint: rate.specialPoint,
@@ -253,22 +249,22 @@ describe('CoinChargePageComponent', () => {
     expect(mockRouter.navigate).toHaveBeenCalledWith(['/userGachaPage']);
   });
 
-  it('should format charge label correctly with special point', async () => {
+  it('should load charge options with correct properties', async () => {
     await component.loadChargeOptions();
 
     const rateWithSpecialPoint = component.chargeOptions[1];
-    expect(rateWithSpecialPoint.label).toContain('¥450');
-    expect(rateWithSpecialPoint.label).toContain('500');
-    expect(rateWithSpecialPoint.label).toContain('50');
+    expect(rateWithSpecialPoint.price).toBe(450);
+    expect(rateWithSpecialPoint.point).toBe(500);
+    expect(rateWithSpecialPoint.specialPoint).toBe(50);
   });
 
-  it('should format charge label correctly without special point', async () => {
+  it('should load charge options without special point', async () => {
     await component.loadChargeOptions();
 
     const rateWithoutSpecialPoint = component.chargeOptions[0];
-    expect(rateWithoutSpecialPoint.label).toContain('¥100');
-    expect(rateWithoutSpecialPoint.label).toContain('100');
-    expect(rateWithoutSpecialPoint.label).not.toContain('(+');
+    expect(rateWithoutSpecialPoint.price).toBe(100);
+    expect(rateWithoutSpecialPoint.point).toBe(100);
+    expect(rateWithoutSpecialPoint.specialPoint).toBe(0);
   });
 
   it('should cancel payment form', () => {

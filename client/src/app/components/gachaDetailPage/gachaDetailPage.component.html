@@ -37,7 +37,7 @@
         <div class="guarantees-section">
           <div class="guarantee-badge">
             {{
-              "gacha-detail.minimum-guarantee" | translate: { cost: gacha.cost }
+              "gacha-detail.minimum-guarantee" | translate: { cost: gacha.minExchangePoints }
             }}
           </div>
         </div>
@@ -99,7 +99,10 @@
             class="draw-btn draw-btn-ten"
             type="button"
             [disabled]="
-              !isLoggedIn || isDrawing || effectiveDrawCount(10) === 0
+              !isLoggedIn ||
+              isDrawing ||
+              effectiveDrawCount(10) === 0 ||
+              gacha.remainingCount < 10
             "
             (click)="draw(10)"
           >

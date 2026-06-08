@@ -210,6 +210,33 @@
   transform: translateY(-1px);
 }
 
+.reveal-btn-toggle {
+  background: #f1f5f9;
+  color: #475569;
+  border: 2px solid transparent;
+  transition:
+    background 0.15s,
+    color 0.15s,
+    border-color 0.15s;
+}
+
+.reveal-btn-toggle:hover {
+  background: #e2e8f0;
+}
+
+.reveal-btn-toggle.active {
+  background: #805ad5;
+  color: #fff;
+  border-color: #6b46c1;
+}
+
+.effect-buttons {
+  display: flex;
+  gap: 10px;
+  width: 100%;
+  max-width: 480px;
+}
+
 .summary {
   display: flex;
   flex-direction: column;

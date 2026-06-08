@@ -350,7 +350,9 @@
     "back-alt": "カード裏面",
     "reveal": "めくる",
     "reveal-all": "全部めくる",
-    "skip-effect": "演出をスキップ",
+    "skip-effect": "今回のみスキップ",
+    "skip-all-effects": "全ての演出をスキップする",
+    "skip-all-effects-enabled": "全ての演出をスキップ中",
     "next": "次へ",
     "finish": "結果を見る",
     "close": "閉じる",
@@ -688,6 +690,11 @@
       "point": "P",
       "special-point": "SP",
       "yen": "¥"
+    },
+    "symbol": {
+      "paren-open": "(",
+      "plus": "+",
+      "paren-close": ")"
     },
     "header": {
       "login": "ログイン",
