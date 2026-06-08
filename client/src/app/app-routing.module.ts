@@ -25,6 +25,7 @@ import { CoinChargePageComponent } from './components/coinChargePage/coinChargeP
 import { CoinPurchaseHistoryPageComponent } from './components/coinPurchaseHistoryPage/coinPurchaseHistoryPage.component';
 import { ForgotPasswordComponent } from './components/forgotPassword/forgot-password.component';
 import { TermsOfServiceComponent } from './components/termsOfService/termsOfService.component';
+import { PrivacyPolicyComponent } from './components/privacyPolicy/privacyPolicy.component';
 import { ContactPageComponent } from './components/contactPage/contactPage.component';
 import { ChargeResultPageComponent } from './components/chargeResultPage/chargeResultPage.component';
 
@@ -69,6 +70,10 @@ const routes: Routes = [
   {
     path: 'terms',
     component: TermsOfServiceComponent,
+  },
+  {
+    path: 'privacy',
+    component: PrivacyPolicyComponent,
   },
   {
     path: 'contact',
