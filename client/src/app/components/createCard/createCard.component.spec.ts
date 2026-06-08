@@ -287,6 +287,7 @@ describe('CreateCardComponent', () => {
         cardType: 'SSR',
         exchangeType: 'SHIPPING_ONLY',
         isDrawn: false,
+        cardCount: 1,
       },
     });
   });

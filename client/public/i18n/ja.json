@@ -228,15 +228,18 @@
     "exchange-points": "返還ポイント数",
     "effect": "演出",
     "effect-placeholder": "演出を選択（任意）",
+    "card-count": "追加カード枚数",
     "close": "閉じる",
     "submit": "登録",
     "submit-edit": "更新",
     "success": "カードを登録しました",
     "success-edit": "カードを更新しました",
+    "success-multiple": "{{count}}枚のカードを登録しました",
     "error": "カードの登録に失敗しました",
     "error-required": "全ての項目を入力してください",
     "error-invalid-image": "画像ファイルを選択してください",
     "error-exchange-points": "返還ポイント数は1以上の整数を入力してください",
+    "error-card-count": "追加カード枚数は1以上の整数を入力してください",
     "error-last-card-already-exists": "このガチャには既にラストワンが登録されています"
   },
 

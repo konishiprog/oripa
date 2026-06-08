@@ -80,6 +80,7 @@ export class CreateCardComponent implements OnInit {
   exchangeTypes = EXCHANGE_TYPES;
   mode: CardFormMode = CardFormMode.Create;
   selectedGachaId: string = '';
+  cardCount: number = 1;
   private editingCardId: string | null = null;
 
   readonly minExchangePoints = 1;
@@ -239,6 +240,14 @@ export class CreateCardComponent implements OnInit {
       return;
     }
 
+    if (
+      !this.isEditMode &&
+      (!Number.isInteger(this.cardCount) || this.cardCount < 1)
+    ) {
+      this.showError('card-create.error-card-count');
+      return;
+    }
+
     this.isLoading = true;
     this.successMessage = '';
     this.errorMessage = '';
@@ -267,23 +276,36 @@ export class CreateCardComponent implements OnInit {
         const gachaIdToUse = this.data?.gachaId || this.selectedGachaId;
         const gachaNameToUse = this.data?.gachaName || this.selectedGachaName;
 
-        const created = await this.cardService.createCard({
-          gachaId: gachaIdToUse,
-          name: this.name,
-          cardType: this.cardType,
-          exchangeType: this.exchangeType,
-          exchangePoints: this.isPointExchangeable ? this.exchangePoints : null,
-          effectId: this.effectId || null,
-          imageFrontFile: this.imageFrontFile!,
-          imageBackFile: imageBackFileToUse,
-        });
-        this.showSuccess('card-create.success');
+        let lastCreated: any = null;
+
+        for (let i = 0; i < this.cardCount; i++) {
+          lastCreated = await this.cardService.createCard({
+            gachaId: gachaIdToUse,
+            name: this.name,
+            cardType: this.cardType,
+            exchangeType: this.exchangeType,
+            exchangePoints: this.isPointExchangeable ? this.exchangePoints : null,
+            effectId: this.effectId || null,
+            imageFrontFile: this.imageFrontFile!,
+            imageBackFile: imageBackFileToUse,
+          });
+        }
+
+        if (this.cardCount === 1) {
+          this.showSuccess('card-create.success');
+        } else {
+          this.successMessage = this.translateService.instant(
+            'card-create.success-multiple',
+            { count: this.cardCount },
+          );
+        }
         this.dialogRef?.close({
           mode: 'create',
           data: {
-            ...created.data,
+            ...lastCreated.data,
             gachaId: gachaIdToUse,
             gachaName: gachaNameToUse,
+            cardCount: this.cardCount,
           },
         });
       }

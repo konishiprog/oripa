@@ -212,10 +212,14 @@ export class DashboardComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(async (result) => {
       if (result?.mode === 'create' && result?.data) {
-        await this.refreshCardsForGacha(
-          result.data.gachaId,
-          result.data.gachaName,
-        );
+        if (result.data.cardCount && result.data.cardCount > 1) {
+          await this.loadGachas();
+        } else {
+          await this.refreshCardsForGacha(
+            result.data.gachaId,
+            result.data.gachaName,
+          );
+        }
       }
     });
   }
@@ -258,7 +262,11 @@ export class DashboardComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(async (result) => {
       if (result?.mode === 'create' && result?.data) {
-        await this.refreshCardsForGacha(gacha.id, gacha.name);
+        if (result.data.cardCount && result.data.cardCount > 1) {
+          await this.loadGachas();
+        } else {
+          await this.refreshCardsForGacha(gacha.id, gacha.name);
+        }
       }
     });
   }
