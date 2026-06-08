@@ -2,7 +2,7 @@
   "signup": {
     "subject": "メールアドレスの確認 - oripa",
     "title": "oripa へようこそ！",
-    "greetingSuffix": "さん",
+    "greetingSuffix": "様",
     "description": "アカウント作成のため、下のボタンをクリックしてメールアドレスを確認してください。",
     "buttonText": "メールアドレスを確認",
     "linkAlternativeText": "または、以下のリンクをコピーしてブラウザに貼り付けてください：",
@@ -12,7 +12,7 @@
   "phoneChange": {
     "subject": "電話番号変更のお知らせ - oripa",
     "title": "電話番号が変更されました",
-    "greetingSuffix": "さん",
+    "greetingSuffix": "様",
     "description": "ご登録いただいた電話番号が変更されました。以下の内容をご確認ください。",
     "oldPhoneLabel": "変更前：",
     "newPhoneLabel": "変更後："
@@ -20,7 +20,7 @@
   "address": {
     "subject": "住所変更のお知らせ - oripa",
     "title": "住所が変更されました",
-    "greetingSuffix": "さん",
+    "greetingSuffix": "様",
     "description": "ご登録いただいた住所が変更されました。以下の内容をご確認ください。",
     "oldAddressLabel": "変更前：",
     "newAddressLabel": "変更後："
@@ -28,13 +28,13 @@
   "password": {
     "subject": "パスワード変更のお知らせ - oripa",
     "title": "パスワードが変更されました",
-    "greetingSuffix": "さん",
+    "greetingSuffix": "様",
     "description": "あなたのアカウントのパスワードが変更されました。もし変更をされていない場合は、すぐにお問い合わせください。"
   },
   "passwordReset": {
     "subject": "パスワードリセットのお知らせ - oripa",
     "title": "パスワードをリセットいたしました",
-    "greetingSuffix": "さん",
+    "greetingSuffix": "様",
     "description": "パスワード忘却のため、新しいパスワードを発行いたしました。",
     "newPasswordLabel": "新しいパスワード：",
     "note": "セキュリティのため、ログイン後にパスワードを変更されることをお勧めします。"
@@ -51,30 +51,10 @@
     "phoneLabel": "電話番号：",
     "action": "管理画面から発送状況を確認してください。"
   },
-  "cardShippingPending": {
-    "subject": "カード発送申請受付のお知らせ - oripa",
-    "title": "カード発送申請を受け付けました",
-    "greetingSuffix": "さん",
-    "description": "カード発送の申請を受け付けました。以下の内容をご確認ください。",
-    "cardNameLabel": "カード名：",
-    "gachaNameLabel": "ガチャ名：",
-    "addressLabel": "発送先住所：",
-    "note": "この度はご利用いただきありがとうございます。確認後、発送させていただきます。"
-  },
-  "cardShipped": {
-    "subject": "カード発送完了のお知らせ - oripa",
-    "title": "カードを発送いたしました",
-    "greetingSuffix": "さん",
-    "description": "カードの発送が完了いたしました。以下の内容をご確認ください。",
-    "cardNameLabel": "カード名：",
-    "gachaNameLabel": "ガチャ名：",
-    "addressLabel": "発送先住所：",
-    "note": "ご不明な点がございましたら、お気軽にお問い合わせください。"
-  },
   "cardExchange": {
     "subject": "カード交換完了のお知らせ - oripa",
     "title": "カードをポイントに交換しました",
-    "greetingSuffix": "さん",
+    "greetingSuffix": "様",
     "description": "カードのポイント交換が完了しました。以下の内容をご確認ください。",
     "cardCountLabel": "交換したカード枚数：",
     "cardCountUnit": "枚",
@@ -85,7 +65,7 @@
   "coinPurchase": {
     "subject": "コイン購入完了のお知らせ - oripa",
     "title": "コイン購入が完了しました",
-    "greetingSuffix": "さん",
+    "greetingSuffix": "様",
     "description": "コインのご購入ありがとうございます。以下の内容をご確認ください。",
     "priceLabel": "ご購入金額：",
     "currencySymbol": "¥",
@@ -97,7 +77,7 @@
   "emailChange": {
     "subject": "メールアドレス変更のご確認 - oripa",
     "title": "メールアドレスが変更されました",
-    "greetingSuffix": "さん",
+    "greetingSuffix": "様",
     "description": "アカウントのメールアドレスの変更をリクエストされました。以下のボタンをクリックして、新しいメールアドレスでの変更を確認してください。",
     "buttonText": "メールアドレスの変更を確認",
     "linkAlternativeText": "または、以下のリンクをコピーしてブラウザに貼り付けてください：",

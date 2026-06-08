@@ -304,14 +304,6 @@ module.exports = {
 
         if (cardOwner?.email) {
           if (isDrawn === CARD_STATUS.SHIPPING_PENDING) {
-            await email.sendCardShippingPendingEmail(
-              cardOwner.email,
-              cardOwner.name,
-              card.name,
-              card.gachaName,
-              cardOwner.address,
-            );
-
             const allAdmins = await admin.getAll();
             const adminEmails = allAdmins.map((a: any) => a.email);
             if (adminEmails.length > 0) {
@@ -324,14 +316,6 @@ module.exports = {
                 cardOwner.phone,
               );
             }
-          } else if (isDrawn === CARD_STATUS.SHIPPED) {
-            await email.sendCardShippedEmail(
-              cardOwner.email,
-              cardOwner.name,
-              card.name,
-              card.gachaName,
-              cardOwner.address,
-            );
           }
         }
 
