@@ -22,7 +22,7 @@ export class ChargeResultPageComponent implements OnInit {
   status: string = 'pending';
   amount: number = 0;
   coinAmount: number = 0;
-  specialPointAmount: number = 0;
+  ticketAmount: number = 0;
   errorMessage: string = '';
   icons: { [key: string]: SafeHtml } = {};
 
@@ -93,12 +93,12 @@ export class ChargeResultPageComponent implements OnInit {
       this.status = paymentIntent.status;
 
       const intent = paymentIntent as any;
-      if (intent.metadata && intent.metadata['point']) {
-        this.coinAmount = parseInt(intent.metadata['point'], 10);
+      if (intent.metadata && intent.metadata['coin']) {
+        this.coinAmount = parseInt(intent.metadata['coin'], 10);
       }
 
-      if (intent.metadata && intent.metadata['specialPoint']) {
-        this.specialPointAmount = parseInt(intent.metadata['specialPoint'], 10);
+      if (intent.metadata && intent.metadata['ticket']) {
+        this.ticketAmount = parseInt(intent.metadata['ticket'], 10);
       }
 
       if (intent.amount) {
@@ -137,8 +137,8 @@ export class ChargeResultPageComponent implements OnInit {
       );
 
       if (response?.data) {
-        this.coinAmount = response.data.point || 0;
-        this.specialPointAmount = response.data.specialPoint || 0;
+        this.coinAmount = response.data.coin || 0;
+        this.ticketAmount = response.data.ticket || 0;
       }
     } catch (error: any) {
       console.error('Failed to confirm payment on server:', error);
@@ -154,7 +154,7 @@ export class ChargeResultPageComponent implements OnInit {
 
       const user = await this.userService.getUserById(userId);
       this.userService.saveCoin(user.coin);
-      this.userService.saveSpecialPoint(user.specialPoint);
+      this.userService.saveTicket(user.ticket);
     } catch (error: any) {
       console.error('Failed to refresh user data:', error);
     }

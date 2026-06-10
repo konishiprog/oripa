@@ -17,7 +17,7 @@ let admin: any;
 const upload = multer({ storage: multer.memoryStorage() });
 
 const validateCardPayload = (req: Request, res: Response): boolean => {
-  const { gachaId, name, cardType, exchangeType, exchangePoints } = req.body;
+  const { gachaId, name, cardType, exchangeType, exchangeCoins } = req.body;
   const files = (req as any).files;
   const imageFrontFile = files?.imageFront?.[0];
   const imageBackFile = files?.imageBack?.[0];
@@ -43,8 +43,8 @@ const validateCardPayload = (req: Request, res: Response): boolean => {
   }
 
   if (exchangeType === EXCHANGE_TYPE.BOTH) {
-    const points = Number(exchangePoints);
-    if (!Number.isInteger(points) || points <= 0) {
+    const coins = Number(exchangeCoins);
+    if (!Number.isInteger(coins) || coins <= 0) {
       res.status(400).json({ error: messages.errors.CARD_FIELDS_REQUIRED });
       return false;
     }
@@ -54,7 +54,7 @@ const validateCardPayload = (req: Request, res: Response): boolean => {
 };
 
 const validateCardUpdatePayload = (req: Request, res: Response): boolean => {
-  const { name, cardType, exchangeType, exchangePoints } = req.body;
+  const { name, cardType, exchangeType, exchangeCoins } = req.body;
   const files = (req as any).files;
   const imageFrontFile = files?.imageFront?.[0];
   const imageBackFile = files?.imageBack?.[0];
@@ -76,8 +76,8 @@ const validateCardUpdatePayload = (req: Request, res: Response): boolean => {
   }
 
   if (exchangeType === EXCHANGE_TYPE.BOTH) {
-    const points = Number(exchangePoints);
-    if (!Number.isInteger(points) || points <= 0) {
+    const coins = Number(exchangeCoins);
+    if (!Number.isInteger(coins) || coins <= 0) {
       res
         .status(400)
         .json({ error: messages.errors.CARD_UPDATE_FIELDS_REQUIRED });
@@ -144,7 +144,7 @@ module.exports = {
             name,
             cardType,
             exchangeType,
-            exchangePoints,
+            exchangeCoins,
             effectId,
           } = req.body;
           const files = (req as any).files;
@@ -156,9 +156,9 @@ module.exports = {
             name,
             cardType,
             exchangeType,
-            exchangePoints:
+            exchangeCoins:
               exchangeType === EXCHANGE_TYPE.BOTH
-                ? Number(exchangePoints)
+                ? Number(exchangeCoins)
                 : null,
             effectId: effectId || null,
             imageFrontFile,
@@ -197,7 +197,7 @@ module.exports = {
         }
 
         try {
-          const { name, cardType, exchangeType, exchangePoints, effectId } =
+          const { name, cardType, exchangeType, exchangeCoins, effectId } =
             req.body;
           const files = (req as any).files;
           const imageFrontFile = files?.imageFront?.[0];
@@ -207,9 +207,9 @@ module.exports = {
             name,
             cardType,
             exchangeType,
-            exchangePoints:
+            exchangeCoins:
               exchangeType === EXCHANGE_TYPE.BOTH
-                ? Number(exchangePoints)
+                ? Number(exchangeCoins)
                 : null,
             effectId: effectId || null,
             imageFrontFile,

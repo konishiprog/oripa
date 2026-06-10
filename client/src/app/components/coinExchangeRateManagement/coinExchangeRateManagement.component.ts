@@ -58,7 +58,7 @@ export class CoinExchangeRateManagementComponent implements OnInit {
     dialogRef.afterClosed().subscribe((result) => {
       if (result?.mode === 'create' && result.data) {
         this.rates.push(result.data);
-        this.rates.sort((rateA, rateB) => rateA.point - rateB.point);
+        this.rates.sort((rateA, rateB) => rateA.coin - rateB.coin);
         this.cdr.markForCheck();
       }
     });
@@ -77,7 +77,7 @@ export class CoinExchangeRateManagementComponent implements OnInit {
         );
         if (index > -1) {
           this.rates[index] = result.data;
-          this.rates.sort((rateA, rateB) => rateA.point - rateB.point);
+          this.rates.sort((rateA, rateB) => rateA.coin - rateB.coin);
         }
         this.cdr.markForCheck();
       }

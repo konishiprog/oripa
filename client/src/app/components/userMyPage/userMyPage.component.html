@@ -69,17 +69,17 @@
         <button
           type="button"
           class="menu-item"
-          [class.expanded]="expandedSection === 'point'"
-          (click)="toggleSection('point')"
+          [class.expanded]="expandedSection === 'coin'"
+          (click)="toggleSection('coin')"
         >
           <span class="menu-label">{{
-            "my-page.point-history" | translate
+            "my-page.coin-history" | translate
           }}</span>
           <span [innerHTML]="chevronSvg" class="menu-icon"></span>
         </button>
-        <div *ngIf="expandedSection === 'point'" class="menu-detail">
+        <div *ngIf="expandedSection === 'coin'" class="menu-detail">
           <div *ngIf="purchaseHistories.length === 0" class="empty-detail">
-            {{ "my-page.point-empty" | translate }}
+            {{ "my-page.coin-empty" | translate }}
           </div>
           <div
             *ngIf="purchaseHistories.length > 0"
@@ -93,8 +93,8 @@
                 {{ formatDate(history.createdAt) }}
               </div>
               <div class="history-price">¥{{ history.price | number }}</div>
-              <div class="history-point">
-                {{ history.point }}{{ "common.unit.point" | translate }}
+              <div class="history-coin">
+                {{ history.coin }}{{ "common.unit.coin" | translate }}
               </div>
             </div>
           </div>

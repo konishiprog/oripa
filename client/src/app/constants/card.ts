@@ -10,6 +10,7 @@ export type CardStatusType = (typeof CARD_STATUS)[keyof typeof CARD_STATUS];
 
 export const EXCHANGE_TYPE = {
   SHIPPING_ONLY: 'SHIPPING_ONLY',
+  COIN_ONLY: 'COIN_ONLY',
   BOTH: 'BOTH',
 } as const;
 

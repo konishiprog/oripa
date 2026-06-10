@@ -53,14 +53,14 @@
   },
   "cardExchange": {
     "subject": "カード交換完了のお知らせ - oripa",
-    "title": "カードをポイントに交換しました",
+    "title": "カードをコインに交換しました",
     "greetingSuffix": "様",
-    "description": "カードのポイント交換が完了しました。以下の内容をご確認ください。",
+    "description": "カードのコイン交換が完了しました。以下の内容をご確認ください。",
     "cardCountLabel": "交換したカード枚数：",
     "cardCountUnit": "枚",
-    "gainedPointLabel": "獲得ポイント：",
-    "totalPointLabel": "現在の合計ポイント：",
-    "pointUnit": "pt"
+    "gainedCoinLabel": "獲得コイン：",
+    "totalCoinLabel": "現在の合計コイン：",
+    "coinUnit": "pt"
   },
   "coinPurchase": {
     "subject": "コイン購入完了のお知らせ - oripa",
@@ -69,10 +69,10 @@
     "description": "コインのご購入ありがとうございます。以下の内容をご確認ください。",
     "priceLabel": "ご購入金額：",
     "currencySymbol": "¥",
-    "pointLabel": "獲得ポイント：",
-    "specialPointLabel": "特典ポイント：",
-    "totalPointLabel": "現在の合計ポイント：",
-    "pointUnit": "pt"
+    "coinLabel": "獲得コイン：",
+    "ticketLabel": "チケット：",
+    "totalCoinLabel": "現在の合計コイン：",
+    "coinUnit": "pt"
   },
   "emailChange": {
     "subject": "メールアドレス変更のご確認 - oripa",

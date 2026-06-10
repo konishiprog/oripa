@@ -4,7 +4,10 @@ import { Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { CoinExchangeRateManagementComponent } from './coinExchangeRateManagement.component';
-import { CoinExchangeRateService, CoinExchangeRate } from '../../service/coin-exchange-rate.service';
+import {
+  CoinExchangeRateService,
+  CoinExchangeRate,
+} from '../../service/coin-exchange-rate.service';
 import { of } from 'rxjs';
 
 describe('CoinExchangeRateManagementComponent', () => {
@@ -15,9 +18,9 @@ describe('CoinExchangeRateManagementComponent', () => {
   let mockDialog: any;
 
   const mockRates: CoinExchangeRate[] = [
-    { id: '1', point: 100, price: 100, specialPoint: 0 },
-    { id: '2', point: 200, price: 200, specialPoint: 50 },
-    { id: '3', point: 300, price: 300, specialPoint: 100 },
+    { id: '1', coin: 100, price: 100, ticket: 0 },
+    { id: '2', coin: 200, price: 200, ticket: 50 },
+    { id: '3', coin: 300, price: 300, ticket: 100 },
   ];
 
   beforeEach(async () => {
@@ -114,9 +117,9 @@ describe('CoinExchangeRateManagementComponent', () => {
     it('should add new rate when dialog returns create result', (done) => {
       const newRate: CoinExchangeRate = {
         id: '4',
-        point: 400,
+        coin: 400,
         price: 400,
-        specialPoint: 150,
+        ticket: 150,
       };
 
       mockDialog.open = () => ({
@@ -153,9 +156,9 @@ describe('CoinExchangeRateManagementComponent', () => {
     it('should update rate when dialog returns edit result', (done) => {
       const updatedRate: CoinExchangeRate = {
         id: '1',
-        point: 100,
+        coin: 100,
         price: 150,
-        specialPoint: 50,
+        ticket: 50,
       };
 
       mockDialog.open = () => ({
@@ -166,7 +169,7 @@ describe('CoinExchangeRateManagementComponent', () => {
 
       setTimeout(() => {
         expect(component.rates[0].price).toBe(150);
-        expect(component.rates[0].specialPoint).toBe(50);
+        expect(component.rates[0].ticket).toBe(50);
         done();
       }, 10);
     });
@@ -232,7 +235,8 @@ describe('CoinExchangeRateManagementComponent', () => {
     it('should handle delete error gracefully', async () => {
       const originalConfirm = window.confirm;
       (window as any).confirm = () => true;
-      mockRateService.deleteRate = () => Promise.reject(new Error('Delete failed'));
+      mockRateService.deleteRate = () =>
+        Promise.reject(new Error('Delete failed'));
 
       const initialLength = component.rates.length;
       await component.deleteRate(mockRates[0]);

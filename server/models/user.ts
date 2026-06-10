@@ -31,7 +31,7 @@ module.exports = (sequelize: any, DataTypes: any) => {
         type: DataTypes.INTEGER,
         defaultValue: 0,
       },
-      specialPoint: {
+      ticket: {
         type: DataTypes.INTEGER,
         defaultValue: 0,
       },

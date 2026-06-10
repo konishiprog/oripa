@@ -17,7 +17,7 @@ export interface User {
   phone: string;
   postalCode: string;
   coin: number;
-  specialPoint: number;
+  ticket: number;
 }
 
 export interface CreateUserPayload {
@@ -34,10 +34,10 @@ export interface ChargeResult {
   userId: string;
   previousCoin: number;
   newCoin: number;
-  addedPoint: number;
-  previousSpecialPoint: number;
-  newSpecialPoint: number;
-  addedSpecialPoint: number;
+  addedCoin: number;
+  previousTicket: number;
+  newTicket: number;
+  addedTicket: number;
 }
 
 @Injectable({
@@ -46,17 +46,17 @@ export interface ChargeResult {
 export class UserService {
   private readonly STORAGE_KEY = 'userId';
   private readonly COIN_STORAGE_KEY = 'userCoin';
-  private readonly SPECIAL_POINT_STORAGE_KEY = 'userSpecialPoint';
+  private readonly TICKET_STORAGE_KEY = 'userTicket';
 
   private coin$ = new BehaviorSubject<number | null>(null);
-  private specialPoint$ = new BehaviorSubject<number | null>(null);
+  private ticket$ = new BehaviorSubject<number | null>(null);
 
   constructor(
     private http: HttpClient,
     private apiConfig: ApiConfigService,
   ) {
     this.coin$.next(this.getCoinFromStorage());
-    this.specialPoint$.next(this.getSpecialPointFromStorage());
+    this.ticket$.next(this.getTicketFromStorage());
   }
 
   /**
@@ -292,41 +292,41 @@ export class UserService {
   }
 
   /**
-   * Save the user's special point balance to local storage and update subject
-   * @param {number} specialPoint - User special point balance
+   * Save the user's ticket balance to local storage and update subject
+   * @param {number} ticket - User ticket balance
    */
-  saveSpecialPoint(specialPoint: number): void {
+  saveTicket(ticket: number): void {
     localStorage.setItem(
-      this.SPECIAL_POINT_STORAGE_KEY,
-      specialPoint.toString(),
+      this.TICKET_STORAGE_KEY,
+      ticket.toString(),
     );
-    this.specialPoint$.next(specialPoint);
+    this.ticket$.next(ticket);
   }
 
   /**
-   * Get the user's special point balance (from subject cache)
-   * @returns {number | null} - User special point balance or null
+   * Get the user's ticket balance (from subject cache)
+   * @returns {number | null} - User ticket balance or null
    */
-  getSpecialPoint(): number | null {
-    return this.specialPoint$.value;
+  getTicket(): number | null {
+    return this.ticket$.value;
   }
 
   /**
-   * Get special point as observable for reactive updates
+   * Get ticket as observable for reactive updates
    */
-  specialPoint$$ = this.specialPoint$.asObservable();
+  ticket$$ = this.ticket$.asObservable();
 
-  private getSpecialPointFromStorage(): number | null {
-    const specialPoint = localStorage.getItem(this.SPECIAL_POINT_STORAGE_KEY);
-    return specialPoint ? parseInt(specialPoint, 10) : null;
+  private getTicketFromStorage(): number | null {
+    const ticket = localStorage.getItem(this.TICKET_STORAGE_KEY);
+    return ticket ? parseInt(ticket, 10) : null;
   }
 
   /**
-   * Clear the user's special point balance from local storage
+   * Clear the user's ticket balance from local storage
    */
-  clearSpecialPoint(): void {
-    localStorage.removeItem(this.SPECIAL_POINT_STORAGE_KEY);
-    this.specialPoint$.next(null);
+  clearTicket(): void {
+    localStorage.removeItem(this.TICKET_STORAGE_KEY);
+    this.ticket$.next(null);
   }
 
   async getAddressByPostalCode(

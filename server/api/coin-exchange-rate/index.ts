@@ -11,20 +11,20 @@ const validateCoinExchangeRatePayload = (
   req: Request,
   res: Response,
 ): boolean => {
-  const { point, price, specialPoint } = req.body;
+  const { coin, price, ticket } = req.body;
 
   if (
-    point === undefined ||
-    point === null ||
+    coin === undefined ||
+    coin === null ||
     price === undefined ||
     price === null
   ) {
-    res.status(400).json({ error: "Point and price are required" });
+    res.status(400).json({ error: "Coin and price are required" });
     return false;
   }
 
-  if (!Number.isInteger(point) || point <= 0) {
-    res.status(400).json({ error: "Point must be a positive integer" });
+  if (!Number.isInteger(coin) || coin <= 0) {
+    res.status(400).json({ error: "Coin must be a positive integer" });
     return false;
   }
 
@@ -34,12 +34,12 @@ const validateCoinExchangeRatePayload = (
   }
 
   if (
-    specialPoint !== undefined &&
-    (!Number.isInteger(specialPoint) || specialPoint < 0)
+    ticket !== undefined &&
+    (!Number.isInteger(ticket) || ticket < 0)
   ) {
     res
       .status(400)
-      .json({ error: "Special point must be a non-negative integer" });
+      .json({ error: "Ticket must be a non-negative integer" });
     return false;
   }
 
@@ -68,11 +68,11 @@ module.exports = {
       if (!validateCoinExchangeRatePayload(req, res)) return;
 
       try {
-        const { point, price, specialPoint } = req.body;
+        const { coin, price, ticket } = req.body;
         const rate = await runtime.coinExchangeRate.create(
-          point,
+          coin,
           price,
-          specialPoint,
+          ticket,
         );
         res.status(201).json({ message: "Exchange rate created", data: rate });
       } catch (error: any) {
@@ -89,12 +89,12 @@ module.exports = {
 
       try {
         const { id } = req.params;
-        const { point, price, specialPoint } = req.body;
+        const { coin, price, ticket } = req.body;
         const rate = await runtime.coinExchangeRate.update(
           id,
-          point,
+          coin,
           price,
-          specialPoint,
+          ticket,
         );
         res.status(200).json({ message: "Exchange rate updated", data: rate });
       } catch (error: any) {

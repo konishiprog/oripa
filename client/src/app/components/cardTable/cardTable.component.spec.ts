@@ -20,7 +20,9 @@ describe('CardTableComponent', () => {
       name: 'Card 1',
       cardType: 'SSR',
       exchangeType: 'BOTH',
-      exchangePoints: 100,
+      exchangeCoins: 100,
+      effectId: null,
+      effectName: '',
       imageFront: 'front1.jpg',
       imageBack: 'back1.jpg',
       isDrawn: '未引き',
@@ -32,7 +34,9 @@ describe('CardTableComponent', () => {
       name: 'Card 2',
       cardType: 'R',
       exchangeType: 'SHIPPING_ONLY',
-      exchangePoints: null,
+      exchangeCoins: null,
+      effectId: null,
+      effectName: '',
       imageFront: 'front2.jpg',
       imageBack: 'back2.jpg',
       isDrawn: '未引き',
@@ -44,7 +48,9 @@ describe('CardTableComponent', () => {
       name: 'Card 3',
       cardType: 'SR',
       exchangeType: 'BOTH',
-      exchangePoints: 500,
+      exchangeCoins: 500,
+      effectId: null,
+      effectName: '',
       imageFront: 'front3.jpg',
       imageBack: 'back3.jpg',
       isDrawn: '引かれた',
@@ -193,15 +199,15 @@ describe('CardTableComponent', () => {
     expect(label).toBe('UNKNOWN');
   });
 
-  it('should display exchange points for BOTH type with points', () => {
+  it('should display exchange coins for BOTH type with coins', () => {
     jest.spyOn(translateService, 'instant').mockReturnValue('No exchange');
-    const result = component.getExchangePointsDisplay(mockCards[0]);
+    const result = component.getExchangeCoinsDisplay(mockCards[0]);
     expect(result).toBe('100');
   });
 
   it('should display no exchange message for SHIPPING_ONLY type', () => {
     jest.spyOn(translateService, 'instant').mockReturnValue('No exchange');
-    const result = component.getExchangePointsDisplay(mockCards[1]);
+    const result = component.getExchangeCoinsDisplay(mockCards[1]);
     expect(result).toBe('No exchange');
   });
 

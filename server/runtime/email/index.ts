@@ -292,8 +292,8 @@ export async function sendCardExchangeEmail(
   to: string,
   userName: string,
   cardCount: number,
-  gainedPoint: number,
-  totalPoint: number,
+  gainedCoin: number,
+  totalCoin: number,
 ): Promise<void> {
   if (!process.env.RESEND_API_KEY) {
     console.error("[EMAIL] RESEND_API_KEY is not set");
@@ -315,8 +315,8 @@ export async function sendCardExchangeEmail(
     const { subject, html } = renderTemplate("cardExchange", {
       userName,
       cardCount: cardCount.toLocaleString("ja-JP"),
-      gainedPoint: gainedPoint.toLocaleString("ja-JP"),
-      totalPoint: totalPoint.toLocaleString("ja-JP"),
+      gainedCoin: gainedCoin.toLocaleString("ja-JP"),
+      totalCoin: totalCoin.toLocaleString("ja-JP"),
     });
 
     const result = await client.emails.send({
@@ -338,9 +338,9 @@ export async function sendCoinPurchaseEmail(
   to: string,
   userName: string,
   price: number,
-  point: number,
-  specialPoint: number,
-  totalPoint: number,
+  coin: number,
+  ticket: number,
+  totalCoin: number,
 ): Promise<void> {
   if (!process.env.RESEND_API_KEY) {
     console.error("[EMAIL] RESEND_API_KEY is not set");
@@ -362,9 +362,9 @@ export async function sendCoinPurchaseEmail(
     const { subject, html } = renderTemplate("coinPurchase", {
       userName,
       price: price.toLocaleString("ja-JP"),
-      point: point.toLocaleString("ja-JP"),
-      specialPoint: specialPoint.toLocaleString("ja-JP"),
-      totalPoint: totalPoint.toLocaleString("ja-JP"),
+      coin: coin.toLocaleString("ja-JP"),
+      ticket: ticket.toLocaleString("ja-JP"),
+      totalCoin: totalCoin.toLocaleString("ja-JP"),
     });
 
     const result = await client.emails.send({

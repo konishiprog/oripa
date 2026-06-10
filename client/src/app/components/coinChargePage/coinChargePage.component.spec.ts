@@ -25,21 +25,21 @@ describe('CoinChargePageComponent', () => {
   const mockRates: CoinExchangeRate[] = [
     {
       id: 'rate-1',
-      point: 100,
+      coin: 100,
       price: 100,
-      specialPoint: 0,
+      ticket: 0,
     },
     {
       id: 'rate-2',
-      point: 500,
+      coin: 500,
       price: 450,
-      specialPoint: 50,
+      ticket: 50,
     },
     {
       id: 'rate-3',
-      point: 1000,
+      coin: 1000,
       price: 800,
-      specialPoint: 200,
+      ticket: 200,
     },
   ];
 
@@ -84,11 +84,11 @@ describe('CoinChargePageComponent', () => {
         if (key === 'common.unit.yen') {
           return '¥';
         }
-        if (key === 'common.unit.point') {
+        if (key === 'common.unit.coin') {
           return 'P';
         }
-        if (key === 'coin-exchange-rate.special-point') {
-          return 'スペシャルP';
+        if (key === 'coin-exchange-rate.ticket') {
+          return 'チケット';
         }
         return 'translated text';
       }),
@@ -96,7 +96,11 @@ describe('CoinChargePageComponent', () => {
 
     await TestBed.configureTestingModule({
       declarations: [CoinChargePageComponent],
-      imports: [FormsModule, TranslateModule.forRoot(), HttpClientTestingModule],
+      imports: [
+        FormsModule,
+        TranslateModule.forRoot(),
+        HttpClientTestingModule,
+      ],
       providers: [
         { provide: CoinExchangeRateService, useValue: mockRateService },
         { provide: UserService, useValue: mockUserService },
@@ -145,15 +149,15 @@ describe('CoinChargePageComponent', () => {
     const selected = component.selectedOption;
     expect(selected).toBeDefined();
     expect(selected?.id).toBe('rate-1');
-    expect(selected?.point).toBe(100);
+    expect(selected?.coin).toBe(100);
   });
 
   it('should return undefined for selectedOption when no option is selected', () => {
     component.chargeOptions = mockRates.map((rate) => ({
       id: rate.id,
       price: rate.price,
-      point: rate.point,
-      specialPoint: rate.specialPoint,
+      coin: rate.coin,
+      ticket: rate.ticket,
     }));
     component.selectedOptionId = '';
 
@@ -185,8 +189,8 @@ describe('CoinChargePageComponent', () => {
     component.chargeOptions = mockRates.map((rate) => ({
       id: rate.id,
       price: rate.price,
-      point: rate.point,
-      specialPoint: rate.specialPoint,
+      coin: rate.coin,
+      ticket: rate.ticket,
     }));
     component.selectedOptionId = 'rate-1';
 
@@ -202,8 +206,8 @@ describe('CoinChargePageComponent', () => {
     component.chargeOptions = mockRates.map((rate) => ({
       id: rate.id,
       price: rate.price,
-      point: rate.point,
-      specialPoint: rate.specialPoint,
+      coin: rate.coin,
+      ticket: rate.ticket,
     }));
     component.selectedOptionId = 'rate-2';
     component['stripe'] = {
@@ -226,8 +230,8 @@ describe('CoinChargePageComponent', () => {
     component.chargeOptions = mockRates.map((rate) => ({
       id: rate.id,
       price: rate.price,
-      point: rate.point,
-      specialPoint: rate.specialPoint,
+      coin: rate.coin,
+      ticket: rate.ticket,
     }));
     component.selectedOptionId = 'rate-1';
     component['stripe'] = {} as any;
@@ -252,19 +256,19 @@ describe('CoinChargePageComponent', () => {
   it('should load charge options with correct properties', async () => {
     await component.loadChargeOptions();
 
-    const rateWithSpecialPoint = component.chargeOptions[1];
-    expect(rateWithSpecialPoint.price).toBe(450);
-    expect(rateWithSpecialPoint.point).toBe(500);
-    expect(rateWithSpecialPoint.specialPoint).toBe(50);
+    const rateWithTicket = component.chargeOptions[1];
+    expect(rateWithTicket.price).toBe(450);
+    expect(rateWithTicket.coin).toBe(500);
+    expect(rateWithTicket.ticket).toBe(50);
   });
 
-  it('should load charge options without special point', async () => {
+  it('should load charge options without ticket', async () => {
     await component.loadChargeOptions();
 
-    const rateWithoutSpecialPoint = component.chargeOptions[0];
-    expect(rateWithoutSpecialPoint.price).toBe(100);
-    expect(rateWithoutSpecialPoint.point).toBe(100);
-    expect(rateWithoutSpecialPoint.specialPoint).toBe(0);
+    const rateWithoutTicket = component.chargeOptions[0];
+    expect(rateWithoutTicket.price).toBe(100);
+    expect(rateWithoutTicket.coin).toBe(100);
+    expect(rateWithoutTicket.ticket).toBe(0);
   });
 
   it('should cancel payment form', () => {

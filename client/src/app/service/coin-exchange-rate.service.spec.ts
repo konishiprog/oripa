@@ -16,16 +16,16 @@ describe('CoinExchangeRateService', () => {
   let mockApiConfig: any;
 
   const mockRates: CoinExchangeRate[] = [
-    { id: 'rate-1', point: 100, price: 99, specialPoint: 10 },
-    { id: 'rate-2', point: 500, price: 490, specialPoint: 50 },
-    { id: 'rate-3', point: 1000, price: 980, specialPoint: 100 },
+    { id: 'rate-1', coin: 100, price: 99, ticket: 10 },
+    { id: 'rate-2', coin: 500, price: 490, ticket: 50 },
+    { id: 'rate-3', coin: 1000, price: 980, ticket: 100 },
   ];
 
   const mockRate: CoinExchangeRate = {
     id: 'rate-1',
-    point: 100,
+    coin: 100,
     price: 99,
-    specialPoint: 10,
+    ticket: 10,
   };
 
   beforeEach(() => {
@@ -113,7 +113,7 @@ describe('CoinExchangeRateService', () => {
 
   describe('createRate', () => {
     it('should create a new rate', async () => {
-      const payload = { point: 100, price: 99, specialPoint: 10 };
+      const payload = { coin: 100, price: 99, ticket: 10 };
       const result = service.createRate(payload);
 
       const req = httpMock.expectOne(
@@ -125,12 +125,12 @@ describe('CoinExchangeRateService', () => {
 
       const response = await result;
       expect(response).toEqual(mockRate);
-      expect(response.point).toBe(100);
+      expect(response.coin).toBe(100);
       expect(response.price).toBe(99);
     });
 
     it('should handle create error with invalid input', async () => {
-      const payload = { point: -100, price: 99, specialPoint: 10 };
+      const payload = { coin: -100, price: 99, ticket: 10 };
       const result = service.createRate(payload);
 
       const req = httpMock.expectOne(
@@ -150,7 +150,7 @@ describe('CoinExchangeRateService', () => {
     });
 
     it('should handle create error with duplicate rate', async () => {
-      const payload = { point: 100, price: 99, specialPoint: 10 };
+      const payload = { coin: 100, price: 99, ticket: 10 };
       const result = service.createRate(payload);
 
       const req = httpMock.expectOne(
@@ -172,7 +172,7 @@ describe('CoinExchangeRateService', () => {
 
   describe('updateRate', () => {
     it('should update an existing rate', async () => {
-      const payload = { point: 200, price: 195, specialPoint: 20 };
+      const payload = { coin: 200, price: 195, ticket: 20 };
       const updatedRate = { id: 'rate-1', ...payload };
       const result = service.updateRate('rate-1', payload);
 
@@ -185,11 +185,11 @@ describe('CoinExchangeRateService', () => {
 
       const response = await result;
       expect(response).toEqual(updatedRate);
-      expect(response.point).toBe(200);
+      expect(response.coin).toBe(200);
     });
 
     it('should handle update error when rate not found', async () => {
-      const payload = { point: 200, price: 195, specialPoint: 20 };
+      const payload = { coin: 200, price: 195, ticket: 20 };
       const result = service.updateRate('nonexistent-id', payload);
 
       const req = httpMock.expectOne(
@@ -209,7 +209,7 @@ describe('CoinExchangeRateService', () => {
     });
 
     it('should handle update error with invalid input', async () => {
-      const payload = { point: -100, price: 195, specialPoint: 20 };
+      const payload = { coin: -100, price: 195, ticket: 20 };
       const result = service.updateRate('rate-1', payload);
 
       const req = httpMock.expectOne(

@@ -33,8 +33,8 @@ export class GachaDrawService {
     private effectPlayer: EffectPlayerService,
   ) {}
 
-  usesSpecialPoint(gacha: DrawableGacha): boolean {
-    return gacha.consumptionType === 'SPECIAL_POINT';
+  usesTicket(gacha: DrawableGacha): boolean {
+    return gacha.consumptionType === 'TICKET';
   }
 
   effectiveDrawCount(gacha: DrawableGacha, requested: number): number {
@@ -68,8 +68,8 @@ export class GachaDrawService {
     if (result.userCoin !== undefined) {
       this.userService.saveCoin(result.userCoin);
     }
-    if (result.userSpecialPoint !== undefined) {
-      this.userService.saveSpecialPoint(result.userSpecialPoint);
+    if (result.userTicket !== undefined) {
+      this.userService.saveTicket(result.userTicket);
     }
 
     this.playHighestRarityEffect(drawnCards);
@@ -104,12 +104,12 @@ export class GachaDrawService {
 
   private hasEnoughBalance(gacha: DrawableGacha, count: number): boolean {
     const totalCost = gacha.cost * count;
-    if (this.usesSpecialPoint(gacha)) {
-      const userSpecialPoint = this.userService.getSpecialPoint();
-      if (userSpecialPoint === null || userSpecialPoint < totalCost) {
+    if (this.usesTicket(gacha)) {
+      const userTicket = this.userService.getTicket();
+      if (userTicket === null || userTicket < totalCost) {
         alert(
           this.translateService.instant(
-            'gacha-box.error-insufficient-special-point',
+            'gacha-box.error-insufficient-ticket',
           ),
         );
         return false;

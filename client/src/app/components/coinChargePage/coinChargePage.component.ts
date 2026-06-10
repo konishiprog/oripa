@@ -20,8 +20,8 @@ import { environment } from '../../../environments/environment';
 interface ChargeOption {
   id: string;
   price: number;
-  point: number;
-  specialPoint: number;
+  coin: number;
+  ticket: number;
 }
 
 @Component({
@@ -98,8 +98,8 @@ export class CoinChargePageComponent implements OnInit, OnDestroy {
       this.chargeOptions = rates.map((rate) => ({
         id: rate.id,
         price: rate.price,
-        point: rate.point,
-        specialPoint: rate.specialPoint,
+        coin: rate.coin,
+        ticket: rate.ticket,
       }));
 
       if (this.chargeOptions.length > 0) {
@@ -150,8 +150,8 @@ export class CoinChargePageComponent implements OnInit, OnDestroy {
       const paymentData = await this.chargeService.createPaymentIntent(
         userId,
         option.price,
-        option.point,
-        option.specialPoint,
+        option.coin,
+        option.ticket,
       );
 
       const elementsResult = await (this.stripe as any).elements({

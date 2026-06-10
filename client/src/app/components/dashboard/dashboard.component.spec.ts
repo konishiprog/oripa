@@ -93,7 +93,7 @@ describe('DashboardComponent', () => {
             name: 'Card 1',
             cardType: 'SSR',
             exchangeType: 'BOTH',
-            exchangePoints: 100,
+            exchangeCoins: 100,
             effectId: null,
             effectName: null,
             imageFront: '/img/front.png',

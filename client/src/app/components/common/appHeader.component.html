@@ -7,7 +7,7 @@
         <div class="user-coin-group">
           <span class="user-coin-icon" [innerHTML]="coinIcon"></span>
           <span class="user-coin-amount">
-            {{ userCoin }}{{ "common.unit.point" | translate }}
+            {{ userCoin }}{{ "common.unit.coin" | translate }}
           </span>
           <button
             class="header-btn-charge"
@@ -18,9 +18,9 @@
             +
           </button>
         </div>
-        <div class="user-special-point-display">
-          +{{ userSpecialPoint || 0
-          }}{{ "common.unit.special-point" | translate }}
+        <div class="user-ticket-display">
+          +{{ userTicket || 0
+          }}{{ "common.unit.ticket" | translate }}
         </div>
       </div>
       <button

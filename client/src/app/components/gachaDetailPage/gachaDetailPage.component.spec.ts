@@ -34,23 +34,37 @@ describe('GachaDetailPageComponent', () => {
     publishStart: '2026-05-01T00:00:00Z',
     publishEnd: '2026-06-09T23:59:00Z',
     isPublic: true,
-    minExchangePoints: 50,
+    minExchangeCoins: 50,
   };
 
   const mockJackpotCards = [
     {
       id: 'card-1',
+      gachaId: '1',
+      gachaName: 'Gacha 1',
       name: 'Jackpot Card 1',
       cardType: 'SSR',
+      exchangeType: 'BOTH',
+      exchangeCoins: 100,
+      effectId: null,
+      effectName: '',
       imageFront: 'card1.jpg',
-      exchangePoints: 100,
+      imageBack: 'back1.jpg',
+      isDrawn: '未引き',
     },
     {
       id: 'card-2',
+      gachaId: '1',
+      gachaName: 'Gacha 1',
       name: 'Jackpot Card 2',
       cardType: 'SSR',
+      exchangeType: 'BOTH',
+      exchangeCoins: 50,
+      effectId: null,
+      effectName: '',
       imageFront: 'card2.jpg',
-      exchangePoints: 50,
+      imageBack: 'back2.jpg',
+      isDrawn: '未引き',
     },
   ];
 
@@ -131,7 +145,7 @@ describe('GachaDetailPageComponent', () => {
     expect(mockGachaService.getGachaById).toHaveBeenCalledWith('test-gacha-id');
     expect(component.gacha?.name).toBe('Test Gacha');
     expect(component.gacha?.cost).toBe(2000);
-    expect(component.gacha?.minExchangePoints).toBe(50);
+    expect(component.gacha?.minExchangeCoins).toBe(50);
   });
 
   it('should set isLoading to false after loading gacha', async () => {
@@ -155,9 +169,9 @@ describe('GachaDetailPageComponent', () => {
 
   it('should filter jackpot cards to only SSR', async () => {
     const allCards = [
-      { id: '1', name: 'SSR Card', cardType: 'SSR', imageFront: 'ssr.jpg', exchangePoints: 100 },
-      { id: '2', name: 'SR Card', cardType: 'SR', imageFront: 'sr.jpg', exchangePoints: 50 },
-      { id: '3', name: 'R Card', cardType: 'R', imageFront: 'r.jpg', exchangePoints: 10 },
+      { id: '1', name: 'SSR Card', cardType: 'SSR', imageFront: 'ssr.jpg', exchangeCoins: 100 },
+      { id: '2', name: 'SR Card', cardType: 'SR', imageFront: 'sr.jpg', exchangeCoins: 50 },
+      { id: '3', name: 'R Card', cardType: 'R', imageFront: 'r.jpg', exchangeCoins: 10 },
     ];
     mockCardService.getCardsByGachaId.mockResolvedValue(allCards);
 

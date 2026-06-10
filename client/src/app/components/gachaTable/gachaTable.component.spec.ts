@@ -29,7 +29,7 @@ describe('GachaTableComponent', () => {
       id: 'gacha-uuid-2',
       name: 'Gacha 2',
       headerImage: 'header2.jpg',
-      consumptionType: 'POINTS',
+      consumptionType: 'COINS',
       cost: 50,
       oncePerUser: true,
       isPublic: false,

@@ -36,7 +36,7 @@ export interface Card {
   name: string;
   cardType: string;
   exchangeType: string;
-  exchangePoints: number | null;
+  exchangeCoins: number | null;
   effectId: string | null;
   effectName: string;
   imageFront: string;
@@ -54,7 +54,7 @@ const CARD_TABLE_HEADERS: TableHeader[] = [
   { key: 'card-name', labelKey: 'dashboard.card-table.card-name' },
   { key: 'card-type', labelKey: 'dashboard.card-table.card-type' },
   { key: 'exchange-type', labelKey: 'dashboard.card-table.exchange-type' },
-  { key: 'exchange-points', labelKey: 'dashboard.card-table.exchange-points' },
+  { key: 'exchange-coins', labelKey: 'dashboard.card-table.exchange-coins' },
   { key: 'effect', labelKey: 'dashboard.card-table.effect' },
   { key: 'is-drawn', labelKey: 'dashboard.card-table.is-drawn' },
 ];
@@ -84,9 +84,9 @@ const CARD_TABLE_CELLS: TableCell[] = [
     dataKey: 'exchangeType',
   },
   {
-    key: 'exchange-points',
+    key: 'exchange-coins',
     type: 'method',
-    methodName: 'getExchangePointsDisplay',
+    methodName: 'getExchangeCoinsDisplay',
   },
   { key: 'effect', type: 'text', dataKey: 'effectName' },
   { key: 'is-drawn', type: 'method', methodName: 'getIsDrawnLabel' },
@@ -210,11 +210,14 @@ export class CardTableComponent implements OnInit, OnChanges {
     return key ? this.translateService.instant(key) : value;
   }
 
-  getExchangePointsDisplay(card: Card): string {
-    return card.exchangeType === EXCHANGE_TYPE.BOTH &&
-      card.exchangePoints !== null
-      ? card.exchangePoints.toString()
-      : this.translateService.instant('dashboard.card.no-exchange-points');
+  getExchangeCoinsDisplay(card: Card): string {
+    const isExchangeable =
+      (card.exchangeType === EXCHANGE_TYPE.BOTH ||
+        card.exchangeType === EXCHANGE_TYPE.COIN_ONLY) &&
+      card.exchangeCoins !== null;
+    return isExchangeable && card.exchangeCoins !== null
+      ? card.exchangeCoins.toString()
+      : this.translateService.instant('dashboard.card.no-exchange-coins');
   }
 
   getIsDrawnLabel(card: Card): string {
@@ -248,8 +251,8 @@ export class CardTableComponent implements OnInit, OnChanges {
         return this.getExchangeTypeLabel(
           card[cell.dataKey as keyof Card] as string,
         );
-      case 'getExchangePointsDisplay':
-        return this.getExchangePointsDisplay(card);
+      case 'getExchangeCoinsDisplay':
+        return this.getExchangeCoinsDisplay(card);
       case 'getIsDrawnLabel':
         return this.getIsDrawnLabel(card);
       default:
@@ -269,7 +272,7 @@ export class CardTableComponent implements OnInit, OnChanges {
           name: card.name,
           cardType: card.cardType,
           exchangeType: card.exchangeType,
-          exchangePoints: card.exchangePoints,
+          exchangeCoins: card.exchangeCoins,
           effectId: card.effectId,
           imageFront: card.imageFront,
           imageBack: card.imageBack,
@@ -288,7 +291,7 @@ export class CardTableComponent implements OnInit, OnChanges {
             name: result.data.name ?? '',
             cardType: result.data.cardType ?? '',
             exchangeType: result.data.exchangeType ?? '',
-            exchangePoints: result.data.exchangePoints ?? null,
+            exchangeCoins: result.data.exchangeCoins ?? null,
             effectId: result.data.effectId ?? null,
             effectName: result.data.effectName ?? '',
             imageFront: result.data.imageFront ?? '',

@@ -17,8 +17,8 @@ async function getAll() {
       "id",
       "userId",
       "price",
-      "point",
-      "specialPoint",
+      "coin",
+      "ticket",
       "status",
       "createdAt",
     ],
@@ -42,8 +42,8 @@ async function getByUserId(userId: string) {
       "id",
       "userId",
       "price",
-      "point",
-      "specialPoint",
+      "coin",
+      "ticket",
       "status",
       "createdAt",
     ],
@@ -63,14 +63,14 @@ async function getByUserId(userId: string) {
 async function create(
   userId: string,
   price: number,
-  point: number,
-  specialPoint: number = 0,
+  coin: number,
+  ticket: number = 0,
 ) {
   const history = await db.CoinPurchaseHistory.create({
     userId,
     price,
-    point,
-    specialPoint,
+    coin,
+    ticket,
     status: "completed",
   });
   return history.get({ plain: true });
@@ -79,14 +79,14 @@ async function create(
 async function createCharge(
   userId: string,
   amount: number,
-  point: number,
-  specialPoint: number = 0,
+  coin: number,
+  ticket: number = 0,
 ) {
   const paymentIntent = await createPaymentIntent({
     userId,
     amount,
-    point,
-    specialPoint,
+    coin,
+    ticket,
     currency: "JPY",
   });
 
@@ -94,8 +94,8 @@ async function createCharge(
     id: uuidv4(),
     userId,
     price: amount,
-    point,
-    specialPoint,
+    coin,
+    ticket,
     status: "pending",
     stripePaymentIntentId: paymentIntent.id,
   });
@@ -113,8 +113,8 @@ async function getChargeHistory(userId: string) {
       "id",
       "userId",
       "price",
-      "point",
-      "specialPoint",
+      "coin",
+      "ticket",
       "status",
       "paymentMethod",
       "stripePaymentIntentId",
@@ -151,10 +151,10 @@ async function updateChargeStatus(
     const user = await db.User.findByPk(history.userId);
     if (user) {
       const currentCoin = user.coin || 0;
-      const specialPoint = user.specialPoint || 0;
+      const ticket = user.ticket || 0;
       await user.update({
-        coin: currentCoin + history.point,
-        specialPoint: specialPoint + history.specialPoint,
+        coin: currentCoin + history.coin,
+        ticket: ticket + history.ticket,
       });
       if (runtime && runtime.user) {
         await runtime.user.refreshCache();

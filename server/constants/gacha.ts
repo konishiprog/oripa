@@ -1,6 +1,6 @@
 export const CONSUMPTION_TYPE = {
   COIN: "COIN",
-  SPECIAL_POINT: "SPECIAL_POINT",
+  TICKET: "TICKET",
 } as const;
 
 export type ConsumptionTypeType =

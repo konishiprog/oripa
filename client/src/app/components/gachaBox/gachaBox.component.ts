@@ -44,8 +44,8 @@ export class GachaBoxComponent {
     return this.userService.isLoggedIn();
   }
 
-  get usesSpecialPoint(): boolean {
-    return this.gacha.consumptionType === 'SPECIAL_POINT';
+  get usesTicket(): boolean {
+    return this.gacha.consumptionType === 'TICKET';
   }
 
   get isExpired(): boolean {
@@ -54,9 +54,9 @@ export class GachaBoxComponent {
   }
 
   formatPrice(cost: number): string {
-    const unitKey = this.usesSpecialPoint
-      ? 'common.unit.special-point'
-      : 'common.unit.point';
+    const unitKey = this.usesTicket
+      ? 'common.unit.ticket'
+      : 'common.unit.coin';
     const unit = this.translateService.instant(unitKey);
     return `${cost.toLocaleString()}${unit}`;
   }

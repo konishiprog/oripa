@@ -26,8 +26,8 @@
     font-size: 12px;
   }
 
-  .special-point-header,
-  .special-point-cell,
+  .ticket-header,
+  .ticket-cell,
   .status-header,
   .status-cell {
     display: none;

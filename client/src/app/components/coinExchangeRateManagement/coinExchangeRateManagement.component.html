@@ -22,17 +22,17 @@
     <table class="rates-table">
       <thead>
         <tr>
-          <th>{{ "coin-exchange-rate.point" | translate }}</th>
+          <th>{{ "coin-exchange-rate.coin" | translate }}</th>
           <th>{{ "coin-exchange-rate.price" | translate }}</th>
-          <th>{{ "coin-exchange-rate.special-point" | translate }}</th>
+          <th>{{ "coin-exchange-rate.ticket" | translate }}</th>
           <th class="action-header"></th>
         </tr>
       </thead>
       <tbody>
         <tr *ngFor="let rate of rates">
-          <td>{{ rate.point }}</td>
+          <td>{{ rate.coin }}</td>
           <td>{{ rate.price }}</td>
-          <td>{{ rate.specialPoint }}</td>
+          <td>{{ rate.ticket }}</td>
           <td class="action-cell">
             <app-action-menu
               (edit)="openEditDialog(rate)"

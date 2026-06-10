@@ -16,8 +16,8 @@ function getStripe(): any {
 export interface CreatePaymentIntentRequest {
   userId: string;
   amount: number;
-  point: number;
-  specialPoint?: number;
+  coin: number;
+  ticket?: number;
   currency?: string;
 }
 
@@ -41,8 +41,8 @@ export async function createPaymentIntent(request: CreatePaymentIntentRequest) {
     currency,
     metadata: {
       userId: request.userId,
-      point: request.point.toString(),
-      specialPoint: (request.specialPoint || 0).toString(),
+      coin: request.coin.toString(),
+      ticket: (request.ticket || 0).toString(),
     },
   });
 

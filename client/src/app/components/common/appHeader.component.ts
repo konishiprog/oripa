@@ -20,7 +20,7 @@ export class AppHeaderComponent implements OnInit {
   isLoggedIn: boolean = false;
   isAdminPage: boolean = false;
   userCoin: number | null = null;
-  userSpecialPoint: number | null = null;
+  userTicket: number | null = null;
   isMobileMenuOpen: boolean = false;
   menuIcon: SafeHtml = '';
   closeIcon: SafeHtml = '';
@@ -42,7 +42,7 @@ export class AppHeaderComponent implements OnInit {
     this.translateService.use('ja');
     this.isLoggedIn = this.userService.isLoggedIn();
     this.userCoin = this.userService.getCoin();
-    this.userSpecialPoint = this.userService.getSpecialPoint();
+    this.userTicket = this.userService.getTicket();
     this.loadIcons();
     this.checkAdminPage();
 
@@ -51,8 +51,8 @@ export class AppHeaderComponent implements OnInit {
       this.cdr.markForCheck();
     });
 
-    this.userService.specialPoint$$.subscribe((specialPoint) => {
-      this.userSpecialPoint = specialPoint;
+    this.userService.ticket$$.subscribe((ticket) => {
+      this.userTicket = ticket;
       this.cdr.markForCheck();
     });
 
@@ -131,9 +131,9 @@ export class AppHeaderComponent implements OnInit {
           this.userService.saveCoin(result.data.coin);
           this.userCoin = result.data.coin;
         }
-        if (result.data?.specialPoint !== undefined) {
-          this.userService.saveSpecialPoint(result.data.specialPoint);
-          this.userSpecialPoint = result.data.specialPoint;
+        if (result.data?.ticket !== undefined) {
+          this.userService.saveTicket(result.data.ticket);
+          this.userTicket = result.data.ticket;
         }
         this.cdr.markForCheck();
       }
@@ -143,10 +143,10 @@ export class AppHeaderComponent implements OnInit {
   logout(): void {
     this.userService.clearUserId();
     this.userService.clearCoin();
-    this.userService.clearSpecialPoint();
+    this.userService.clearTicket();
     this.isLoggedIn = false;
     this.userCoin = null;
-    this.userSpecialPoint = null;
+    this.userTicket = null;
     this.router.navigate(['/userGachaPage']);
     this.cdr.markForCheck();
   }

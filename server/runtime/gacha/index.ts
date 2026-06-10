@@ -245,12 +245,12 @@ async function draw(payload: {
   const requestedDrawCount = gacha.oncePerUser ? 1 : payload.drawCount;
   const actualDrawCount = Math.min(requestedDrawCount, availableCards.length);
   const totalCost = gacha.cost * actualDrawCount;
-  const usesSpecialPoint =
-    gacha.consumptionType === CONSUMPTION_TYPE.SPECIAL_POINT;
+  const usesTicket =
+    gacha.consumptionType === CONSUMPTION_TYPE.TICKET;
 
-  if (usesSpecialPoint) {
-    if ((user.specialPoint ?? 0) < totalCost) {
-      throw new Error(messages.errors.INSUFFICIENT_SPECIAL_POINT);
+  if (usesTicket) {
+    if ((user.ticket ?? 0) < totalCost) {
+      throw new Error(messages.errors.INSUFFICIENT_TICKET);
     }
   } else if (user.coin < totalCost) {
     throw new Error(messages.errors.INSUFFICIENT_COIN);
@@ -288,9 +288,9 @@ async function draw(payload: {
   gachaCache.set(payload.gachaId, gacha);
 
   let updatedUser;
-  if (usesSpecialPoint) {
+  if (usesTicket) {
     updatedUser = await userRuntime.update(payload.userId, {
-      specialPoint: (user.specialPoint ?? 0) - totalCost,
+      ticket: (user.ticket ?? 0) - totalCost,
     });
   } else {
     updatedUser = await userRuntime.updateCoin(
@@ -325,7 +325,7 @@ async function draw(payload: {
     }),
     remainingCount,
     userCoin: updatedUser.coin,
-    userSpecialPoint: updatedUser.specialPoint,
+    userTicket: updatedUser.ticket,
     consumptionType: gacha.consumptionType ?? CONSUMPTION_TYPE.COIN,
     oncePerUser: !!gacha.oncePerUser,
     actualDrawCount,

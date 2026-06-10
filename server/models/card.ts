@@ -47,7 +47,7 @@ module.exports = (sequelize: any, DataTypes: any) => {
       exchangeType: {
         type: DataTypes.STRING,
       },
-      exchangePoints: {
+      exchangeCoins: {
         type: DataTypes.INTEGER,
         allowNull: true,
       },

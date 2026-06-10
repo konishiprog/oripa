@@ -5,9 +5,9 @@ import { ApiConfigService } from './api-config.service';
 
 export interface CoinExchangeRate {
   id: string;
-  point: number;
+  coin: number;
   price: number;
-  specialPoint: number;
+  ticket: number;
 }
 
 @Injectable({

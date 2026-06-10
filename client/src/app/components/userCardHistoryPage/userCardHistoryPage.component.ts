@@ -30,7 +30,7 @@ export interface UserCard {
   imageBack: string;
   cardType: string;
   exchangeType: string;
-  exchangePoints: number | null;
+  exchangeCoins: number | null;
   isDrawn: string;
   gachaName: string | null;
   status: CardHistoryTab;
@@ -103,7 +103,7 @@ export class UserCardHistoryPageComponent implements OnInit {
             imageBack: card.imageBack,
             cardType: card.cardType,
             exchangeType: card.exchangeType,
-            exchangePoints: card.exchangePoints,
+            exchangeCoins: card.exchangeCoins,
             isDrawn: card.isDrawn,
             gachaName: card.gachaName,
             status,
@@ -126,7 +126,11 @@ export class UserCardHistoryPageComponent implements OnInit {
   }
 
   get filteredCards(): UserCard[] {
-    return this.cards.filter((card) => card.status === this.activeTab);
+    let filtered = this.cards.filter((card) => card.status === this.activeTab);
+    if (this.activeTab === CARD_HISTORY_TABS.UNSELECTED && this.mode === 'exchange') {
+      filtered = filtered.filter((card) => this.isExchangeable(card));
+    }
+    return filtered;
   }
 
   get emptyMessageKey(): string {
@@ -141,7 +145,10 @@ export class UserCardHistoryPageComponent implements OnInit {
   }
 
   isExchangeable(card: UserCard): boolean {
-    return card.exchangeType === EXCHANGE_TYPE.BOTH;
+    return (
+      card.exchangeType === EXCHANGE_TYPE.BOTH ||
+      card.exchangeType === EXCHANGE_TYPE.COIN_ONLY
+    );
   }
 
   isSelectableForCurrentMode(card: UserCard): boolean {
@@ -191,10 +198,10 @@ export class UserCardHistoryPageComponent implements OnInit {
     this.selectedCardIds.clear();
   }
 
-  get selectedTotalPoints(): number {
+  get selectedTotalCoins(): number {
     return this.filteredCards
       .filter((card) => this.selectedCardIds.has(card.id))
-      .reduce((sum, card) => sum + (card.exchangePoints ?? 0), 0);
+      .reduce((sum, card) => sum + (card.exchangeCoins ?? 0), 0);
   }
 
   get hasSelectedCards(): boolean {
@@ -204,7 +211,7 @@ export class UserCardHistoryPageComponent implements OnInit {
   openExchangeDialog(): void {
     const dialogRef = this.dialog.open(CoinExchangeDialogComponent, {
       width: '320px',
-      data: { points: this.selectedTotalPoints },
+      data: { coins: this.selectedTotalCoins },
       disableClose: true,
     });
     dialogRef.afterClosed().subscribe(async (result) => {
@@ -225,7 +232,7 @@ export class UserCardHistoryPageComponent implements OnInit {
       const selectedCards = this.filteredCards.filter((card) =>
         this.selectedCardIds.has(card.id),
       );
-      const totalPoints = this.selectedTotalPoints;
+      const totalCoins = this.selectedTotalCoins;
       const currentCoin = this.userService.getCoin() ?? 0;
       const exchangedCardIds = selectedCards.map((card) => card.id);
 
@@ -235,9 +242,9 @@ export class UserCardHistoryPageComponent implements OnInit {
       }
 
       await this.userService.updateUser(userId, {
-        coin: currentCoin + totalPoints,
+        coin: currentCoin + totalCoins,
       });
-      this.userService.saveCoin(currentCoin + totalPoints);
+      this.userService.saveCoin(currentCoin + totalCoins);
 
       await this.userService.notifyCardExchange(userId, exchangedCardIds);
 

@@ -19,7 +19,7 @@ export type MyPageSection =
   | 'email'
   | 'password'
   | 'phone'
-  | 'point'
+  | 'coin'
   | 'nickname'
   | null;
 

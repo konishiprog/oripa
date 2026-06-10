@@ -14,7 +14,7 @@ module.exports = (sequelize: any, DataTypes: any) => {
         primaryKey: true,
         defaultValue: DataTypes.UUIDV4,
       },
-      point: {
+      coin: {
         type: DataTypes.INTEGER,
         allowNull: false,
         unique: true,
@@ -23,7 +23,7 @@ module.exports = (sequelize: any, DataTypes: any) => {
         type: DataTypes.INTEGER,
         allowNull: false,
       },
-      specialPoint: {
+      ticket: {
         type: DataTypes.INTEGER,
         allowNull: false,
         defaultValue: 0,

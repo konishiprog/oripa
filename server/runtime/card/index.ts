@@ -62,7 +62,7 @@ async function create(payload: {
   name: string;
   cardType: string;
   exchangeType: string;
-  exchangePoints?: number | null;
+  exchangeCoins?: number | null;
   effectId?: string | null;
   imageFrontFile?: any;
   imageBackFile?: any;
@@ -100,9 +100,9 @@ async function create(payload: {
     name: payload.name,
     cardType: payload.cardType,
     exchangeType: payload.exchangeType,
-    exchangePoints:
+    exchangeCoins:
       payload.exchangeType === EXCHANGE_TYPE.BOTH
-        ? (payload.exchangePoints ?? null)
+        ? (payload.exchangeCoins ?? null)
         : null,
     effectId: payload.effectId ?? null,
     imageFront: imageFrontBase64,
@@ -146,7 +146,7 @@ async function update(
     name?: string;
     cardType?: string;
     exchangeType?: string;
-    exchangePoints?: number | null;
+    exchangeCoins?: number | null;
     effectId?: string | null;
     imageFrontFile?: any;
     imageBackFile?: any;
@@ -192,9 +192,9 @@ async function update(
   if (payload.cardType !== undefined) updateData.cardType = payload.cardType;
   if (payload.exchangeType !== undefined) {
     updateData.exchangeType = payload.exchangeType;
-    updateData.exchangePoints =
+    updateData.exchangeCoins =
       payload.exchangeType === EXCHANGE_TYPE.BOTH
-        ? (payload.exchangePoints ?? null)
+        ? (payload.exchangeCoins ?? null)
         : null;
   }
   if (payload.effectId !== undefined) {
