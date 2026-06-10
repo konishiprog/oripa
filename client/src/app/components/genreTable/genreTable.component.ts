@@ -33,6 +33,7 @@ export class GenreTableComponent implements OnInit, OnChanges {
   searchQuery: string = '';
   currentPage: number = 1;
   itemsPerPage: number = 20;
+  isLoading: boolean = false;
 
   constructor(
     private cdr: ChangeDetectorRef,
@@ -102,6 +103,7 @@ export class GenreTableComponent implements OnInit, OnChanges {
       return;
     }
 
+    this.isLoading = true;
     try {
       await this.genreService.deleteGenre(genre.id);
       this.genresUpdated.emit();
@@ -109,6 +111,8 @@ export class GenreTableComponent implements OnInit, OnChanges {
     } catch (error) {
       console.error('Failed to delete genre:', error);
       alert(this.translateService.instant('dashboard.delete-error'));
+    } finally {
+      this.isLoading = false;
     }
   }
 }

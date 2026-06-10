@@ -12,13 +12,12 @@ import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-charge-result-page',
-  standalone: true,
-  imports: [CommonModule, TranslateModule],
+  standalone: false,
   templateUrl: './chargeResultPage.component.html',
   styleUrls: ['./chargeResultPage.component.css'],
 })
 export class ChargeResultPageComponent implements OnInit {
-  loading: boolean = true;
+  isLoading: boolean = true;
   status: string = 'pending';
   amount: number = 0;
   coinAmount: number = 0;
@@ -69,7 +68,7 @@ export class ChargeResultPageComponent implements OnInit {
       this.errorMessage = this.translateService.instant(
         'charge-result.error-no-secret',
       );
-      this.loading = false;
+      this.isLoading = false;
       return;
     }
 
@@ -122,7 +121,7 @@ export class ChargeResultPageComponent implements OnInit {
       this.errorMessage = error.message;
       console.error('Payment status check error:', error);
     } finally {
-      this.loading = false;
+      this.isLoading = false;
     }
   }
 

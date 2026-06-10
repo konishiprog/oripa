@@ -1,9 +1,7 @@
-<div class="result-container">
-  <div *ngIf="loading" class="loading">
-    <p>{{ "common.loading" | translate }}</p>
-  </div>
+<app-loading-overlay [isLoading]="isLoading"></app-loading-overlay>
 
-  <div *ngIf="!loading && status === 'succeeded'" class="success">
+<div class="result-container">
+  <div *ngIf="!isLoading && status === 'succeeded'" class="success">
     <div class="icon" [innerHTML]="icons['success']"></div>
     <h2>{{ "charge-result.success-title" | translate }}</h2>
     <p>{{ "charge-result.success-message" | translate }}</p>
@@ -27,7 +25,7 @@
     </div>
   </div>
 
-  <div *ngIf="!loading && status === 'failed'" class="error">
+  <div *ngIf="!isLoading && status === 'failed'" class="error">
     <div class="icon" [innerHTML]="icons['error']"></div>
     <h2>{{ "charge-result.error-title" | translate }}</h2>
     <p>{{ "charge-result.error-message" | translate }}</p>
@@ -39,7 +37,7 @@
     </div>
   </div>
 
-  <div *ngIf="!loading && status === 'processing'" class="pending">
+  <div *ngIf="!isLoading && status === 'processing'" class="pending">
     <div class="icon" [innerHTML]="icons['processing']"></div>
     <h2>{{ "charge-result.processing-title" | translate }}</h2>
     <p>{{ "charge-result.processing-message" | translate }}</p>

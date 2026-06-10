@@ -7,6 +7,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { CardService } from '../../service/card.service';
 import { UserService } from '../../service/user.service';
 import { CoinExchangeDialogComponent } from '../coinExchangeDialog/coinExchangeDialog.component';
+import { ShippingConfirmDialogComponent } from '../shippingConfirmDialog/shippingConfirmDialog.component';
 import { CARD_STATUS, EXCHANGE_TYPE } from '../../constants/card';
 
 export type CardHistoryTab = 'unselected' | 'pending' | 'shipped';
@@ -127,8 +128,12 @@ export class UserCardHistoryPageComponent implements OnInit {
 
   get filteredCards(): UserCard[] {
     let filtered = this.cards.filter((card) => card.status === this.activeTab);
-    if (this.activeTab === CARD_HISTORY_TABS.UNSELECTED && this.mode === 'exchange') {
-      filtered = filtered.filter((card) => this.isExchangeable(card));
+    if (this.activeTab === CARD_HISTORY_TABS.UNSELECTED) {
+      if (this.mode === 'exchange') {
+        filtered = filtered.filter((card) => this.isExchangeable(card));
+      } else {
+        filtered = filtered.filter((card) => this.isShippable(card));
+      }
     }
     return filtered;
   }
@@ -151,6 +156,13 @@ export class UserCardHistoryPageComponent implements OnInit {
     );
   }
 
+  isShippable(card: UserCard): boolean {
+    return (
+      card.exchangeType === EXCHANGE_TYPE.BOTH ||
+      card.exchangeType === EXCHANGE_TYPE.SHIPPING_ONLY
+    );
+  }
+
   isSelectableForCurrentMode(card: UserCard): boolean {
     if (this.activeTab === CARD_HISTORY_TABS.SHIPPED) {
       return true;
@@ -159,6 +171,7 @@ export class UserCardHistoryPageComponent implements OnInit {
       return this.isExchangeable(card) && card.isDrawn !== CARD_STATUS.REFUNDED;
     } else {
       return (
+        this.isShippable(card) &&
         card.isDrawn !== CARD_STATUS.REFUNDED &&
         card.isDrawn !== CARD_STATUS.SHIPPING_PENDING
       );
@@ -222,6 +235,7 @@ export class UserCardHistoryPageComponent implements OnInit {
   }
 
   async executeExchange(): Promise<void> {
+    this.isLoading = true;
     try {
       const userId = this.userService.getUserId();
       if (!userId) {
@@ -255,10 +269,31 @@ export class UserCardHistoryPageComponent implements OnInit {
       this.cdr.markForCheck();
     } catch (error) {
       console.error('Failed to exchange cards:', error);
+    } finally {
+      this.isLoading = false;
+      this.cdr.markForCheck();
     }
   }
 
   async startShipping(): Promise<void> {
+    if (this.selectedCardIds.size === 0) {
+      return;
+    }
+
+    const dialogRef = this.dialog.open(ShippingConfirmDialogComponent, {
+      width: '500px',
+      data: {
+        cardCount: this.selectedCardIds.size,
+      },
+    });
+
+    const confirmed = await dialogRef.afterClosed().toPromise();
+
+    if (!confirmed) {
+      return;
+    }
+
+    this.isLoading = true;
     try {
       const selectedCards = this.cards.filter((card) =>
         this.selectedCardIds.has(card.id),
@@ -277,6 +312,9 @@ export class UserCardHistoryPageComponent implements OnInit {
       this.cdr.markForCheck();
     } catch (error) {
       console.error('Failed to start shipping:', error);
+    } finally {
+      this.isLoading = false;
+      this.cdr.markForCheck();
     }
   }
 
@@ -294,6 +332,7 @@ export class UserCardHistoryPageComponent implements OnInit {
       return;
     }
 
+    this.isLoading = true;
     try {
       const selectedCardIds = Array.from(this.selectedCardIds);
       for (const cardId of selectedCardIds) {
@@ -313,6 +352,9 @@ export class UserCardHistoryPageComponent implements OnInit {
       alert(
         this.translateService.instant('card-history.confirm-received-error'),
       );
+    } finally {
+      this.isLoading = false;
+      this.cdr.markForCheck();
     }
   }
 }

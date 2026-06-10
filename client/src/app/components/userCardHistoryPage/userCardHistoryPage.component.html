@@ -1,6 +1,8 @@
 <div class="app">
   <app-header></app-header>
 
+  <app-loading-overlay [isLoading]="isLoading"></app-loading-overlay>
+
   <div class="page">
     <header class="page-header">
       <button type="button" class="back-btn" (click)="goBack()">
@@ -128,6 +130,7 @@
             <div
               *ngIf="
                 activeTab === CARD_HISTORY_TABS.UNSELECTED &&
+                mode === 'exchange' &&
                 isExchangeable(card) &&
                 card.exchangeCoins &&
                 card.exchangeCoins > 0

@@ -23,6 +23,7 @@ export class SidebarComponent implements OnInit {
   menuSections: MenuSection[] = SIDEBAR_MENU;
   iconCache: Map<string, SafeHtml> = new Map();
   isAdminAccountActive: boolean = false;
+  isLoading: boolean = true;
 
   constructor(
     private http: HttpClient,
@@ -33,16 +34,21 @@ export class SidebarComponent implements OnInit {
   ) {}
 
   async ngOnInit(): Promise<void> {
-    this.translateService.setDefaultLang('ja');
-    this.translateService.use('ja');
-    this.loadIcons();
-    await this.loadAdminEmail();
-    this.checkAdminAccountRoute();
-    this.router.events
-      .pipe(filter((event) => event instanceof NavigationEnd))
-      .subscribe(() => {
-        this.checkAdminAccountRoute();
-      });
+    this.isLoading = true;
+    try {
+      this.translateService.setDefaultLang('ja');
+      this.translateService.use('ja');
+      this.loadIcons();
+      await this.loadAdminEmail();
+      this.checkAdminAccountRoute();
+      this.router.events
+        .pipe(filter((event) => event instanceof NavigationEnd))
+        .subscribe(() => {
+          this.checkAdminAccountRoute();
+        });
+    } finally {
+      this.isLoading = false;
+    }
   }
 
   private checkAdminAccountRoute(): void {
