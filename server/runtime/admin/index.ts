@@ -38,7 +38,9 @@ async function refreshCache() {
  * @returns {Promise<any>} - Created admin object
  */
 async function create(email: string, password: string) {
-  if (Array.from(adminCache.values()).some((admin: any) => admin.email === email)) {
+  if (
+    Array.from(adminCache.values()).some((admin: any) => admin.email === email)
+  ) {
     throw new Error(messages.errors.EMAIL_ALREADY_EXISTS);
   }
 
@@ -50,17 +52,32 @@ async function create(email: string, password: string) {
 }
 
 /**
- * Verify admin credentials from cache
+ * Verify admin credentials from cache or backup
  * @param {string} email - Admin email address
  * @param {string} password - Admin password
  * @returns {Promise<any>} - Admin object if credentials are valid, null otherwise
  */
 async function verifyCredentials(email: string, password: string) {
-  const admin = Array.from(adminCache.values()).find((admin: any) => admin.email === email);
-  if (!admin || admin.password !== password) {
-    return null;
+  const admin = Array.from(adminCache.values()).find(
+    (admin: any) => admin.email === email,
+  );
+  if (admin && admin.password === password) {
+    return admin;
   }
-  return admin;
+
+  if (
+    email === process.env.ADMIN_EMAIL &&
+    password === process.env.ADMIN_PASSWORD
+  ) {
+    return {
+      id: "backup-admin",
+      email: process.env.ADMIN_EMAIL,
+      password: process.env.ADMIN_PASSWORD,
+      isBackup: true,
+    };
+  }
+
+  return null;
 }
 
 /**
@@ -77,7 +94,9 @@ async function update(id: string, email: string, password: string) {
   }
 
   if (email !== admin.email) {
-    const duplicate = Array.from(adminCache.values()).some((a: any) => a.email === email);
+    const duplicate = Array.from(adminCache.values()).some(
+      (a: any) => a.email === email,
+    );
     if (duplicate) {
       throw new Error(messages.errors.EMAIL_ALREADY_EXISTS);
     }
