@@ -18,6 +18,7 @@ export interface ShippingCardDetailDialogData {
 })
 export class ShippingCardDetailDialogComponent implements OnInit {
   card!: ShippingCardInfo;
+  isLoading: boolean = false;
 
   constructor(
     private translateService: TranslateService,

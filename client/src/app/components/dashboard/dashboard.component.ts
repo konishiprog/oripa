@@ -45,6 +45,7 @@ export class DashboardComponent implements OnInit {
   genres: Genre[] = [];
   effects: Effect[] = [];
   viewMode: ViewMode = ViewMode.Gacha;
+  isLoading: boolean = true;
 
   constructor(
     private dialog: MatDialog,
@@ -56,6 +57,7 @@ export class DashboardComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    this.isLoading = true;
     this.loadGachas();
     this.loadGenres();
     this.loadEffects();
@@ -67,6 +69,8 @@ export class DashboardComponent implements OnInit {
       this.cdr.markForCheck();
     } catch (error) {
       console.error('Failed to load genres:', error);
+    } finally {
+      this.isLoading = false;
     }
   }
 
@@ -76,10 +80,13 @@ export class DashboardComponent implements OnInit {
       this.cdr.markForCheck();
     } catch (error) {
       console.error('Failed to load effects:', error);
+    } finally {
+      this.isLoading = false;
     }
   }
 
   async loadGachas(): Promise<void> {
+    this.isLoading = true;
     try {
       const data = await this.gachaService.getGachas();
       this.gachas = data.map((gacha: any) => ({
@@ -115,6 +122,8 @@ export class DashboardComponent implements OnInit {
       this.cdr.markForCheck();
     } catch (error) {
       console.error('Failed to load gachas:', error);
+    } finally {
+      this.isLoading = false;
     }
   }
 

@@ -101,7 +101,8 @@ async function create(payload: {
     cardType: payload.cardType,
     exchangeType: payload.exchangeType,
     exchangeCoins:
-      payload.exchangeType === EXCHANGE_TYPE.BOTH
+      payload.exchangeType === EXCHANGE_TYPE.BOTH ||
+      payload.exchangeType === EXCHANGE_TYPE.COIN_ONLY
         ? (payload.exchangeCoins ?? null)
         : null,
     effectId: payload.effectId ?? null,
@@ -193,7 +194,8 @@ async function update(
   if (payload.exchangeType !== undefined) {
     updateData.exchangeType = payload.exchangeType;
     updateData.exchangeCoins =
-      payload.exchangeType === EXCHANGE_TYPE.BOTH
+      payload.exchangeType === EXCHANGE_TYPE.BOTH ||
+      payload.exchangeType === EXCHANGE_TYPE.COIN_ONLY
         ? (payload.exchangeCoins ?? null)
         : null;
   }

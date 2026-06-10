@@ -112,6 +112,7 @@ export class CardTableComponent implements OnInit, OnChanges {
   currentPage: number = 1;
   itemsPerPage: number = 20;
   filterCriteria: CardFilterCriteria = { ...DEFAULT_CARD_FILTER_CRITERIA };
+  isLoading: boolean = false;
 
   private readonly cardTypeLabelMap = new Map(
     CARD_TYPES.map((cardType) => [cardType.value, cardType.labelKey]),
@@ -316,6 +317,7 @@ export class CardTableComponent implements OnInit, OnChanges {
       return;
     }
 
+    this.isLoading = true;
     try {
       await this.cardService.deleteCard(card.id);
       this.cards = this.cards.filter((target) => target.id !== card.id);
@@ -325,6 +327,8 @@ export class CardTableComponent implements OnInit, OnChanges {
     } catch (error) {
       console.error('Failed to delete card:', error);
       alert(this.translateService.instant('dashboard.delete-error'));
+    } finally {
+      this.isLoading = false;
     }
   }
 
