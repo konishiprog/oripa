@@ -28,16 +28,16 @@ describe('CoinExchangeRateDialogComponent', () => {
       createRate: () =>
         Promise.resolve({
           id: 'test',
-          point: 100,
+          coin: 100,
           price: 100,
-          specialPoint: 0,
+          ticket: 0,
         }),
       updateRate: () =>
         Promise.resolve({
           id: 'test',
-          point: 100,
+          coin: 100,
           price: 100,
-          specialPoint: 0,
+          ticket: 0,
         }),
     };
 
@@ -65,9 +65,9 @@ describe('CoinExchangeRateDialogComponent', () => {
   });
 
   it('should initialize with default values', () => {
-    expect(component.point).toBe(1000);
+    expect(component.coin).toBe(1000);
     expect(component.price).toBe(1000);
-    expect(component.specialPoint).toBe(0);
+    expect(component.ticket).toBe(0);
     expect(component.isLoading).toBe(false);
   });
 
@@ -75,20 +75,20 @@ describe('CoinExchangeRateDialogComponent', () => {
     expect(component.isEditMode).toBe(false);
   });
 
-  it('should show error for invalid point (0)', async () => {
-    component.point = 0;
+  it('should show error for invalid coin (0)', async () => {
+    component.coin = 0;
     component.price = 100;
-    component.specialPoint = 0;
+    component.ticket = 0;
 
     await component.onSubmit();
 
     expect(component.errorMessage).not.toBe('');
   });
 
-  it('should show error for negative point', async () => {
-    component.point = -10;
+  it('should show error for negative coin', async () => {
+    component.coin = -10;
     component.price = 100;
-    component.specialPoint = 0;
+    component.ticket = 0;
 
     await component.onSubmit();
 
@@ -96,9 +96,9 @@ describe('CoinExchangeRateDialogComponent', () => {
   });
 
   it('should show error for invalid price (0)', async () => {
-    component.point = 100;
+    component.coin = 100;
     component.price = 0;
-    component.specialPoint = 0;
+    component.ticket = 0;
 
     await component.onSubmit();
 
@@ -106,19 +106,19 @@ describe('CoinExchangeRateDialogComponent', () => {
   });
 
   it('should show error for negative price', async () => {
-    component.point = 100;
+    component.coin = 100;
     component.price = -50;
-    component.specialPoint = 0;
+    component.ticket = 0;
 
     await component.onSubmit();
 
     expect(component.errorMessage).not.toBe('');
   });
 
-  it('should show error for negative specialPoint', async () => {
-    component.point = 100;
+  it('should show error for negative ticket', async () => {
+    component.coin = 100;
     component.price = 100;
-    component.specialPoint = -5;
+    component.ticket = -5;
 
     await component.onSubmit();
 
@@ -126,9 +126,9 @@ describe('CoinExchangeRateDialogComponent', () => {
   });
 
   it('should accept valid values', async () => {
-    component.point = 100;
+    component.coin = 100;
     component.price = 100;
-    component.specialPoint = 0;
+    component.ticket = 0;
 
     mockDialogRef.resetCloseCalled();
     await component.onSubmit();
@@ -144,9 +144,9 @@ describe('CoinExchangeRateDialogComponent', () => {
   });
 
   it('should validate integer values only', async () => {
-    component.point = 100.5 as any;
+    component.coin = 100.5 as any;
     component.price = 100;
-    component.specialPoint = 0;
+    component.ticket = 0;
 
     await component.onSubmit();
 

@@ -29,7 +29,7 @@ describe('EmailVerificationComponent', () => {
     address: 'Tokyo',
     phone: '09012345678',
     coin: 1000,
-    specialPoint: 0,
+    ticket: 0,
   };
 
   beforeEach(async () => {

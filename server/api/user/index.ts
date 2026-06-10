@@ -426,8 +426,8 @@ module.exports = {
         const result = await runtime.user.charge(
           userId,
           rate.price,
-          rate.point,
-          rate.specialPoint,
+          rate.coin,
+          rate.ticket,
         );
 
         const user = await runtime.user.getById(userId);
@@ -436,8 +436,8 @@ module.exports = {
             user.email,
             user.name,
             rate.price,
-            result.addedPoint,
-            result.addedSpecialPoint,
+            result.addedCoin,
+            result.addedTicket,
             result.newCoin,
           );
         }

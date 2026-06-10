@@ -16,7 +16,7 @@
     "user-management": "ユーザー管理",
     "main": "メイン",
     "settings": "設定",
-    "coin-exchange-rate": "ポイント交換レート",
+    "coin-exchange-rate": "コイン交換レート",
     "logs": "ログ",
     "purchase-log": "購入ログ",
     "shipping-info": "輸送情報",
@@ -122,7 +122,7 @@
       "card-name": "カード名",
       "card-type": "カードタイプ",
       "exchange-type": "交換タイプ",
-      "exchange-points": "交換コイン",
+      "exchange-coins": "交換コイン",
       "effect": "演出",
       "is-drawn": "引かれた"
     },
@@ -133,10 +133,10 @@
       "unit-cards": "{{count}}枚",
       "no-end-date": "-",
       "consumption-coin": "コイン",
-      "consumption-special-point": "特別ポイント"
+      "consumption-ticket": "チケット"
     },
     "card": {
-      "no-exchange-points": "-",
+      "no-exchange-coins": "-",
       "drawn": "引かれた",
       "not-drawn": "未引き",
       "refunded": "差し戻し",
@@ -156,7 +156,7 @@
     "image-change": "画像を変更",
     "consumption-type": "消費タイプ",
     "consumption-type-coin": "コイン",
-    "consumption-type-special-point": "特別ポイント",
+    "consumption-type-ticket": "チケット",
     "cost": "値段",
     "once-per-user": "1人1回制限",
     "once-per-user-yes": "1人1回のみ",
@@ -224,8 +224,9 @@
     "card-type-last": "ラストワン賞",
     "exchange-type": "交換タイプ",
     "exchange-type-shipping-only": "発送のみ",
+    "exchange-type-coin-only": "コイン交換のみ",
     "exchange-type-both": "コイン返還/発送",
-    "exchange-points": "返還ポイント数",
+    "exchange-coins": "返還コイン数",
     "effect": "演出",
     "effect-placeholder": "演出を選択（任意）",
     "card-count": "追加カード枚数",
@@ -238,7 +239,7 @@
     "error": "カードの登録に失敗しました",
     "error-required": "全ての項目を入力してください",
     "error-invalid-image": "画像ファイルを選択してください",
-    "error-exchange-points": "返還ポイント数は1以上の整数を入力してください",
+    "error-exchange-coins": "返還コイン数は1以上の整数を入力してください",
     "error-card-count": "追加カード枚数は1以上の整数を入力してください",
     "error-last-card-already-exists": "このガチャには既にラストワンが登録されています"
   },
@@ -308,7 +309,7 @@
     "already-drawn": "このガチャは既に引いています",
     "error-already-drawn": "このガチャは1人1回までしか引けません",
     "error-insufficient-coin": "コインが足りません。チャージしてから再度お試しください。",
-    "error-insufficient-special-point": "特別ポイントが足りません。",
+    "error-insufficient-ticket": "チケットが足りません。",
     "error-out-of-stock": "在庫がなくなりました",
     "error-gacha-not-found": "対象のガチャが見つかりません",
     "error-user-not-found": "ユーザー情報が見つかりません。ログインし直してください。",
@@ -470,14 +471,14 @@
     "back-to-gacha": "ガチャページに戻る",
     "loading": "読み込み中...",
     "card-history": "カード獲得履歴",
-    "point-history": "ポイント購入履歴",
+    "coin-history": "コイン購入履歴",
     "nickname": "ニックネームの変更",
     "nickname-label": "ニックネーム",
     "nickname-placeholder": "サイト内で表示される名前",
     "address": "お届け先登録・変更",
     "email": "メールアドレスの変更",
     "password": "パスワードの変更",
-    "point-empty": "ポイント購入履歴がありません",
+    "coin-empty": "コイン購入履歴がありません",
     "address-label": "住所",
     "address-placeholder": "東京都港区...",
     "email-label": "メールアドレス",
@@ -521,15 +522,16 @@
     "empty-pending": "発送待ちの獲得商品がありません",
     "empty-shipped": "発送済みの獲得商品がありません",
     "from-gacha": "{{name}} より",
-    "exchange-button": "コインに交換する（{{points}}コイン）",
-    "exchange-confirm": "選択したカードを {{points}} コインに変換しますか？",
+    "exchange-button": "コインに交換する（{{coins}}コイン）",
+    "exchange-confirm": "選択したカードを {{coins}} コインに変換しますか？",
     "shipping-button": "発送開始",
     "confirm-received": "中身を確認しました",
     "no-selection": "カードを選択してください",
     "confirm-received-message": "選択したカードをリストから削除しますか？",
     "confirm-received-success": "カードを削除しました",
     "confirm-received-error": "カード削除に失敗しました",
-    "select-all": "すべて選択"
+    "select-all": "すべて選択",
+    "select-all-clear": "すべて選択解除"
   },
 
   "user-management": {
@@ -558,14 +560,14 @@
   },
 
   "coin-exchange-rate": {
-    "page-title": "ポイント交換レート設定",
-    "page-desc": "ユーザーがコインに交換できるポイント交換のレートを設定します。",
+    "page-title": "コイン交換レート設定",
+    "page-desc": "ユーザーがコインに交換できるコイン交換のレートを設定します。",
     "back": "戻る",
-    "title-create": "ポイント交換レート登録",
-    "title-edit": "ポイント交換レート編集",
-    "point": "ポイント",
+    "title-create": "コイン交換レート登録",
+    "title-edit": "コイン交換レート編集",
+    "coin": "コイン",
     "price": "金額",
-    "special-point": "特別ポイント",
+    "ticket": "チケット",
     "actions": "アクション",
     "add-new": "+ 新規レート追加",
     "save": "保存",
@@ -579,15 +581,15 @@
     "error-delete": "レート設定の削除に失敗しました",
     "error-create": "レート設定の作成に失敗しました",
     "error-invalid-input": "入力値が無効です",
-    "error-point-invalid": "ポイントは1以上の整数で入力してください",
+    "error-coin-invalid": "コインは1以上の整数で入力してください",
     "error-price-invalid": "金額は50円以上の整数で入力してください",
-    "error-special-point-invalid": "特別ポイントは0以上の整数で入力してください",
+    "error-ticket-invalid": "チケットは0以上の整数で入力してください",
     "no-data": "レート設定はまだ登録されていません"
   },
 
   "coin-charge": {
-    "page-title": "ポイントチャージ",
-    "page-desc": "ポイントをチャージして購入できます。",
+    "page-title": "コインチャージ",
+    "page-desc": "コインをチャージして購入できます。",
     "back": "戻る",
     "select-option": "チャージオプションを選択",
     "price": "金額",
@@ -598,17 +600,18 @@
     "error-load": "チャージオプションの読み込みに失敗しました",
     "error-no-option": "チャージオプションを選択してください",
     "error-charge": "チャージに失敗しました",
-    "success-charge": "{{addedPoint}}ポイント チャージしました。現在のポイント: {{newCoin}}P"
+    "success-charge": "{{addedCoin}}コイン チャージしました。現在のコイン: {{newCoin}}枚"
   },
 
   "charge-result": {
     "success-title": "✓ チャージが完了しました",
-    "success-message": "ポイントが付与されました",
+    "success-message": "コインが付与されました",
     "error-title": "✗ チャージに失敗しました",
     "error-message": "申し訳ございませんが、チャージ処理を完了することができませんでした。",
     "processing-title": "⏳ 処理中です",
     "processing-message": "お待ちください",
-    "acquired": "が付与されました",
+    "acquired-coin": "獲得コイン：",
+    "acquired-ticket": "獲得チケット：",
     "go-gacha": "ガチャページへ",
     "retry": "もう一度試す",
     "error-no-secret": "支払い情報が見つかりません",
@@ -624,8 +627,8 @@
         "header": {
           "user-id": "ユーザー名",
           "price": "金額",
-          "point": "ポイント",
-          "special-point": "特別ポイント",
+          "coin": "コイン",
+          "ticket": "チケット",
           "status": "ステータス",
           "date": "購入日時"
         }
@@ -638,7 +641,7 @@
       "price-range": "購入金額",
       "min": "最小",
       "max": "最大",
-      "point-range": "獲得ポイント",
+      "coin-range": "獲得コイン",
       "date-range": "日付",
       "year-filter": "年度フィルター",
       "year-all": "全て",
@@ -685,8 +688,8 @@
       "button": "絞り込み"
     },
     "unit": {
-      "point": "P",
-      "special-point": "SP",
+      "coin": "枚",
+      "ticket": "枚",
       "yen": "¥"
     },
     "symbol": {
@@ -700,7 +703,7 @@
       "admin-page": "管理者専用ページ",
       "logout": "ログアウト",
       "back-to-gacha": "ガチャページに戻る",
-      "charge": "ポイントチャージ",
+      "charge": "コインチャージ",
       "menu": "メニュー",
       "contact": "お問い合わせ"
     },

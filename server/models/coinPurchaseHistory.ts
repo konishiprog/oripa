@@ -31,11 +31,11 @@ module.exports = (sequelize: any, DataTypes: any) => {
         type: DataTypes.INTEGER,
         allowNull: false,
       },
-      point: {
+      coin: {
         type: DataTypes.INTEGER,
         allowNull: false,
       },
-      specialPoint: {
+      ticket: {
         type: DataTypes.INTEGER,
         allowNull: false,
         defaultValue: 0,

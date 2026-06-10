@@ -72,7 +72,7 @@
       >
         <div
           class="select-all-section"
-          *ngIf="!isAllSelected() && activeTab !== CARD_HISTORY_TABS.PENDING"
+          *ngIf="activeTab !== CARD_HISTORY_TABS.PENDING"
         >
           <input
             type="checkbox"
@@ -81,7 +81,9 @@
             (change)="toggleSelectAll()"
           />
           <label class="select-all-label">{{
-            "card-history.select-all" | translate
+            isAllSelected()
+              ? ("card-history.select-all-clear" | translate)
+              : ("card-history.select-all" | translate)
           }}</label>
         </div>
         <div class="card-list">
@@ -127,12 +129,12 @@
               *ngIf="
                 activeTab === CARD_HISTORY_TABS.UNSELECTED &&
                 isExchangeable(card) &&
-                card.exchangePoints &&
-                card.exchangePoints > 0
+                card.exchangeCoins &&
+                card.exchangeCoins > 0
               "
-              class="card-exchange-points"
+              class="card-exchange-coins"
             >
-              {{ card.exchangePoints }}{{ "common.unit.point" | translate }}
+              {{ card.exchangeCoins }}{{ "common.unit.coin" | translate }}
             </div>
           </div>
         </div>
@@ -161,7 +163,7 @@
         >
           {{
             "card-history.exchange-button"
-              | translate: { points: selectedTotalPoints }
+              | translate: { coins: selectedTotalCoins }
           }}
         </button>
       </ng-container>

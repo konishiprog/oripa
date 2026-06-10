@@ -27,8 +27,8 @@ describe('CoinPurchaseHistoryFilterDialogComponent', () => {
             criteria: {
               minPrice: 100,
               maxPrice: 1000,
-              minPoint: 50,
-              maxPoint: 500,
+              minCoin: 50,
+              maxCoin: 500,
               startDate: '2026-01-01',
               endDate: '2026-12-31',
               yearFilter: '2026',
@@ -50,8 +50,8 @@ describe('CoinPurchaseHistoryFilterDialogComponent', () => {
   it('should initialize with provided criteria from dialog data', () => {
     expect(component.criteria.minPrice).toBe(100);
     expect(component.criteria.maxPrice).toBe(1000);
-    expect(component.criteria.minPoint).toBe(50);
-    expect(component.criteria.maxPoint).toBe(500);
+    expect(component.criteria.minCoin).toBe(50);
+    expect(component.criteria.maxCoin).toBe(500);
     expect(component.criteria.startDate).toBe('2026-01-01');
     expect(component.criteria.endDate).toBe('2026-12-31');
     expect(component.criteria.yearFilter).toBe('2026');
@@ -79,8 +79,8 @@ describe('CoinPurchaseHistoryFilterDialogComponent', () => {
 
     expect(newComponent.criteria.minPrice).toBeNull();
     expect(newComponent.criteria.maxPrice).toBeNull();
-    expect(newComponent.criteria.minPoint).toBeNull();
-    expect(newComponent.criteria.maxPoint).toBeNull();
+    expect(newComponent.criteria.minCoin).toBeNull();
+    expect(newComponent.criteria.maxCoin).toBeNull();
     expect(newComponent.criteria.startDate).toBe('');
     expect(newComponent.criteria.endDate).toBe('');
     expect(newComponent.criteria.yearFilter).toBe('');
@@ -96,8 +96,8 @@ describe('CoinPurchaseHistoryFilterDialogComponent', () => {
   it('should reset criteria to default values', () => {
     component.criteria.minPrice = 500;
     component.criteria.maxPrice = 5000;
-    component.criteria.minPoint = 100;
-    component.criteria.maxPoint = 1000;
+    component.criteria.minCoin = 100;
+    component.criteria.maxCoin = 1000;
     component.criteria.startDate = '2025-01-01';
     component.criteria.endDate = '2025-12-31';
     component.criteria.yearFilter = '2025';
@@ -106,8 +106,8 @@ describe('CoinPurchaseHistoryFilterDialogComponent', () => {
 
     expect(component.criteria.minPrice).toBeNull();
     expect(component.criteria.maxPrice).toBeNull();
-    expect(component.criteria.minPoint).toBeNull();
-    expect(component.criteria.maxPoint).toBeNull();
+    expect(component.criteria.minCoin).toBeNull();
+    expect(component.criteria.maxCoin).toBeNull();
     expect(component.criteria.startDate).toBe('');
     expect(component.criteria.endDate).toBe('');
     expect(component.criteria.yearFilter).toBe('');
@@ -116,8 +116,8 @@ describe('CoinPurchaseHistoryFilterDialogComponent', () => {
   it('should close dialog with normalized criteria on apply', () => {
     component.criteria.minPrice = 100;
     component.criteria.maxPrice = null;
-    component.criteria.minPoint = 50;
-    component.criteria.maxPoint = null;
+    component.criteria.minCoin = 50;
+    component.criteria.maxCoin = null;
     component.criteria.startDate = '2026-01-01';
     component.criteria.endDate = '';
     component.criteria.yearFilter = '2026';
@@ -127,8 +127,8 @@ describe('CoinPurchaseHistoryFilterDialogComponent', () => {
     expect(dialogRef.close).toHaveBeenCalledWith({
       minPrice: 100,
       maxPrice: null,
-      minPoint: 50,
-      maxPoint: null,
+      minCoin: 50,
+      maxCoin: null,
       startDate: '2026-01-01',
       endDate: '',
       yearFilter: '2026',
@@ -185,8 +185,8 @@ describe('CoinPurchaseHistoryFilterDialogComponent', () => {
     component.criteria = {
       minPrice: 100,
       maxPrice: null,
-      minPoint: 50,
-      maxPoint: null,
+      minCoin: 50,
+      maxCoin: null,
       startDate: '2026-01-01',
       endDate: '',
       yearFilter: '2026',
@@ -197,8 +197,8 @@ describe('CoinPurchaseHistoryFilterDialogComponent', () => {
     const expectedNormalized = {
       minPrice: 100,
       maxPrice: null,
-      minPoint: 50,
-      maxPoint: null,
+      minCoin: 50,
+      maxCoin: null,
       startDate: '2026-01-01',
       endDate: '',
       yearFilter: '2026',

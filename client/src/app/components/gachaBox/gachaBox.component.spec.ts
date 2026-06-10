@@ -11,7 +11,7 @@ describe('GachaBoxComponent', () => {
 
   beforeEach(async () => {
     mockTranslateService = {
-      instant: jest.fn((key) => (key === 'common.unit.point' ? 'P' : '')),
+      instant: jest.fn((key) => (key === 'common.unit.coin' ? 'P' : '')),
     };
 
     await TestBed.configureTestingModule({

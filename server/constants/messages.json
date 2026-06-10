@@ -23,7 +23,7 @@
     "DRAW_COUNT_INVALID": "Draw count must be a positive integer",
     "GACHA_OUT_OF_STOCK": "No remaining cards in this gacha",
     "INSUFFICIENT_COIN": "Insufficient coin balance",
-    "INSUFFICIENT_SPECIAL_POINT": "Insufficient special point balance",
+    "INSUFFICIENT_TICKET": "Insufficient ticket balance",
     "GACHA_ALREADY_DRAWN": "This gacha can only be drawn once per user",
     "USER_ID_REQUIRED": "User ID is required",
     "UNAUTHORIZED": "Unauthorized",

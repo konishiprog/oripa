@@ -24,21 +24,21 @@ describe('AppHeaderComponent', () => {
 
   beforeEach(async () => {
     const coinSubject = new BehaviorSubject<number | null>(null);
-    const specialPointSubject = new BehaviorSubject<number | null>(null);
+    const ticketSubject = new BehaviorSubject<number | null>(null);
 
     mockUserService = {
       isLoggedIn: jest.fn().mockReturnValue(false),
       getCoin: jest.fn(() => coinSubject.value),
-      getSpecialPoint: jest.fn(() => specialPointSubject.value),
+      getTicket: jest.fn(() => ticketSubject.value),
       coin$$: coinSubject.asObservable(),
-      specialPoint$$: specialPointSubject.asObservable(),
+      ticket$$: ticketSubject.asObservable(),
       saveCoin: jest.fn((coin: number) => coinSubject.next(coin)),
-      saveSpecialPoint: jest.fn((sp: number) => specialPointSubject.next(sp)),
+      saveTicket: jest.fn((sp: number) => ticketSubject.next(sp)),
       clearUserId: jest.fn(),
       clearCoin: jest.fn(() => coinSubject.next(null)),
-      clearSpecialPoint: jest.fn(() => specialPointSubject.next(null)),
+      clearTicket: jest.fn(() => ticketSubject.next(null)),
       _coinSubject: coinSubject,
-      _specialPointSubject: specialPointSubject,
+      _ticketSubject: ticketSubject,
     };
     const routerEventsSubject = new Subject();
     mockRouter = {
@@ -105,7 +105,7 @@ describe('AppHeaderComponent', () => {
     component.logout();
     expect(mockUserService.clearUserId).toHaveBeenCalled();
     expect(mockUserService.clearCoin).toHaveBeenCalled();
-    expect(mockUserService.clearSpecialPoint).toHaveBeenCalled();
+    expect(mockUserService.clearTicket).toHaveBeenCalled();
     expect(mockRouter.navigate).toHaveBeenCalledWith(['/userGachaPage']);
   });
 
@@ -114,9 +114,9 @@ describe('AppHeaderComponent', () => {
     expect(mockRouter.navigate).toHaveBeenCalledWith(['/coinCharge']);
   });
 
-  it('should load coin and special point on init', () => {
+  it('should load coin and ticket on init', () => {
     mockUserService._coinSubject.next(1000);
-    mockUserService._specialPointSubject.next(100);
+    mockUserService._ticketSubject.next(100);
     component.ngOnInit();
 
     const menuReq = httpMock.expectOne('assets/icons/menu.svg');
@@ -129,7 +129,7 @@ describe('AppHeaderComponent', () => {
     coinReq.flush('<svg></svg>');
 
     expect(component.userCoin).toBe(1000);
-    expect(component.userSpecialPoint).toBe(100);
+    expect(component.userTicket).toBe(100);
   });
 
   it('should load icons on init', () => {

@@ -4,8 +4,8 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 export interface CoinPurchaseHistoryFilterCriteria {
   minPrice: number | null;
   maxPrice: number | null;
-  minPoint: number | null;
-  maxPoint: number | null;
+  minCoin: number | null;
+  maxCoin: number | null;
   startDate: string;
   endDate: string;
   yearFilter: string;
@@ -14,8 +14,8 @@ export interface CoinPurchaseHistoryFilterCriteria {
 export const DEFAULT_FILTER_CRITERIA: CoinPurchaseHistoryFilterCriteria = {
   minPrice: null,
   maxPrice: null,
-  minPoint: null,
-  maxPoint: null,
+  minCoin: null,
+  maxCoin: null,
   startDate: '',
   endDate: '',
   yearFilter: '',
@@ -75,8 +75,8 @@ export class CoinPurchaseHistoryFilterDialogComponent {
     return {
       minPrice: this.toNullableNumber(this.criteria.minPrice),
       maxPrice: this.toNullableNumber(this.criteria.maxPrice),
-      minPoint: this.toNullableNumber(this.criteria.minPoint),
-      maxPoint: this.toNullableNumber(this.criteria.maxPoint),
+      minCoin: this.toNullableNumber(this.criteria.minCoin),
+      maxCoin: this.toNullableNumber(this.criteria.maxCoin),
       startDate: this.toNullableString(this.criteria.startDate),
       endDate: this.toNullableString(this.criteria.endDate),
       yearFilter: this.toNullableString(this.criteria.yearFilter),

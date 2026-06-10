@@ -31,13 +31,13 @@
 
     <div class="filter-group">
       <label>{{
-        "coin-purchase-history.filter.point-range" | translate
+        "coin-purchase-history.filter.coin-range" | translate
       }}</label>
       <div class="filter-inputs">
         <input
           type="number"
           [placeholder]="'coin-purchase-history.filter.min' | translate"
-          [(ngModel)]="criteria.minPoint"
+          [(ngModel)]="criteria.minCoin"
           class="filter-input"
         />
         <span class="filter-separator">{{
@@ -46,7 +46,7 @@
         <input
           type="number"
           [placeholder]="'coin-purchase-history.filter.max' | translate"
-          [(ngModel)]="criteria.maxPoint"
+          [(ngModel)]="criteria.maxCoin"
           class="filter-input"
         />
       </div>

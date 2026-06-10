@@ -21,8 +21,8 @@ describe('CoinPurchaseHistoryService', () => {
       userId: 'user-1',
       'User.name': 'John Doe',
       price: 99,
-      point: 100,
-      specialPoint: 10,
+      coin: 100,
+      ticket: 10,
       status: 'completed',
       createdAt: new Date('2025-01-01'),
     },
@@ -31,8 +31,8 @@ describe('CoinPurchaseHistoryService', () => {
       userId: 'user-2',
       'User.name': 'Jane Smith',
       price: 490,
-      point: 500,
-      specialPoint: 50,
+      coin: 500,
+      ticket: 50,
       status: 'completed',
       createdAt: new Date('2025-01-02'),
     },
@@ -41,8 +41,8 @@ describe('CoinPurchaseHistoryService', () => {
       userId: 'user-1',
       'User.name': 'John Doe',
       price: 980,
-      point: 1000,
-      specialPoint: 100,
+      coin: 1000,
+      ticket: 100,
       status: 'pending',
       createdAt: new Date('2025-01-03'),
     },
@@ -263,8 +263,8 @@ describe('CoinPurchaseHistoryService', () => {
       expect(req.request.body).toEqual({
         userId: 'user-123',
         amount: 450,
-        point: 500,
-        specialPoint: 50,
+        coin: 500,
+        ticket: 50,
       });
       req.flush({ message: 'Payment intent created', data: mockPaymentResponse });
 
@@ -273,7 +273,7 @@ describe('CoinPurchaseHistoryService', () => {
       expect(response.chargeHistoryId).toBe('charge-history-123');
     });
 
-    it('should create payment intent without special point', async () => {
+    it('should create payment intent without ticket', async () => {
       const mockPaymentResponse = {
         clientSecret: 'pi_test_secret_2',
         chargeHistoryId: 'charge-history-124',
@@ -287,8 +287,8 @@ describe('CoinPurchaseHistoryService', () => {
       expect(req.request.body).toEqual({
         userId: 'user-456',
         amount: 99,
-        point: 100,
-        specialPoint: 0,
+        coin: 100,
+        ticket: 0,
       });
       req.flush({ message: 'Payment intent created', data: mockPaymentResponse });
 

@@ -33,7 +33,7 @@ describe('GachaWinnersDialogComponent', () => {
       phone: '',
       postalCode: '',
       coin: 0,
-      specialPoint: 0,
+      ticket: 0,
     },
     {
       id: 'user2',
@@ -45,7 +45,7 @@ describe('GachaWinnersDialogComponent', () => {
       phone: '',
       postalCode: '',
       coin: 0,
-      specialPoint: 0,
+      ticket: 0,
     },
     {
       id: 'user3',
@@ -57,7 +57,7 @@ describe('GachaWinnersDialogComponent', () => {
       phone: '',
       postalCode: '',
       coin: 0,
-      specialPoint: 0,
+      ticket: 0,
     },
   ];
 

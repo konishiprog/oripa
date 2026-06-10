@@ -14,8 +14,10 @@ describe('CardService', () => {
     gachaId: 'test-gacha-id',
     name: 'Test Card',
     cardType: 'normal',
-    exchangeType: 'points',
-    exchangePoints: 100,
+    exchangeType: 'BOTH',
+    exchangeCoins: 100,
+    effectId: null,
+    effectName: '',
     imageFront: 'front.jpg',
     imageBack: 'back.jpg',
   };
@@ -54,8 +56,8 @@ describe('CardService', () => {
         gachaId: 'test-gacha-id',
         name: 'Test Card',
         cardType: 'normal',
-        exchangeType: 'points',
-        exchangePoints: 100,
+        exchangeType: 'BOTH',
+        exchangeCoins: 100,
         imageFrontFile: mockFile,
         imageBackFile: mockFile,
       };
@@ -71,14 +73,14 @@ describe('CardService', () => {
       expect(response.data).toEqual(mockCard);
     });
 
-    it('should create a card with null exchangePoints', async () => {
+    it('should create a card with null exchangeCoins', async () => {
       const mockFile = new File(['content'], 'test.jpg', { type: 'image/jpeg' });
       const payload: CreateCardPayload = {
         gachaId: 'test-gacha-id',
         name: 'Test Card',
         cardType: 'normal',
         exchangeType: 'none',
-        exchangePoints: null,
+        exchangeCoins: null,
         imageFrontFile: mockFile,
         imageBackFile: mockFile,
       };
@@ -100,8 +102,8 @@ describe('CardService', () => {
       const payload: UpdateCardPayload = {
         name: 'Updated Card',
         cardType: 'rare',
-        exchangeType: 'points',
-        exchangePoints: 200,
+        exchangeType: 'BOTH',
+        exchangeCoins: 200,
         imageFrontFile: mockFile,
         imageBackFile: mockFile,
       };
@@ -123,8 +125,8 @@ describe('CardService', () => {
       const payload: UpdateCardPayload = {
         name: 'Updated Card',
         cardType: 'rare',
-        exchangeType: 'points',
-        exchangePoints: 200,
+        exchangeType: 'BOTH',
+        exchangeCoins: 200,
       };
 
       const result = service.updateCard('test-card-id', payload);

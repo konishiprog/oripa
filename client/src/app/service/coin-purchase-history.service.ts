@@ -8,8 +8,8 @@ export interface CoinPurchaseHistoryItem {
   userId: string;
   'User.name'?: string;
   price: number;
-  point: number;
-  specialPoint: number;
+  coin: number;
+  ticket: number;
   status: string;
   paymentMethod?: string;
   stripePaymentIntentId?: string;
@@ -54,13 +54,13 @@ export class CoinPurchaseHistoryService {
   async createPaymentIntent(
     userId: string,
     amount: number,
-    point: number,
-    specialPoint: number = 0,
+    coin: number,
+    ticket: number = 0,
   ): Promise<PaymentIntentResponse> {
     const response = await lastValueFrom(
       this.http.post<{ message: string; data: PaymentIntentResponse }>(
         `${this.apiConfig.domain}/api/coin-purchase-history/charge/create-payment-intent`,
-        { userId, amount, point, specialPoint },
+        { userId, amount, coin, ticket },
         { headers: this.apiConfig.headers },
       ),
     );

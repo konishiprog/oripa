@@ -106,11 +106,11 @@ describe('CreateCardComponent', () => {
     ]);
   });
 
-  it('should have 2 exchange types defined', () => {
-    expect(component.exchangeTypes.length).toBe(2);
+  it('should have 3 exchange types defined', () => {
+    expect(component.exchangeTypes.length).toBe(3);
     expect(
       component.exchangeTypes.map((exchangeType) => exchangeType.value),
-    ).toEqual(['SHIPPING_ONLY', 'BOTH']);
+    ).toEqual(['SHIPPING_ONLY', 'COIN_ONLY', 'BOTH']);
   });
 
   it('should clear imageFrontFile and preview when no file selected', () => {
@@ -260,7 +260,7 @@ describe('CreateCardComponent', () => {
     component.name = 'Test Card';
     component.cardType = 'SSR';
     component.exchangeType = 'SHIPPING_ONLY';
-    component.exchangePoints = null;
+    component.exchangeCoins = null;
     component.imageFrontFile = frontFile;
     component.imageBackFile = backFile;
 
@@ -271,7 +271,7 @@ describe('CreateCardComponent', () => {
       name: 'Test Card',
       cardType: 'SSR',
       exchangeType: 'SHIPPING_ONLY',
-      exchangePoints: null,
+      exchangeCoins: null,
       effectId: null,
       imageFrontFile: frontFile,
       imageBackFile: backFile,

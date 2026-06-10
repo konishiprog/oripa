@@ -30,7 +30,7 @@ describe('UserMyPageComponent', () => {
     phone: '555-0123',
     postalCode: '123-4567',
     coin: 100,
-    specialPoint: 0,
+    ticket: 0,
   };
 
   beforeEach(async () => {

@@ -23,7 +23,7 @@ export interface CardDialogPayload {
   name: string;
   cardType: string;
   exchangeType: string;
-  exchangePoints: number | null;
+  exchangeCoins: number | null;
   effectId: string | null;
   imageFront: string;
   imageBack: string;
@@ -50,6 +50,10 @@ export const EXCHANGE_TYPES = [
     value: EXCHANGE_TYPE.SHIPPING_ONLY,
     labelKey: 'card-create.exchange-type-shipping-only',
   },
+  {
+    value: EXCHANGE_TYPE.COIN_ONLY,
+    labelKey: 'card-create.exchange-type-coin-only',
+  },
   { value: EXCHANGE_TYPE.BOTH, labelKey: 'card-create.exchange-type-both' },
 ];
 
@@ -66,7 +70,7 @@ export class CreateCardComponent implements OnInit {
   name: string = '';
   cardType: string = 'SSR';
   exchangeType: string = EXCHANGE_TYPE.SHIPPING_ONLY;
-  exchangePoints: number | null = null;
+  exchangeCoins: number | null = null;
   effectId: string = '';
   effects: Effect[] = [];
   imageFrontFile: File | null = null;
@@ -83,11 +87,12 @@ export class CreateCardComponent implements OnInit {
   cardCount: number = 1;
   private editingCardId: string | null = null;
 
-  readonly minExchangePoints = 1;
-  readonly stepExchangePoints = 1;
+  readonly minExchangeCoins = 1;
+  readonly stepExchangeCoins = 1;
 
-  get isPointExchangeable(): boolean {
-    return this.exchangeType === EXCHANGE_TYPE.BOTH;
+  get isCoinExchangeable(): boolean {
+    return this.exchangeType === EXCHANGE_TYPE.BOTH ||
+      this.exchangeType === EXCHANGE_TYPE.COIN_ONLY;
   }
 
   get isEditMode(): boolean {
@@ -101,8 +106,8 @@ export class CreateCardComponent implements OnInit {
   }
 
   onExchangeTypeChange(): void {
-    if (!this.isPointExchangeable) {
-      this.exchangePoints = null;
+    if (!this.isCoinExchangeable) {
+      this.exchangeCoins = null;
     }
   }
 
@@ -150,7 +155,7 @@ export class CreateCardComponent implements OnInit {
     this.name = card.name;
     this.cardType = card.cardType;
     this.exchangeType = card.exchangeType;
-    this.exchangePoints = card.exchangePoints;
+    this.exchangeCoins = card.exchangeCoins;
     this.effectId = card.effectId ?? '';
     this.imageFrontPreview = this.buildImagePreview(card.imageFront);
     this.imageBackPreview = this.buildImagePreview(card.imageBack);
@@ -231,12 +236,12 @@ export class CreateCardComponent implements OnInit {
     }
 
     if (
-      this.isPointExchangeable &&
-      (this.exchangePoints === null ||
-        !Number.isInteger(this.exchangePoints) ||
-        this.exchangePoints < this.minExchangePoints)
+      this.isCoinExchangeable &&
+      (this.exchangeCoins === null ||
+        !Number.isInteger(this.exchangeCoins) ||
+        this.exchangeCoins < this.minExchangeCoins)
     ) {
-      this.showError('card-create.error-exchange-points');
+      this.showError('card-create.error-exchange-coins');
       return;
     }
 
@@ -265,7 +270,7 @@ export class CreateCardComponent implements OnInit {
           name: this.name,
           cardType: this.cardType,
           exchangeType: this.exchangeType,
-          exchangePoints: this.isPointExchangeable ? this.exchangePoints : null,
+          exchangeCoins: this.isCoinExchangeable ? this.exchangeCoins : null,
           effectId: this.effectId || null,
           imageFrontFile: this.imageFrontFile,
           imageBackFile: this.imageBackFile,
@@ -284,7 +289,7 @@ export class CreateCardComponent implements OnInit {
             name: this.name,
             cardType: this.cardType,
             exchangeType: this.exchangeType,
-            exchangePoints: this.isPointExchangeable ? this.exchangePoints : null,
+            exchangeCoins: this.isCoinExchangeable ? this.exchangeCoins : null,
             effectId: this.effectId || null,
             imageFrontFile: this.imageFrontFile!,
             imageBackFile: imageBackFileToUse,

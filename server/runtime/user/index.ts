@@ -205,18 +205,18 @@ async function updateCoin(id: string, newCoin: number) {
 }
 
 /**
- * Charge a user with coin and special points
+ * Charge a user with coin and ticket
  * Uses cache to minimize DB access (only 1 UPDATE query)
  * @param {string} id - User id
- * @param {number} point - Point amount to add to coin
- * @param {number} specialPoint - Special point amount to add
+ * @param {number} coin - Coin amount to add to coin
+ * @param {number} ticket - Ticket amount to add
  * @returns {Promise<any>} - Charge result with updated values
  */
 async function charge(
   id: string,
   price: number,
-  point: number,
-  specialPoint: number = 0,
+  coin: number,
+  ticket: number = 0,
 ) {
   const cachedUser = userCache.get(id);
   if (!cachedUser) {
@@ -224,27 +224,27 @@ async function charge(
   }
 
   const previousCoin = cachedUser.coin || 0;
-  const previousSpecialPoint = cachedUser.specialPoint || 0;
-  const newCoin = previousCoin + point;
-  const newSpecialPoint = previousSpecialPoint + specialPoint;
+  const previousTicket = cachedUser.ticket || 0;
+  const newCoin = previousCoin + coin;
+  const newTicket = previousTicket + ticket;
 
   await db.User.update(
-    { coin: newCoin, specialPoint: newSpecialPoint },
+    { coin: newCoin, ticket: newTicket },
     { where: { id } },
   );
 
   const updatedUser = {
     ...cachedUser,
     coin: newCoin,
-    specialPoint: newSpecialPoint,
+    ticket: newTicket,
   };
   userCache.set(id, updatedUser);
 
   await db.CoinPurchaseHistory.create({
     userId: id,
     price,
-    point,
-    specialPoint,
+    coin,
+    ticket,
     status: "completed",
   });
 
@@ -252,10 +252,10 @@ async function charge(
     userId: id,
     previousCoin,
     newCoin,
-    addedPoint: point,
-    previousSpecialPoint,
-    newSpecialPoint,
-    addedSpecialPoint: specialPoint,
+    addedCoin: coin,
+    previousTicket,
+    newTicket,
+    addedTicket: ticket,
   };
 }
 
@@ -277,7 +277,7 @@ async function update(
     phone?: string;
     postalCode?: string;
     coin?: number;
-    specialPoint?: number;
+    ticket?: number;
   },
 ) {
   const cachedUser = userCache.get(id);
@@ -312,8 +312,8 @@ async function update(
   if (payload.phone !== undefined) updateData.phone = payload.phone;
   if (payload.postalCode !== undefined) updateData.postalCode = payload.postalCode;
   if (payload.coin !== undefined) updateData.coin = payload.coin;
-  if (payload.specialPoint !== undefined)
-    updateData.specialPoint = payload.specialPoint;
+  if (payload.ticket !== undefined)
+    updateData.ticket = payload.ticket;
 
   await db.User.update(updateData, { where: { id } });
 

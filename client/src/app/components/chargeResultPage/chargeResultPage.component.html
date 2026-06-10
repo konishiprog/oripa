@@ -12,11 +12,12 @@
     </div>
     <div class="coin-info">
       <div>
-        獲得ポイント：{{ coinAmount }}{{ "common.unit.point" | translate }}
+        {{ "charge-result.acquired-coin" | translate }}{{ coinAmount
+        }}{{ "common.unit.coin" | translate }}
       </div>
-      <div *ngIf="specialPointAmount > 0">
-        獲得特別ポイント：{{ specialPointAmount
-        }}{{ "common.unit.point" | translate }}
+      <div *ngIf="ticketAmount > 0">
+        {{ "charge-result.acquired-ticket" | translate }}{{ ticketAmount
+        }}{{ "common.unit.coin" | translate }}
       </div>
     </div>
     <div class="actions">

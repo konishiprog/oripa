@@ -267,8 +267,8 @@ export class GachaTableComponent implements OnInit, OnChanges {
 
   getConsumptionTypeLabel(consumptionType: string): string {
     const key =
-      consumptionType === 'SPECIAL_POINT'
-        ? 'dashboard.gacha.consumption-special-point'
+      consumptionType === 'TICKET'
+        ? 'dashboard.gacha.consumption-ticket'
         : 'dashboard.gacha.consumption-coin';
     return this.translateService.instant(key);
   }

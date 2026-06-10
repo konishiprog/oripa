@@ -19,7 +19,7 @@ export interface GachaDetail {
   publishStart: string;
   publishEnd: string | null;
   isPublic: boolean;
-  minExchangePoints: number;
+  minExchangeCoins: number;
 }
 
 export interface JackpotCard {
@@ -73,7 +73,7 @@ export class GachaDetailPageComponent implements OnInit {
   async loadGachaDetail(): Promise<void> {
     try {
       const data = await this.gachaService.getGachaById(this.gachaId);
-      const minExchangePoints = await this.getMinExchangePoints();
+      const minExchangeCoins = await this.getMinExchangeCoins();
       this.gacha = {
         id: data.id,
         name: data.name,
@@ -87,7 +87,7 @@ export class GachaDetailPageComponent implements OnInit {
         publishStart: data.publishStart,
         publishEnd: data.publishEnd,
         isPublic: data.isPublic ?? false,
-        minExchangePoints: minExchangePoints,
+        minExchangeCoins: minExchangeCoins,
       };
     } catch (error) {
       console.error('Failed to load gacha detail:', error);
@@ -98,16 +98,16 @@ export class GachaDetailPageComponent implements OnInit {
     }
   }
 
-  private async getMinExchangePoints(): Promise<number> {
+  private async getMinExchangeCoins(): Promise<number> {
     try {
       const cards = await this.cardService.getCardsByGachaId(this.gachaId);
       if (cards.length === 0) return 0;
-      const exchangePoints = cards
-        .map((card: any) => card.exchangePoints ?? 0)
-        .filter((points: number) => points > 0);
-      return exchangePoints.length > 0 ? Math.min(...exchangePoints) : 0;
+      const exchangeCoins = cards
+        .map((card: any) => card.exchangeCoins ?? 0)
+        .filter((coins: number) => coins > 0);
+      return exchangeCoins.length > 0 ? Math.min(...exchangeCoins) : 0;
     } catch (error) {
-      console.error('Failed to get minimum exchange points:', error);
+      console.error('Failed to get minimum exchange coins:', error);
       return 0;
     }
   }

@@ -46,10 +46,10 @@ describe('ChargeResultPageComponent', () => {
       getUserId: jest.fn().mockReturnValue('user-123'),
       getUserById: jest.fn().mockResolvedValue({
         coin: 500,
-        specialPoint: 50,
+        ticket: 50,
       }),
       saveCoin: jest.fn(),
-      saveSpecialPoint: jest.fn(),
+      saveTicket: jest.fn(),
     };
 
     await TestBed.configureTestingModule({
@@ -87,7 +87,7 @@ describe('ChargeResultPageComponent', () => {
     expect(component.status).toBe('pending');
     expect(component.amount).toBe(0);
     expect(component.coinAmount).toBe(0);
-    expect(component.specialPointAmount).toBe(0);
+    expect(component.ticketAmount).toBe(0);
     expect(component.errorMessage).toBe('');
   });
 
@@ -159,7 +159,7 @@ describe('ChargeResultPageComponent', () => {
   it('should call userService methods when payment succeeded', async () => {
     mockUserService.getUserById.mockResolvedValue({
       coin: 600,
-      specialPoint: 60,
+      ticket: 60,
     });
 
     component.ngOnInit();

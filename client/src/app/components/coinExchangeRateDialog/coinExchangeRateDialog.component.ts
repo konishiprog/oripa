@@ -32,9 +32,9 @@ export interface CoinExchangeRateDialogData {
   ],
 })
 export class CoinExchangeRateDialogComponent implements OnInit {
-  point: number = 1000;
+  coin: number = 1000;
   price: number = 1000;
-  specialPoint: number = 0;
+  ticket: number = 0;
   errorMessage: string = '';
   isLoading: boolean = false;
   mode: CoinExchangeRateFormMode = CoinExchangeRateFormMode.Create;
@@ -55,9 +55,9 @@ export class CoinExchangeRateDialogComponent implements OnInit {
     if (this.data?.mode === CoinExchangeRateFormMode.Edit && this.data.rate) {
       this.mode = CoinExchangeRateFormMode.Edit;
       this.editingId = this.data.rate.id;
-      this.point = this.data.rate.point;
+      this.coin = this.data.rate.coin;
       this.price = this.data.rate.price;
-      this.specialPoint = this.data.rate.specialPoint;
+      this.ticket = this.data.rate.ticket;
     }
   }
 
@@ -66,16 +66,16 @@ export class CoinExchangeRateDialogComponent implements OnInit {
   }
 
   async onSubmit(): Promise<void> {
-    if (!Number.isInteger(this.point) || this.point <= 0) {
-      this.showError('coin-exchange-rate.error-point-invalid');
+    if (!Number.isInteger(this.coin) || this.coin <= 0) {
+      this.showError('coin-exchange-rate.error-coin-invalid');
       return;
     }
     if (!Number.isInteger(this.price) || this.price < 50) {
       this.showError('coin-exchange-rate.error-price-invalid');
       return;
     }
-    if (!Number.isInteger(this.specialPoint) || this.specialPoint < 0) {
-      this.showError('coin-exchange-rate.error-special-point-invalid');
+    if (!Number.isInteger(this.ticket) || this.ticket < 0) {
+      this.showError('coin-exchange-rate.error-ticket-invalid');
       return;
     }
 
@@ -85,16 +85,16 @@ export class CoinExchangeRateDialogComponent implements OnInit {
     try {
       if (this.isEditMode && this.editingId) {
         const updated = await this.rateService.updateRate(this.editingId, {
-          point: this.point,
+          coin: this.coin,
           price: this.price,
-          specialPoint: this.specialPoint,
+          ticket: this.ticket,
         });
         this.dialogRef?.close({ mode: 'edit', data: updated });
       } else {
         const created = await this.rateService.createRate({
-          point: this.point,
+          coin: this.coin,
           price: this.price,
-          specialPoint: this.specialPoint,
+          ticket: this.ticket,
         });
         this.dialogRef?.close({ mode: 'create', data: created });
       }

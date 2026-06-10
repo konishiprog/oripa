@@ -25,12 +25,12 @@
         >
           <mat-option *ngFor="let option of chargeOptions" [value]="option.id">
             {{ "common.unit.yen" | translate }}{{ option.price }}:{{
-              option.point
-            }}{{ "common.unit.point" | translate
-            }}<span *ngIf="option.specialPoint > 0"
+              option.coin
+            }}{{ "common.unit.coin" | translate
+            }}<span *ngIf="option.ticket > 0"
               >{{ "common.symbol.paren-open" | translate
-              }}{{ "common.symbol.plus" | translate }}{{ option.specialPoint
-              }}{{ "coin-exchange-rate.special-point" | translate
+              }}{{ "common.symbol.plus" | translate }}{{ option.ticket
+              }}{{ "coin-exchange-rate.ticket" | translate
               }}{{ "common.symbol.paren-close" | translate }}</span
             >
           </mat-option>
@@ -44,20 +44,20 @@
         </div>
         <div class="summary-item">
           <span class="label">{{
-            "coin-exchange-rate.point" | translate
+            "coin-exchange-rate.coin" | translate
           }}</span>
           <span class="value"
-            >{{ selectedOption.point
-            }}{{ "common.unit.point" | translate }}</span
+            >{{ selectedOption.coin
+            }}{{ "common.unit.coin" | translate }}</span
           >
         </div>
-        <div class="summary-item" *ngIf="selectedOption.specialPoint > 0">
+        <div class="summary-item" *ngIf="selectedOption.ticket > 0">
           <span class="label">{{
-            "coin-exchange-rate.special-point" | translate
+            "coin-exchange-rate.ticket" | translate
           }}</span>
           <span class="value bonus"
-            >+{{ selectedOption.specialPoint
-            }}{{ "common.unit.point" | translate }}</span
+            >+{{ selectedOption.ticket
+            }}{{ "common.unit.coin" | translate }}</span
           >
         </div>
       </div>

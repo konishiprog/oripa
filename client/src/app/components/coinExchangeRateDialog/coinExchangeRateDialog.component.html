@@ -15,12 +15,12 @@
 
     <form (ngSubmit)="onSubmit()">
       <div class="form-group">
-        <label for="point">{{ "coin-exchange-rate.point" | translate }}</label>
+        <label for="coin">{{ "coin-exchange-rate.coin" | translate }}</label>
         <input
-          id="point"
+          id="coin"
           type="number"
-          [(ngModel)]="point"
-          name="point"
+          [(ngModel)]="coin"
+          name="coin"
           min="1"
           required
           [disabled]="isLoading"
@@ -41,14 +41,14 @@
       </div>
 
       <div class="form-group">
-        <label for="specialPoint">{{
-          "coin-exchange-rate.special-point" | translate
+        <label for="ticket">{{
+          "coin-exchange-rate.ticket" | translate
         }}</label>
         <input
-          id="specialPoint"
+          id="ticket"
           type="number"
-          [(ngModel)]="specialPoint"
-          name="specialPoint"
+          [(ngModel)]="ticket"
+          name="ticket"
           min="0"
           required
           [disabled]="isLoading"

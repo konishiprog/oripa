@@ -27,10 +27,10 @@ const COIN_PURCHASE_HISTORY_TABLE_HEADERS: TableHeader[] = [
     labelKey: 'coin-purchase-history.page.table.header.user-id',
   },
   { key: 'price', labelKey: 'coin-purchase-history.page.table.header.price' },
-  { key: 'point', labelKey: 'coin-purchase-history.page.table.header.point' },
+  { key: 'coin', labelKey: 'coin-purchase-history.page.table.header.coin' },
   {
-    key: 'special-point',
-    labelKey: 'coin-purchase-history.page.table.header.special-point',
+    key: 'ticket',
+    labelKey: 'coin-purchase-history.page.table.header.ticket',
   },
   {
     key: 'status',
@@ -42,8 +42,8 @@ const COIN_PURCHASE_HISTORY_TABLE_HEADERS: TableHeader[] = [
 const COIN_PURCHASE_HISTORY_TABLE_CELLS: TableCell[] = [
   { key: 'user-id', type: 'method', methodName: 'getUserName' },
   { key: 'price', type: 'method', methodName: 'getPrice' },
-  { key: 'point', type: 'method', methodName: 'getPoint' },
-  { key: 'special-point', type: 'method', methodName: 'getSpecialPoint' },
+  { key: 'coin', type: 'method', methodName: 'getCoin' },
+  { key: 'ticket', type: 'method', methodName: 'getTicket' },
   { key: 'status', type: 'text', dataKey: 'status' },
   { key: 'date', type: 'method', methodName: 'getDate' },
 ];
@@ -68,8 +68,8 @@ export class CoinPurchaseHistoryPageComponent implements OnInit {
   searchQuery: string = '';
   minPrice: number | null = null;
   maxPrice: number | null = null;
-  minPoint: number | null = null;
-  maxPoint: number | null = null;
+  minCoin: number | null = null;
+  maxCoin: number | null = null;
   startDate: string = '';
   endDate: string = '';
   yearFilter: string = '';
@@ -98,8 +98,8 @@ export class CoinPurchaseHistoryPageComponent implements OnInit {
           criteria: {
             minPrice: this.minPrice,
             maxPrice: this.maxPrice,
-            minPoint: this.minPoint,
-            maxPoint: this.maxPoint,
+            minCoin: this.minCoin,
+            maxCoin: this.maxCoin,
             startDate: this.startDate,
             endDate: this.endDate,
             yearFilter: this.yearFilter,
@@ -112,8 +112,8 @@ export class CoinPurchaseHistoryPageComponent implements OnInit {
       if (result) {
         this.minPrice = result.minPrice;
         this.maxPrice = result.maxPrice;
-        this.minPoint = result.minPoint;
-        this.maxPoint = result.maxPoint;
+        this.minCoin = result.minCoin;
+        this.maxCoin = result.maxCoin;
         this.startDate = result.startDate;
         this.endDate = result.endDate;
         this.yearFilter = result.yearFilter;
@@ -137,10 +137,10 @@ export class CoinPurchaseHistoryPageComponent implements OnInit {
         return this.getUserName(history);
       case 'getPrice':
         return this.getPrice(history);
-      case 'getPoint':
-        return this.getPoint(history);
-      case 'getSpecialPoint':
-        return this.getSpecialPoint(history);
+      case 'getCoin':
+        return this.getCoin(history);
+      case 'getTicket':
+        return this.getTicket(history);
       case 'getDate':
         return this.getDate(history);
       default:
@@ -160,12 +160,12 @@ export class CoinPurchaseHistoryPageComponent implements OnInit {
     return `¥${new Intl.NumberFormat('ja-JP').format(history.price)}`;
   }
 
-  private getPoint(history: CoinPurchaseHistoryItem): string {
-    return `${history.point}${this.translateService.instant('common.unit.point')}`;
+  private getCoin(history: CoinPurchaseHistoryItem): string {
+    return `${history.coin}${this.translateService.instant('common.unit.coin')}`;
   }
 
-  private getSpecialPoint(history: CoinPurchaseHistoryItem): string {
-    return `+${history.specialPoint}${this.translateService.instant('common.unit.point')}`;
+  private getTicket(history: CoinPurchaseHistoryItem): string {
+    return `+${history.ticket}${this.translateService.instant('common.unit.ticket')}`;
   }
 
   private getDate(history: CoinPurchaseHistoryItem): string {
@@ -234,12 +234,12 @@ export class CoinPurchaseHistoryPageComponent implements OnInit {
       filtered = filtered.filter((history) => history.price <= this.maxPrice!);
     }
 
-    if (this.minPoint !== null) {
-      filtered = filtered.filter((history) => history.point >= this.minPoint!);
+    if (this.minCoin !== null) {
+      filtered = filtered.filter((history) => history.coin >= this.minCoin!);
     }
 
-    if (this.maxPoint !== null) {
-      filtered = filtered.filter((history) => history.point <= this.maxPoint!);
+    if (this.maxCoin !== null) {
+      filtered = filtered.filter((history) => history.coin <= this.maxCoin!);
     }
 
     if (this.startDate) {
@@ -289,8 +289,8 @@ export class CoinPurchaseHistoryPageComponent implements OnInit {
     return (
       this.minPrice !== null ||
       this.maxPrice !== null ||
-      this.minPoint !== null ||
-      this.maxPoint !== null ||
+      this.minCoin !== null ||
+      this.maxCoin !== null ||
       this.startDate !== '' ||
       this.endDate !== '' ||
       this.yearFilter !== ''
@@ -301,8 +301,8 @@ export class CoinPurchaseHistoryPageComponent implements OnInit {
     this.searchQuery = '';
     this.minPrice = null;
     this.maxPrice = null;
-    this.minPoint = null;
-    this.maxPoint = null;
+    this.minCoin = null;
+    this.maxCoin = null;
     this.startDate = '';
     this.endDate = '';
     this.yearFilter = '';

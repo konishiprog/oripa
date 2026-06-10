@@ -19,7 +19,7 @@ export enum GachaFormMode {
 
 export enum ConsumptionType {
   Coin = 'COIN',
-  SpecialPoint = 'SPECIAL_POINT',
+  Ticket = 'TICKET',
 }
 
 export interface GachaDialogPayload {
@@ -117,8 +117,8 @@ export class CreateGachaComponent implements OnInit {
     this.name = gacha.name;
     this.selectedGenreId = gacha.genreId ?? '';
     this.consumptionType =
-      gacha.consumptionType === ConsumptionType.SpecialPoint
-        ? ConsumptionType.SpecialPoint
+      gacha.consumptionType === ConsumptionType.Ticket
+        ? ConsumptionType.Ticket
         : ConsumptionType.Coin;
     this.cost = gacha.cost;
     this.oncePerUser = gacha.oncePerUser ?? false;

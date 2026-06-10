@@ -67,9 +67,9 @@ module.exports = {
      * POST /api/coin-purchase-history
      */
     router.post("/", async (req: Request, res: Response) => {
-      const { userId, price, point, specialPoint } = req.body;
+      const { userId, price, coin, ticket } = req.body;
 
-      if (!userId || price === undefined || point === undefined) {
+      if (!userId || price === undefined || coin === undefined) {
         return res.status(400).json({
           message: messages.errors.MISSING_REQUIRED_FIELDS,
         });
@@ -79,8 +79,8 @@ module.exports = {
         const history = await runtime.coinPurchaseHistory.create(
           userId,
           price,
-          point,
-          specialPoint || 0,
+          coin,
+          ticket || 0,
         );
         res.status(201).json({
           message: messages.success.CREATED,
@@ -100,9 +100,9 @@ module.exports = {
       "/charge/create-payment-intent",
       async (req: Request, res: Response) => {
         try {
-          const { userId, amount, point, specialPoint } = req.body;
+          const { userId, amount, coin, ticket } = req.body;
 
-          if (!userId || !amount || !point) {
+          if (!userId || !amount || !coin) {
             return res.status(400).json({
               message: messages.errors.MISSING_REQUIRED_FIELDS,
             });
@@ -111,8 +111,8 @@ module.exports = {
           const result = await runtime.coinPurchaseHistory.createCharge(
             userId,
             amount,
-            point,
-            specialPoint || 0,
+            coin,
+            ticket || 0,
           );
 
           res.status(200).json({
@@ -162,7 +162,7 @@ module.exports = {
     );
 
     /**
-     * Confirm payment intent status and update points
+     * Confirm payment intent status and update coins
      * POST /api/coin-purchase-history/confirm-payment
      */
     router.post("/confirm-payment", async (req: Request, res: Response) => {
@@ -195,8 +195,8 @@ module.exports = {
           data: {
             status: paymentIntent.status,
             amount: paymentIntent.amount,
-            point: chargeHistory?.point || 0,
-            specialPoint: chargeHistory?.specialPoint || 0,
+            coin: chargeHistory?.coin || 0,
+            ticket: chargeHistory?.ticket || 0,
           },
         });
       } catch (error: any) {

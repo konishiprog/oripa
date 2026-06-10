@@ -84,8 +84,8 @@ const handleError = (
   if (error.message === messages.errors.INSUFFICIENT_COIN) {
     return { status: 402, message: messages.errors.INSUFFICIENT_COIN };
   }
-  if (error.message === messages.errors.INSUFFICIENT_SPECIAL_POINT) {
-    return { status: 402, message: messages.errors.INSUFFICIENT_SPECIAL_POINT };
+  if (error.message === messages.errors.INSUFFICIENT_TICKET) {
+    return { status: 402, message: messages.errors.INSUFFICIENT_TICKET };
   }
   if (error.message === messages.errors.GACHA_ALREADY_DRAWN) {
     return { status: 409, message: messages.errors.GACHA_ALREADY_DRAWN };

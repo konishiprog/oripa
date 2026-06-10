@@ -20,8 +20,8 @@ describe('CoinPurchaseHistoryPageComponent', () => {
       userId: 'user-1',
       'User.name': 'テストユーザー1',
       price: 500,
-      point: 100,
-      specialPoint: 50,
+      coin: 100,
+      ticket: 50,
       status: '完了',
       createdAt: new Date('2026-05-20T10:30:00'),
     },
@@ -30,8 +30,8 @@ describe('CoinPurchaseHistoryPageComponent', () => {
       userId: 'user-2',
       'User.name': 'テストユーザー2',
       price: 1000,
-      point: 200,
-      specialPoint: 100,
+      coin: 200,
+      ticket: 100,
       status: '完了',
       createdAt: new Date('2026-05-21T15:45:00'),
     },
@@ -109,8 +109,8 @@ describe('CoinPurchaseHistoryPageComponent', () => {
     expect(component.tableHeaders.length).toBe(6);
     expect(component.tableHeaders[0].key).toBe('user-id');
     expect(component.tableHeaders[1].key).toBe('price');
-    expect(component.tableHeaders[2].key).toBe('point');
-    expect(component.tableHeaders[3].key).toBe('special-point');
+    expect(component.tableHeaders[2].key).toBe('coin');
+    expect(component.tableHeaders[3].key).toBe('ticket');
     expect(component.tableHeaders[4].key).toBe('status');
     expect(component.tableHeaders[5].key).toBe('date');
   });
@@ -120,8 +120,8 @@ describe('CoinPurchaseHistoryPageComponent', () => {
     expect(component.tableCells.length).toBe(6);
     expect(component.tableCells[0].methodName).toBe('getUserName');
     expect(component.tableCells[1].methodName).toBe('getPrice');
-    expect(component.tableCells[2].methodName).toBe('getPoint');
-    expect(component.tableCells[3].methodName).toBe('getSpecialPoint');
+    expect(component.tableCells[2].methodName).toBe('getCoin');
+    expect(component.tableCells[3].methodName).toBe('getTicket');
     expect(component.tableCells[4].type).toBe('text');
     expect(component.tableCells[5].methodName).toBe('getDate');
   });
@@ -159,24 +159,24 @@ describe('CoinPurchaseHistoryPageComponent', () => {
     expect(result).toContain('500');
   });
 
-  it('should get method cell value for getPoint', () => {
+  it('should get method cell value for getCoin', () => {
     jest.spyOn(translateService, 'instant').mockReturnValue('P');
     const cell = {
-      key: 'point',
+      key: 'coin',
       type: 'method' as const,
-      methodName: 'getPoint',
+      methodName: 'getCoin',
     };
     const result = component.getMethodCellValue(cell, mockHistories[0]);
     expect(result).toContain('100');
     expect(result).toContain('P');
   });
 
-  it('should get method cell value for getSpecialPoint', () => {
+  it('should get method cell value for getTicket', () => {
     jest.spyOn(translateService, 'instant').mockReturnValue('P');
     const cell = {
-      key: 'special-point',
+      key: 'ticket',
       type: 'method' as const,
-      methodName: 'getSpecialPoint',
+      methodName: 'getTicket',
     };
     const result = component.getMethodCellValue(cell, mockHistories[0]);
     expect(result).toContain('+');

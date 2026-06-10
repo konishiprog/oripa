@@ -21,7 +21,7 @@ async function init(_db: any) {
  */
 async function refreshCache() {
   const rates = await db.CoinExchangeRate.findAll({
-    order: [["point", "ASC"]],
+    order: [["coin", "ASC"]],
   });
   rateCache.clear();
   rates.forEach((rate: any) => {
@@ -31,11 +31,11 @@ async function refreshCache() {
 }
 
 /**
- * Get all rates from cache (sorted by point)
+ * Get all rates from cache (sorted by coin)
  */
 async function getAll() {
   return Array.from(rateCache.values()).sort(
-    (rateA: any, rateB: any) => rateA.point - rateB.point,
+    (rateA: any, rateB: any) => rateA.coin - rateB.coin,
   );
 }
 
@@ -50,18 +50,18 @@ function getById(id: string) {
  * Create a new rate
  * Uses cache for duplicate check (only 1 INSERT query)
  */
-async function create(point: number, price: number, specialPoint: number = 0) {
+async function create(coin: number, price: number, ticket: number = 0) {
   const exists = Array.from(rateCache.values()).some(
-    (rate: any) => rate.point === point,
+    (rate: any) => rate.coin === coin,
   );
   if (exists) {
-    throw new Error("Exchange rate for this point already exists");
+    throw new Error("Exchange rate for this coin already exists");
   }
 
   const rate = await db.CoinExchangeRate.create({
-    point,
+    coin,
     price,
-    specialPoint,
+    ticket,
   });
   const plainRate = toPlain(rate);
   rateCache.set(rate.id, plainRate);
@@ -74,9 +74,9 @@ async function create(point: number, price: number, specialPoint: number = 0) {
  */
 async function update(
   id: string,
-  point: number,
+  coin: number,
   price: number,
-  specialPoint: number = 0,
+  ticket: number = 0,
 ) {
   const cachedRate = rateCache.get(id);
   if (!cachedRate) {
@@ -84,17 +84,17 @@ async function update(
   }
 
   const exists = Array.from(rateCache.values()).some(
-    (rate: any) => rate.point === point && rate.id !== id,
+    (rate: any) => rate.coin === coin && rate.id !== id,
   );
   if (exists) {
-    throw new Error("Exchange rate for this point already exists");
+    throw new Error("Exchange rate for this coin already exists");
   }
 
   await db.CoinExchangeRate.update(
-    { point, price, specialPoint },
+    { coin, price, ticket },
     { where: { id } },
   );
-  const updatedRate = { ...cachedRate, point, price, specialPoint };
+  const updatedRate = { ...cachedRate, coin, price, ticket };
   rateCache.set(id, updatedRate);
   return updatedRate;
 }

@@ -29,7 +29,7 @@ describe('UserCardHistoryPageComponent', () => {
       imageBack: 'back1.jpg',
       cardType: 'SSR',
       exchangeType: 'BOTH',
-      exchangePoints: 100,
+      exchangeCoins: 100,
       isDrawn: CARD_STATUS.NOT_DRAWN,
       gachaName: 'Gacha 1',
       status: 'unselected',
@@ -42,7 +42,7 @@ describe('UserCardHistoryPageComponent', () => {
       imageBack: 'back2.jpg',
       cardType: 'R',
       exchangeType: 'SHIPPING_ONLY',
-      exchangePoints: null,
+      exchangeCoins: null,
       isDrawn: CARD_STATUS.NOT_DRAWN,
       gachaName: 'Gacha 1',
       status: 'unselected',
@@ -55,7 +55,7 @@ describe('UserCardHistoryPageComponent', () => {
       imageBack: 'back3.jpg',
       cardType: 'SR',
       exchangeType: 'BOTH',
-      exchangePoints: 500,
+      exchangeCoins: 500,
       isDrawn: CARD_STATUS.REFUNDED,
       gachaName: 'Gacha 2',
       status: 'unselected',
@@ -219,7 +219,7 @@ describe('UserCardHistoryPageComponent', () => {
     expect(component.selectedCardIds.has(nonExchangeableCard.id)).toBe(false);
   });
 
-  it('should calculate selected total points correctly', async () => {
+  it('should calculate selected total coins correctly', async () => {
     fixture.detectChanges();
     await component.ngOnInit();
     const card1 = component.cards[0];
@@ -227,8 +227,8 @@ describe('UserCardHistoryPageComponent', () => {
     component.selectedCardIds.add(card1.id);
     component.cards[0].status = 'unselected';
 
-    const totalPoints = component.selectedTotalPoints;
-    expect(totalPoints).toBe(100);
+    const totalCoins = component.selectedTotalCoins;
+    expect(totalCoins).toBe(100);
   });
 
   it('should return true for hasSelectedCards when cards are selected', async () => {
@@ -249,7 +249,7 @@ describe('UserCardHistoryPageComponent', () => {
     expect(router.navigate).toHaveBeenCalledWith(['/myPage']);
   });
 
-  it('should open exchange dialog with selected points', async () => {
+  it('should open exchange dialog with selected coins', async () => {
     fixture.detectChanges();
     jest.spyOn(dialog, 'open').mockReturnValue({
       afterClosed: () => ({ subscribe: jest.fn() }),

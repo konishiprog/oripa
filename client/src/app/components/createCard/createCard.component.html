@@ -203,17 +203,17 @@
         </select>
       </div>
 
-      <div class="form-group" *ngIf="isPointExchangeable">
-        <label for="exchangePoints">{{
-          "card-create.exchange-points" | translate
+      <div class="form-group" *ngIf="isCoinExchangeable">
+        <label for="exchangeCoins">{{
+          "card-create.exchange-coins" | translate
         }}</label>
         <input
-          id="exchangePoints"
+          id="exchangeCoins"
           type="number"
-          [min]="minExchangePoints"
-          [step]="stepExchangePoints"
-          [(ngModel)]="exchangePoints"
-          name="exchangePoints"
+          [min]="minExchangeCoins"
+          [step]="stepExchangeCoins"
+          [(ngModel)]="exchangeCoins"
+          name="exchangeCoins"
           required
           [disabled]="isLoading"
         />
