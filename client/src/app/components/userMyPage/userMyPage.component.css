@@ -356,3 +356,31 @@
   opacity: 0.6;
   cursor: not-allowed;
 }
+
+.delete-account-section {
+  padding: 28px 20px;
+  border-top: 1px solid #ececec;
+}
+
+.delete-account-btn {
+  width: 100%;
+  padding: 12px 16px;
+  background-color: #dc3545;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: inherit;
+  transition: background-color 0.2s;
+}
+
+.delete-account-btn:hover {
+  background-color: #c82333;
+}
+
+.delete-account-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}

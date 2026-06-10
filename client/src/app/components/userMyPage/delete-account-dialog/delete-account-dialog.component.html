@@ -1,0 +1,22 @@
+<div class="delete-account-dialog">
+  <h2>{{ "my-page.delete-confirm-title" | translate }}</h2>
+  <div class="warning-message">
+    {{ "my-page.delete-confirm-message" | translate }}
+  </div>
+  <div class="button-group">
+    <button
+      type="button"
+      class="cancel-btn"
+      (click)="onCancel()"
+    >
+      {{ "common.cancel" | translate }}
+    </button>
+    <button
+      type="button"
+      class="delete-btn"
+      (click)="onConfirm()"
+    >
+      {{ "my-page.delete-button" | translate }}
+    </button>
+  </div>
+</div>

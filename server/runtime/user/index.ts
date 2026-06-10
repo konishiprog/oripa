@@ -228,10 +228,7 @@ async function charge(
   const newCoin = previousCoin + coin;
   const newTicket = previousTicket + ticket;
 
-  await db.User.update(
-    { coin: newCoin, ticket: newTicket },
-    { where: { id } },
-  );
+  await db.User.update({ coin: newCoin, ticket: newTicket }, { where: { id } });
 
   const updatedUser = {
     ...cachedUser,
@@ -310,10 +307,10 @@ async function update(
   if (payload.nickname !== undefined) updateData.nickname = payload.nickname;
   if (payload.address !== undefined) updateData.address = payload.address;
   if (payload.phone !== undefined) updateData.phone = payload.phone;
-  if (payload.postalCode !== undefined) updateData.postalCode = payload.postalCode;
+  if (payload.postalCode !== undefined)
+    updateData.postalCode = payload.postalCode;
   if (payload.coin !== undefined) updateData.coin = payload.coin;
-  if (payload.ticket !== undefined)
-    updateData.ticket = payload.ticket;
+  if (payload.ticket !== undefined) updateData.ticket = payload.ticket;
 
   await db.User.update(updateData, { where: { id } });
 
@@ -333,7 +330,14 @@ async function deleteUser(id: string) {
   if (!cachedUser) {
     throw new Error(messages.errors.USER_NOT_FOUND);
   }
-  await db.User.destroy({ where: { id } });
+  await db.CoinPurchaseHistory.destroy({ where: { userId: id } });
+  await db.GachaUserDraw.destroy({ where: { userId: id } });
+  await db.Card.destroy({ where: { userId: id } });
+  await db.PendingVerification.destroy({ where: { userId: id } });
+  const result = await db.User.destroy({ where: { id } });
+  if (result === 0) {
+    throw new Error(messages.errors.USER_NOT_FOUND);
+  }
   userCache.delete(id);
 }
 

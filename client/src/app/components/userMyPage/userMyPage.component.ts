@@ -9,6 +9,7 @@ import {
   ConfirmUpdateDialogComponent,
   ConfirmDialogData,
 } from './confirm-update-dialog/confirm-update-dialog.component';
+import { DeleteAccountDialogComponent } from './delete-account-dialog/delete-account-dialog.component';
 import {
   CoinPurchaseHistoryService,
   CoinPurchaseHistoryItem,
@@ -358,5 +359,37 @@ export class UserMyPageComponent implements OnInit {
         resolve(result === true);
       });
     });
+  }
+
+  openDeleteAccountDialog(): void {
+    const dialogRef = this.dialog.open(DeleteAccountDialogComponent, {
+      width: '400px',
+    });
+
+    dialogRef.afterClosed().subscribe((confirmed) => {
+      if (confirmed) {
+        this.deleteAccount();
+      }
+    });
+  }
+
+  private async deleteAccount(): Promise<void> {
+    const userId = this.userService.getUserId();
+    if (!userId) {
+      return;
+    }
+
+    try {
+      this.isSaving = true;
+      await this.userService.deleteUser(userId);
+      this.userService.logout();
+      this.router.navigate(['/userGachaPage']);
+    } catch (error) {
+      console.error('Failed to delete account:', error);
+      this.errorMessage = this.translateService.instant('my-page.delete-error');
+      this.cdr.markForCheck();
+    } finally {
+      this.isSaving = false;
+    }
   }
 }

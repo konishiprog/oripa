@@ -38,7 +38,9 @@ async function refreshCache() {
  * @returns {Promise<any>} - Created admin object
  */
 async function create(email: string, password: string) {
-  if (Array.from(adminCache.values()).some((admin: any) => admin.email === email)) {
+  if (
+    Array.from(adminCache.values()).some((admin: any) => admin.email === email)
+  ) {
     throw new Error(messages.errors.EMAIL_ALREADY_EXISTS);
   }
 
@@ -56,7 +58,9 @@ async function create(email: string, password: string) {
  * @returns {Promise<any>} - Admin object if credentials are valid, null otherwise
  */
 async function verifyCredentials(email: string, password: string) {
-  const admin = Array.from(adminCache.values()).find((admin: any) => admin.email === email);
+  const admin = Array.from(adminCache.values()).find(
+    (admin: any) => admin.email === email,
+  );
   if (!admin || admin.password !== password) {
     return null;
   }
@@ -77,7 +81,9 @@ async function update(id: string, email: string, password: string) {
   }
 
   if (email !== admin.email) {
-    const duplicate = Array.from(adminCache.values()).some((a: any) => a.email === email);
+    const duplicate = Array.from(adminCache.values()).some(
+      (a: any) => a.email === email,
+    );
     if (duplicate) {
       throw new Error(messages.errors.EMAIL_ALREADY_EXISTS);
     }
@@ -100,6 +106,9 @@ async function deleteAdmin(id: string) {
   }
 
   const result = await db.Admin.destroy({ where: { id } });
+  if (result === 0) {
+    throw new Error(messages.errors.ADMIN_NOT_FOUND);
+  }
   adminCache.delete(id);
   return result;
 }
