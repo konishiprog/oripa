@@ -299,6 +299,7 @@
     "draw-all": "残り全て",
     "login-required": "ログインすると引けます",
     "out-of-stock": "在庫なし",
+    "sold-out": "SOLD OUT",
     "expired": "このガチャは終了しました。",
     "winners-button": "当選者リスト",
     "draw-success": "{{count}}枚引きました！",
@@ -357,7 +358,11 @@
     "close": "閉じる",
     "close-icon": "×",
     "close-aria-label": "閉じる",
-    "exchange-guide": "マイページ > カード獲得履歴からコイン交換またはカード発送手続きができます"
+    "exchange-guide": "マイページ > カード獲得履歴からコイン交換またはカード発送手続きができます",
+    "exchanging": "交換中...",
+    "exchange-total": "{{coins}}コイン獲得",
+    "exchange-error": "コイン交換に失敗しました",
+    "select-card": "カードを選択"
   },
 
   "user-gacha": {

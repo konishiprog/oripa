@@ -97,13 +97,49 @@
 
   <div class="summary" *ngIf="showSummary">
     <div class="summary-grid">
-      <div class="summary-card" *ngFor="let card of drawnCards">
-        <img [src]="card.imageFront" [alt]="card.name" />
-        <div class="summary-card-name">{{ card.name }}</div>
+      <div
+        class="summary-card"
+        *ngFor="let card of drawnCards"
+        [class.exchangeable]="isExchangeable(card)"
+        [class.selected]="selectedCardIds.has(card.id)"
+      >
+        <div class="summary-card-wrapper">
+          <img [src]="card.imageFront" [alt]="card.name" />
+          <div class="summary-card-name">{{ card.name }}</div>
+          <div class="summary-card-checkbox-wrapper" *ngIf="isExchangeable(card)">
+            <input
+              type="checkbox"
+              [checked]="selectedCardIds.has(card.id)"
+              (change)="toggleSelect(card)"
+              [attr.aria-label]="'gacha-draw-result.select-card' | translate"
+            />
+          </div>
+          <div class="summary-card-coins" *ngIf="isExchangeable(card) && card.exchangeCoins">
+            {{ card.exchangeCoins }}{{ "common.unit.coin" | translate }}
+          </div>
+        </div>
       </div>
     </div>
-    <button type="button" class="reveal-btn reveal-btn-next" (click)="close()">
-      {{ "gacha-draw-result.close" | translate }}
-    </button>
+    <div class="summary-actions">
+      <button
+        type="button"
+        class="reveal-btn reveal-btn-exchange"
+        [disabled]="!hasSelectedCards || isExchanging"
+        (click)="executeExchange()"
+      >
+        <ng-container *ngIf="!isExchanging">
+          {{
+            "gacha-draw-result.exchange-total"
+              | translate: { coins: selectedTotalCoins }
+          }}
+        </ng-container>
+        <ng-container *ngIf="isExchanging">
+          {{ "gacha-draw-result.exchanging" | translate }}
+        </ng-container>
+      </button>
+      <button type="button" class="reveal-btn reveal-btn-next" (click)="close()">
+        {{ "gacha-draw-result.close" | translate }}
+      </button>
+    </div>
   </div>
 </div>
