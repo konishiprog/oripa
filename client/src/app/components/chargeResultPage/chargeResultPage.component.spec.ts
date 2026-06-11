@@ -53,8 +53,8 @@ describe('ChargeResultPageComponent', () => {
     };
 
     await TestBed.configureTestingModule({
+      declarations: [ChargeResultPageComponent],
       imports: [
-        ChargeResultPageComponent,
         HttpClientTestingModule,
       ],
       providers: [
@@ -83,7 +83,7 @@ describe('ChargeResultPageComponent', () => {
   });
 
   it('should initialize with default values', () => {
-    expect(component.loading).toBe(true);
+    expect(component.isLoading).toBe(true);
     expect(component.status).toBe('pending');
     expect(component.amount).toBe(0);
     expect(component.coinAmount).toBe(0);
@@ -153,7 +153,7 @@ describe('ChargeResultPageComponent', () => {
 
     expect(component.status).toBe('failed');
     expect(component.errorMessage).toBe('No payment secret found');
-    expect(component.loading).toBe(false);
+    expect(component.isLoading).toBe(false);
   });
 
   it('should call userService methods when payment succeeded', async () => {
