@@ -3,7 +3,6 @@ import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { TranslateService } from '@ngx-translate/core';
 import { GachaService } from '../service/gacha.service';
 import { UserService } from '../service/user.service';
-import { EffectPlayerService } from '../service/effect-player.service';
 import { GachaDrawResultDialogComponent } from '../components/gachaDrawResultDialog/gachaDrawResultDialog.component';
 import { ERROR_KEY_MAP } from './constants/error-messages.constant';
 
@@ -30,7 +29,6 @@ export class GachaDrawService {
     private userService: UserService,
     private translateService: TranslateService,
     private dialog: MatDialog,
-    private effectPlayer: EffectPlayerService,
   ) {}
 
   usesTicket(gacha: DrawableGacha): boolean {
@@ -72,13 +70,10 @@ export class GachaDrawService {
       this.userService.saveTicket(result.userTicket);
     }
 
-    this.playHighestRarityEffect(drawnCards);
-
     let dialogRef: MatDialogRef<GachaDrawResultDialogComponent> | null = null;
     if (drawnCards.length > 0) {
       const cardsForDialog = drawnCards.map((card: any) => ({
         ...card,
-        effectUrl: undefined,
         exchangeType: card.exchangeType,
         exchangeCoins: card.exchangeCoins,
       }));
@@ -126,27 +121,5 @@ export class GachaDrawService {
       }
     }
     return true;
-  }
-
-  private playHighestRarityEffect(drawnCards: any[]): void {
-    const cardsWithEffect = drawnCards.filter((card: any) => card.effectUrl);
-    if (cardsWithEffect.length === 0) return;
-
-    const highestRarityCard = cardsWithEffect.reduce((max: any, card: any) =>
-      this.compareRarity(card.cardType, max.cardType) >= 0 ? card : max,
-    );
-    this.effectPlayer.playEffects([highestRarityCard.effectUrl]);
-  }
-
-  private compareRarity(cardTypeA: string, cardTypeB: string): number {
-    const rarityOrder: Record<string, number> = {
-      SSR: 4,
-      SR: 3,
-      R: 2,
-      N: 1,
-    };
-    const rarityA = rarityOrder[cardTypeA] ?? 0;
-    const rarityB = rarityOrder[cardTypeB] ?? 0;
-    return rarityA - rarityB;
   }
 }
