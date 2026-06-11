@@ -117,6 +117,28 @@
   border-color: #805ad5;
 }
 
+.mode-btn-wrapper {
+  flex: 1;
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.mode-btn-wrapper .mode-btn {
+  width: 100%;
+}
+
+.badge-small {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  width: 20px;
+  height: 20px;
+  background-color: #ef4444;
+  border-radius: 50%;
+  z-index: 20;
+}
+
 .nav-tabs {
   display: flex;
   border-bottom: 1px solid #f0f0f0;

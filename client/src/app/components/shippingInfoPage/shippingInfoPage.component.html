@@ -65,7 +65,7 @@
       <button
         class="complete-btn"
         (click)="completeShipping()"
-        [disabled]="selectedCardIds.size === 0"
+        [disabled]="selectedCardIds.size === 0 || isLoading"
       >
         {{ "shipping-info.complete-button" | translate }}
       </button>
