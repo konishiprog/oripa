@@ -18,6 +18,11 @@ export interface CreateCardPayload {
   imageBackFile: File;
 }
 
+export interface ShipmentPayload {
+  cardId: string;
+  trackingNumber: string;
+}
+
 export interface UpdateCardPayload {
   name: string;
   cardType: string;
@@ -172,6 +177,21 @@ export class CardService {
       this.http.patch<any>(
         `${this.apiConfig.domain}/api/card/${id}/status`,
         { isDrawn: status },
+        { headers: this.apiConfig.headers },
+      ),
+    );
+  }
+
+  /**
+   * Complete shipping for multiple cards with tracking numbers
+   * @param {ShipmentPayload[]} shipments
+   * @returns {Promise<any>}
+   */
+  async completeShipping(shipments: ShipmentPayload[]) {
+    return await lastValueFrom(
+      this.http.patch<any>(
+        `${this.apiConfig.domain}/api/card/ship-complete`,
+        { shipments },
         { headers: this.apiConfig.headers },
       ),
     );

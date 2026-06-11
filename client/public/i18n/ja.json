@@ -277,6 +277,13 @@
     "complete-confirm": "発送完了した連絡を入れますがよろしいですか？",
     "complete-success": "カードの発送が完了しました",
     "complete-error": "カードの発送処理に失敗しました",
+    "tab-pending": "発送待ち",
+    "tab-shipped": "発送済み",
+    "tracking-title": "追跡番号の入力",
+    "tracking-desc": "各カードの追跡番号を入力してください。同じ発送先のカードは追跡番号が連携されます。",
+    "tracking-column": "追跡番号",
+    "tracking-placeholder": "追跡番号を入力",
+    "send-mail-button": "発送メールを送る",
     "table": {
       "user-name": "ユーザー名",
       "address": "住所",
@@ -537,7 +544,8 @@
     "shipping-button": "発送開始",
     "no-selection": "カードを選択してください",
     "select-all": "すべて選択",
-    "select-all-clear": "すべて選択解除"
+    "select-all-clear": "すべて選択解除",
+    "tracking-number": "追跡番号"
   },
 
   "user-management": {

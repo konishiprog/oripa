@@ -8,7 +8,6 @@ import {
 import { CardService } from '../../service/card.service';
 import { ShippingCardDetailDialogComponent } from '../shippingCardDetailDialog/shippingCardDetailDialog.component';
 import { ShippingConfirmDialogComponent } from '../shippingConfirmDialog/shippingConfirmDialog.component';
-import { CARD_STATUS } from '../../constants/card';
 
 interface TableHeader {
   key: string;
@@ -37,6 +36,7 @@ export class ShippingInfoPageComponent implements OnInit {
   isLoading: boolean = true;
   error: string | null = null;
   selectedCardIds = new Set<string>();
+  activeTab: 'pending' | 'shipped' = 'pending';
 
   constructor(
     private translateService: TranslateService,
@@ -81,7 +81,17 @@ export class ShippingInfoPageComponent implements OnInit {
   }
 
   getTotalCards(): number {
-    return this.shippingCards.length;
+    return this.shippingCards.filter((card) => card.status === 'pending')
+      .length;
+  }
+
+  get filteredCards(): ShippingCardInfo[] {
+    return this.shippingCards.filter((card) => card.status === this.activeTab);
+  }
+
+  selectTab(tab: 'pending' | 'shipped'): void {
+    this.activeTab = tab;
+    this.selectedCardIds.clear();
   }
 
   viewCardDetail(card: ShippingCardInfo): void {
@@ -106,13 +116,15 @@ export class ShippingInfoPageComponent implements OnInit {
   }
 
   toggleAllCards(): void {
-    if (this.selectedCardIds.size === this.shippingCards.length) {
+    const selectableCards = this.filteredCards;
+    if (
+      this.selectedCardIds.size === selectableCards.length &&
+      selectableCards.length > 0
+    ) {
       this.selectedCardIds.clear();
     } else {
       this.selectedCardIds.clear();
-      this.shippingCards.forEach((card) =>
-        this.selectedCardIds.add(card.cardId),
-      );
+      selectableCards.forEach((card) => this.selectedCardIds.add(card.cardId));
     }
   }
 
@@ -122,24 +134,29 @@ export class ShippingInfoPageComponent implements OnInit {
       return;
     }
 
+    const selectedCards = this.filteredCards.filter((card) =>
+      this.selectedCardIds.has(card.cardId),
+    );
+
     const dialogRef = this.dialog.open(ShippingConfirmDialogComponent, {
-      width: '500px',
+      width: '760px',
+      maxWidth: '95vw',
       data: {
-        cardCount: this.selectedCardIds.size,
+        cards: selectedCards,
       },
     });
 
-    const confirmed = await dialogRef.afterClosed().toPromise();
+    const shipments = await dialogRef.afterClosed().toPromise();
 
-    if (!confirmed) {
+    if (!shipments) {
       return;
     }
 
     this.isLoading = true;
+    this.cdr.markForCheck();
+
     try {
-      for (const cardId of this.selectedCardIds) {
-        await this.cardService.updateCardStatus(cardId, CARD_STATUS.SHIPPED);
-      }
+      await this.cardService.completeShipping(shipments);
 
       this.selectedCardIds.clear();
       await this.loadShippingCards();

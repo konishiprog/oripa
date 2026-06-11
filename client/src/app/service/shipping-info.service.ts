@@ -6,11 +6,14 @@ import { CARD_STATUS } from '../constants/card';
 
 export interface ShippingCardInfo {
   cardId: string;
+  userId: string;
   userName: string;
   address: string;
   phone: string;
   gachaName: string;
   cardName: string;
+  trackingNumber: string | null;
+  status: 'pending' | 'shipped';
 }
 
 const DEFAULT_UNAVAILABLE_TEXT = '-';
@@ -31,20 +34,27 @@ export class ShippingInfoService {
     const allGachas = await this.gachaService.getGachas();
 
     const shippingCards = allCards.filter(
-      (card: any) => card.isDrawn === CARD_STATUS.SHIPPING_PENDING,
+      (card: any) =>
+        card.isDrawn === CARD_STATUS.SHIPPING_PENDING ||
+        card.isDrawn === CARD_STATUS.SHIPPED,
     );
 
     return shippingCards.map((card: any) => {
       const user = allUsers.find((user: User) => user.id === card.userId);
       const gacha = allGachas.find((gacha: any) => gacha.id === card.gachaId);
+      const status =
+        card.isDrawn === CARD_STATUS.SHIPPED ? 'shipped' : 'pending';
 
       return {
         cardId: card.id,
+        userId: card.userId,
         userName: user?.name || DEFAULT_UNAVAILABLE_TEXT,
         address: user?.address || DEFAULT_UNAVAILABLE_TEXT,
         phone: user?.phone || DEFAULT_UNAVAILABLE_TEXT,
         gachaName: gacha?.name || DEFAULT_UNAVAILABLE_TEXT,
         cardName: card.name || DEFAULT_UNAVAILABLE_TEXT,
+        trackingNumber: card.trackingNumber || null,
+        status,
       };
     });
   }

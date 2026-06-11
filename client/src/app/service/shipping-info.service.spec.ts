@@ -106,11 +106,14 @@ describe('ShippingInfoService', () => {
       expect(result).toHaveLength(3);
       expect(result[0]).toEqual({
         cardId: 'card-1',
+        userId: 'user-1',
         userName: 'John Doe',
         address: '123 Main St',
         phone: '555-0001',
         gachaName: 'Fantasy Box',
         cardName: 'Card 1',
+        trackingNumber: null,
+        status: 'pending',
       });
     });
 
@@ -249,21 +252,27 @@ describe('ShippingInfoService', () => {
       const card2 = result.find((card) => card.cardId === 'card-2');
       expect(card2).toEqual({
         cardId: 'card-2',
+        userId: 'user-2',
         userName: 'Jane Smith',
         address: '456 Oak Ave',
         phone: '555-0002',
         gachaName: 'Fantasy Box',
         cardName: 'Card 2',
+        trackingNumber: null,
+        status: 'pending',
       });
 
       const card4 = result.find((card) => card.cardId === 'card-4');
       expect(card4).toEqual({
         cardId: 'card-4',
+        userId: 'user-3',
         userName: 'Bob Johnson',
         address: '-',
         phone: '-',
         gachaName: 'Fantasy Box',
         cardName: 'Card 4',
+        trackingNumber: null,
+        status: 'pending',
       });
     });
 

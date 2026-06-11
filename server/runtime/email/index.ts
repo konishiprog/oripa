@@ -288,6 +288,50 @@ export async function sendAdminCardShippingRequestEmail(
   }
 }
 
+export async function sendShippingCompleteEmail(
+  to: string,
+  userName: string,
+  cardList: string,
+  trackingNumber: string,
+): Promise<void> {
+  if (!process.env.RESEND_API_KEY) {
+    console.error("[EMAIL] RESEND_API_KEY is not set");
+    throw new Error("RESEND_API_KEY is not configured");
+  }
+
+  if (!validateEmail(to)) {
+    console.error("[EMAIL] Invalid email address:", to);
+    throw new Error("Invalid email address format");
+  }
+
+  try {
+    const client = getResendClient();
+    const emailFrom = process.env.EMAIL_FROM;
+    if (!emailFrom) {
+      throw new Error("EMAIL_FROM is not configured");
+    }
+
+    const { subject, html } = renderTemplate("shippingComplete", {
+      userName,
+      cardList,
+      trackingNumber,
+    });
+
+    const result = await client.emails.send({
+      from: emailFrom,
+      to,
+      subject,
+      html,
+    });
+
+    console.log(`[EMAIL] Send result:`, result);
+  } catch (error: any) {
+    console.error("[EMAIL] Failed to send shipping complete email:", error);
+    console.error("[EMAIL] Error details:", error.message || error);
+    throw new Error(messages.email.SEND_FAILURE_ERROR);
+  }
+}
+
 export async function sendCardExchangeEmail(
   to: string,
   userName: string,

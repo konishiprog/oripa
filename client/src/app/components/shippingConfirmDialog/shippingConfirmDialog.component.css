@@ -16,6 +16,63 @@
   line-height: 1.5;
 }
 
+.dialog-table-scroll {
+  overflow-x: auto;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  margin-bottom: 20px;
+}
+
+.dialog-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+
+.dialog-table thead {
+  background-color: #f7f8fa;
+}
+
+.dialog-table th {
+  padding: 10px 12px;
+  text-align: left;
+  font-weight: 600;
+  color: #1a202c;
+  border-bottom: 1px solid #e2e8f0;
+  white-space: nowrap;
+}
+
+.dialog-table td {
+  padding: 10px 12px;
+  color: #4a5568;
+  border-bottom: 1px solid #e2e8f0;
+  white-space: nowrap;
+}
+
+.dialog-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.tracking-column {
+  width: 180px;
+}
+
+.tracking-input {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 7px 10px;
+  font-size: 13px;
+  font-family: inherit;
+  border: 1px solid #cbd5e0;
+  border-radius: 6px;
+}
+
+.tracking-input:focus {
+  outline: none;
+  border-color: #805ad5;
+  box-shadow: 0 0 0 2px rgba(128, 90, 213, 0.15);
+}
+
 .dialog-buttons {
   display: flex;
   gap: 10px;
@@ -46,6 +103,11 @@
   color: #fff;
 }
 
-.dialog-btn-confirm:hover {
+.dialog-btn-confirm:hover:not(:disabled) {
   box-shadow: 0 2px 8px rgba(128, 90, 213, 0.3);
+}
+
+.dialog-btn-confirm:disabled {
+  background: #ccc;
+  cursor: not-allowed;
 }

@@ -16,22 +16,39 @@
   </div>
 </div>
 
+<div class="nav-tabs">
+  <div
+    class="nav-tab"
+    [class.active]="activeTab === 'pending'"
+    (click)="selectTab('pending')"
+  >
+    {{ "shipping-info.tab-pending" | translate }}
+  </div>
+  <div
+    class="nav-tab"
+    [class.active]="activeTab === 'shipped'"
+    (click)="selectTab('shipped')"
+  >
+    {{ "shipping-info.tab-shipped" | translate }}
+  </div>
+</div>
+
 <ng-container *ngIf="!isLoading">
   <div *ngIf="error" class="error-message">
     {{ error }}
   </div>
 
-  <div *ngIf="shippingCards.length > 0" class="table-card">
+  <div *ngIf="filteredCards.length > 0" class="table-card">
     <div class="table-scroll">
       <table>
         <thead>
           <tr>
-            <th class="checkbox-column">
+            <th class="checkbox-column" *ngIf="activeTab === 'pending'">
               <input
                 type="checkbox"
                 [checked]="
-                  selectedCardIds.size === shippingCards.length &&
-                  shippingCards.length > 0
+                  selectedCardIds.size === filteredCards.length &&
+                  filteredCards.length > 0
                 "
                 (change)="toggleAllCards()"
               />
@@ -42,8 +59,8 @@
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let card of shippingCards" class="clickable-row">
-            <td class="checkbox-column" (click)="$event.stopPropagation()">
+          <tr *ngFor="let card of filteredCards" class="clickable-row">
+            <td class="checkbox-column" *ngIf="activeTab === 'pending'" (click)="$event.stopPropagation()">
               <input
                 type="checkbox"
                 [checked]="isCardSelected(card.cardId)"
@@ -61,7 +78,10 @@
       </table>
     </div>
 
-    <div class="table-footer" *ngIf="shippingCards.length > 0">
+    <div
+      class="table-footer"
+      *ngIf="filteredCards.length > 0 && activeTab === 'pending'"
+    >
       <button
         class="complete-btn"
         (click)="completeShipping()"
@@ -72,7 +92,7 @@
     </div>
   </div>
 
-  <div *ngIf="shippingCards.length === 0 && !error" class="no-data">
+  <div *ngIf="filteredCards.length === 0 && !error" class="no-data">
     {{ "shipping-info.no-data" | translate }}
   </div>
 </ng-container>

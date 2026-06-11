@@ -139,6 +139,17 @@
             >
               {{ card.exchangeCoins }}{{ "common.unit.coin" | translate }}
             </div>
+            <div
+              *ngIf="
+                activeTab === CARD_HISTORY_TABS.SHIPPED && card.trackingNumber
+              "
+              class="card-tracking-number"
+            >
+              <div class="tracking-label">
+                {{ "card-history.tracking-number" | translate }}
+              </div>
+              <div class="tracking-value">{{ card.trackingNumber }}</div>
+            </div>
           </div>
         </div>
       </div>

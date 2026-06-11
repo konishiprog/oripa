@@ -33,6 +33,7 @@ describe('UserCardHistoryPageComponent', () => {
       isDrawn: CARD_STATUS.NOT_DRAWN,
       gachaName: 'Gacha 1',
       status: 'unselected',
+      trackingNumber: null,
     },
     {
       id: '2',
@@ -46,6 +47,7 @@ describe('UserCardHistoryPageComponent', () => {
       isDrawn: CARD_STATUS.NOT_DRAWN,
       gachaName: 'Gacha 1',
       status: 'unselected',
+      trackingNumber: null,
     },
     {
       id: '3',
@@ -59,6 +61,7 @@ describe('UserCardHistoryPageComponent', () => {
       isDrawn: CARD_STATUS.REFUNDED,
       gachaName: 'Gacha 2',
       status: 'unselected',
+      trackingNumber: null,
     },
   ];
 
