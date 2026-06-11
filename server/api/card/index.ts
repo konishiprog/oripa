@@ -326,6 +326,96 @@ module.exports = {
     });
 
     /**
+     * Complete shipping for multiple cards (store tracking number + notify users)
+     * PATCH /api/card/ship-complete
+     */
+    router.patch("/ship-complete", async (req: Request, res: Response) => {
+      const { shipments } = req.body;
+      if (!Array.isArray(shipments) || shipments.length === 0) {
+        return res.status(400).json({ error: messages.errors.CARD_NOT_FOUND });
+      }
+
+      const hasInvalid = shipments.some(
+        (shipment: any) =>
+          !shipment ||
+          typeof shipment.cardId !== "string" ||
+          shipment.cardId.trim() === "" ||
+          typeof shipment.trackingNumber !== "string" ||
+          shipment.trackingNumber.trim() === "",
+      );
+      if (hasInvalid) {
+        return res
+          .status(400)
+          .json({ error: messages.errors.TRACKING_NUMBER_REQUIRED });
+      }
+
+      try {
+        const allCards = await runtime.card.getAll();
+        const affectedGachaIds = new Set<string>();
+        const groupsByUser = new Map<
+          string,
+          { userId: string; trackingNumber: string; cardNames: string[] }
+        >();
+
+        for (const shipment of shipments) {
+          const card = allCards.find(
+            (foundCard: any) => foundCard.id === shipment.cardId,
+          );
+          if (!card) {
+            return res
+              .status(404)
+              .json({ error: messages.errors.CARD_NOT_FOUND });
+          }
+
+          await runtime.card.update(shipment.cardId, {
+            isDrawn: CARD_STATUS.SHIPPED,
+            trackingNumber: shipment.trackingNumber,
+          });
+          affectedGachaIds.add(card.gachaId);
+
+          if (card.userId) {
+            const existingGroup = groupsByUser.get(card.userId);
+            if (existingGroup) {
+              existingGroup.cardNames.push(card.name);
+            } else {
+              groupsByUser.set(card.userId, {
+                userId: card.userId,
+                trackingNumber: shipment.trackingNumber,
+                cardNames: [card.name],
+              });
+            }
+          }
+        }
+
+        for (const gachaId of affectedGachaIds) {
+          await gacha.refreshGachaCards(gachaId);
+        }
+
+        for (const group of groupsByUser.values()) {
+          const cardOwner = await user?.getById(group.userId);
+          if (cardOwner?.email) {
+            await email.sendShippingCompleteEmail(
+              cardOwner.email,
+              cardOwner.name,
+              group.cardNames.join("、"),
+              group.trackingNumber,
+            );
+          }
+        }
+
+        return res.status(200).json({
+          message: messages.success.CARDS_SHIPPED,
+        });
+      } catch (error: any) {
+        const { status, message } = handleError(
+          error,
+          "Card shipping completion",
+        );
+        return res.status(status).json({ error: message });
+      }
+    });
+
+    /**
      * Get all cards
      * GET /api/card
      */

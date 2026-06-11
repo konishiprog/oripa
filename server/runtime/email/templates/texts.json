@@ -51,6 +51,15 @@
     "phoneLabel": "電話番号：",
     "action": "管理画面から発送状況を確認してください。"
   },
+  "shippingComplete": {
+    "subject": "カード発送完了のお知らせ - oripa",
+    "title": "カードを発送しました",
+    "greetingSuffix": "様",
+    "description": "ご注文いただいたカードを発送しました。以下の内容をご確認ください。",
+    "cardListLabel": "発送カード：",
+    "trackingNumberLabel": "追跡番号：",
+    "action": "追跡番号から配送状況をご確認いただけます。"
+  },
   "cardExchange": {
     "subject": "カード交換完了のお知らせ - oripa",
     "title": "カードをコインに交換しました",

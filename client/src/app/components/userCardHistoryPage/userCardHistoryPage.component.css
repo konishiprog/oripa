@@ -285,12 +285,36 @@
   cursor: not-allowed;
 }
 
-.card-exchange-points {
+.card-exchange-coins {
   font-size: 14px;
   font-weight: 600;
   color: #6b46c1;
   margin-left: auto;
   flex-shrink: 0;
+}
+
+.card-tracking-number {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  margin-left: auto;
+  flex-shrink: 0;
+  gap: 4px;
+}
+
+.tracking-label {
+  font-size: 11px;
+  color: #9ca3af;
+  font-weight: 500;
+}
+
+.tracking-value {
+  font-size: 13px;
+  font-weight: 600;
+  color: #1a202c;
+  word-break: break-word;
+  max-width: 140px;
+  text-align: right;
 }
 
 .exchange-footer {

@@ -153,6 +153,7 @@ async function update(
     imageBackFile?: any;
     userId?: string;
     isDrawn?: string;
+    trackingNumber?: string;
   },
 ) {
   if (cardCache.size === 0) {
@@ -204,6 +205,9 @@ async function update(
   }
   if (payload.isDrawn !== undefined) updateData.isDrawn = payload.isDrawn;
   if (payload.userId !== undefined) updateData.userId = payload.userId;
+  if (payload.trackingNumber !== undefined) {
+    updateData.trackingNumber = payload.trackingNumber;
+  }
 
   await card.update(updateData);
 

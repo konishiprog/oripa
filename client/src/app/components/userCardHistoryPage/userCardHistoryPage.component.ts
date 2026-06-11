@@ -34,6 +34,7 @@ export interface UserCard {
   exchangeCoins: number | null;
   isDrawn: string;
   gachaName: string | null;
+  trackingNumber: string | null;
   status: CardHistoryTab;
 }
 
@@ -108,6 +109,7 @@ export class UserCardHistoryPageComponent implements OnInit {
             exchangeCoins: card.exchangeCoins,
             isDrawn: card.isDrawn,
             gachaName: card.gachaName,
+            trackingNumber: card.trackingNumber || null,
             status,
           };
         });

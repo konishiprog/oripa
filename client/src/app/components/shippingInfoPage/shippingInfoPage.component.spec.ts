@@ -21,19 +21,25 @@ describe('ShippingInfoPageComponent', () => {
   const mockShippingCards: ShippingCardInfo[] = [
     {
       cardId: '1',
+      userId: 'user-1',
       userName: 'User 1',
       address: '東京都渋谷区',
       phone: '09012345678',
       gachaName: 'ガチャA',
       cardName: 'カードA',
+      trackingNumber: null,
+      status: 'pending',
     },
     {
       cardId: '2',
+      userId: 'user-2',
       userName: 'User 2',
       address: '大阪府大阪市',
       phone: '09087654321',
       gachaName: 'ガチャB',
       cardName: 'カードB',
+      trackingNumber: null,
+      status: 'pending',
     },
   ];
 
@@ -44,6 +50,7 @@ describe('ShippingInfoPageComponent', () => {
 
     mockCardService = {
       updateCardStatus: jest.fn(),
+      completeShipping: jest.fn(),
     } as unknown as jest.Mocked<CardService>;
 
     mockTranslateService = {
@@ -293,12 +300,18 @@ describe('ShippingInfoPageComponent', () => {
       }, 50);
     });
 
-    it('should update card status to SHIPPED for selected cards', (done) => {
+    it('should call completeShipping API with shipments', async () => {
       jest.spyOn(window, 'alert').mockImplementation();
       mockShippingInfoService.getShippingCards.mockResolvedValue([]);
+      mockCardService.completeShipping.mockResolvedValue({
+        message: 'Shipped',
+      });
       const mockDialogRef = {
         afterClosed: jest.fn().mockReturnValue({
-          toPromise: jest.fn().mockResolvedValue(true),
+          toPromise: jest.fn().mockResolvedValue([
+            { cardId: '1', trackingNumber: 'TRK123456' },
+            { cardId: '2', trackingNumber: 'TRK123456' },
+          ]),
         }),
       };
       mockDialog.open.mockReturnValue(mockDialogRef as any);
@@ -306,101 +319,99 @@ describe('ShippingInfoPageComponent', () => {
       component.selectedCardIds.add('1');
       component.selectedCardIds.add('2');
 
-      component.completeShipping();
+      await component.completeShipping();
 
-      setTimeout(() => {
-        expect(mockCardService.updateCardStatus).toHaveBeenCalledWith(
-          '1',
-          CARD_STATUS.SHIPPED,
-        );
-        expect(mockCardService.updateCardStatus).toHaveBeenCalledWith(
-          '2',
-          CARD_STATUS.SHIPPED,
-        );
-        done();
-      }, 0);
+      expect(mockCardService.completeShipping).toHaveBeenCalledWith([
+        { cardId: '1', trackingNumber: 'TRK123456' },
+        { cardId: '2', trackingNumber: 'TRK123456' },
+      ]);
     });
 
-    it('should clear selected cards after successful update', (done) => {
+    it('should clear selected cards after successful update', async () => {
       jest.spyOn(window, 'alert').mockImplementation();
       mockShippingInfoService.getShippingCards.mockResolvedValue([]);
+      mockCardService.completeShipping.mockResolvedValue({
+        message: 'Shipped',
+      });
       const mockDialogRef = {
         afterClosed: jest.fn().mockReturnValue({
-          toPromise: jest.fn().mockResolvedValue(true),
+          toPromise: jest.fn().mockResolvedValue([
+            { cardId: '1', trackingNumber: 'TRK123456' },
+          ]),
         }),
       };
       mockDialog.open.mockReturnValue(mockDialogRef as any);
       component.shippingCards = mockShippingCards;
       component.selectedCardIds.add('1');
 
-      component.completeShipping();
+      await component.completeShipping();
 
-      setTimeout(() => {
-        expect(component.selectedCardIds.size).toBe(0);
-        done();
-      }, 50);
+      expect(component.selectedCardIds.size).toBe(0);
     });
 
-    it('should reload shipping cards after successful update', (done) => {
+    it('should reload shipping cards after successful update', async () => {
       jest.spyOn(window, 'alert').mockImplementation();
       mockShippingInfoService.getShippingCards.mockResolvedValue([]);
+      mockCardService.completeShipping.mockResolvedValue({
+        message: 'Shipped',
+      });
       const mockDialogRef = {
         afterClosed: jest.fn().mockReturnValue({
-          toPromise: jest.fn().mockResolvedValue(true),
+          toPromise: jest.fn().mockResolvedValue([
+            { cardId: '1', trackingNumber: 'TRK123456' },
+          ]),
         }),
       };
       mockDialog.open.mockReturnValue(mockDialogRef as any);
       component.shippingCards = mockShippingCards;
       component.selectedCardIds.add('1');
 
-      component.completeShipping();
+      await component.completeShipping();
 
-      setTimeout(() => {
-        expect(mockShippingInfoService.getShippingCards).toHaveBeenCalled();
-        done();
-      }, 50);
+      expect(mockShippingInfoService.getShippingCards).toHaveBeenCalled();
     });
 
-    it('should show success alert after completing shipping', (done) => {
+    it('should show success alert after completing shipping', async () => {
       jest.spyOn(window, 'alert').mockImplementation();
       mockShippingInfoService.getShippingCards.mockResolvedValue([]);
+      mockCardService.completeShipping.mockResolvedValue({
+        message: 'Shipped',
+      });
       const mockDialogRef = {
         afterClosed: jest.fn().mockReturnValue({
-          toPromise: jest.fn().mockResolvedValue(true),
+          toPromise: jest.fn().mockResolvedValue([
+            { cardId: '1', trackingNumber: 'TRK123456' },
+          ]),
         }),
       };
       mockDialog.open.mockReturnValue(mockDialogRef as any);
       component.shippingCards = mockShippingCards;
       component.selectedCardIds.add('1');
 
-      component.completeShipping();
+      await component.completeShipping();
 
-      setTimeout(() => {
-        expect(window.alert).toHaveBeenCalledWith('Completed successfully');
-        done();
-      }, 50);
+      expect(window.alert).toHaveBeenCalledWith('Completed successfully');
     });
 
-    it('should show error alert when update fails', (done) => {
+    it('should show error alert when completeShipping fails', async () => {
       jest.spyOn(window, 'alert').mockImplementation();
       const mockDialogRef = {
         afterClosed: jest.fn().mockReturnValue({
-          toPromise: jest.fn().mockResolvedValue(true),
+          toPromise: jest.fn().mockResolvedValue([
+            { cardId: '1', trackingNumber: 'TRK123456' },
+          ]),
         }),
       };
       mockDialog.open.mockReturnValue(mockDialogRef as any);
-      mockCardService.updateCardStatus.mockRejectedValue(
-        new Error('Update failed'),
+      mockCardService.completeShipping.mockRejectedValue(
+        new Error('API failed'),
       );
       component.shippingCards = mockShippingCards;
       component.selectedCardIds.add('1');
 
-      component.completeShipping();
+      await component.completeShipping();
 
-      setTimeout(() => {
-        expect(window.alert).toHaveBeenCalledWith('Failed to complete');
-        done();
-      }, 100);
+      expect(window.alert).toHaveBeenCalledWith('Failed to complete');
     });
   });
 

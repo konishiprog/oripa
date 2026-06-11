@@ -59,6 +59,10 @@ module.exports = (sequelize: any, DataTypes: any) => {
         type: DataTypes.STRING,
         defaultValue: CARD_STATUS.NOT_DRAWN,
       },
+      trackingNumber: {
+        type: DataTypes.STRING,
+        allowNull: true,
+      },
     },
     {
       sequelize,
