@@ -327,6 +327,16 @@
           </button>
         </div>
       </div>
+
+      <div class="delete-account-section">
+        <button
+          type="button"
+          class="delete-account-btn"
+          (click)="openDeleteAccountDialog()"
+        >
+          {{ "my-page.delete-account" | translate }}
+        </button>
+      </div>
     </div>
 
     <app-footer-links></app-footer-links>

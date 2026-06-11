@@ -44,6 +44,7 @@ import { EmailChangeVerificationComponent } from './components/emailChangeVerifi
 import { SignupEmailSentComponent } from './components/signupEmailSent/signupEmailSent.component';
 import { UserMyPageComponent } from './components/userMyPage/userMyPage.component';
 import { ConfirmUpdateDialogComponent } from './components/userMyPage/confirm-update-dialog/confirm-update-dialog.component';
+import { DeleteAccountDialogComponent } from './components/userMyPage/delete-account-dialog/delete-account-dialog.component';
 import { UserCardHistoryPageComponent } from './components/userCardHistoryPage/userCardHistoryPage.component';
 import { UserLoginDialogComponent } from './components/userLoginDialog/userLoginDialog.component';
 import { AppLogoComponent } from './components/common/appLogo/appLogo.component';
@@ -105,6 +106,7 @@ import { GachaDrawButtonsComponent } from './common/gachaDrawButtons/gachaDrawBu
     EmailChangeVerificationComponent,
     SignupEmailSentComponent,
     UserMyPageComponent,
+    DeleteAccountDialogComponent,
     ConfirmUpdateDialogComponent,
     UserCardHistoryPageComponent,
     UserLoginDialogComponent,

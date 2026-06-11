@@ -511,7 +511,12 @@
     "error-address-not-found": "郵便番号に対応する住所が見つかりません",
     "error-address-lookup": "住所検索に失敗しました",
     "success-address-lookup": "住所を自動入力しました",
-    "lookup-address": "住所を検索"
+    "lookup-address": "住所を検索",
+    "delete-account": "アカウントを削除する",
+    "delete-confirm-title": "本当に削除しますか？",
+    "delete-confirm-message": "⚠️ 警告：アカウントを削除すると、未発送のカードなどの情報はすべて削除されます。ポイント・コインも消えてしまいますので、ご注意ください。",
+    "delete-button": "削除",
+    "delete-error": "アカウント削除に失敗しました"
   },
 
   "card-history": {

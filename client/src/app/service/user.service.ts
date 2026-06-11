@@ -177,6 +177,12 @@ export class UserService {
     );
   }
 
+  logout(): void {
+    localStorage.removeItem(this.STORAGE_KEY);
+    localStorage.removeItem(this.COIN_STORAGE_KEY);
+    localStorage.removeItem(this.TICKET_STORAGE_KEY);
+  }
+
   /**
    * Charge a user's coin balance based on exchange rate
    * @param {string} rateId - Coin exchange rate id

@@ -61,6 +61,7 @@ async function verifyCredentials(email: string, password: string) {
   const admin = Array.from(adminCache.values()).find(
     (admin: any) => admin.email === email,
   );
+
   if (admin && admin.password === password) {
     return admin;
   }
@@ -119,6 +120,9 @@ async function deleteAdmin(id: string) {
   }
 
   const result = await db.Admin.destroy({ where: { id } });
+  if (result === 0) {
+    throw new Error(messages.errors.ADMIN_NOT_FOUND);
+  }
   adminCache.delete(id);
   return result;
 }

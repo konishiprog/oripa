@@ -1,0 +1,56 @@
+.delete-account-dialog {
+  padding: 24px;
+}
+
+h2 {
+  margin: 0 0 16px 0;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.warning-message {
+  margin-bottom: 24px;
+  padding: 12px;
+  background-color: #fff3cd;
+  border: 1px solid #ffc107;
+  border-radius: 4px;
+  color: #856404;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.button-group {
+  display: flex;
+  gap: 12px;
+}
+
+button {
+  flex: 1;
+  padding: 12px 16px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.cancel-btn {
+  background-color: #f5f5f5;
+  color: #333;
+}
+
+.cancel-btn:hover {
+  background-color: #efefef;
+}
+
+.delete-btn {
+  background-color: #dc3545;
+  color: white;
+  border-color: #dc3545;
+}
+
+.delete-btn:hover {
+  background-color: #c82333;
+  border-color: #bd2130;
+}
