@@ -1,12 +1,16 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { TranslateModule } from '@ngx-translate/core';
+import { CardService } from '../../service/card.service';
+import { UserService } from '../../service/user.service';
 import { GachaDrawResultDialogComponent } from './gachaDrawResultDialog.component';
 
 describe('GachaDrawResultDialogComponent', () => {
   let component: GachaDrawResultDialogComponent;
   let fixture: ComponentFixture<GachaDrawResultDialogComponent>;
   let dialogRef: jest.Mocked<MatDialogRef<GachaDrawResultDialogComponent>>;
+  let mockCardService: any;
+  let mockUserService: any;
 
   const mockDrawnCards = [
     {
@@ -16,6 +20,8 @@ describe('GachaDrawResultDialogComponent', () => {
       imageBack: 'back.jpg',
       cardType: 'SSR',
       effectUrl: 'effect1.mp4',
+      exchangeType: 'BOTH',
+      exchangeCoins: 100,
     },
     {
       id: 'card-2',
@@ -23,6 +29,8 @@ describe('GachaDrawResultDialogComponent', () => {
       imageFront: 'front2.jpg',
       imageBack: 'back.jpg',
       cardType: 'R',
+      exchangeType: 'SHIPPING_ONLY',
+      exchangeCoins: null,
     },
     {
       id: 'card-3',
@@ -31,6 +39,8 @@ describe('GachaDrawResultDialogComponent', () => {
       imageBack: 'back.jpg',
       cardType: 'SR',
       effectUrl: 'effect3.mp4',
+      exchangeType: 'COIN_ONLY',
+      exchangeCoins: 50,
     },
   ];
 
@@ -38,6 +48,17 @@ describe('GachaDrawResultDialogComponent', () => {
     const dialogRefSpy = {
       close: jest.fn<void, []>(),
       updateSize: jest.fn(),
+    };
+
+    mockCardService = {
+      exchangeCard: jest.fn().mockResolvedValue({}),
+    };
+
+    mockUserService = {
+      getUserId: jest.fn().mockReturnValue('test-user-id'),
+      getCoin: jest.fn().mockReturnValue(1000),
+      saveCoin: jest.fn(),
+      updateUser: jest.fn().mockResolvedValue({}),
     };
 
     await TestBed.configureTestingModule({
@@ -49,6 +70,8 @@ describe('GachaDrawResultDialogComponent', () => {
           provide: MAT_DIALOG_DATA,
           useValue: { drawnCards: mockDrawnCards },
         },
+        { provide: CardService, useValue: mockCardService },
+        { provide: UserService, useValue: mockUserService },
       ],
     }).compileComponents();
 
@@ -219,5 +242,83 @@ describe('GachaDrawResultDialogComponent', () => {
     expect(component.currentCard).toBeNull();
     expect(component.isLast).toBe(true);
     expect(component.hasEffectUrl).toBe(false);
+  });
+
+  it('isExchangeable should return true for BOTH and COIN_ONLY exchange types', () => {
+    const bothCard = mockDrawnCards[0];
+    const shippingCard = mockDrawnCards[1];
+    const coinCard = mockDrawnCards[2];
+
+    expect(component.isExchangeable(bothCard)).toBe(true);
+    expect(component.isExchangeable(shippingCard)).toBe(false);
+    expect(component.isExchangeable(coinCard)).toBe(true);
+  });
+
+  it('toggleSelect should add/remove card from selection', () => {
+    const card = mockDrawnCards[0];
+    expect(component.selectedCardIds.has(card.id)).toBe(false);
+
+    component.toggleSelect(card);
+    expect(component.selectedCardIds.has(card.id)).toBe(true);
+
+    component.toggleSelect(card);
+    expect(component.selectedCardIds.has(card.id)).toBe(false);
+  });
+
+  it('toggleSelect should not add non-exchangeable cards', () => {
+    const shippingCard = mockDrawnCards[1];
+    component.toggleSelect(shippingCard);
+    expect(component.selectedCardIds.has(shippingCard.id)).toBe(false);
+  });
+
+  it('selectedTotalCoins should calculate total coins from selected cards', () => {
+    component.selectedCardIds.add(mockDrawnCards[0].id);
+    component.selectedCardIds.add(mockDrawnCards[2].id);
+    expect(component.selectedTotalCoins).toBe(150);
+  });
+
+  it('selectedTotalCoins should return 0 when no cards selected', () => {
+    expect(component.selectedTotalCoins).toBe(0);
+  });
+
+  it('hasSelectedCards should return true only when cards are selected', () => {
+    expect(component.hasSelectedCards).toBe(false);
+    component.selectedCardIds.add(mockDrawnCards[0].id);
+    expect(component.hasSelectedCards).toBe(true);
+  });
+
+  it('executeExchange should exchange selected cards', async () => {
+    component.selectedCardIds.add(mockDrawnCards[0].id);
+    component.selectedCardIds.add(mockDrawnCards[2].id);
+
+    await component.executeExchange();
+
+    expect(mockCardService.exchangeCard).toHaveBeenCalledWith(
+      mockDrawnCards[0].id,
+    );
+    expect(mockCardService.exchangeCard).toHaveBeenCalledWith(
+      mockDrawnCards[2].id,
+    );
+    expect(mockUserService.updateUser).toHaveBeenCalled();
+    expect(mockUserService.saveCoin).toHaveBeenCalledWith(1150);
+  });
+
+  it('executeExchange should remove exchanged cards from drawnCards', async () => {
+    component.selectedCardIds.add(mockDrawnCards[0].id);
+
+    await component.executeExchange();
+
+    expect(component.drawnCards.length).toBe(2);
+    expect(
+      component.drawnCards.find((c) => c.id === mockDrawnCards[0].id),
+    ).toBeUndefined();
+  });
+
+  it('executeExchange should clear selected cards after exchange', async () => {
+    component.selectedCardIds.add(mockDrawnCards[0].id);
+
+    await component.executeExchange();
+
+    expect(component.selectedCardIds.size).toBe(0);
   });
 });
