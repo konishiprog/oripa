@@ -92,6 +92,8 @@ describe('AppHeaderComponent', () => {
     myPageReq.flush('<svg></svg>');
     const coinReq = httpMock.expectOne('assets/icons/coin-gold.svg');
     coinReq.flush('<svg></svg>');
+    const ticketReq = httpMock.expectOne('assets/icons/ticket.svg');
+    ticketReq.flush('<svg></svg>');
 
     expect(component.isLoggedIn).toBe(true);
   });
@@ -127,6 +129,8 @@ describe('AppHeaderComponent', () => {
     myPageReq.flush('<svg></svg>');
     const coinReq = httpMock.expectOne('assets/icons/coin-gold.svg');
     coinReq.flush('<svg></svg>');
+    const ticketReq = httpMock.expectOne('assets/icons/ticket.svg');
+    ticketReq.flush('<svg></svg>');
 
     expect(component.userCoin).toBe(1000);
     expect(component.userTicket).toBe(100);
@@ -151,7 +155,11 @@ describe('AppHeaderComponent', () => {
     expect(coinReq.request.method).toBe('GET');
     coinReq.flush('<svg>coin</svg>');
 
-    expect(mockSanitizer.bypassSecurityTrustHtml).toHaveBeenCalledTimes(4);
+    const ticketReq = httpMock.expectOne('assets/icons/ticket.svg');
+    expect(ticketReq.request.method).toBe('GET');
+    ticketReq.flush('<svg>ticket</svg>');
+
+    expect(mockSanitizer.bypassSecurityTrustHtml).toHaveBeenCalledTimes(5);
   });
 
   it('should toggle mobile menu', () => {
@@ -180,6 +188,8 @@ describe('AppHeaderComponent', () => {
     myPageReq.flush('<svg></svg>');
     const coinReq = httpMock.expectOne('assets/icons/coin-gold.svg');
     coinReq.flush('<svg></svg>');
+    const ticketReq = httpMock.expectOne('assets/icons/ticket.svg');
+    ticketReq.flush('<svg></svg>');
 
     expect(component.isAdminPage).toBe(true);
   });

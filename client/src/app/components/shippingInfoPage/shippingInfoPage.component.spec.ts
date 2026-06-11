@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatDialog } from '@angular/material/dialog';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { of } from 'rxjs';
 import { ShippingInfoPageComponent } from './shippingInfoPage.component';
 import {
   ShippingInfoService,
@@ -55,6 +56,16 @@ describe('ShippingInfoPageComponent', () => {
           'shipping-info.complete-error': 'Failed to complete',
         };
         return translations[key] || key;
+      }),
+      get: jest.fn((key: string) => {
+        const translations: { [key: string]: string } = {
+          'shipping-info.error': 'Error loading cards',
+          'shipping-info.no-selection': 'Please select cards',
+          'shipping-info.complete-confirm': 'Are you sure?',
+          'shipping-info.complete-success': 'Completed successfully',
+          'shipping-info.complete-error': 'Failed to complete',
+        };
+        return of(translations[key] || key);
       }),
     } as unknown as jest.Mocked<TranslateService>;
 
