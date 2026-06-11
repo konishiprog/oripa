@@ -7,6 +7,7 @@ import {
 } from '../../service/shipping-info.service';
 import { CardService } from '../../service/card.service';
 import { ShippingCardDetailDialogComponent } from '../shippingCardDetailDialog/shippingCardDetailDialog.component';
+import { ShippingConfirmDialogComponent } from '../shippingConfirmDialog/shippingConfirmDialog.component';
 import { CARD_STATUS } from '../../constants/card';
 
 interface TableHeader {
@@ -121,25 +122,34 @@ export class ShippingInfoPageComponent implements OnInit {
       return;
     }
 
-    const confirmed = confirm(
-      this.translateService.instant('shipping-info.complete-confirm'),
-    );
+    const dialogRef = this.dialog.open(ShippingConfirmDialogComponent, {
+      width: '500px',
+      data: {
+        cardCount: this.selectedCardIds.size,
+      },
+    });
+
+    const confirmed = await dialogRef.afterClosed().toPromise();
 
     if (!confirmed) {
       return;
     }
 
+    this.isLoading = true;
     try {
       for (const cardId of this.selectedCardIds) {
         await this.cardService.updateCardStatus(cardId, CARD_STATUS.SHIPPED);
       }
 
       this.selectedCardIds.clear();
-      this.loadShippingCards();
+      await this.loadShippingCards();
       alert(this.translateService.instant('shipping-info.complete-success'));
     } catch (err) {
       console.error('Failed to complete shipping:', err);
       alert(this.translateService.instant('shipping-info.complete-error'));
+    } finally {
+      this.isLoading = false;
+      this.cdr.markForCheck();
     }
   }
 }

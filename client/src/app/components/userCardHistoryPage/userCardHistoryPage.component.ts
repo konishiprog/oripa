@@ -7,6 +7,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { CardService } from '../../service/card.service';
 import { UserService } from '../../service/user.service';
 import { CoinExchangeDialogComponent } from '../coinExchangeDialog/coinExchangeDialog.component';
+import { ShippingConfirmDialogComponent } from '../shippingConfirmDialog/shippingConfirmDialog.component';
 import { CARD_STATUS, EXCHANGE_TYPE } from '../../constants/card';
 
 export type CardHistoryTab = 'unselected' | 'pending' | 'shipped';
@@ -54,6 +55,7 @@ export class UserCardHistoryPageComponent implements OnInit {
   cards: UserCard[] = [];
   chevronSvg: SafeHtml = '';
   mode: 'exchange' | 'shipping' = 'exchange';
+  hasNewCards: boolean = false;
 
   selectedCardIds = new Set<string>();
 
@@ -113,8 +115,34 @@ export class UserCardHistoryPageComponent implements OnInit {
       console.error('Failed to load user cards:', error);
     } finally {
       this.isLoading = false;
+      this.checkForNewCards();
       this.cdr.markForCheck();
     }
+  }
+
+  private checkForNewCards(): void {
+    const unselectedCards = this.cards.filter(
+      (card) => card.status === CARD_HISTORY_TABS.UNSELECTED,
+    );
+    const seenCardIds = this.getSeenCardIds();
+    this.hasNewCards = unselectedCards.some(
+      (card) => !seenCardIds.includes(card.id),
+    );
+  }
+
+  private getSeenCardIds(): string[] {
+    const stored = localStorage.getItem('seenCardIds');
+    return stored ? JSON.parse(stored) : [];
+  }
+
+  private markCardsAsSeen(): void {
+    const unselectedCards = this.cards.filter(
+      (card) => card.status === CARD_HISTORY_TABS.UNSELECTED,
+    );
+    const cardIds = unselectedCards.map((card) => card.id);
+    const seenCardIds = this.getSeenCardIds();
+    const allSeenIds = Array.from(new Set([...seenCardIds, ...cardIds]));
+    localStorage.setItem('seenCardIds', JSON.stringify(allSeenIds));
   }
 
   goBack(): void {
@@ -127,8 +155,12 @@ export class UserCardHistoryPageComponent implements OnInit {
 
   get filteredCards(): UserCard[] {
     let filtered = this.cards.filter((card) => card.status === this.activeTab);
-    if (this.activeTab === CARD_HISTORY_TABS.UNSELECTED && this.mode === 'exchange') {
-      filtered = filtered.filter((card) => this.isExchangeable(card));
+    if (this.activeTab === CARD_HISTORY_TABS.UNSELECTED) {
+      if (this.mode === 'exchange') {
+        filtered = filtered.filter((card) => this.isExchangeable(card));
+      } else {
+        filtered = filtered.filter((card) => this.isShippable(card));
+      }
     }
     return filtered;
   }
@@ -151,6 +183,13 @@ export class UserCardHistoryPageComponent implements OnInit {
     );
   }
 
+  isShippable(card: UserCard): boolean {
+    return (
+      card.exchangeType === EXCHANGE_TYPE.BOTH ||
+      card.exchangeType === EXCHANGE_TYPE.SHIPPING_ONLY
+    );
+  }
+
   isSelectableForCurrentMode(card: UserCard): boolean {
     if (this.activeTab === CARD_HISTORY_TABS.SHIPPED) {
       return true;
@@ -159,6 +198,7 @@ export class UserCardHistoryPageComponent implements OnInit {
       return this.isExchangeable(card) && card.isDrawn !== CARD_STATUS.REFUNDED;
     } else {
       return (
+        this.isShippable(card) &&
         card.isDrawn !== CARD_STATUS.REFUNDED &&
         card.isDrawn !== CARD_STATUS.SHIPPING_PENDING
       );
@@ -196,6 +236,10 @@ export class UserCardHistoryPageComponent implements OnInit {
   switchMode(newMode: 'exchange' | 'shipping'): void {
     this.mode = newMode;
     this.selectedCardIds.clear();
+    if (newMode === 'shipping') {
+      this.markCardsAsSeen();
+      this.checkForNewCards();
+    }
   }
 
   get selectedTotalCoins(): number {
@@ -222,6 +266,8 @@ export class UserCardHistoryPageComponent implements OnInit {
   }
 
   async executeExchange(): Promise<void> {
+    this.isLoading = true;
+    this.cdr.detectChanges();
     try {
       const userId = this.userService.getUserId();
       if (!userId) {
@@ -252,13 +298,36 @@ export class UserCardHistoryPageComponent implements OnInit {
         (card) => !this.selectedCardIds.has(card.id),
       );
       this.selectedCardIds.clear();
+      this.checkForNewCards();
       this.cdr.markForCheck();
     } catch (error) {
       console.error('Failed to exchange cards:', error);
+    } finally {
+      this.isLoading = false;
+      this.cdr.markForCheck();
     }
   }
 
   async startShipping(): Promise<void> {
+    if (this.selectedCardIds.size === 0) {
+      return;
+    }
+
+    const dialogRef = this.dialog.open(ShippingConfirmDialogComponent, {
+      width: '500px',
+      data: {
+        cardCount: this.selectedCardIds.size,
+      },
+    });
+
+    const confirmed = await dialogRef.afterClosed().toPromise();
+
+    if (!confirmed) {
+      return;
+    }
+
+    this.isLoading = true;
+    this.cdr.detectChanges();
     try {
       const selectedCards = this.cards.filter((card) =>
         this.selectedCardIds.has(card.id),
@@ -274,45 +343,14 @@ export class UserCardHistoryPageComponent implements OnInit {
       }
 
       this.selectedCardIds.clear();
+      this.checkForNewCards();
       this.cdr.markForCheck();
     } catch (error) {
       console.error('Failed to start shipping:', error);
-    }
-  }
-
-  async confirmReceived(): Promise<void> {
-    if (this.selectedCardIds.size === 0) {
-      alert(this.translateService.instant('card-history.no-selection'));
-      return;
-    }
-
-    const confirmed = confirm(
-      this.translateService.instant('card-history.confirm-received-message'),
-    );
-
-    if (!confirmed) {
-      return;
-    }
-
-    try {
-      const selectedCardIds = Array.from(this.selectedCardIds);
-      for (const cardId of selectedCardIds) {
-        await this.cardService.deleteCard(cardId);
-      }
-
-      this.cards = this.cards.filter(
-        (card) => !this.selectedCardIds.has(card.id),
-      );
-      this.selectedCardIds.clear();
-      alert(
-        this.translateService.instant('card-history.confirm-received-success'),
-      );
+    } finally {
+      this.isLoading = false;
       this.cdr.markForCheck();
-    } catch (error) {
-      console.error('Failed to delete cards:', error);
-      alert(
-        this.translateService.instant('card-history.confirm-received-error'),
-      );
     }
   }
+
 }

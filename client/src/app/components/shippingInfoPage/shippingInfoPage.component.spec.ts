@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatDialog } from '@angular/material/dialog';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { of } from 'rxjs';
 import { ShippingInfoPageComponent } from './shippingInfoPage.component';
 import {
   ShippingInfoService,
@@ -55,6 +56,16 @@ describe('ShippingInfoPageComponent', () => {
           'shipping-info.complete-error': 'Failed to complete',
         };
         return translations[key] || key;
+      }),
+      get: jest.fn((key: string) => {
+        const translations: { [key: string]: string } = {
+          'shipping-info.error': 'Error loading cards',
+          'shipping-info.no-selection': 'Please select cards',
+          'shipping-info.complete-confirm': 'Are you sure?',
+          'shipping-info.complete-success': 'Completed successfully',
+          'shipping-info.complete-error': 'Failed to complete',
+        };
+        return of(translations[key] || key);
       }),
     } as unknown as jest.Mocked<TranslateService>;
 
@@ -265,7 +276,12 @@ describe('ShippingInfoPageComponent', () => {
     });
 
     it('should return early if user cancels confirmation', (done) => {
-      jest.spyOn(window, 'confirm').mockReturnValue(false);
+      const mockDialogRef = {
+        afterClosed: jest.fn().mockReturnValue({
+          toPromise: jest.fn().mockResolvedValue(false),
+        }),
+      };
+      mockDialog.open.mockReturnValue(mockDialogRef as any);
       component.shippingCards = mockShippingCards;
       component.selectedCardIds.add('1');
 
@@ -274,12 +290,18 @@ describe('ShippingInfoPageComponent', () => {
       setTimeout(() => {
         expect(mockCardService.updateCardStatus).not.toHaveBeenCalled();
         done();
-      }, 0);
+      }, 50);
     });
 
     it('should update card status to SHIPPED for selected cards', (done) => {
-      jest.spyOn(window, 'confirm').mockReturnValue(true);
       jest.spyOn(window, 'alert').mockImplementation();
+      mockShippingInfoService.getShippingCards.mockResolvedValue([]);
+      const mockDialogRef = {
+        afterClosed: jest.fn().mockReturnValue({
+          toPromise: jest.fn().mockResolvedValue(true),
+        }),
+      };
+      mockDialog.open.mockReturnValue(mockDialogRef as any);
       component.shippingCards = mockShippingCards;
       component.selectedCardIds.add('1');
       component.selectedCardIds.add('2');
@@ -300,8 +322,14 @@ describe('ShippingInfoPageComponent', () => {
     });
 
     it('should clear selected cards after successful update', (done) => {
-      jest.spyOn(window, 'confirm').mockReturnValue(true);
       jest.spyOn(window, 'alert').mockImplementation();
+      mockShippingInfoService.getShippingCards.mockResolvedValue([]);
+      const mockDialogRef = {
+        afterClosed: jest.fn().mockReturnValue({
+          toPromise: jest.fn().mockResolvedValue(true),
+        }),
+      };
+      mockDialog.open.mockReturnValue(mockDialogRef as any);
       component.shippingCards = mockShippingCards;
       component.selectedCardIds.add('1');
 
@@ -310,12 +338,18 @@ describe('ShippingInfoPageComponent', () => {
       setTimeout(() => {
         expect(component.selectedCardIds.size).toBe(0);
         done();
-      }, 0);
+      }, 50);
     });
 
     it('should reload shipping cards after successful update', (done) => {
-      jest.spyOn(window, 'confirm').mockReturnValue(true);
       jest.spyOn(window, 'alert').mockImplementation();
+      mockShippingInfoService.getShippingCards.mockResolvedValue([]);
+      const mockDialogRef = {
+        afterClosed: jest.fn().mockReturnValue({
+          toPromise: jest.fn().mockResolvedValue(true),
+        }),
+      };
+      mockDialog.open.mockReturnValue(mockDialogRef as any);
       component.shippingCards = mockShippingCards;
       component.selectedCardIds.add('1');
 
@@ -328,8 +362,14 @@ describe('ShippingInfoPageComponent', () => {
     });
 
     it('should show success alert after completing shipping', (done) => {
-      jest.spyOn(window, 'confirm').mockReturnValue(true);
       jest.spyOn(window, 'alert').mockImplementation();
+      mockShippingInfoService.getShippingCards.mockResolvedValue([]);
+      const mockDialogRef = {
+        afterClosed: jest.fn().mockReturnValue({
+          toPromise: jest.fn().mockResolvedValue(true),
+        }),
+      };
+      mockDialog.open.mockReturnValue(mockDialogRef as any);
       component.shippingCards = mockShippingCards;
       component.selectedCardIds.add('1');
 
@@ -338,12 +378,17 @@ describe('ShippingInfoPageComponent', () => {
       setTimeout(() => {
         expect(window.alert).toHaveBeenCalledWith('Completed successfully');
         done();
-      }, 0);
+      }, 50);
     });
 
     it('should show error alert when update fails', (done) => {
-      jest.spyOn(window, 'confirm').mockReturnValue(true);
       jest.spyOn(window, 'alert').mockImplementation();
+      const mockDialogRef = {
+        afterClosed: jest.fn().mockReturnValue({
+          toPromise: jest.fn().mockResolvedValue(true),
+        }),
+      };
+      mockDialog.open.mockReturnValue(mockDialogRef as any);
       mockCardService.updateCardStatus.mockRejectedValue(
         new Error('Update failed'),
       );
@@ -355,7 +400,7 @@ describe('ShippingInfoPageComponent', () => {
       setTimeout(() => {
         expect(window.alert).toHaveBeenCalledWith('Failed to complete');
         done();
-      }, 0);
+      }, 100);
     });
   });
 

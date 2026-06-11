@@ -1,6 +1,8 @@
 <div class="app">
   <app-header></app-header>
 
+  <app-loading-overlay [isLoading]="isLoading"></app-loading-overlay>
+
   <div class="page">
     <header class="page-header">
       <button type="button" class="back-btn" (click)="goBack()">
@@ -47,14 +49,17 @@
       >
         {{ "card-history.exchange-mode" | translate }}
       </button>
-      <button
-        type="button"
-        class="mode-btn"
-        [class.active]="mode === 'shipping'"
-        (click)="switchMode('shipping')"
-      >
-        {{ "card-history.shipping-mode" | translate }}
-      </button>
+      <div class="mode-btn-wrapper">
+        <span class="badge-small" *ngIf="hasNewCards"></span>
+        <button
+          type="button"
+          class="mode-btn"
+          [class.active]="mode === 'shipping'"
+          (click)="switchMode('shipping')"
+        >
+          {{ "card-history.shipping-mode" | translate }}
+        </button>
+      </div>
     </div>
 
     <div class="content">
@@ -72,7 +77,7 @@
       >
         <div
           class="select-all-section"
-          *ngIf="activeTab !== CARD_HISTORY_TABS.PENDING"
+          *ngIf="activeTab === CARD_HISTORY_TABS.UNSELECTED"
         >
           <input
             type="checkbox"
@@ -89,10 +94,7 @@
         <div class="card-list">
           <div class="card-item" *ngFor="let card of filteredCards">
             <div
-              *ngIf="
-                activeTab === CARD_HISTORY_TABS.UNSELECTED ||
-                activeTab === CARD_HISTORY_TABS.SHIPPED
-              "
+              *ngIf="activeTab === CARD_HISTORY_TABS.UNSELECTED"
               class="checkbox-wrapper"
               [class.disabled]="!isSelectableForCurrentMode(card)"
             >
@@ -128,6 +130,7 @@
             <div
               *ngIf="
                 activeTab === CARD_HISTORY_TABS.UNSELECTED &&
+                mode === 'exchange' &&
                 isExchangeable(card) &&
                 card.exchangeCoins &&
                 card.exchangeCoins > 0
@@ -179,16 +182,6 @@
           (click)="startShipping()"
         >
           {{ "card-history.shipping-button" | translate }}
-        </button>
-      </ng-container>
-      <ng-container *ngIf="activeTab === CARD_HISTORY_TABS.SHIPPED">
-        <button
-          type="button"
-          class="exchange-btn"
-          [disabled]="!hasSelectedCards"
-          (click)="confirmReceived()"
-        >
-          {{ "card-history.confirm-received" | translate }}
         </button>
       </ng-container>
     </div>

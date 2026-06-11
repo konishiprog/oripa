@@ -42,7 +42,10 @@ const validateCardPayload = (req: Request, res: Response): boolean => {
     return false;
   }
 
-  if (exchangeType === EXCHANGE_TYPE.BOTH) {
+  if (
+    exchangeType === EXCHANGE_TYPE.BOTH ||
+    exchangeType === EXCHANGE_TYPE.COIN_ONLY
+  ) {
     const coins = Number(exchangeCoins);
     if (!Number.isInteger(coins) || coins <= 0) {
       res.status(400).json({ error: messages.errors.CARD_FIELDS_REQUIRED });
@@ -75,7 +78,10 @@ const validateCardUpdatePayload = (req: Request, res: Response): boolean => {
     return false;
   }
 
-  if (exchangeType === EXCHANGE_TYPE.BOTH) {
+  if (
+    exchangeType === EXCHANGE_TYPE.BOTH ||
+    exchangeType === EXCHANGE_TYPE.COIN_ONLY
+  ) {
     const coins = Number(exchangeCoins);
     if (!Number.isInteger(coins) || coins <= 0) {
       res
@@ -157,7 +163,8 @@ module.exports = {
             cardType,
             exchangeType,
             exchangeCoins:
-              exchangeType === EXCHANGE_TYPE.BOTH
+              exchangeType === EXCHANGE_TYPE.BOTH ||
+              exchangeType === EXCHANGE_TYPE.COIN_ONLY
                 ? Number(exchangeCoins)
                 : null,
             effectId: effectId || null,
@@ -208,7 +215,8 @@ module.exports = {
             cardType,
             exchangeType,
             exchangeCoins:
-              exchangeType === EXCHANGE_TYPE.BOTH
+              exchangeType === EXCHANGE_TYPE.BOTH ||
+              exchangeType === EXCHANGE_TYPE.COIN_ONLY
                 ? Number(exchangeCoins)
                 : null,
             effectId: effectId || null,
@@ -295,7 +303,9 @@ module.exports = {
         const card = allCards.find((foundCard: any) => foundCard.id === id);
 
         if (!card) {
-          return res.status(404).json({ error: messages.errors.CARD_NOT_FOUND });
+          return res
+            .status(404)
+            .json({ error: messages.errors.CARD_NOT_FOUND });
         }
 
         const cardOwner = await user?.getById(card.userId);

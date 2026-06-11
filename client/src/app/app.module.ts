@@ -50,18 +50,21 @@ import { UserLoginDialogComponent } from './components/userLoginDialog/userLogin
 import { AppLogoComponent } from './components/common/appLogo/appLogo.component';
 import { AppHeaderComponent } from './components/common/appHeader.component';
 import { TableControlsComponent } from './components/common/tableControls/tableControls.component';
+import { LoadingOverlayComponent } from './components/common/loadingOverlay/loadingOverlay.component';
 import { GachaBoxComponent } from './components/gachaBox/gachaBox.component';
 import { GachaDrawResultDialogComponent } from './components/gachaDrawResultDialog/gachaDrawResultDialog.component';
 import { GachaWinnersDialogComponent } from './components/gachaWinnersDialog/gachaWinnersDialog.component';
 import { CoinExchangeDialogComponent } from './components/coinExchangeDialog/coinExchangeDialog.component';
 import { ShippingInfoPageComponent } from './components/shippingInfoPage/shippingInfoPage.component';
 import { ShippingCardDetailDialogComponent } from './components/shippingCardDetailDialog/shippingCardDetailDialog.component';
+import { ShippingConfirmDialogComponent } from './components/shippingConfirmDialog/shippingConfirmDialog.component';
 import { CoinExchangeRateManagementComponent } from './components/coinExchangeRateManagement/coinExchangeRateManagement.component';
 import { CoinExchangeRateDialogComponent } from './components/coinExchangeRateDialog/coinExchangeRateDialog.component';
 import { CoinChargePageComponent } from './components/coinChargePage/coinChargePage.component';
 import { CoinPurchaseHistoryPageComponent } from './components/coinPurchaseHistoryPage/coinPurchaseHistoryPage.component';
 import { CoinPurchaseHistoryFilterDialogComponent } from './components/coinPurchaseHistoryFilterDialog/coinPurchaseHistoryFilterDialog.component';
 import { CardTableFilterDialogComponent } from './components/cardTableFilterDialog/cardTableFilterDialog.component';
+import { ChargeResultPageComponent } from './components/chargeResultPage/chargeResultPage.component';
 import { ForgotPasswordComponent } from './components/forgotPassword/forgot-password.component';
 import { TermsOfServiceComponent } from './components/termsOfService/termsOfService.component';
 import { PrivacyPolicyComponent } from './components/privacyPolicy/privacyPolicy.component';
@@ -110,18 +113,21 @@ import { GachaDrawButtonsComponent } from './common/gachaDrawButtons/gachaDrawBu
     AppLogoComponent,
     AppHeaderComponent,
     TableControlsComponent,
+    LoadingOverlayComponent,
     GachaBoxComponent,
     GachaDrawResultDialogComponent,
     GachaWinnersDialogComponent,
     CoinExchangeDialogComponent,
     ShippingInfoPageComponent,
     ShippingCardDetailDialogComponent,
+    ShippingConfirmDialogComponent,
     CoinExchangeRateManagementComponent,
     CoinExchangeRateDialogComponent,
     CoinChargePageComponent,
     CoinPurchaseHistoryPageComponent,
     CoinPurchaseHistoryFilterDialogComponent,
     CardTableFilterDialogComponent,
+    ChargeResultPageComponent,
     ForgotPasswordComponent,
     TermsOfServiceComponent,
     PrivacyPolicyComponent,

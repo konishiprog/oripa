@@ -299,6 +299,7 @@
     "draw-all": "残り全て",
     "login-required": "ログインすると引けます",
     "out-of-stock": "在庫なし",
+    "sold-out": "SOLD OUT",
     "expired": "このガチャは終了しました。",
     "winners-button": "当選者リスト",
     "draw-success": "{{count}}枚引きました！",
@@ -351,13 +352,17 @@
     "back-alt": "カード裏面",
     "reveal": "めくる",
     "reveal-all": "全部めくる",
-    "skip-effect": "今回のみスキップ",
+    "skip-effect": "スキップ",
     "next": "次へ",
     "finish": "結果を見る",
     "close": "閉じる",
     "close-icon": "×",
     "close-aria-label": "閉じる",
-    "exchange-guide": "マイページ > カード獲得履歴からコイン交換またはカード発送手続きができます"
+    "exchange-guide": "マイページ > カード獲得履歴からコイン交換またはカード発送手続きができます",
+    "exchanging": "交換中...",
+    "exchange-total": "{{coins}}コイン獲得",
+    "exchange-error": "コイン交換に失敗しました",
+    "select-card": "カードを選択"
   },
 
   "user-gacha": {
@@ -530,11 +535,7 @@
     "exchange-button": "コインに交換する（{{coins}}コイン）",
     "exchange-confirm": "選択したカードを {{coins}} コインに変換しますか？",
     "shipping-button": "発送開始",
-    "confirm-received": "中身を確認しました",
     "no-selection": "カードを選択してください",
-    "confirm-received-message": "選択したカードをリストから削除しますか？",
-    "confirm-received-success": "カードを削除しました",
-    "confirm-received-error": "カード削除に失敗しました",
     "select-all": "すべて選択",
     "select-all-clear": "すべて選択解除"
   },

@@ -1,10 +1,15 @@
 <div
   class="box-card"
-  [class.box-card--expired]="isExpired"
-  (click)="!isExpired && navigateToDetail()"
+  [class.box-card--unavailable]="isUnavailable"
+  (click)="!isUnavailable && navigateToDetail()"
 >
   <div class="box-thumb">
     <img [src]="gacha.headerImage" [alt]="gacha.name" class="box-image" />
+    <div class="box-overlay" *ngIf="isUnavailable">
+      <span class="box-overlay-text">{{
+        "gacha-box.sold-out" | translate
+      }}</span>
+    </div>
   </div>
   <div class="box-info">
     <div class="box-name">{{ gacha.name }}</div>
@@ -14,26 +19,20 @@
       </span>
     </div>
     <div class="box-meta">
-      <span
-        class="box-price"
-        [ngClass]="{ 'box-price-ticket': usesTicket }"
-      >
+      <span class="box-price" [ngClass]="{ 'box-price-ticket': usesTicket }">
         {{ formatPrice(gacha.cost) }}
       </span>
     </div>
     <app-gacha-draw-buttons
-      *ngIf="!isExpired"
+      *ngIf="!isUnavailable"
       [gacha]="gacha"
       [isLoggedIn]="isLoggedIn"
       [isDrawing]="isDrawing"
       variant="compact"
       (drawRequested)="draw($event)"
     ></app-gacha-draw-buttons>
-    <div *ngIf="isExpired" class="expired-notice">
-      {{ "gacha-box.expired" | translate }}
-    </div>
     <button
-      *ngIf="isExpired"
+      *ngIf="isUnavailable"
       type="button"
       class="winners-btn"
       (click)="$event.stopPropagation(); openWinnersDialog()"

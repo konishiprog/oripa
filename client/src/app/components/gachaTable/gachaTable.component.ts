@@ -104,6 +104,7 @@ export class GachaTableComponent implements OnInit, OnChanges {
   currentPage: number = 1;
   itemsPerPage: number = 20;
   filterCriteria: GachaFilterCriteria = { ...DEFAULT_GACHA_FILTER_CRITERIA };
+  isLoading: boolean = false;
 
   constructor(
     private cdr: ChangeDetectorRef,
@@ -328,6 +329,7 @@ export class GachaTableComponent implements OnInit, OnChanges {
       return;
     }
 
+    this.isLoading = true;
     try {
       await this.gachaService.deleteGacha(gacha.id);
       this.gachas = this.gachas.filter((target) => target.id !== gacha.id);
@@ -337,6 +339,8 @@ export class GachaTableComponent implements OnInit, OnChanges {
     } catch (error) {
       console.error('Failed to delete gacha:', error);
       alert(this.translateService.instant('dashboard.delete-error'));
+    } finally {
+      this.isLoading = false;
     }
   }
 }

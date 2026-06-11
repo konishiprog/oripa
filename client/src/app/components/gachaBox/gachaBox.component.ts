@@ -53,10 +53,16 @@ export class GachaBoxComponent {
     return new Date() > new Date(this.gacha.publishEnd);
   }
 
+  get isSoldOut(): boolean {
+    return this.gacha.remainingCount === 0;
+  }
+
+  get isUnavailable(): boolean {
+    return this.isExpired || this.isSoldOut;
+  }
+
   formatPrice(cost: number): string {
-    const unitKey = this.usesTicket
-      ? 'common.unit.ticket'
-      : 'common.unit.coin';
+    const unitKey = this.usesTicket ? 'common.unit.ticket' : 'common.unit.coin';
     const unit = this.translateService.instant(unitKey);
     return `${cost.toLocaleString()}${unit}`;
   }
