@@ -312,23 +312,6 @@ module.exports = {
 
         await runtime.card.update(id, { isDrawn });
 
-        if (cardOwner?.email) {
-          if (isDrawn === CARD_STATUS.SHIPPING_PENDING) {
-            const allAdmins = await admin.getAll();
-            const adminEmails = allAdmins.map((a: any) => a.email);
-            if (adminEmails.length > 0) {
-              await email.sendAdminCardShippingRequestEmail(
-                adminEmails,
-                cardOwner.name,
-                card.name,
-                card.gachaName,
-                cardOwner.address,
-                cardOwner.phone,
-              );
-            }
-          }
-        }
-
         if (card) {
           await gacha.refreshGachaCards(card.gachaId);
         }
