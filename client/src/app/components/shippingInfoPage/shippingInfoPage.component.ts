@@ -136,6 +136,7 @@ export class ShippingInfoPageComponent implements OnInit {
     }
 
     this.isLoading = true;
+    this.cdr.detectChanges();
     try {
       for (const cardId of this.selectedCardIds) {
         await this.cardService.updateCardStatus(cardId, CARD_STATUS.SHIPPED);

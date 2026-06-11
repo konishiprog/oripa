@@ -19,8 +19,11 @@
           </button>
         </div>
         <div class="user-ticket-display">
-          +{{ userTicket || 0
-          }}{{ "common.unit.ticket" | translate }}
+          <span class="user-ticket-icon" [innerHTML]="ticketIcon"></span>
+          <span class="user-ticket-amount">
+            +{{ userTicket || 0
+            }}{{ "common.unit.ticket" | translate }}
+          </span>
         </div>
       </div>
       <button

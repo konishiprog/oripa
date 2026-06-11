@@ -26,6 +26,7 @@ export class AppHeaderComponent implements OnInit {
   closeIcon: SafeHtml = '';
   myPageIcon: SafeHtml = '';
   coinIcon: SafeHtml = '';
+  ticketIcon: SafeHtml = '';
 
   constructor(
     private userService: UserService,
@@ -102,6 +103,17 @@ export class AppHeaderComponent implements OnInit {
         },
         error: (error) => {
           console.error('Failed to load coin icon:', error);
+        },
+      });
+
+    this.http
+      .get('assets/icons/ticket.svg', { responseType: 'text' })
+      .subscribe({
+        next: (svg) => {
+          this.ticketIcon = this.sanitizer.bypassSecurityTrustHtml(svg);
+        },
+        error: (error) => {
+          console.error('Failed to load ticket icon:', error);
         },
       });
   }

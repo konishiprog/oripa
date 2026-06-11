@@ -530,11 +530,7 @@
     "exchange-button": "コインに交換する（{{coins}}コイン）",
     "exchange-confirm": "選択したカードを {{coins}} コインに変換しますか？",
     "shipping-button": "発送開始",
-    "confirm-received": "中身を確認しました",
     "no-selection": "カードを選択してください",
-    "confirm-received-message": "選択したカードをリストから削除しますか？",
-    "confirm-received-success": "カードを削除しました",
-    "confirm-received-error": "カード削除に失敗しました",
     "select-all": "すべて選択",
     "select-all-clear": "すべて選択解除"
   },

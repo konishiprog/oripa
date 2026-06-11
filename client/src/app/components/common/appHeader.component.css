@@ -134,11 +134,32 @@
 }
 
 .user-ticket-display {
+  display: flex;
+  align-items: center;
+  gap: 6px;
   font-size: 14px;
   font-weight: 700;
   color: #d69e2e;
   padding: 8px 12px;
   border-radius: 8px;
+}
+
+.user-ticket-icon {
+  display: flex;
+  align-items: center;
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+  color: #d69e2e;
+}
+
+.user-ticket-icon svg {
+  width: 100%;
+  height: 100%;
+}
+
+.user-ticket-amount {
+  color: #d69e2e;
 }
 
 .user-coin-group {
