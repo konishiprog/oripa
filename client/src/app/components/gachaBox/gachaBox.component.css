@@ -12,7 +12,7 @@
   cursor: pointer;
 }
 
-.box-card.box-card--expired {
+.box-card.box-card--unavailable {
   cursor: default;
 }
 
@@ -21,20 +21,13 @@
   box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
 }
 
-.box-card--expired {
+.box-card--unavailable {
   cursor: default;
 }
 
-.box-card--expired:hover {
+.box-card--unavailable:hover {
   transform: none;
   box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
-}
-
-.box-card--expired .box-thumb,
-.box-card--expired .box-name,
-.box-card--expired .box-badges,
-.box-card--expired .box-meta {
-  opacity: 0.5;
 }
 
 .box-thumb {
@@ -52,6 +45,23 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
+}
+
+.box-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.box-overlay-text {
+  font-size: 36px;
+  font-weight: 900;
+  color: #fff;
+  text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.5);
+  letter-spacing: 2px;
 }
 
 .box-info {

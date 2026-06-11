@@ -79,6 +79,8 @@ export class GachaDrawService {
       const cardsForDialog = drawnCards.map((card: any) => ({
         ...card,
         effectUrl: undefined,
+        exchangeType: card.exchangeType,
+        exchangeCoins: card.exchangeCoins,
       }));
       dialogRef = this.dialog.open(GachaDrawResultDialogComponent, {
         width: '520px',
