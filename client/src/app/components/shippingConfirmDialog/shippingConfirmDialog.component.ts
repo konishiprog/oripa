@@ -4,7 +4,9 @@ import { ShippingCardInfo } from '../../service/shipping-info.service';
 import { ShipmentPayload } from '../../service/card.service';
 
 export interface ShippingConfirmDialogData {
-  cards: ShippingCardInfo[];
+  cards?: ShippingCardInfo[];
+  cardCount?: number;
+  isFromAdmin?: boolean;
 }
 
 interface DialogTableHeader {
@@ -32,12 +34,14 @@ export class ShippingConfirmDialogComponent {
   cards: ShippingCardInfo[];
   tableHeaders = DIALOG_TABLE_HEADERS;
   trackingByDestination: { [destinationKey: string]: string } = {};
+  isFromAdmin: boolean = false;
 
   constructor(
     public dialogRef: MatDialogRef<ShippingConfirmDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: ShippingConfirmDialogData,
   ) {
-    this.cards = data.cards;
+    this.cards = data?.cards || [];
+    this.isFromAdmin = data?.isFromAdmin ?? data?.cards !== undefined;
     this.cards.forEach((card) => {
       const destinationKey = this.getDestinationKey(card);
       if (this.trackingByDestination[destinationKey] === undefined) {

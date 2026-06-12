@@ -11,12 +11,15 @@ export interface User {
   id: string;
   email: string;
   password: string;
-  name: string;
+  firstName: string;
+  lastName: string;
   nickname: string;
   coin: number;
-  address: string;
-  phone: string;
   postalCode: string;
+  prefecture: string;
+  address: string;
+  buildingName: string;
+  phone: string;
 }
 
 interface TableHeader {
@@ -36,10 +39,13 @@ const USER_TABLE_HEADERS: TableHeader[] = [
   { key: 'email', labelKey: 'user-management.table.email' },
   { key: 'password', labelKey: 'user-management.table.password' },
   { key: 'nickname', labelKey: 'user-management.table.nickname' },
-  { key: 'name', labelKey: 'user-management.table.name' },
+  { key: 'lastName', labelKey: 'user-management.table.last-name' },
+  { key: 'firstName', labelKey: 'user-management.table.first-name' },
   { key: 'coin', labelKey: 'user-management.table.coin' },
   { key: 'postalCode', labelKey: 'user-management.table.postal-code' },
+  { key: 'prefecture', labelKey: 'user-management.table.prefecture' },
   { key: 'address', labelKey: 'user-management.table.address' },
+  { key: 'buildingName', labelKey: 'user-management.table.building-name' },
   { key: 'phone', labelKey: 'user-management.table.phone' },
 ];
 
@@ -47,10 +53,13 @@ const USER_TABLE_CELLS: TableCell[] = [
   { key: 'email', dataKey: 'email' },
   { key: 'password', dataKey: 'password', masked: true },
   { key: 'nickname', dataKey: 'nickname' },
-  { key: 'name', dataKey: 'name' },
+  { key: 'lastName', dataKey: 'lastName' },
+  { key: 'firstName', dataKey: 'firstName' },
   { key: 'coin', dataKey: 'coin' },
   { key: 'postalCode', dataKey: 'postalCode', masked: true },
+  { key: 'prefecture', dataKey: 'prefecture', masked: true },
   { key: 'address', dataKey: 'address', masked: true },
+  { key: 'buildingName', dataKey: 'buildingName', masked: true },
   { key: 'phone', dataKey: 'phone', masked: true },
 ];
 
@@ -95,12 +104,15 @@ export class UserManagementComponent implements OnInit {
         id: user.id,
         email: user.email ?? '',
         password: user.password ?? '',
-        name: user.name ?? '',
+        firstName: user.firstName ?? '',
+        lastName: user.lastName ?? '',
         nickname: user.nickname ?? '',
         coin: user.coin ?? 0,
-        address: user.address ?? '',
-        phone: user.phone ?? '',
         postalCode: user.postalCode ?? '',
+        prefecture: user.prefecture ?? '',
+        address: user.address ?? '',
+        buildingName: user.buildingName ?? '',
+        phone: user.phone ?? '',
       }));
       this.applyFilters();
     } catch (error) {
@@ -126,7 +138,8 @@ export class UserManagementComponent implements OnInit {
       ? this.users.filter(
           (user) =>
             user.phone.toLowerCase().includes(query) ||
-            user.name.toLowerCase().includes(query) ||
+            user.lastName.toLowerCase().includes(query) ||
+            user.firstName.toLowerCase().includes(query) ||
             user.nickname.toLowerCase().includes(query) ||
             user.address.toLowerCase().includes(query),
         )
@@ -178,11 +191,14 @@ export class UserManagementComponent implements OnInit {
       await this.userService.updateUser(updatedUser.id, {
         email: updatedUser.email,
         password: updatedUser.password,
-        name: updatedUser.name,
+        firstName: updatedUser.firstName,
+        lastName: updatedUser.lastName,
         nickname: updatedUser.nickname,
-        address: updatedUser.address,
-        phone: updatedUser.phone,
         postalCode: updatedUser.postalCode,
+        prefecture: updatedUser.prefecture,
+        address: updatedUser.address,
+        buildingName: updatedUser.buildingName,
+        phone: updatedUser.phone,
         coin: updatedUser.coin,
       });
       const index = this.users.findIndex((u) => u.id === updatedUser.id);

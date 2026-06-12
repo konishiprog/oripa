@@ -43,16 +43,34 @@
         </div>
       </div>
 
-      <div class="form-group">
-        <label for="name">{{ "user-signup.name" | translate }}</label>
-        <input
-          id="name"
-          type="text"
-          [(ngModel)]="name"
-          name="name"
-          required
-          [disabled]="isLoading"
-        />
+      <div class="form-group-row">
+        <div class="form-group">
+          <label for="lastName">{{
+            "user-signup.last-name" | translate
+          }}</label>
+          <input
+            id="lastName"
+            type="text"
+            [(ngModel)]="lastName"
+            name="lastName"
+            required
+            [disabled]="isLoading"
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="firstName">{{
+            "user-signup.first-name" | translate
+          }}</label>
+          <input
+            id="firstName"
+            type="text"
+            [(ngModel)]="firstName"
+            name="firstName"
+            required
+            [disabled]="isLoading"
+          />
+        </div>
       </div>
 
       <div class="form-group">
@@ -99,6 +117,20 @@
       </div>
 
       <div class="form-group">
+        <label for="prefecture">{{
+          "user-signup.prefecture" | translate
+        }}</label>
+        <input
+          id="prefecture"
+          type="text"
+          [(ngModel)]="prefecture"
+          name="prefecture"
+          required
+          [disabled]="isLoading"
+        />
+      </div>
+
+      <div class="form-group">
         <label for="address">{{ "user-signup.address" | translate }}</label>
         <input
           id="address"
@@ -106,6 +138,20 @@
           [(ngModel)]="address"
           name="address"
           required
+          [disabled]="isLoading"
+        />
+      </div>
+
+      <div class="form-group">
+        <label for="buildingName">{{
+          "user-signup.building-name" | translate
+        }}</label>
+        <input
+          id="buildingName"
+          type="text"
+          [(ngModel)]="buildingName"
+          name="buildingName"
+          [placeholder]="'user-signup.building-name-placeholder' | translate"
           [disabled]="isLoading"
         />
       </div>

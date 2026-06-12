@@ -48,8 +48,13 @@ export class ShippingInfoService {
       return {
         cardId: card.id,
         userId: card.userId,
-        userName: user?.name || DEFAULT_UNAVAILABLE_TEXT,
-        address: user?.address || DEFAULT_UNAVAILABLE_TEXT,
+        userName: user
+          ? `${user.lastName || ''} ${user.firstName || ''}`.trim()
+          : DEFAULT_UNAVAILABLE_TEXT,
+        address:
+          user && (user.prefecture || user.address || user.buildingName)
+            ? `${user.prefecture || ''}${user.address || ''}${user.buildingName ? ' ' + user.buildingName : ''}`.trim()
+            : DEFAULT_UNAVAILABLE_TEXT,
         phone: user?.phone || DEFAULT_UNAVAILABLE_TEXT,
         gachaName: gacha?.name || DEFAULT_UNAVAILABLE_TEXT,
         cardName: card.name || DEFAULT_UNAVAILABLE_TEXT,

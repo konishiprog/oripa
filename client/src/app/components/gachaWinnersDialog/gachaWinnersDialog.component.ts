@@ -76,7 +76,10 @@ export class GachaWinnersDialogComponent implements OnInit {
       const users = await this.userService.getAllUsers();
       const nicknameByUserId = new Map<string, string>();
       users.forEach((user) => {
-        nicknameByUserId.set(user.id, user.nickname || user.name);
+        nicknameByUserId.set(
+          user.id,
+          user.nickname || `${user.firstName} ${user.lastName}`.trim(),
+        );
       });
 
       this.ssrWinners = this.buildWinners(cards, 'SSR', nicknameByUserId);

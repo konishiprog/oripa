@@ -2,6 +2,7 @@ import { Component, ChangeDetectorRef, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { UserService } from '../../service/user.service';
+import { PREFECTURES } from '../../constants/prefectures';
 
 @Component({
   selector: 'app-user-signup',
@@ -15,11 +16,14 @@ import { UserService } from '../../service/user.service';
 export class UserSignupComponent implements OnInit {
   email: string = '';
   password: string = '';
-  name: string = '';
+  firstName: string = '';
+  lastName: string = '';
   nickname: string = '';
-  address: string = '';
-  phone: string = '';
   postalCode: string = '';
+  prefecture: string = '';
+  address: string = '';
+  buildingName: string = '';
+  phone: string = '';
   successMessage: string = '';
   errorMessage: string = '';
   isLoading: boolean = false;
@@ -43,7 +47,9 @@ export class UserSignupComponent implements OnInit {
     if (
       !this.email ||
       !this.password ||
-      !this.name ||
+      !this.firstName ||
+      !this.lastName ||
+      !this.prefecture ||
       !this.address ||
       !this.phone ||
       !this.postalCode
@@ -75,11 +81,14 @@ export class UserSignupComponent implements OnInit {
       await this.userService.createUser({
         email: this.email,
         password: this.password,
-        name: this.name,
+        firstName: this.firstName,
+        lastName: this.lastName,
         nickname: this.nickname,
-        address: this.address,
-        phone: this.phone,
         postalCode: this.postalCode,
+        prefecture: this.prefecture,
+        address: this.address,
+        buildingName: this.buildingName,
+        phone: this.phone,
       });
       this.router.navigate(['/signup-email-sent']);
     } catch (error: any) {
@@ -142,7 +151,10 @@ export class UserSignupComponent implements OnInit {
         this.postalCode,
       );
       if (result) {
-        this.address = result.address;
+        const fullAddress = result.address;
+        const { prefecture, restAddress } = this.parseAddress(fullAddress);
+        this.prefecture = prefecture;
+        this.address = restAddress;
         this.successMessage = this.translateService.instant(
           'user-signup.success-address-lookup',
         );
@@ -166,5 +178,20 @@ export class UserSignupComponent implements OnInit {
       value = value.slice(0, 3) + '-' + value.slice(3);
     }
     this.postalCode = value;
+  }
+
+  private parseAddress(fullAddress: string): { prefecture: string; restAddress: string } {
+    for (const pref of PREFECTURES) {
+      if (fullAddress.startsWith(pref)) {
+        return {
+          prefecture: pref,
+          restAddress: fullAddress.slice(pref.length)
+        };
+      }
+    }
+    return {
+      prefecture: fullAddress,
+      restAddress: ''
+    };
   }
 }

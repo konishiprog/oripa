@@ -45,17 +45,19 @@ describe('ShippingInfoService', () => {
   const mockUsers = [
     {
       id: 'user-1',
-      name: 'John Doe',
+      firstName: 'John',
+      lastName: 'Doe',
       address: '123 Main St',
       phone: '555-0001',
     },
     {
       id: 'user-2',
-      name: 'Jane Smith',
+      firstName: 'Jane',
+      lastName: 'Smith',
       address: '456 Oak Ave',
       phone: '555-0002',
     },
-    { id: 'user-3', name: 'Bob Johnson', address: null, phone: null },
+    { id: 'user-3', firstName: 'Bob', lastName: 'Johnson', address: null, phone: null },
   ];
 
   const mockGachas = [
@@ -107,7 +109,7 @@ describe('ShippingInfoService', () => {
       expect(result[0]).toEqual({
         cardId: 'card-1',
         userId: 'user-1',
-        userName: 'John Doe',
+        userName: 'Doe John',
         address: '123 Main St',
         phone: '555-0001',
         gachaName: 'Fantasy Box',
@@ -132,7 +134,7 @@ describe('ShippingInfoService', () => {
       const result = await service.getShippingCards();
 
       const bobCard = result.find((card) => card.cardName === 'Card 4');
-      expect(bobCard?.userName).toBe('Bob Johnson');
+      expect(bobCard?.userName).toBe('Johnson Bob');
       expect(bobCard?.address).toBe('-');
       expect(bobCard?.phone).toBe('-');
     });
@@ -253,7 +255,7 @@ describe('ShippingInfoService', () => {
       expect(card2).toEqual({
         cardId: 'card-2',
         userId: 'user-2',
-        userName: 'Jane Smith',
+        userName: 'Smith Jane',
         address: '456 Oak Ave',
         phone: '555-0002',
         gachaName: 'Fantasy Box',
@@ -266,7 +268,7 @@ describe('ShippingInfoService', () => {
       expect(card4).toEqual({
         cardId: 'card-4',
         userId: 'user-3',
-        userName: 'Bob Johnson',
+        userName: 'Johnson Bob',
         address: '-',
         phone: '-',
         gachaName: 'Fantasy Box',

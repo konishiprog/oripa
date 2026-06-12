@@ -20,34 +20,43 @@ describe('UserManagementComponent', () => {
       id: 'user-uuid-1',
       email: 'user1@example.com',
       password: 'password123',
-      name: 'User One',
+      firstName: 'User',
+      lastName: 'One',
       nickname: 'Nick One',
       coin: 1000,
-      address: '123 Main St',
-      phone: '09012345678',
       postalCode: '100-0001',
+      prefecture: 'Tokyo',
+      address: '123 Main St',
+      buildingName: 'Tower A',
+      phone: '09012345678',
     },
     {
       id: 'user-uuid-2',
       email: 'user2@example.com',
       password: 'password456',
-      name: 'User Two',
+      firstName: 'User',
+      lastName: 'Two',
       nickname: 'Nick Two',
       coin: 2000,
-      address: '456 Oak Ave',
-      phone: '09087654321',
       postalCode: '200-0002',
+      prefecture: 'Osaka',
+      address: '456 Oak Ave',
+      buildingName: 'Tower B',
+      phone: '09087654321',
     },
     {
       id: 'user-uuid-3',
       email: 'user3@example.com',
       password: 'password789',
-      name: 'User Three',
+      firstName: 'User',
+      lastName: 'Three',
       nickname: 'Nick Three',
       coin: 3000,
-      address: '789 Pine Rd',
-      phone: '09011223344',
       postalCode: '300-0003',
+      prefecture: 'Kyoto',
+      address: '789 Pine Rd',
+      buildingName: 'Tower C',
+      phone: '09011223344',
     },
   ];
 
@@ -121,12 +130,12 @@ describe('UserManagementComponent', () => {
       await component.loadUsers();
     });
 
-    it('should filter users by name', () => {
-      component.searchQuery = 'User Two';
+    it('should filter users by last name', () => {
+      component.searchQuery = 'Two';
       component.applyFilters();
 
       expect(component.filteredUsers.length).toBe(1);
-      expect(component.filteredUsers[0].name).toBe('User Two');
+      expect(component.filteredUsers[0].lastName).toBe('Two');
     });
 
     it('should filter users by phone', () => {
@@ -234,7 +243,11 @@ describe('UserManagementComponent', () => {
     });
 
     it('should update user after edit', (done) => {
-      const updatedUser = { ...mockUsers[0], name: 'Updated User' };
+      const updatedUser = {
+        ...mockUsers[0],
+        firstName: 'Updated',
+        lastName: 'User',
+      };
       jest.spyOn(matDialog, 'open').mockReturnValue({
         afterClosed: () => of({ mode: 'edit', data: updatedUser }),
       } as any);
@@ -245,7 +258,8 @@ describe('UserManagementComponent', () => {
         expect(userService.updateUser).toHaveBeenCalledWith(
           updatedUser.id,
           expect.objectContaining({
-            name: 'Updated User',
+            firstName: 'Updated',
+            lastName: 'User',
           }),
         );
         done();

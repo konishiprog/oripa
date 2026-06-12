@@ -39,6 +39,23 @@
   </div>
 
   <div *ngIf="filteredCards.length > 0" class="table-card">
+    <div class="table-header-buttons" *ngIf="activeTab === 'pending'">
+      <button
+        class="csv-download-btn"
+        (click)="downloadCSVFile()"
+        [disabled]="isLoading"
+      >
+        {{ "shipping-info.csv-download-button" | translate }}
+      </button>
+      <button
+        class="complete-btn"
+        (click)="completeShipping()"
+        [disabled]="selectedCardIds.size === 0 || isLoading"
+      >
+        {{ "shipping-info.complete-button" | translate }}
+      </button>
+    </div>
+
     <div class="table-scroll">
       <table>
         <thead>
@@ -60,7 +77,11 @@
         </thead>
         <tbody>
           <tr *ngFor="let card of filteredCards" class="clickable-row">
-            <td class="checkbox-column" *ngIf="activeTab === 'pending'" (click)="$event.stopPropagation()">
+            <td
+              class="checkbox-column"
+              *ngIf="activeTab === 'pending'"
+              (click)="$event.stopPropagation()"
+            >
               <input
                 type="checkbox"
                 [checked]="isCardSelected(card.cardId)"
@@ -76,19 +97,6 @@
           </tr>
         </tbody>
       </table>
-    </div>
-
-    <div
-      class="table-footer"
-      *ngIf="filteredCards.length > 0 && activeTab === 'pending'"
-    >
-      <button
-        class="complete-btn"
-        (click)="completeShipping()"
-        [disabled]="selectedCardIds.size === 0 || isLoading"
-      >
-        {{ "shipping-info.complete-button" | translate }}
-      </button>
     </div>
   </div>
 
