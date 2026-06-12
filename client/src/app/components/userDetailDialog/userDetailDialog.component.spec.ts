@@ -17,12 +17,15 @@ describe('UserDetailDialogComponent', () => {
     id: 'user-uuid-1',
     email: 'user@example.com',
     password: 'password123',
-    name: 'Test User',
+    firstName: 'Test',
+    lastName: 'User',
     nickname: 'Tester',
     coin: 1000,
-    address: '123 Main St',
-    phone: '09012345678',
     postalCode: '123-4567',
+    prefecture: 'Tokyo',
+    address: '123 Main St',
+    buildingName: 'Tower A',
+    phone: '09012345678',
   };
 
   beforeEach(async () => {
@@ -83,7 +86,8 @@ describe('UserDetailDialogComponent', () => {
 
     it('should copy user data', () => {
       expect(component.user.email).toBe('user@example.com');
-      expect(component.user.name).toBe('Test User');
+      expect(component.user.firstName).toBe('Test');
+      expect(component.user.lastName).toBe('User');
     });
   });
 
@@ -124,7 +128,8 @@ describe('UserDetailDialogComponent', () => {
     it('should close dialog with edited data on valid submission', () => {
       component.user = {
         ...mockUser,
-        name: 'Updated User',
+        firstName: 'Updated',
+        lastName: 'User',
       };
       jest.spyOn(component as any, 'isValidForm').mockReturnValue(true);
 
@@ -133,7 +138,8 @@ describe('UserDetailDialogComponent', () => {
       expect(dialogRef.close).toHaveBeenCalledWith({
         mode: 'edit',
         data: expect.objectContaining({
-          name: 'Updated User',
+          firstName: 'Updated',
+          lastName: 'User',
         }),
       });
     });
@@ -164,8 +170,15 @@ describe('UserDetailDialogComponent', () => {
       expect(result).toBe(false);
     });
 
-    it('should return false when name is empty', () => {
-      component.user.name = '';
+    it('should return false when firstName is empty', () => {
+      component.user.firstName = '';
+      const result = (component as any).isValidForm();
+
+      expect(result).toBe(false);
+    });
+
+    it('should return false when lastName is empty', () => {
+      component.user.lastName = '';
       const result = (component as any).isValidForm();
 
       expect(result).toBe(false);
@@ -179,7 +192,8 @@ describe('UserDetailDialogComponent', () => {
 
       const compiled = fixture.nativeElement;
       expect(compiled.textContent).toContain('user@example.com');
-      expect(compiled.textContent).toContain('Test User');
+      expect(compiled.textContent).toContain('Test');
+      expect(compiled.textContent).toContain('User');
       expect(compiled.textContent).toContain('1000');
     });
 

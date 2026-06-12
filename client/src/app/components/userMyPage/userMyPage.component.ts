@@ -14,6 +14,7 @@ import {
   CoinPurchaseHistoryService,
   CoinPurchaseHistoryItem,
 } from '../../service/coin-purchase-history.service';
+import { PREFECTURES } from '../../constants/prefectures';
 
 export type MyPageSection =
   | 'address'
@@ -41,7 +42,9 @@ export class UserMyPageComponent implements OnInit {
   user: User | null = null;
   purchaseHistories: CoinPurchaseHistoryItem[] = [];
 
+  prefectureInput: string = '';
   addressInput: string = '';
+  buildingNameInput: string = '';
   emailInput: string = '';
   phoneInput: string = '';
   postalCodeInput: string = '';
@@ -94,7 +97,9 @@ export class UserMyPageComponent implements OnInit {
 
     try {
       this.user = await this.userService.getUserById(userId);
+      this.prefectureInput = this.user?.prefecture ?? '';
       this.addressInput = this.user?.address ?? '';
+      this.buildingNameInput = this.user?.buildingName ?? '';
       this.emailInput = this.user?.email ?? '';
       this.phoneInput = this.user?.phone ?? '';
       this.postalCodeInput = this.user?.postalCode ?? '';
@@ -132,7 +137,7 @@ export class UserMyPageComponent implements OnInit {
       this.showError('my-page.error-postal-code');
       return;
     }
-    if (!this.addressInput.trim()) {
+    if (!this.prefectureInput.trim() || !this.addressInput.trim()) {
       this.showError('my-page.error-required');
       return;
     }
@@ -140,8 +145,10 @@ export class UserMyPageComponent implements OnInit {
     const confirm = await this.showConfirmDialog('my-page.address');
     if (confirm) {
       await this.updateUser({
-        address: this.addressInput,
         postalCode: this.postalCodeInput,
+        prefecture: this.prefectureInput,
+        address: this.addressInput,
+        buildingName: this.buildingNameInput,
       });
     }
   }
@@ -234,7 +241,10 @@ export class UserMyPageComponent implements OnInit {
         this.postalCodeInput,
       );
       if (result) {
-        this.addressInput = result.address;
+        const fullAddress = result.address;
+        const { prefecture, restAddress } = this.parseAddress(fullAddress);
+        this.prefectureInput = prefecture;
+        this.addressInput = restAddress;
         this.showSuccess('my-page.success-address-lookup');
       } else {
         this.showError('my-page.error-address-not-found');
@@ -262,11 +272,14 @@ export class UserMyPageComponent implements OnInit {
     changes: Partial<{
       email: string;
       password: string;
-      name: string;
+      firstName: string;
+      lastName: string;
       nickname: string;
-      address: string;
-      phone: string;
       postalCode: string;
+      prefecture: string;
+      address: string;
+      buildingName: string;
+      phone: string;
     }>,
   ): Promise<void> {
     if (!this.user) return;
@@ -279,11 +292,14 @@ export class UserMyPageComponent implements OnInit {
       const updated = await this.userService.updateUser(this.user.id, {
         email: changes.email ?? this.user.email,
         password: changes.password ?? this.user.password,
-        name: changes.name ?? this.user.name,
+        firstName: changes.firstName ?? this.user.firstName,
+        lastName: changes.lastName ?? this.user.lastName,
         nickname: changes.nickname ?? this.user.nickname,
-        address: changes.address ?? this.user.address,
-        phone: changes.phone ?? this.user.phone,
         postalCode: changes.postalCode ?? this.user.postalCode,
+        prefecture: changes.prefecture ?? this.user.prefecture,
+        address: changes.address ?? this.user.address,
+        buildingName: changes.buildingName ?? this.user.buildingName,
+        phone: changes.phone ?? this.user.phone,
         coin: this.user.coin,
       });
       this.user = updated;
@@ -291,6 +307,8 @@ export class UserMyPageComponent implements OnInit {
       this.emailInput = this.user?.email ?? '';
       this.phoneInput = this.user?.phone ?? '';
       this.postalCodeInput = this.user?.postalCode ?? '';
+      this.prefectureInput = this.user?.prefecture ?? '';
+      this.buildingNameInput = this.user?.buildingName ?? '';
       this.nicknameInput = this.user?.nickname ?? '';
 
       if (emailChanged) {
@@ -391,5 +409,23 @@ export class UserMyPageComponent implements OnInit {
     } finally {
       this.isSaving = false;
     }
+  }
+
+  private parseAddress(fullAddress: string): {
+    prefecture: string;
+    restAddress: string;
+  } {
+    for (const pref of PREFECTURES) {
+      if (fullAddress.startsWith(pref)) {
+        return {
+          prefecture: pref,
+          restAddress: fullAddress.slice(pref.length),
+        };
+      }
+    }
+    return {
+      prefecture: fullAddress,
+      restAddress: '',
+    };
   }
 }

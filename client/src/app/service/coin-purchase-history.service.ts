@@ -6,7 +6,9 @@ import { ApiConfigService } from './api-config.service';
 export interface CoinPurchaseHistoryItem {
   id: string;
   userId: string;
-  'User.name'?: string;
+  'User.firstName'?: string;
+  'User.lastName'?: string;
+  'User.nickname'?: string;
   price: number;
   coin: number;
   ticket: number;

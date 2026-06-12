@@ -117,9 +117,28 @@ module.exports = {
      * POST /api/user
      */
     router.post("/", async (req: Request, res: Response) => {
-      const { email, password, name, nickname, address, phone, postalCode } =
-        req.body;
-      if (!email || !password || !name || !address || !phone || !postalCode) {
+      const {
+        email,
+        password,
+        firstName,
+        lastName,
+        nickname,
+        postalCode,
+        prefecture,
+        address,
+        buildingName,
+        phone,
+      } = req.body;
+      if (
+        !email ||
+        !password ||
+        !firstName ||
+        !lastName ||
+        !prefecture ||
+        !address ||
+        !phone ||
+        !postalCode
+      ) {
         return res
           .status(400)
           .json({ error: messages.errors.USER_FIELDS_REQUIRED });
@@ -139,18 +158,25 @@ module.exports = {
         const pending = await runtime.user.createPending({
           email,
           password,
-          name,
+          firstName,
+          lastName,
           nickname,
-          address,
-          phone,
           postalCode,
+          prefecture,
+          address,
+          buildingName,
+          phone,
         });
 
         // Generate verification URL
         const clientUrl = process.env.CLIENT_URL || "http://localhost:4200";
         const verifyUrl = `${clientUrl}/verify-email?token=${pending.token}`;
 
-        await runtime.email.sendSignupEmail(email, verifyUrl, name);
+        await runtime.email.sendSignupEmail(
+          email,
+          verifyUrl,
+          `${lastName} ${firstName}`.trim(),
+        );
 
         return res.status(200).json({
           message: messages.success.SIGNUP_EMAIL_SENT,
@@ -316,8 +342,19 @@ module.exports = {
      */
     router.put("/:id", async (req: Request, res: Response) => {
       const { id } = req.params;
-      const { email, password, name, nickname, address, phone, postalCode, coin } =
-        req.body;
+      const {
+        email,
+        password,
+        firstName,
+        lastName,
+        nickname,
+        postalCode,
+        prefecture,
+        address,
+        buildingName,
+        phone,
+        coin,
+      } = req.body;
 
       if (!id) {
         return res
@@ -333,11 +370,14 @@ module.exports = {
         const oldUser = await runtime.user.getById(id);
         const updateData: any = {
           password,
-          name,
+          firstName,
+          lastName,
           nickname,
-          address,
-          phone,
           postalCode,
+          prefecture,
+          address,
+          buildingName,
+          phone,
           coin,
         };
 
@@ -350,7 +390,7 @@ module.exports = {
         if (oldUser && oldUser.phone !== phone && phone) {
           await runtime.email.sendPhoneChangeEmail(
             user.email,
-            user.name,
+            `${user.lastName} ${user.firstName}`.trim(),
             oldUser.phone,
             phone,
           );
@@ -359,14 +399,17 @@ module.exports = {
         if (oldUser && oldUser.address !== address && address) {
           await runtime.email.sendAddressChangeEmail(
             user.email,
-            user.name,
+            `${user.lastName} ${user.firstName}`.trim(),
             oldUser.address,
             address,
           );
         }
 
         if (oldUser && oldUser.password !== password && password) {
-          await runtime.email.sendPasswordChangeEmail(user.email, user.name);
+          await runtime.email.sendPasswordChangeEmail(
+            user.email,
+            `${user.lastName} ${user.firstName}`.trim(),
+          );
         }
 
         if (oldUser && email && oldUser.email !== email) {
@@ -377,7 +420,11 @@ module.exports = {
           );
           const verifyUrl = `${clientUrl}/verify-email-change?token=${pending.token}`;
 
-          await runtime.email.sendEmailChangeEmail(email, verifyUrl, user.name);
+          await runtime.email.sendEmailChangeEmail(
+            email,
+            verifyUrl,
+            `${user.lastName} ${user.firstName}`.trim(),
+          );
 
           return res.status(200).json({
             message: messages.success.USER_UPDATED,
@@ -434,7 +481,7 @@ module.exports = {
         if (user?.email) {
           await runtime.email.sendCoinPurchaseEmail(
             user.email,
-            user.name,
+            `${user.lastName} ${user.firstName}`.trim(),
             rate.price,
             result.addedCoin,
             result.addedTicket,
@@ -509,7 +556,7 @@ module.exports = {
         );
         await runtime.email.sendPasswordResetEmail(
           user.email,
-          user.name,
+          `${user.lastName} ${user.firstName}`.trim(),
           newPassword,
         );
         return res.status(200).json({

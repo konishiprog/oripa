@@ -147,14 +147,32 @@
             </div>
           </div>
           <div class="form-group">
-            <label for="address">{{
-              "my-page.address-label" | translate
-            }}</label>
+            <label for="prefecture">{{ "my-page.prefecture-label" | translate }}</label>
+            <input
+              id="prefecture"
+              type="text"
+              [(ngModel)]="prefectureInput"
+              [placeholder]="'my-page.prefecture-placeholder' | translate"
+              [disabled]="isSaving"
+            />
+          </div>
+          <div class="form-group">
+            <label for="address">{{ "my-page.address-label" | translate }}</label>
             <input
               id="address"
               type="text"
               [(ngModel)]="addressInput"
               [placeholder]="'my-page.address-placeholder' | translate"
+              [disabled]="isSaving"
+            />
+          </div>
+          <div class="form-group">
+            <label for="buildingName">{{ "my-page.building-name-label" | translate }}</label>
+            <input
+              id="buildingName"
+              type="text"
+              [(ngModel)]="buildingNameInput"
+              [placeholder]="'my-page.building-name-placeholder' | translate"
               [disabled]="isSaving"
             />
           </div>

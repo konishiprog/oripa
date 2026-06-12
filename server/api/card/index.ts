@@ -5,6 +5,8 @@ export {};
 
 import express, { Request, Response, Router } from "express";
 import multer from "multer";
+import fs from "fs";
+import path from "path";
 
 const messages = require("../../constants/messages.json");
 const { CARD_STATUS, EXCHANGE_TYPE } = require("../../constants/card");
@@ -13,7 +15,6 @@ let runtime: any;
 let gacha: any;
 let user: any;
 let email: any;
-let admin: any;
 const upload = multer({ storage: multer.memoryStorage() });
 
 const validateCardPayload = (req: Request, res: Response): boolean => {
@@ -111,6 +112,98 @@ const handleError = (
   return { status: 500, message: error.message };
 };
 
+const escapeCsvField = (field: any): string => {
+  const fieldStr = String(field || "");
+  if (
+    fieldStr.includes(",") ||
+    fieldStr.includes('"') ||
+    fieldStr.includes("\n")
+  ) {
+    return `"${fieldStr.replace(/"/g, '""')}"`;
+  }
+  return fieldStr;
+};
+
+const generatePendingShippingCSV = async (
+  pendingCards: any[],
+): Promise<string> => {
+  const csvRows: string[] = [];
+
+  const templatePath = path.join(
+    __dirname,
+    "../../runtime/trackingNumber_Template.csv",
+  );
+
+  try {
+    if (fs.existsSync(templatePath)) {
+      const templateBuffer = fs.readFileSync(templatePath);
+      let templateContent: string;
+      try {
+        const iconv = require("iconv-lite");
+        templateContent = iconv.decode(templateBuffer, "shiftjis");
+      } catch {
+        templateContent = templateBuffer.toString("utf-8");
+        if (templateContent.charCodeAt(0) === 0xfeff) {
+          templateContent = templateContent.slice(1);
+        }
+      }
+      const lines = templateContent.split("\n");
+      if (lines.length > 0 && lines[0].trim()) {
+        csvRows.push(lines[0].trim());
+      }
+    } else {
+      console.warn("Template file not found at:", templatePath);
+    }
+  } catch (error) {
+    console.warn("Failed to read template file:", error);
+  }
+
+  for (const card of pendingCards) {
+    let lastName = "";
+    let firstName = "";
+    let postalCode = "";
+    let prefecture = "";
+    let address = "";
+    let buildingName = "";
+    let phone = "";
+
+    if (card.userId) {
+      const cardOwner = await user?.getById(card.userId);
+      if (cardOwner) {
+        lastName = cardOwner.lastName || "";
+        firstName = cardOwner.firstName || "";
+        postalCode = cardOwner.postalCode || "";
+        prefecture = cardOwner.prefecture || "";
+        address = cardOwner.address || "";
+        buildingName = cardOwner.buildingName || "";
+        phone = cardOwner.phone || "";
+      }
+    }
+
+    const drawnDate = card.drawnDate
+      ? new Date(card.drawnDate).toISOString().split("T")[0]
+      : "";
+
+    const row = [
+      escapeCsvField(""),
+      escapeCsvField(postalCode),
+      escapeCsvField(prefecture),
+      escapeCsvField(address),
+      escapeCsvField(buildingName),
+      escapeCsvField(phone),
+      escapeCsvField(lastName),
+      escapeCsvField(firstName),
+      escapeCsvField(card.userId || ""),
+      escapeCsvField(card.name || ""),
+      escapeCsvField(card.exchangeCoins || ""),
+      escapeCsvField(drawnDate),
+    ];
+    csvRows.push(row.join(","));
+  }
+
+  return csvRows.join("\n");
+};
+
 module.exports = {
   /**
    * Initialize card API with runtime
@@ -121,7 +214,6 @@ module.exports = {
     gacha = _runtime.gacha;
     user = _runtime.user;
     email = _runtime.email;
-    admin = _runtime.admin;
   },
 
   /**
@@ -396,7 +488,7 @@ module.exports = {
           if (cardOwner?.email) {
             await email.sendShippingCompleteEmail(
               cardOwner.email,
-              cardOwner.name,
+              `${cardOwner.lastName || ""} ${cardOwner.firstName || ""}`.trim(),
               group.cardNames.join("、"),
               group.trackingNumber,
             );
@@ -414,6 +506,40 @@ module.exports = {
         return res.status(status).json({ error: message });
       }
     });
+
+    /**
+     * Get pending shipping CSV
+     * GET /api/card/pending-shipping-csv
+     */
+    router.get(
+      "/pending-shipping-csv",
+      async (_req: Request, res: Response) => {
+        try {
+          const allCards = await runtime.card.getAll();
+          const pendingCards = allCards.filter(
+            (card: any) => card.isDrawn === "発送待ち",
+          );
+
+          const csvData = await generatePendingShippingCSV(pendingCards);
+          const bom = "﻿";
+          const csvDataWithBom = bom + csvData;
+          const csvBase64 = Buffer.from(csvDataWithBom, "utf-8").toString(
+            "base64",
+          );
+
+          return res.status(200).json({
+            message: "Pending shipping CSV generated",
+            csvData: csvBase64,
+          });
+        } catch (error: any) {
+          const { status, message } = handleError(
+            error,
+            "Pending shipping CSV generation",
+          );
+          return res.status(status).json({ error: message });
+        }
+      },
+    );
 
     /**
      * Get all cards

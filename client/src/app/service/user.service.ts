@@ -11,11 +11,14 @@ export interface User {
   id: string;
   email: string;
   password: string;
-  name: string;
+  firstName: string;
+  lastName: string;
   nickname: string;
-  address: string;
-  phone: string;
   postalCode: string;
+  prefecture: string;
+  address: string;
+  buildingName: string;
+  phone: string;
   coin: number;
   ticket: number;
 }
@@ -23,11 +26,14 @@ export interface User {
 export interface CreateUserPayload {
   email: string;
   password: string;
-  name: string;
+  firstName: string;
+  lastName: string;
   nickname?: string;
-  address: string;
-  phone: string;
   postalCode?: string;
+  prefecture: string;
+  address: string;
+  buildingName?: string;
+  phone: string;
 }
 
 export interface ChargeResult {
@@ -145,11 +151,14 @@ export class UserService {
     payload: Partial<{
       email: string;
       password: string;
-      name: string;
+      firstName: string;
+      lastName: string;
       nickname: string;
-      address: string;
-      phone: string;
       postalCode: string;
+      prefecture: string;
+      address: string;
+      buildingName: string;
+      phone: string;
       coin: number;
     }>,
   ): Promise<User> {
@@ -302,10 +311,7 @@ export class UserService {
    * @param {number} ticket - User ticket balance
    */
   saveTicket(ticket: number): void {
-    localStorage.setItem(
-      this.TICKET_STORAGE_KEY,
-      ticket.toString(),
-    );
+    localStorage.setItem(this.TICKET_STORAGE_KEY, ticket.toString());
     this.ticket$.next(ticket);
   }
 
