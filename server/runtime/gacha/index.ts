@@ -270,19 +270,22 @@ async function draw(payload: {
   }
   const drawnIds = drawnCards.map((card: any) => card.id);
 
+  const now = new Date();
+
   await db.Card.update(
-    { isDrawn: CARD_STATUS.DRAWN, userId: payload.userId },
+    { isDrawn: CARD_STATUS.DRAWN, userId: payload.userId, drawnDate: now },
     { where: { id: drawnIds } },
   );
 
   await cardRuntime.update(drawnIds, {
     isDrawn: CARD_STATUS.DRAWN,
     userId: payload.userId,
+    drawnDate: now,
   });
 
   gacha.cards = (gacha.cards ?? []).map((card: any) =>
     drawnIds.includes(card.id)
-      ? { ...card, isDrawn: CARD_STATUS.DRAWN, userId: payload.userId }
+      ? { ...card, isDrawn: CARD_STATUS.DRAWN, userId: payload.userId, drawnDate: now }
       : card,
   );
   gachaCache.set(payload.gachaId, gacha);
@@ -321,6 +324,7 @@ async function draw(payload: {
         effectUrl: effect?.url ?? null,
         isDrawn: CARD_STATUS.DRAWN,
         userId: payload.userId,
+        drawnDate: now,
       };
     }),
     remainingCount,

@@ -20,6 +20,8 @@ describe('ShippingConfirmDialogComponent', () => {
       phone: '09012345678',
       gachaName: 'Premium Gacha',
       cardName: 'Rare Card A',
+      trackingNumber: null,
+      status: 'pending',
     },
     {
       cardId: 'card-uuid-2',
@@ -29,6 +31,8 @@ describe('ShippingConfirmDialogComponent', () => {
       phone: '09012345678',
       gachaName: 'Standard Gacha',
       cardName: 'Common Card B',
+      trackingNumber: null,
+      status: 'pending',
     },
     {
       cardId: 'card-uuid-3',
@@ -38,6 +42,8 @@ describe('ShippingConfirmDialogComponent', () => {
       phone: '08098765432',
       gachaName: 'Premium Gacha',
       cardName: 'Epic Card C',
+      trackingNumber: null,
+      status: 'pending',
     },
   ];
 
@@ -71,6 +77,10 @@ describe('ShippingConfirmDialogComponent', () => {
   describe('Initialization', () => {
     it('should initialize with cards data from dialog', () => {
       expect(component.cards).toEqual(mockCards);
+    });
+
+    it('should set isFromAdmin to true when cards are provided', () => {
+      expect(component.isFromAdmin).toBe(true);
     });
 
     it('should initialize trackingByDestination for each unique user', () => {
@@ -371,6 +381,34 @@ describe('ShippingConfirmDialogComponent', () => {
       shipments.forEach((s) => {
         expect(s.trackingNumber).toBe(longTrackingNumber);
       });
+    });
+  });
+
+  describe('User context (isFromAdmin flag)', () => {
+    it('should set isFromAdmin to true when data contains cards', () => {
+      expect(component.isFromAdmin).toBe(true);
+    });
+
+    it('should set isFromAdmin to false when data contains cardCount (user context)', () => {
+      const userComponent = new ShippingConfirmDialogComponent(
+        dialogRef,
+        { cardCount: 3 },
+      );
+      expect(userComponent.isFromAdmin).toBe(false);
+    });
+
+    it('should hide tracking column when isFromAdmin is false', () => {
+      const userComponent = new ShippingConfirmDialogComponent(
+        dialogRef,
+        { cardCount: 1 },
+      );
+      expect(userComponent.isFromAdmin).toBe(false);
+    });
+
+    it('should handle null or undefined data gracefully', () => {
+      const noDataComponent = new ShippingConfirmDialogComponent(dialogRef, {});
+      expect(noDataComponent.cards).toEqual([]);
+      expect(noDataComponent.isFromAdmin).toBe(false);
     });
   });
 });

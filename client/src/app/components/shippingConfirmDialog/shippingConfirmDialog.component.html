@@ -8,7 +8,7 @@
     <table class="dialog-table">
       <thead>
         <tr>
-          <th class="tracking-column">
+          <th *ngIf="isFromAdmin" class="tracking-column">
             {{ "shipping-info.tracking-column" | translate }}
           </th>
           <th *ngFor="let header of tableHeaders">
@@ -18,7 +18,7 @@
       </thead>
       <tbody>
         <tr *ngFor="let card of cards">
-          <td class="tracking-column">
+          <td *ngIf="isFromAdmin" class="tracking-column">
             <input
               type="text"
               class="tracking-input"

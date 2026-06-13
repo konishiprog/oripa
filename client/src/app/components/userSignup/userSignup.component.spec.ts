@@ -43,10 +43,12 @@ describe('UserSignupComponent', () => {
   it('should initialize with empty form', () => {
     expect(component.email).toBe('');
     expect(component.password).toBe('');
-    expect(component.name).toBe('');
+    expect(component.firstName).toBe('');
+    expect(component.lastName).toBe('');
     expect(component.address).toBe('');
     expect(component.phone).toBe('');
     expect(component.postalCode).toBe('');
+    expect(component.prefecture).toBe('');
     expect(component.isLoading).toBe(false);
   });
 
@@ -67,10 +69,12 @@ describe('UserSignupComponent', () => {
   it('should validate required fields', async () => {
     component.email = '';
     component.password = '';
-    component.name = '';
+    component.firstName = '';
+    component.lastName = '';
     component.address = '';
     component.phone = '';
     component.postalCode = '';
+    component.prefecture = '';
 
     await component.onSubmit();
 
@@ -81,11 +85,14 @@ describe('UserSignupComponent', () => {
   it('should handle successful signup', async () => {
     component.email = 'test@example.com';
     component.password = 'password123';
-    component.name = 'Test User';
+    component.firstName = 'Test';
+    component.lastName = 'User';
     component.nickname = 'Tester';
-    component.address = 'Test Address';
-    component.phone = '09012345678';
     component.postalCode = '123-4567';
+    component.prefecture = 'Tokyo';
+    component.address = 'Test Address';
+    component.buildingName = 'Tower A';
+    component.phone = '09012345678';
     userService.createUser.mockResolvedValue({});
 
     await component.onSubmit();
@@ -93,21 +100,26 @@ describe('UserSignupComponent', () => {
     expect(userService.createUser).toHaveBeenCalledWith({
       email: 'test@example.com',
       password: 'password123',
-      name: 'Test User',
+      firstName: 'Test',
+      lastName: 'User',
       nickname: 'Tester',
-      address: 'Test Address',
-      phone: '09012345678',
       postalCode: '123-4567',
+      prefecture: 'Tokyo',
+      address: 'Test Address',
+      buildingName: 'Tower A',
+      phone: '09012345678',
     });
   });
 
   it('should validate email format', async () => {
     component.email = 'invalid-email';
     component.password = 'password123';
-    component.name = 'Test User';
+    component.firstName = 'Test';
+    component.lastName = 'User';
     component.address = 'Test Address';
     component.phone = '09012345678';
     component.postalCode = '123-4567';
+    component.prefecture = 'Tokyo';
 
     await component.onSubmit();
 
@@ -118,10 +130,12 @@ describe('UserSignupComponent', () => {
   it('should validate password length', async () => {
     component.email = 'test@example.com';
     component.password = '123';
-    component.name = 'Test User';
+    component.firstName = 'Test';
+    component.lastName = 'User';
     component.address = 'Test Address';
     component.phone = '09012345678';
     component.postalCode = '123-4567';
+    component.prefecture = 'Tokyo';
 
     await component.onSubmit();
 
@@ -132,10 +146,12 @@ describe('UserSignupComponent', () => {
   it('should validate phone format', async () => {
     component.email = 'test@example.com';
     component.password = 'password123';
-    component.name = 'Test User';
+    component.firstName = 'Test';
+    component.lastName = 'User';
     component.address = 'Test Address';
     component.phone = 'not-a-number';
     component.postalCode = '123-4567';
+    component.prefecture = 'Tokyo';
 
     await component.onSubmit();
 

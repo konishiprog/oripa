@@ -196,4 +196,13 @@ export class CardService {
       ),
     );
   }
+
+  async getPendingShippingCSV() {
+    return await lastValueFrom(
+      this.http.get<any>(
+        `${this.apiConfig.domain}/api/card/pending-shipping-csv`,
+        { headers: this.apiConfig.headers },
+      ),
+    );
+  }
 }

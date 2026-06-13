@@ -315,19 +315,6 @@ export class UserCardHistoryPageComponent implements OnInit {
       return;
     }
 
-    const dialogRef = this.dialog.open(ShippingConfirmDialogComponent, {
-      width: '500px',
-      data: {
-        cardCount: this.selectedCardIds.size,
-      },
-    });
-
-    const confirmed = await dialogRef.afterClosed().toPromise();
-
-    if (!confirmed) {
-      return;
-    }
-
     this.isLoading = true;
     this.cdr.detectChanges();
     try {

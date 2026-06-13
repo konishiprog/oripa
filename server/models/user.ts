@@ -21,7 +21,10 @@ module.exports = (sequelize: any, DataTypes: any) => {
       password: {
         type: DataTypes.STRING,
       },
-      name: {
+      firstName: {
+        type: DataTypes.STRING,
+      },
+      lastName: {
         type: DataTypes.STRING,
       },
       nickname: {
@@ -35,13 +38,19 @@ module.exports = (sequelize: any, DataTypes: any) => {
         type: DataTypes.INTEGER,
         defaultValue: 0,
       },
+      postalCode: {
+        type: DataTypes.STRING,
+      },
+      prefecture: {
+        type: DataTypes.STRING,
+      },
       address: {
         type: DataTypes.STRING,
       },
-      phone: {
+      buildingName: {
         type: DataTypes.STRING,
       },
-      postalCode: {
+      phone: {
         type: DataTypes.STRING,
       },
     },

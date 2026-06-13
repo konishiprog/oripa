@@ -58,7 +58,7 @@ export class UserDetailDialogComponent implements OnInit {
   }
 
   private isValidForm(): boolean {
-    if (!this.user.email || !this.user.password || !this.user.name) {
+    if (!this.user.email || !this.user.password || !this.user.firstName || !this.user.lastName) {
       return false;
     }
     return true;

@@ -31,9 +31,16 @@
 
       <div class="detail-row">
         <div class="detail-label">
-          {{ "user-management.table.name" | translate }}
+          {{ "user-management.table.last-name" | translate }}
         </div>
-        <div class="detail-value">{{ user.name }}</div>
+        <div class="detail-value">{{ user.lastName }}</div>
+      </div>
+
+      <div class="detail-row">
+        <div class="detail-label">
+          {{ "user-management.table.first-name" | translate }}
+        </div>
+        <div class="detail-value">{{ user.firstName }}</div>
       </div>
 
       <div class="detail-row">
@@ -52,9 +59,23 @@
 
       <div class="detail-row">
         <div class="detail-label">
+          {{ "user-management.table.prefecture" | translate }}
+        </div>
+        <div class="detail-value">{{ user.prefecture }}</div>
+      </div>
+
+      <div class="detail-row">
+        <div class="detail-label">
           {{ "user-management.table.address" | translate }}
         </div>
         <div class="detail-value">{{ user.address }}</div>
+      </div>
+
+      <div class="detail-row">
+        <div class="detail-label">
+          {{ "user-management.table.building-name" | translate }}
+        </div>
+        <div class="detail-value">{{ user.buildingName }}</div>
       </div>
 
       <div class="detail-row">
@@ -81,9 +102,9 @@
       </div>
 
       <div class="form-group">
-        <label for="password">
-          {{ "user-management.table.password" | translate }}
-        </label>
+        <label for="password">{{
+          "user-management.table.password" | translate
+        }}</label>
         <input
           id="password"
           type="text"
@@ -108,12 +129,28 @@
       </div>
 
       <div class="form-group">
-        <label for="name">{{ "user-management.table.name" | translate }}</label>
+        <label for="lastName">{{
+          "user-management.table.last-name" | translate
+        }}</label>
         <input
-          id="name"
+          id="lastName"
           type="text"
-          [(ngModel)]="user.name"
-          name="name"
+          [(ngModel)]="user.lastName"
+          name="lastName"
+          required
+          [disabled]="isLoading"
+        />
+      </div>
+
+      <div class="form-group">
+        <label for="firstName">{{
+          "user-management.table.first-name" | translate
+        }}</label>
+        <input
+          id="firstName"
+          type="text"
+          [(ngModel)]="user.firstName"
+          name="firstName"
           required
           [disabled]="isLoading"
         />
@@ -131,9 +168,9 @@
       </div>
 
       <div class="form-group">
-        <label for="postalCode">
-          {{ "user-management.table.postal-code" | translate }}
-        </label>
+        <label for="postalCode">{{
+          "user-management.table.postal-code" | translate
+        }}</label>
         <input
           id="postalCode"
           type="text"
@@ -144,9 +181,22 @@
       </div>
 
       <div class="form-group">
-        <label for="address">
-          {{ "user-management.table.address" | translate }}
-        </label>
+        <label for="prefecture">{{
+          "user-management.table.prefecture" | translate
+        }}</label>
+        <input
+          id="prefecture"
+          type="text"
+          [(ngModel)]="user.prefecture"
+          name="prefecture"
+          [disabled]="isLoading"
+        />
+      </div>
+
+      <div class="form-group">
+        <label for="address">{{
+          "user-management.table.address" | translate
+        }}</label>
         <input
           id="address"
           type="text"
@@ -157,9 +207,22 @@
       </div>
 
       <div class="form-group">
-        <label for="phone">
-          {{ "user-management.table.phone" | translate }}
-        </label>
+        <label for="buildingName">{{
+          "user-management.table.building-name" | translate
+        }}</label>
+        <input
+          id="buildingName"
+          type="text"
+          [(ngModel)]="user.buildingName"
+          name="buildingName"
+          [disabled]="isLoading"
+        />
+      </div>
+
+      <div class="form-group">
+        <label for="phone">{{
+          "user-management.table.phone" | translate
+        }}</label>
         <input
           id="phone"
           type="text"

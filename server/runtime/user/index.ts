@@ -38,11 +38,14 @@ async function refreshCache() {
 async function createPending(payload: {
   email: string;
   password: string;
-  name: string;
+  firstName: string;
+  lastName: string;
   nickname?: string;
-  address: string;
-  phone: string;
   postalCode?: string;
+  prefecture: string;
+  address: string;
+  buildingName?: string;
+  phone: string;
 }) {
   if (userCache.size === 0) {
     await refreshCache();
@@ -89,11 +92,14 @@ async function createPending(payload: {
     type: "signup",
     email: payload.email,
     password: payload.password,
-    name: payload.name,
+    firstName: payload.firstName,
+    lastName: payload.lastName,
     nickname: payload.nickname,
-    address: payload.address,
-    phone: payload.phone,
     postalCode: payload.postalCode,
+    prefecture: payload.prefecture,
+    address: payload.address,
+    buildingName: payload.buildingName,
+    phone: payload.phone,
     expiresAt,
   });
 
@@ -124,11 +130,14 @@ async function verifyEmail(token: string) {
   const user = await db.User.create({
     email: pendingPlain.email,
     password: pendingPlain.password,
-    name: pendingPlain.name,
+    firstName: pendingPlain.firstName,
+    lastName: pendingPlain.lastName,
     nickname: pendingPlain.nickname,
-    address: pendingPlain.address,
-    phone: pendingPlain.phone,
     postalCode: pendingPlain.postalCode,
+    prefecture: pendingPlain.prefecture,
+    address: pendingPlain.address,
+    buildingName: pendingPlain.buildingName,
+    phone: pendingPlain.phone,
     coin: 0,
   });
 
@@ -268,11 +277,14 @@ async function update(
   payload: {
     email?: string;
     password?: string;
-    name?: string;
+    firstName?: string;
+    lastName?: string;
     nickname?: string;
-    address?: string;
-    phone?: string;
     postalCode?: string;
+    prefecture?: string;
+    address?: string;
+    buildingName?: string;
+    phone?: string;
     coin?: number;
     ticket?: number;
   },
@@ -303,12 +315,14 @@ async function update(
   const updateData: any = {};
   if (payload.email !== undefined) updateData.email = payload.email;
   if (payload.password !== undefined) updateData.password = payload.password;
-  if (payload.name !== undefined) updateData.name = payload.name;
+  if (payload.firstName !== undefined) updateData.firstName = payload.firstName;
+  if (payload.lastName !== undefined) updateData.lastName = payload.lastName;
   if (payload.nickname !== undefined) updateData.nickname = payload.nickname;
+  if (payload.postalCode !== undefined) updateData.postalCode = payload.postalCode;
+  if (payload.prefecture !== undefined) updateData.prefecture = payload.prefecture;
   if (payload.address !== undefined) updateData.address = payload.address;
+  if (payload.buildingName !== undefined) updateData.buildingName = payload.buildingName;
   if (payload.phone !== undefined) updateData.phone = payload.phone;
-  if (payload.postalCode !== undefined)
-    updateData.postalCode = payload.postalCode;
   if (payload.coin !== undefined) updateData.coin = payload.coin;
   if (payload.ticket !== undefined) updateData.ticket = payload.ticket;
 

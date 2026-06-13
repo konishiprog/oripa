@@ -143,6 +143,7 @@ export class ShippingInfoPageComponent implements OnInit {
       maxWidth: '95vw',
       data: {
         cards: selectedCards,
+        isFromAdmin: true,
       },
     });
 
@@ -168,5 +169,51 @@ export class ShippingInfoPageComponent implements OnInit {
       this.isLoading = false;
       this.cdr.markForCheck();
     }
+  }
+
+  async downloadCSVFile(): Promise<void> {
+    this.isLoading = true;
+    this.cdr.markForCheck();
+
+    try {
+      const response = await this.cardService.getPendingShippingCSV();
+      if (response?.csvData) {
+        this.saveCSVFile(response.csvData);
+      }
+    } catch (err) {
+      console.error('Failed to download CSV:', err);
+      alert(this.translateService.instant('shipping-info.csv-download-error'));
+    } finally {
+      this.isLoading = false;
+      this.cdr.markForCheck();
+    }
+  }
+
+  private saveCSVFile(csvDataBase64: string): void {
+    const binaryString = atob(csvDataBase64);
+    const bytes = new Uint8Array(binaryString.length);
+    for (let i = 0; i < binaryString.length; i++) {
+      bytes[i] = binaryString.charCodeAt(i);
+    }
+    const bom = new Uint8Array([0xef, 0xbb, 0xbf]);
+    const blob = new Blob([bom, bytes], { type: 'text/csv;charset=utf-8;' });
+    const link = document.createElement('a');
+    const url = URL.createObjectURL(blob);
+
+    const now = new Date();
+    const timestamp =
+      now.getFullYear() +
+      String(now.getMonth() + 1).padStart(2, '0') +
+      String(now.getDate()).padStart(2, '0') +
+      String(now.getHours()).padStart(2, '0') +
+      String(now.getMinutes()).padStart(2, '0') +
+      String(now.getSeconds()).padStart(2, '0');
+
+    link.setAttribute('href', url);
+    link.setAttribute('download', `trackingNumber_${timestamp}.csv`);
+    link.style.visibility = 'hidden';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
   }
 }

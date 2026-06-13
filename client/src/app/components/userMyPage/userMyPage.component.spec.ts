@@ -24,11 +24,14 @@ describe('UserMyPageComponent', () => {
     id: 'test-user-id',
     email: 'test@example.com',
     password: 'password123',
-    name: 'Test User',
+    firstName: 'Test',
+    lastName: 'User',
     nickname: 'Tester',
-    address: '123 Test St',
-    phone: '555-0123',
     postalCode: '123-4567',
+    prefecture: 'Tokyo',
+    address: '123 Test St',
+    buildingName: 'Tower A',
+    phone: '555-0123',
     coin: 100,
     ticket: 0,
   };
@@ -82,7 +85,9 @@ describe('UserMyPageComponent', () => {
     expect(mockUserService.getUserId).toHaveBeenCalled();
     expect(mockUserService.getUserById).toHaveBeenCalledWith('test-user-id');
     expect(component.user).toEqual(mockUser);
+    expect(component.prefectureInput).toBe(mockUser.prefecture);
     expect(component.addressInput).toBe(mockUser.address);
+    expect(component.buildingNameInput).toBe(mockUser.buildingName);
     expect(component.emailInput).toBe(mockUser.email);
     expect(component.phoneInput).toBe(mockUser.phone);
     expect(component.postalCodeInput).toBe(mockUser.postalCode);
@@ -124,6 +129,7 @@ describe('UserMyPageComponent', () => {
   it('should validate address input', async () => {
     component.user = mockUser;
     component.postalCodeInput = '123-4567';
+    component.prefectureInput = 'Tokyo';
     component.addressInput = '';
     await component.saveAddressAndPostalCode();
     expect(mockTranslateService.instant).toHaveBeenCalledWith(
