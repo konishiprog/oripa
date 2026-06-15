@@ -165,6 +165,7 @@ STRIPE_WEBHOOK_SECRET=whsec_xxxxxxxxxxxxxxxxxxxx
 RESEND_API_KEY=re_xxxxxxxxxxxxxxxxxxxx
 EMAIL_FROM=support@oripamall.com
 ADMIN_EMAIL=admin@oripamall.local
+
 ADMIN_PASSWORD=AdminSecurePass2024
 NODE_ENV=production
 PORT=3000
@@ -177,9 +178,11 @@ EOF
 | 設定項目 | 説明 | 変更が必要な箇所 |
 |---|---|---|
 | `DATABASE_PASSWORD` | PostgreSQL パスワード | 本番環境では強力なパスワード推奨 |
+
 | `CLIENT_URL` | フロントエンド URL | `https://oripamall.com` |
 | `SERVER_URL` | バックエンド API URL | `https://api.oripamall.com` |
 | `ALLOWED_ORIGINS` | CORS許可ドメイン | `https://oripamall.com` |
+
 | `STRIPE_*` | Stripe API キー | 本番環境では `sk_live_` を使用 |
 | `RESEND_API_KEY` | メール送信API | Resend ダッシュボードから取得 |
 
@@ -248,6 +251,7 @@ sudo apt install -y certbot python3-certbot-nginx
 # ドメイン設定済みの場合：
 sudo certbot certonly --nginx -d oripamall.com -d api.oripamall.com
 
+
 # メールアドレスと利用規約に同意
 ```
 
@@ -269,6 +273,7 @@ server {
     listen 80;
     listen [::]:80;
     server_name oripamall.com;
+
     return 301 https://$server_name$request_uri;
 }
 
@@ -280,6 +285,7 @@ server {
 
     ssl_certificate /etc/letsencrypt/live/oripamall.com/fullchain.pem;
     ssl_certificate_key /etc/letsencrypt/live/oripamall.com/privkey.pem;
+
 
     # SSL設定（セキュリティ強化）
     ssl_protocols TLSv1.2 TLSv1.3;
@@ -311,6 +317,7 @@ server {
     ssl_certificate /etc/letsencrypt/live/oripamall.com/fullchain.pem;
     ssl_certificate_key /etc/letsencrypt/live/oripamall.com/privkey.pem;
 
+
     ssl_protocols TLSv1.2 TLSv1.3;
     ssl_ciphers HIGH:!aNULL:!MD5;
     ssl_prefer_server_ciphers on;
@@ -328,6 +335,7 @@ server {
 
         # CORSヘッダ設定（必要に応じて）
         add_header 'Access-Control-Allow-Origin' 'https://oripamall.com' always;
+
     }
 }
 ```
@@ -392,12 +400,14 @@ ConoHa のコントロールパネルまたはドメインレジストラで以�
 | A | api.oripamall.com | \<VPS_IP\> |
 | A | www.oripamall.com | \<VPS_IP\> |
 
+
 ### 6-2. 伝播確認
 
 ```bash
 # DNS伝播確認（5〜24時間かかることもある）
 nslookup oripamall.com
 dig oripamall.com @8.8.8.8
+
 ```
 
 ---
@@ -409,6 +419,7 @@ dig oripamall.com @8.8.8.8
 ```
 https://oripamall.com          # フロントエンド
 https://api.oripamall.com/api  # API（エンドポイント確認）
+
 ```
 
 ### 7-2. ログ確認
@@ -508,6 +519,7 @@ docker logging-driver json-file \
 |---|---|---|
 | DBに接続できない | 環境変数ミス | `docker compose logs db` で確認、再設定後 `docker compose restart` |
 | SSLエラー | 証明書未取得 | `sudo certbot certonly --nginx -d oripamall.com` 再実行 |
+
 | 503エラー | バックエンド未起動 | `docker compose up -d` 再実行、`docker compose ps` で確認 |
 | ポート競合 | 既に使用中 | `lsof -i :80` で確認、不要なプロセス終了 |
 | メモリ不足 | コンテナサイズ不足 | `docker compose down`、VPSプランアップグレード |
