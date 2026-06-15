@@ -1,4 +1,4 @@
-FROM node:20
+FROM node:20 AS builder
 
 WORKDIR /app
 
@@ -8,6 +8,18 @@ RUN npm install
 
 COPY . .
 
+RUN npm run build
+
+FROM node:20
+
+WORKDIR /app
+
+COPY --from=builder /app/dist ./dist
+COPY --from=builder /app/node_modules ./node_modules
+COPY --from=builder /app/package.json ./
+
+RUN npm install -g http-server
+
 EXPOSE 4200
 
-CMD ["npx", "ng", "serve", "--host", "0.0.0.0", "--allowed-hosts", "oripamall.com,localhost,127.0.0.1,163.44.112.176"]
+CMD ["http-server", "dist/app/browser", "-p", "4200", "-c-1"]
