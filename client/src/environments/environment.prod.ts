@@ -1,6 +1,6 @@
 export const environment = {
   production: true,
-  apiDomain: 'https://oripa-server.onrender.com',
+  apiDomain: 'https://api.oripamall.com',
   stripe: {
     publishableKey: 'pk_live_***',
   },
