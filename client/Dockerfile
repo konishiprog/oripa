@@ -17,9 +17,8 @@ WORKDIR /app
 COPY --from=builder /app/dist ./dist
 COPY --from=builder /app/node_modules ./node_modules
 COPY --from=builder /app/package.json ./
-
-RUN npm install -g http-server
+COPY server.js ./
 
 EXPOSE 4200
 
-CMD ["http-server", "dist/app/browser", "-p", "4200", "-c-1", "--spa"]
+CMD ["node", "server.js"]
