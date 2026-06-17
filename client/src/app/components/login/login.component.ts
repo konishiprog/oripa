@@ -1,4 +1,4 @@
-import { Component, ChangeDetectorRef, OnInit } from '@angular/core';
+import { Component, ChangeDetectorRef, NgZone, OnInit } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { LoginService } from '../../service/login.service';
 import { SidebarService } from '../../service/sidebar.service';
@@ -32,6 +32,7 @@ export class LoginComponent implements OnInit {
     private translateService: TranslateService,
     private cdr: ChangeDetectorRef,
     private router: Router,
+    private ngZone: NgZone,
   ) {}
 
   ngOnInit(): void {
@@ -66,7 +67,9 @@ export class LoginComponent implements OnInit {
       }
       this.showSuccess('login.success');
       setTimeout(() => {
-        this.router.navigate(['/adminPanel']);
+        this.ngZone.run(() => {
+          this.router.navigate(['/adminPanel']);
+        });
       }, 1500);
     } catch (error: any) {
       if (error?.status === 401) {
