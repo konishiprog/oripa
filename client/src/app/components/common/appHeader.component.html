@@ -21,8 +21,7 @@
         <div class="user-ticket-display">
           <span class="user-ticket-icon" [innerHTML]="ticketIcon"></span>
           <span class="user-ticket-amount">
-            +{{ userTicket || 0
-            }}{{ "common.unit.ticket" | translate }}
+            {{ userTicket || 0 }}{{ "common.unit.ticket" | translate }}
           </span>
         </div>
       </div>
