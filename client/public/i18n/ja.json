@@ -301,7 +301,6 @@
   },
 
   "gacha-box": {
-    "remaining": "残り{{count}}枚",
     "draw-single": "1回引く",
     "draw-ten": "10回引く",
     "draw-hundred": "100回引く",
@@ -627,7 +626,7 @@
     "error-load": "チャージオプションの読み込みに失敗しました",
     "error-no-option": "チャージオプションを選択してください",
     "error-charge": "チャージに失敗しました",
-    "success-charge": "{{addedCoin}}コイン チャージしました。現在のコイン: {{newCoin}}枚"
+    "success-charge": "{{addedCoin}}Pt チャージしました。現在のコイン: {{newCoin}}Pt"
   },
 
   "charge-result": {
@@ -715,7 +714,7 @@
       "button": "絞り込み"
     },
     "unit": {
-      "coin": "枚",
+      "coin": "Pt",
       "ticket": "枚",
       "yen": "¥"
     },
