@@ -99,11 +99,16 @@ export class CoinExchangeRateDialogComponent implements OnInit {
         this.dialogRef?.close({ mode: 'create', data: created });
       }
     } catch (error: any) {
-      this.showError(
-        this.isEditMode
-          ? 'coin-exchange-rate.error-save'
-          : 'coin-exchange-rate.error-create',
-      );
+      const serverMessage: string = error?.error?.error ?? '';
+      if (serverMessage.includes('already exists')) {
+        this.showError('coin-exchange-rate.error-duplicate-coin');
+      } else {
+        this.showError(
+          this.isEditMode
+            ? 'coin-exchange-rate.error-save'
+            : 'coin-exchange-rate.error-create',
+        );
+      }
     } finally {
       this.isLoading = false;
     }
