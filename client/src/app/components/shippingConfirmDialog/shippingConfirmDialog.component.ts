@@ -70,6 +70,9 @@ export class ShippingConfirmDialogComponent {
   }
 
   isAllTrackingFilled(): boolean {
+    if (!this.isFromAdmin) {
+      return true;
+    }
     return Object.values(this.trackingByDestination).every(
       (trackingNumber) => trackingNumber.trim() !== '',
     );
@@ -77,6 +80,11 @@ export class ShippingConfirmDialogComponent {
 
   onConfirm(): void {
     if (!this.isAllTrackingFilled()) {
+      return;
+    }
+
+    if (!this.isFromAdmin) {
+      this.dialogRef.close(true);
       return;
     }
 

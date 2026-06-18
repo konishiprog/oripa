@@ -6,6 +6,7 @@ import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { MatDialog } from '@angular/material/dialog';
 import { CardService } from '../../service/card.service';
 import { UserService } from '../../service/user.service';
+import { ShippingCardInfo } from '../../service/shipping-info.service';
 import { CoinExchangeDialogComponent } from '../coinExchangeDialog/coinExchangeDialog.component';
 import { ShippingConfirmDialogComponent } from '../shippingConfirmDialog/shippingConfirmDialog.component';
 import { CARD_STATUS, EXCHANGE_TYPE } from '../../constants/card';
@@ -315,13 +316,53 @@ export class UserCardHistoryPageComponent implements OnInit {
       return;
     }
 
+    const selectedCards = this.cards.filter((card) =>
+      this.selectedCardIds.has(card.id),
+    );
+
+    const userId = this.userService.getUserId();
+    const user = userId ? await this.userService.getUserById(userId) : null;
+    const fullName = user
+      ? [user.lastName, user.firstName].filter(Boolean).join(' ')
+      : '';
+    const userName = fullName || user?.nickname || '';
+    const address = user
+      ? [user.postalCode, user.prefecture, user.address, user.buildingName]
+          .filter(Boolean)
+          .join(' ')
+      : '';
+    const phone = user?.phone ?? '';
+
+    const shippingCards: ShippingCardInfo[] = selectedCards.map((card) => ({
+      cardId: card.id,
+      userId: userId ?? '',
+      userName,
+      address,
+      phone,
+      gachaName: card.gachaName ?? '',
+      cardName: card.name,
+      trackingNumber: null,
+      status: 'pending' as const,
+    }));
+
+    const dialogRef = this.dialog.open(ShippingConfirmDialogComponent, {
+      width: '760px',
+      maxWidth: '95vw',
+      data: {
+        cards: shippingCards,
+        isFromAdmin: false,
+      },
+    });
+
+    const result = await dialogRef.afterClosed().toPromise();
+
+    if (result !== true) {
+      return;
+    }
+
     this.isLoading = true;
     this.cdr.detectChanges();
     try {
-      const selectedCards = this.cards.filter((card) =>
-        this.selectedCardIds.has(card.id),
-      );
-
       for (const card of selectedCards) {
         await this.cardService.updateCardStatus(
           card.id,
@@ -341,5 +382,4 @@ export class UserCardHistoryPageComponent implements OnInit {
       this.cdr.markForCheck();
     }
   }
-
 }
