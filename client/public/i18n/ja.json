@@ -554,7 +554,10 @@
     "no-selection": "カードを選択してください",
     "select-all": "すべて選択",
     "select-all-clear": "すべて選択解除",
-    "tracking-number": "追跡番号"
+    "tracking-number": "追跡番号",
+    "shipping-confirm-title": "発送確認",
+    "shipping-confirm-message": "選択した{{count}}枚のカードを発送します。よろしいですか？",
+    "shipping-confirm-button": "発送する"
   },
 
   "user-management": {

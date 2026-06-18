@@ -49,6 +49,13 @@
   white-space: nowrap;
 }
 
+.dialog-table td.address-column {
+  max-width: 200px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
 .dialog-table tbody tr:last-child td {
   border-bottom: none;
 }
