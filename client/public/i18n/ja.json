@@ -606,6 +606,7 @@
     "error-save": "レート設定の保存に失敗しました",
     "error-delete": "レート設定の削除に失敗しました",
     "error-create": "レート設定の作成に失敗しました",
+    "error-duplicate-coin": "このコイン数のレートは既に登録されています",
     "error-invalid-input": "入力値が無効です",
     "error-coin-invalid": "コインは1以上の整数で入力してください",
     "error-price-invalid": "金額は50円以上の整数で入力してください",
