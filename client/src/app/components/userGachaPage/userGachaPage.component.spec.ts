@@ -183,4 +183,119 @@ describe('UserGachaPageComponent', () => {
     expect(component.isLoading).toBe(false);
     expect(component.gachas.length).toBe(0);
   });
+
+  it('selectGenre should update selectedGenreId', () => {
+    component.selectGenre('genre-1');
+    expect(component.selectedGenreId).toBe('genre-1');
+  });
+
+  it('filteredAndSortedGachas should return all gachas when no genre selected', async () => {
+    const mockGachas = [
+      { id: '1', name: 'A', headerImage: '', consumptionType: 'COIN', cost: 100, oncePerUser: false, alreadyDrawn: false, remainingCount: 1, isPublic: true, publishStart: '2026-01-01', publishEnd: null, genreId: 'genre-1' },
+      { id: '2', name: 'B', headerImage: '', consumptionType: 'COIN', cost: 100, oncePerUser: false, alreadyDrawn: false, remainingCount: 1, isPublic: true, publishStart: '2026-01-02', publishEnd: null, genreId: 'genre-2' },
+    ];
+    gachaService.getGachas.mockResolvedValue(mockGachas);
+    userService.isLoggedIn.mockReturnValue(false);
+
+    fixture.detectChanges();
+    await fixture.whenStable();
+
+    component.selectedGenreId = '';
+    expect(component.filteredAndSortedGachas.length).toBe(2);
+  });
+
+  it('filteredAndSortedGachas should filter by selected genre', async () => {
+    const mockGachas = [
+      { id: '1', name: 'A', headerImage: '', consumptionType: 'COIN', cost: 100, oncePerUser: false, alreadyDrawn: false, remainingCount: 1, isPublic: true, publishStart: '2026-01-01', publishEnd: null, genreId: 'genre-1' },
+      { id: '2', name: 'B', headerImage: '', consumptionType: 'COIN', cost: 100, oncePerUser: false, alreadyDrawn: false, remainingCount: 1, isPublic: true, publishStart: '2026-01-02', publishEnd: null, genreId: 'genre-2' },
+    ];
+    gachaService.getGachas.mockResolvedValue(mockGachas);
+    userService.isLoggedIn.mockReturnValue(false);
+
+    fixture.detectChanges();
+    await fixture.whenStable();
+
+    component.selectGenre('genre-1');
+    expect(component.filteredAndSortedGachas.length).toBe(1);
+    expect(component.filteredAndSortedGachas[0].id).toBe('1');
+  });
+
+  it('filteredAndSortedGachas should sort by cost-high', async () => {
+    const mockGachas = [
+      { id: '1', name: 'Cheap', headerImage: '', consumptionType: 'COIN', cost: 100, oncePerUser: false, alreadyDrawn: false, remainingCount: 1, isPublic: true, publishStart: '2026-01-01', publishEnd: null },
+      { id: '2', name: 'Expensive', headerImage: '', consumptionType: 'COIN', cost: 1000, oncePerUser: false, alreadyDrawn: false, remainingCount: 1, isPublic: true, publishStart: '2026-01-02', publishEnd: null },
+    ];
+    gachaService.getGachas.mockResolvedValue(mockGachas);
+    userService.isLoggedIn.mockReturnValue(false);
+
+    fixture.detectChanges();
+    await fixture.whenStable();
+
+    component.sortOrder = 'cost-high';
+    const sorted = component.filteredAndSortedGachas;
+    expect(sorted[0].cost).toBe(1000);
+    expect(sorted[1].cost).toBe(100);
+  });
+
+  it('filteredAndSortedGachas should sort by cost-low', async () => {
+    const mockGachas = [
+      { id: '1', name: 'Expensive', headerImage: '', consumptionType: 'COIN', cost: 1000, oncePerUser: false, alreadyDrawn: false, remainingCount: 1, isPublic: true, publishStart: '2026-01-01', publishEnd: null },
+      { id: '2', name: 'Cheap', headerImage: '', consumptionType: 'COIN', cost: 100, oncePerUser: false, alreadyDrawn: false, remainingCount: 1, isPublic: true, publishStart: '2026-01-02', publishEnd: null },
+    ];
+    gachaService.getGachas.mockResolvedValue(mockGachas);
+    userService.isLoggedIn.mockReturnValue(false);
+
+    fixture.detectChanges();
+    await fixture.whenStable();
+
+    component.sortOrder = 'cost-low';
+    const sorted = component.filteredAndSortedGachas;
+    expect(sorted[0].cost).toBe(100);
+  });
+
+  it('filteredAndSortedGachas should sort by remaining-high', async () => {
+    const mockGachas = [
+      { id: '1', name: 'Few', headerImage: '', consumptionType: 'COIN', cost: 100, oncePerUser: false, alreadyDrawn: false, remainingCount: 2, isPublic: true, publishStart: '2026-01-01', publishEnd: null },
+      { id: '2', name: 'Many', headerImage: '', consumptionType: 'COIN', cost: 100, oncePerUser: false, alreadyDrawn: false, remainingCount: 10, isPublic: true, publishStart: '2026-01-02', publishEnd: null },
+    ];
+    gachaService.getGachas.mockResolvedValue(mockGachas);
+    userService.isLoggedIn.mockReturnValue(false);
+
+    fixture.detectChanges();
+    await fixture.whenStable();
+
+    component.sortOrder = 'remaining-high';
+    expect(component.filteredAndSortedGachas[0].remainingCount).toBe(10);
+  });
+
+  it('filteredAndSortedGachas should sort by remaining-low', async () => {
+    const mockGachas = [
+      { id: '1', name: 'Many', headerImage: '', consumptionType: 'COIN', cost: 100, oncePerUser: false, alreadyDrawn: false, remainingCount: 10, isPublic: true, publishStart: '2026-01-01', publishEnd: null },
+      { id: '2', name: 'Few', headerImage: '', consumptionType: 'COIN', cost: 100, oncePerUser: false, alreadyDrawn: false, remainingCount: 2, isPublic: true, publishStart: '2026-01-02', publishEnd: null },
+    ];
+    gachaService.getGachas.mockResolvedValue(mockGachas);
+    userService.isLoggedIn.mockReturnValue(false);
+
+    fixture.detectChanges();
+    await fixture.whenStable();
+
+    component.sortOrder = 'remaining-low';
+    expect(component.filteredAndSortedGachas[0].remainingCount).toBe(2);
+  });
+
+  it('filteredAndSortedGachas should put expired gachas at end', async () => {
+    const mockGachas = [
+      { id: '1', name: 'Active', headerImage: '', consumptionType: 'COIN', cost: 100, oncePerUser: false, alreadyDrawn: false, remainingCount: 1, isPublic: true, publishStart: '2026-01-02', publishEnd: null },
+      { id: '2', name: 'Expired', headerImage: '', consumptionType: 'COIN', cost: 100, oncePerUser: false, alreadyDrawn: false, remainingCount: 1, isPublic: true, publishStart: '2020-01-01', publishEnd: '2020-12-31T00:00:00Z' },
+    ];
+    gachaService.getGachas.mockResolvedValue(mockGachas);
+    userService.isLoggedIn.mockReturnValue(false);
+
+    fixture.detectChanges();
+    await fixture.whenStable();
+
+    const sorted = component.filteredAndSortedGachas;
+    expect(sorted[0].name).toBe('Active');
+    expect(sorted[1].name).toBe('Expired');
+  });
 });

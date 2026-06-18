@@ -2,6 +2,7 @@ import {
   Component,
   ChangeDetectorRef,
   Inject,
+  NgZone,
   OnInit,
   Optional,
 } from '@angular/core';
@@ -22,6 +23,14 @@ export interface DrawnCard {
   exchangeType?: string;
   exchangeCoins?: number | null;
 }
+
+const CARD_RARITY_RANK: { [key: string]: number } = {
+  SSR: 5,
+  SR: 4,
+  R: 3,
+  N: 2,
+  LAST: 1,
+};
 
 export interface GachaDrawResultDialogData {
   drawnCards: DrawnCard[];
@@ -46,6 +55,8 @@ export class GachaDrawResultDialogComponent implements OnInit {
   isPlayingEffect: boolean = false;
   selectedCardIds = new Set<string>();
   isExchanging: boolean = false;
+  effectCard: DrawnCard | null = null;
+  isShowingEffectPhase: boolean = false;
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: GachaDrawResultDialogData,
@@ -54,6 +65,7 @@ export class GachaDrawResultDialogComponent implements OnInit {
     @Optional() private dialogRef: MatDialogRef<GachaDrawResultDialogComponent>,
     private cardService: CardService,
     private userService: UserService,
+    private ngZone: NgZone,
   ) {}
 
   ngOnInit(): void {
@@ -61,7 +73,38 @@ export class GachaDrawResultDialogComponent implements OnInit {
     this.translateService.use('ja');
     this.drawnCards = this.data?.drawnCards ?? [];
     this.revealed = this.drawnCards.map(() => false);
-    this.startEffectForCurrent();
+    this.setupEffectsForMultipleDraw();
+
+    if (!this.isShowingEffectPhase) {
+      this.startEffectForCurrent();
+    }
+  }
+
+  private setupEffectsForMultipleDraw(): void {
+    if (this.drawnCards.length <= 1) return;
+
+    const maxRarity = Math.max(
+      ...this.drawnCards.map(
+        (card) => CARD_RARITY_RANK[card.cardType ?? 'N'] ?? 0,
+      ),
+    );
+
+    let highestRarityCardIndex = -1;
+    this.drawnCards.forEach((card, index) => {
+      const cardRank = CARD_RARITY_RANK[card.cardType ?? 'N'] ?? 0;
+      if (cardRank === maxRarity && highestRarityCardIndex === -1) {
+        highestRarityCardIndex = index;
+      }
+    });
+
+    if (highestRarityCardIndex >= 0) {
+      this.effectCard = { ...this.drawnCards[highestRarityCardIndex] };
+      this.isShowingEffectPhase = true;
+    }
+
+    this.drawnCards.forEach((card) => {
+      card.effectUrl = undefined;
+    });
   }
 
   get currentCard(): DrawnCard | null {
@@ -75,6 +118,13 @@ export class GachaDrawResultDialogComponent implements OnInit {
   }
 
   onEffectEnded(): void {
+    if (this.isShowingEffectPhase) {
+      this.isShowingEffectPhase = false;
+      this.currentIndex = 0;
+      this.cdr.markForCheck();
+      return;
+    }
+
     if (!this.isPlayingEffect) return;
     this.isPlayingEffect = false;
     this.revealed[this.currentIndex] = true;
@@ -108,6 +158,10 @@ export class GachaDrawResultDialogComponent implements OnInit {
     if (this.isPlayingEffect || this.isCurrentRevealed) return;
     this.revealed[this.currentIndex] = true;
     this.cdr.markForCheck();
+
+    if (this.isLast) {
+      setTimeout(() => this.next(), 300);
+    }
   }
 
   next(): void {
@@ -144,7 +198,11 @@ export class GachaDrawResultDialogComponent implements OnInit {
   }
 
   close(): void {
-    this.dialogRef?.close();
+    if (!this.showSummary && this.drawnCards.length > 0) {
+      this.enterSummary();
+    } else {
+      this.dialogRef?.close();
+    }
   }
 
   isExchangeable(card: DrawnCard): boolean {
@@ -202,14 +260,15 @@ export class GachaDrawResultDialogComponent implements OnInit {
       await this.userService.updateUser(userId, {
         coin: currentCoin + totalCoins,
       });
-      this.userService.saveCoin(currentCoin + totalCoins);
 
-      this.drawnCards = this.drawnCards.filter(
-        (card) => !this.selectedCardIds.has(card.id),
-      );
-      this.selectedCardIds.clear();
-
-      this.cdr.markForCheck();
+      this.ngZone.run(() => {
+        this.userService.saveCoin(currentCoin + totalCoins);
+        this.drawnCards = this.drawnCards.filter(
+          (card) => !this.selectedCardIds.has(card.id),
+        );
+        this.selectedCardIds.clear();
+        this.cdr.markForCheck();
+      });
     } catch (error) {
       console.error('Failed to exchange cards:', error);
       alert(this.translateService.instant('gacha-draw-result.exchange-error'));
