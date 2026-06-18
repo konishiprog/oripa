@@ -93,7 +93,8 @@ describe('GachaDrawResultDialogComponent', () => {
     expect(component.revealed).toEqual([false, false, false]);
     expect(component.currentIndex).toBe(0);
     expect(component.showSummary).toBe(false);
-    expect(component.isPlayingEffect).toBe(true);
+    expect(component.isShowingEffectPhase).toBe(true);
+    expect(component.effectCard).toBeTruthy();
   });
 
   it('currentCard should return card at current index', () => {
@@ -120,20 +121,17 @@ describe('GachaDrawResultDialogComponent', () => {
   });
 
   it('hasEffectUrl should return true only when current card has effectUrl', () => {
-    expect(component.hasEffectUrl).toBe(true);
+    expect(component.hasEffectUrl).toBe(false);
     component.currentIndex = 1;
     expect(component.hasEffectUrl).toBe(false);
     component.currentIndex = 2;
-    expect(component.hasEffectUrl).toBe(true);
+    expect(component.hasEffectUrl).toBe(false);
   });
 
   it('isShowingEffect should return true when playing effect or has effect url', () => {
+    expect(component.isShowingEffect).toBe(false);
     component.isPlayingEffect = true;
     expect(component.isShowingEffect).toBe(true);
-    component.isPlayingEffect = false;
-    expect(component.isShowingEffect).toBe(true);
-    component.currentIndex = 1;
-    expect(component.isShowingEffect).toBe(false);
   });
 
   it('isShowingEffect should return false when showing summary', () => {
@@ -203,7 +201,15 @@ describe('GachaDrawResultDialogComponent', () => {
     expect(component.isPlayingEffect).toBe(false);
   });
 
-  it('onEffectEnded should mark current card as revealed', () => {
+  it('onEffectEnded should handle effect phase ending', () => {
+    component.isShowingEffectPhase = true;
+    component.onEffectEnded();
+    expect(component.isShowingEffectPhase).toBe(false);
+    expect(component.currentIndex).toBe(0);
+  });
+
+  it('onEffectEnded should mark current card as revealed in normal mode', () => {
+    component.isShowingEffectPhase = false;
     component.isPlayingEffect = true;
     component.onEffectEnded();
     expect(component.revealed[0]).toBe(true);
@@ -231,7 +237,14 @@ describe('GachaDrawResultDialogComponent', () => {
     expect(onEffectEndedSpy).not.toHaveBeenCalled();
   });
 
-  it('close should close the dialog', () => {
+  it('close should show summary when not showing summary', () => {
+    component.showSummary = false;
+    component.close();
+    expect(component.showSummary).toBe(true);
+  });
+
+  it('close should close the dialog when showing summary', () => {
+    component.showSummary = true;
     component.close();
     expect(dialogRef.close).toHaveBeenCalled();
   });
@@ -293,12 +306,8 @@ describe('GachaDrawResultDialogComponent', () => {
 
     await component.executeExchange();
 
-    expect(mockCardService.exchangeCard).toHaveBeenCalledWith(
-      mockDrawnCards[0].id,
-    );
-    expect(mockCardService.exchangeCard).toHaveBeenCalledWith(
-      mockDrawnCards[2].id,
-    );
+    expect(mockCardService.exchangeCard).toHaveBeenCalledWith(mockDrawnCards[0].id);
+    expect(mockCardService.exchangeCard).toHaveBeenCalledWith(mockDrawnCards[2].id);
     expect(mockUserService.updateUser).toHaveBeenCalled();
     expect(mockUserService.saveCoin).toHaveBeenCalledWith(1150);
   });

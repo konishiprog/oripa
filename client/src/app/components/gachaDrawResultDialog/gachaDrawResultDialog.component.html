@@ -1,4 +1,7 @@
-<div class="dialog-wrapper" [class.showing-effect]="isShowingEffect">
+<div
+  class="dialog-wrapper"
+  [class.showing-effect]="isShowingEffect || isShowingEffectPhase"
+>
   <div class="dialog-header" *ngIf="!hasEffectUrl || showSummary">
     <h2>
       <ng-container *ngIf="!showSummary">
@@ -24,9 +27,34 @@
     </button>
   </div>
 
+  <div class="effect-stage" *ngIf="isShowingEffectPhase && effectCard">
+    <video
+      class="effect-video"
+      [src]="effectCard.effectUrl"
+      autoplay
+      playsinline
+      (ended)="onEffectEnded()"
+      (error)="onEffectEnded()"
+    ></video>
+    <div class="effect-buttons">
+      <button
+        type="button"
+        class="reveal-btn reveal-btn-skip"
+        (click)="onEffectEnded()"
+      >
+        {{ "gacha-draw-result.skip-effect" | translate }}
+      </button>
+    </div>
+  </div>
+
   <div
     class="effect-stage"
-    *ngIf="!showSummary && currentCard && (isPlayingEffect || hasEffectUrl)"
+    *ngIf="
+      !isShowingEffectPhase &&
+      !showSummary &&
+      currentCard &&
+      (isPlayingEffect || hasEffectUrl)
+    "
   >
     <video
       class="effect-video"
@@ -50,7 +78,13 @@
 
   <div
     class="reveal-stage"
-    *ngIf="!showSummary && currentCard && !isPlayingEffect && !hasEffectUrl"
+    *ngIf="
+      !isShowingEffectPhase &&
+      !showSummary &&
+      currentCard &&
+      !isPlayingEffect &&
+      !hasEffectUrl
+    "
   >
     <div
       class="card-flip"
@@ -106,7 +140,10 @@
         <div class="summary-card-wrapper">
           <img [src]="card.imageFront" [alt]="card.name" />
           <div class="summary-card-name">{{ card.name }}</div>
-          <div class="summary-card-checkbox-wrapper" *ngIf="isExchangeable(card)">
+          <div
+            class="summary-card-checkbox-wrapper"
+            *ngIf="isExchangeable(card)"
+          >
             <input
               type="checkbox"
               [checked]="selectedCardIds.has(card.id)"
@@ -114,7 +151,10 @@
               [attr.aria-label]="'gacha-draw-result.select-card' | translate"
             />
           </div>
-          <div class="summary-card-coins" *ngIf="isExchangeable(card) && card.exchangeCoins">
+          <div
+            class="summary-card-coins"
+            *ngIf="isExchangeable(card) && card.exchangeCoins"
+          >
             {{ card.exchangeCoins }}{{ "common.unit.coin" | translate }}
           </div>
         </div>
@@ -134,10 +174,19 @@
           }}
         </ng-container>
         <ng-container *ngIf="isExchanging">
+          <mat-progress-spinner
+            [diameter]="16"
+            [strokeWidth]="2"
+            mode="indeterminate"
+          ></mat-progress-spinner>
           {{ "gacha-draw-result.exchanging" | translate }}
         </ng-container>
       </button>
-      <button type="button" class="reveal-btn reveal-btn-next" (click)="close()">
+      <button
+        type="button"
+        class="reveal-btn reveal-btn-next"
+        (click)="close()"
+      >
         {{ "gacha-draw-result.close" | translate }}
       </button>
     </div>
