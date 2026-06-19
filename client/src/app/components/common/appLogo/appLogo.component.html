@@ -1,3 +1,11 @@
-<div [class]="class || 'logo'" (click)="goToGachaPage()" role="button" [attr.aria-label]="'Logo'">
-  <div [class]="(class ? class + '-icon' : 'logo-icon')" [innerHTML]="getIcon('assets/icons/logo.svg')"></div>
+<div
+  [class]="class || 'logo'"
+  (click)="goToGachaPage()"
+  role="button"
+  [attr.aria-label]="'Logo'"
+>
+  <div
+    [class]="class ? class + '-icon' : 'logo-icon'"
+    [innerHTML]="getIcon('assets/icons/logo.svg')"
+  ></div>
 </div>
