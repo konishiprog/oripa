@@ -16,7 +16,7 @@
           (click)="toggleSidebar()"
           [attr.aria-label]="'common.header.menu' | translate"
         >
-          <span class="sidebar-toggle-icon" [innerHTML]="menuIcon"></span>
+          <span class="sidebar-toggle-icon" [innerHTML]="getIcon('assets/icons/menu.svg')"></span>
         </button>
         <span>{{ 'common.console' | translate }}</span>
         <span class="breadcrumb-sep">/</span>
@@ -24,10 +24,10 @@
       </div>
       <div class="topbar-right">
         <button class="icon-btn">
-          <span [innerHTML]="notificationIcon"></span>
+          <span [innerHTML]="getIcon('assets/icons/notification.svg')"></span>
         </button>
         <button class="icon-btn">
-          <span [innerHTML]="searchIcon"></span>
+          <span [innerHTML]="getIcon('assets/icons/search.svg')"></span>
         </button>
       </div>
     </header>

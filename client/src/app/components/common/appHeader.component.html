@@ -5,7 +5,7 @@
     <ng-container *ngIf="!isAdminPage && isLoggedIn">
       <div class="user-coin-section">
         <div class="user-coin-group">
-          <span class="user-coin-icon" [innerHTML]="coinIcon"></span>
+          <span class="user-coin-icon" [innerHTML]="getIcon('assets/icons/coin-gold.svg')"></span>
           <span class="user-coin-amount">
             {{ userCoin }}{{ "common.unit.coin" | translate }}
           </span>
@@ -19,7 +19,7 @@
           </button>
         </div>
         <div class="user-ticket-display">
-          <span class="user-ticket-icon" [innerHTML]="ticketIcon"></span>
+          <span class="user-ticket-icon" [innerHTML]="getIcon('assets/icons/ticket.svg')"></span>
           <span class="user-ticket-amount">
             {{ userTicket || 0 }}{{ "common.unit.ticket" | translate }}
           </span>
@@ -31,7 +31,7 @@
         (click)="goToMyPage()"
         [attr.aria-label]="'common.header.my-page' | translate"
       >
-        <span class="header-mypage-icon" [innerHTML]="myPageIcon"></span>
+        <span class="header-mypage-icon" [innerHTML]="getIcon('assets/icons/user-profile.svg')"></span>
       </button>
     </ng-container>
 
@@ -44,7 +44,7 @@
     >
       <span
         class="hamburger-icon"
-        [innerHTML]="isMobileMenuOpen ? closeIcon : menuIcon"
+        [innerHTML]="isMobileMenuOpen ? getIcon('assets/icons/close.svg') : getIcon('assets/icons/menu.svg')"
       ></span>
     </button>
   </div>

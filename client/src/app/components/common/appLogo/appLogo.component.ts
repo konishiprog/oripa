@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, ChangeDetectorRef } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { Router } from '@angular/router';
@@ -7,23 +7,49 @@ import { Router } from '@angular/router';
   selector: 'app-logo',
   standalone: false,
   templateUrl: './appLogo.component.html',
-  styleUrls: ['./appLogo.component.css']
+  styleUrls: ['./appLogo.component.css'],
 })
 export class AppLogoComponent implements OnInit {
   @Input() class: string = '';
-  logoSvg: SafeHtml = '';
+  private iconCache: Map<string, SafeHtml> = new Map();
+  private readonly CACHE_BUST = new Date().getTime();
 
-  constructor(private http: HttpClient, private sanitizer: DomSanitizer, private router: Router) {}
+  constructor(
+    private http: HttpClient,
+    private sanitizer: DomSanitizer,
+    private router: Router,
+    private cdr: ChangeDetectorRef,
+  ) {}
 
-  ngOnInit() {
-    this.http.get('assets/icons/logo.svg', { responseType: 'text' }).subscribe({
-      next: (svg) => {
-        this.logoSvg = this.sanitizer.bypassSecurityTrustHtml(svg);
-      },
-      error: (error) => {
-        console.error('Failed to load logo SVG', error);
-      }
-    });
+  ngOnInit(): void {
+    this.loadIcon();
+  }
+
+  private loadIcon(): void {
+    const iconPath = 'assets/icons/logo.svg';
+    this.http
+      .get(`${iconPath}?v=${this.CACHE_BUST}`, { responseType: 'text' })
+      .subscribe({
+        next: (svg) => {
+          this.iconCache.set(
+            iconPath,
+            this.sanitizer.bypassSecurityTrustHtml(svg),
+          );
+          this.cdr.markForCheck();
+        },
+        error: (error) => {
+          console.error(
+            `Failed to load icon ${iconPath}:`,
+            error.status,
+            error.statusText,
+            error.url,
+          );
+        },
+      });
+  }
+
+  getIcon(iconPath: string): SafeHtml {
+    return this.iconCache.get(iconPath) || '';
   }
 
   goToGachaPage(): void {

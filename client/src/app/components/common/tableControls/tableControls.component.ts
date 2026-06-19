@@ -31,10 +31,8 @@ export class TableControlsComponent implements OnInit {
 
   searchQuery: string = '';
   isComposing: boolean = false;
-  searchIcon: SafeHtml = '';
-  filterIcon: SafeHtml = '';
-  chevronLeftIcon: SafeHtml = '';
-  chevronRightIcon: SafeHtml = '';
+  private iconCache: Map<string, SafeHtml> = new Map();
+  private readonly CACHE_BUST = new Date().getTime();
   Math = Math;
 
   constructor(
@@ -135,32 +133,37 @@ export class TableControlsComponent implements OnInit {
   }
 
   private loadIcons(): void {
-    this.loadIcon('assets/icons/search.svg', (svg) => (this.searchIcon = svg));
-    if (this.showFilterButton) {
-      this.loadIcon(
-        'assets/icons/filter.svg',
-        (svg) => (this.filterIcon = svg),
-      );
-    }
-    this.loadIcon(
+    const iconPaths = [
+      'assets/icons/search.svg',
+      ...(this.showFilterButton ? ['assets/icons/filter.svg'] : []),
       'assets/icons/chevron-left.svg',
-      (svg) => (this.chevronLeftIcon = svg),
-    );
-    this.loadIcon(
       'assets/icons/chevron-right.svg',
-      (svg) => (this.chevronRightIcon = svg),
-    );
+    ];
+
+    iconPaths.forEach((iconPath) => {
+      this.http
+        .get(`${iconPath}?v=${this.CACHE_BUST}`, { responseType: 'text' })
+        .subscribe({
+          next: (svg) => {
+            this.iconCache.set(
+              iconPath,
+              this.sanitizer.bypassSecurityTrustHtml(svg),
+            );
+            this.cdr.markForCheck();
+          },
+          error: (error) => {
+            console.error(
+              `Failed to load icon ${iconPath}:`,
+              error.status,
+              error.statusText,
+              error.url,
+            );
+          },
+        });
+    });
   }
 
-  private loadIcon(path: string, assign: (svg: SafeHtml) => void): void {
-    this.http.get(path, { responseType: 'text' }).subscribe({
-      next: (svg) => {
-        assign(this.sanitizer.bypassSecurityTrustHtml(svg));
-        this.cdr.markForCheck();
-      },
-      error: (error) => {
-        console.error(`Failed to load icon ${path}:`, error);
-      },
-    });
+  getIcon(iconPath: string): SafeHtml {
+    return this.iconCache.get(iconPath) || '';
   }
 }

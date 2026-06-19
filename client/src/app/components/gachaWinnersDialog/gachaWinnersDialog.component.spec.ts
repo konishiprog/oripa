@@ -121,7 +121,7 @@ describe('GachaWinnersDialogComponent', () => {
   it('should create', async () => {
     fixture.detectChanges();
 
-    const req = httpMock.expectOne('assets/icons/user-profile.svg');
+    const req = httpMock.expectOne(request => request.url.includes('assets/icons/user-profile.svg'));
     req.flush('<svg>avatar</svg>');
 
     await fixture.whenStable();
@@ -135,7 +135,7 @@ describe('GachaWinnersDialogComponent', () => {
 
     fixture.detectChanges();
 
-    const req = httpMock.expectOne('assets/icons/user-profile.svg');
+    const req = httpMock.expectOne(request => request.url.includes('assets/icons/user-profile.svg'));
     expect(req.request.method).toBe('GET');
     req.flush('<svg>avatar</svg>');
 
@@ -153,7 +153,7 @@ describe('GachaWinnersDialogComponent', () => {
 
     fixture.detectChanges();
 
-    const req = httpMock.expectOne('assets/icons/user-profile.svg');
+    const req = httpMock.expectOne(request => request.url.includes('assets/icons/user-profile.svg'));
     req.flush('<svg>avatar</svg>');
 
     await fixture.whenStable();
@@ -184,7 +184,7 @@ describe('GachaWinnersDialogComponent', () => {
 
     fixture.detectChanges();
 
-    const req = httpMock.expectOne('assets/icons/user-profile.svg');
+    const req = httpMock.expectOne(request => request.url.includes('assets/icons/user-profile.svg'));
     req.flush('<svg>avatar</svg>');
 
     await fixture.whenStable();
@@ -216,7 +216,7 @@ describe('GachaWinnersDialogComponent', () => {
 
     fixture.detectChanges();
 
-    const req = httpMock.expectOne('assets/icons/user-profile.svg');
+    const req = httpMock.expectOne(request => request.url.includes('assets/icons/user-profile.svg'));
     req.flush('<svg>avatar</svg>');
 
     await fixture.whenStable();
@@ -255,7 +255,7 @@ describe('GachaWinnersDialogComponent', () => {
 
     fixture.detectChanges();
 
-    const req = httpMock.expectOne('assets/icons/user-profile.svg');
+    const req = httpMock.expectOne(request => request.url.includes('assets/icons/user-profile.svg'));
     req.flush('<svg>avatar</svg>');
 
     await fixture.whenStable();
@@ -275,7 +275,7 @@ describe('GachaWinnersDialogComponent', () => {
 
     fixture.detectChanges();
 
-    const req = httpMock.expectOne('assets/icons/user-profile.svg');
+    const req = httpMock.expectOne(request => request.url.includes('assets/icons/user-profile.svg'));
     req.flush('<svg>avatar</svg>');
 
     await fixture.whenStable();
@@ -292,7 +292,7 @@ describe('GachaWinnersDialogComponent', () => {
 
     fixture.detectChanges();
 
-    const req = httpMock.expectOne('assets/icons/user-profile.svg');
+    const req = httpMock.expectOne(request => request.url.includes('assets/icons/user-profile.svg'));
     req.flush('<svg>avatar</svg>');
 
     component.onClose();
@@ -310,7 +310,7 @@ describe('GachaWinnersDialogComponent', () => {
 
     fixture.detectChanges();
 
-    const req = httpMock.expectOne('assets/icons/user-profile.svg');
+    const req = httpMock.expectOne(request => request.url.includes('assets/icons/user-profile.svg'));
     req.flush('<svg>avatar</svg>');
 
     await fixture.whenStable();
@@ -332,7 +332,7 @@ describe('GachaWinnersDialogComponent', () => {
 
     fixture.detectChanges();
 
-    const req = httpMock.expectOne('assets/icons/user-profile.svg');
+    const req = httpMock.expectOne(request => request.url.includes('assets/icons/user-profile.svg'));
     req.flush('<svg>avatar</svg>');
 
     await fixture.whenStable();

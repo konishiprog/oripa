@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
@@ -25,6 +25,9 @@ export class ChargeResultPageComponent implements OnInit {
   errorMessage: string = '';
   icons: { [key: string]: SafeHtml } = {};
 
+  private iconCache: Map<string, SafeHtml> = new Map();
+  private readonly CACHE_BUST = new Date().getTime();
+
   constructor(
     private router: Router,
     private http: HttpClient,
@@ -32,6 +35,7 @@ export class ChargeResultPageComponent implements OnInit {
     private translateService: TranslateService,
     private apiConfig: ApiConfigService,
     private userService: UserService,
+    private cdr: ChangeDetectorRef,
   ) {}
 
   ngOnInit(): void {
@@ -40,22 +44,38 @@ export class ChargeResultPageComponent implements OnInit {
   }
 
   private loadIcons(): void {
-    const iconPaths = {
-      success: './assets/icons/check-circle.svg',
-      error: './assets/icons/x-circle.svg',
-      processing: './assets/icons/hourglass.svg',
+    const iconMap = {
+      'assets/icons/check-circle.svg': 'success',
+      'assets/icons/x-circle.svg': 'error',
+      'assets/icons/hourglass.svg': 'processing',
     };
 
-    Object.entries(iconPaths).forEach(([key, path]) => {
-      this.http.get(path, { responseType: 'text' }).subscribe({
-        next: (svg) => {
-          this.icons[key] = this.sanitizer.bypassSecurityTrustHtml(svg);
-        },
-        error: (error) => {
-          console.error(`Failed to load icon ${path}:`, error);
-        },
-      });
+    Object.entries(iconMap).forEach(([iconPath, key]) => {
+      this.http
+        .get(`${iconPath}?v=${this.CACHE_BUST}`, { responseType: 'text' })
+        .subscribe({
+          next: (svg) => {
+            this.iconCache.set(
+              iconPath,
+              this.sanitizer.bypassSecurityTrustHtml(svg),
+            );
+            this.icons[key] = this.getIcon(iconPath);
+            this.cdr.markForCheck();
+          },
+          error: (error) => {
+            console.error(
+              `Failed to load icon ${iconPath}:`,
+              error.status,
+              error.statusText,
+              error.url,
+            );
+          },
+        });
     });
+  }
+
+  private getIcon(iconPath: string): SafeHtml {
+    return this.iconCache.get(iconPath) || '';
   }
 
   private async checkPaymentStatus(): Promise<void> {
