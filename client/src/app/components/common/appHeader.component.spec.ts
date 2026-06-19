@@ -84,15 +84,15 @@ describe('AppHeaderComponent', () => {
     mockUserService.isLoggedIn.mockReturnValue(true);
     component.ngOnInit();
 
-    const menuReq = httpMock.expectOne('assets/icons/menu.svg');
+    const menuReq = httpMock.expectOne(request => request.url.includes('assets/icons/menu.svg'));
     menuReq.flush('<svg></svg>');
-    const closeReq = httpMock.expectOne('assets/icons/close.svg');
+    const closeReq = httpMock.expectOne(request => request.url.includes('assets/icons/close.svg'));
     closeReq.flush('<svg></svg>');
-    const myPageReq = httpMock.expectOne('assets/icons/user-profile.svg');
+    const myPageReq = httpMock.expectOne(request => request.url.includes('assets/icons/user-profile.svg'));
     myPageReq.flush('<svg></svg>');
-    const coinReq = httpMock.expectOne('assets/icons/coin-gold.svg');
+    const coinReq = httpMock.expectOne(request => request.url.includes('assets/icons/coin-gold.svg'));
     coinReq.flush('<svg></svg>');
-    const ticketReq = httpMock.expectOne('assets/icons/ticket.svg');
+    const ticketReq = httpMock.expectOne(request => request.url.includes('assets/icons/ticket.svg'));
     ticketReq.flush('<svg></svg>');
 
     expect(component.isLoggedIn).toBe(true);
@@ -121,15 +121,15 @@ describe('AppHeaderComponent', () => {
     mockUserService._ticketSubject.next(100);
     component.ngOnInit();
 
-    const menuReq = httpMock.expectOne('assets/icons/menu.svg');
+    const menuReq = httpMock.expectOne(request => request.url.includes('assets/icons/menu.svg'));
     menuReq.flush('<svg></svg>');
-    const closeReq = httpMock.expectOne('assets/icons/close.svg');
+    const closeReq = httpMock.expectOne(request => request.url.includes('assets/icons/close.svg'));
     closeReq.flush('<svg></svg>');
-    const myPageReq = httpMock.expectOne('assets/icons/user-profile.svg');
+    const myPageReq = httpMock.expectOne(request => request.url.includes('assets/icons/user-profile.svg'));
     myPageReq.flush('<svg></svg>');
-    const coinReq = httpMock.expectOne('assets/icons/coin-gold.svg');
+    const coinReq = httpMock.expectOne(request => request.url.includes('assets/icons/coin-gold.svg'));
     coinReq.flush('<svg></svg>');
-    const ticketReq = httpMock.expectOne('assets/icons/ticket.svg');
+    const ticketReq = httpMock.expectOne(request => request.url.includes('assets/icons/ticket.svg'));
     ticketReq.flush('<svg></svg>');
 
     expect(component.userCoin).toBe(1000);
@@ -139,23 +139,23 @@ describe('AppHeaderComponent', () => {
   it('should load icons on init', () => {
     component.ngOnInit();
 
-    const menuReq = httpMock.expectOne('assets/icons/menu.svg');
+    const menuReq = httpMock.expectOne(request => request.url.includes('assets/icons/menu.svg'));
     expect(menuReq.request.method).toBe('GET');
     menuReq.flush('<svg>menu</svg>');
 
-    const closeReq = httpMock.expectOne('assets/icons/close.svg');
+    const closeReq = httpMock.expectOne(request => request.url.includes('assets/icons/close.svg'));
     expect(closeReq.request.method).toBe('GET');
     closeReq.flush('<svg>close</svg>');
 
-    const myPageReq = httpMock.expectOne('assets/icons/user-profile.svg');
+    const myPageReq = httpMock.expectOne(request => request.url.includes('assets/icons/user-profile.svg'));
     expect(myPageReq.request.method).toBe('GET');
     myPageReq.flush('<svg>my-page</svg>');
 
-    const coinReq = httpMock.expectOne('assets/icons/coin-gold.svg');
+    const coinReq = httpMock.expectOne(request => request.url.includes('assets/icons/coin-gold.svg'));
     expect(coinReq.request.method).toBe('GET');
     coinReq.flush('<svg>coin</svg>');
 
-    const ticketReq = httpMock.expectOne('assets/icons/ticket.svg');
+    const ticketReq = httpMock.expectOne(request => request.url.includes('assets/icons/ticket.svg'));
     expect(ticketReq.request.method).toBe('GET');
     ticketReq.flush('<svg>ticket</svg>');
 
@@ -180,15 +180,15 @@ describe('AppHeaderComponent', () => {
     mockRouter.url = '/adminPanel/dashboard';
     component.ngOnInit();
 
-    const menuReq = httpMock.expectOne('assets/icons/menu.svg');
+    const menuReq = httpMock.expectOne(request => request.url.includes('assets/icons/menu.svg'));
     menuReq.flush('<svg></svg>');
-    const closeReq = httpMock.expectOne('assets/icons/close.svg');
+    const closeReq = httpMock.expectOne(request => request.url.includes('assets/icons/close.svg'));
     closeReq.flush('<svg></svg>');
-    const myPageReq = httpMock.expectOne('assets/icons/user-profile.svg');
+    const myPageReq = httpMock.expectOne(request => request.url.includes('assets/icons/user-profile.svg'));
     myPageReq.flush('<svg></svg>');
-    const coinReq = httpMock.expectOne('assets/icons/coin-gold.svg');
+    const coinReq = httpMock.expectOne(request => request.url.includes('assets/icons/coin-gold.svg'));
     coinReq.flush('<svg></svg>');
-    const ticketReq = httpMock.expectOne('assets/icons/ticket.svg');
+    const ticketReq = httpMock.expectOne(request => request.url.includes('assets/icons/ticket.svg'));
     ticketReq.flush('<svg></svg>');
 
     expect(component.isAdminPage).toBe(true);

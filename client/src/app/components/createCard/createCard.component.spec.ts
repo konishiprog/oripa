@@ -139,13 +139,21 @@ describe('CreateCardComponent', () => {
     const file = new File(['test'], 'test.jpg', { type: 'image/jpeg' });
     const event = { target: { files: [file] } };
 
+    jest.spyOn(FileReader.prototype, 'readAsDataURL').mockImplementation(function () {
+      const reader = this as any;
+      reader.onload({
+        target: { result: 'data:image/jpeg;base64,test' },
+      });
+    });
+
     component.onImageFrontSelected(event);
 
     expect(component.imageFrontFile).toBe(file);
+    expect(mockSanitizer.bypassSecurityTrustUrl).toHaveBeenCalledWith(
+      'data:image/jpeg;base64,test',
+    );
 
-    await new Promise((resolve) => setTimeout(resolve, 10));
-
-    expect(mockSanitizer.bypassSecurityTrustUrl).toHaveBeenCalled();
+    jest.restoreAllMocks();
   });
 
   it('should clear imageBackFile and preview when no file selected', () => {
@@ -174,13 +182,21 @@ describe('CreateCardComponent', () => {
     const file = new File(['test'], 'test.jpg', { type: 'image/jpeg' });
     const event = { target: { files: [file] } };
 
+    jest.spyOn(FileReader.prototype, 'readAsDataURL').mockImplementation(function () {
+      const reader = this as any;
+      reader.onload({
+        target: { result: 'data:image/jpeg;base64,test' },
+      });
+    });
+
     component.onImageBackSelected(event);
 
     expect(component.imageBackFile).toBe(file);
+    expect(mockSanitizer.bypassSecurityTrustUrl).toHaveBeenCalledWith(
+      'data:image/jpeg;base64,test',
+    );
 
-    await new Promise((resolve) => setTimeout(resolve, 10));
-
-    expect(mockSanitizer.bypassSecurityTrustUrl).toHaveBeenCalled();
+    jest.restoreAllMocks();
   });
 
   it('should show error when name is missing on submit', async () => {

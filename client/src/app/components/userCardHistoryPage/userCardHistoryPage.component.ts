@@ -72,18 +72,14 @@ export class UserCardHistoryPageComponent implements OnInit {
     private dialog: MatDialog,
   ) {}
 
+  private iconCache: Map<string, SafeHtml> = new Map();
+  private readonly CACHE_BUST = new Date().getTime();
+
   async ngOnInit(): Promise<void> {
     this.translateService.setDefaultLang('ja');
     this.translateService.use('ja');
 
-    this.http
-      .get('assets/icons/chevron-right.svg', { responseType: 'text' })
-      .subscribe({
-        next: (svg) => {
-          this.chevronSvg = this.sanitizer.bypassSecurityTrustHtml(svg);
-          this.cdr.markForCheck();
-        },
-      });
+    this.loadIcons();
 
     const userId = this.userService.getUserId();
     if (!userId) {
@@ -121,6 +117,36 @@ export class UserCardHistoryPageComponent implements OnInit {
       this.checkForNewCards();
       this.cdr.markForCheck();
     }
+  }
+
+  private loadIcons(): void {
+    const iconPaths = ['assets/icons/chevron-right.svg'];
+    iconPaths.forEach((iconPath) => {
+      this.http
+        .get(`${iconPath}?v=${this.CACHE_BUST}`, { responseType: 'text' })
+        .subscribe({
+          next: (svg) => {
+            this.iconCache.set(
+              iconPath,
+              this.sanitizer.bypassSecurityTrustHtml(svg),
+            );
+            this.chevronSvg = this.getIcon(iconPath);
+            this.cdr.markForCheck();
+          },
+          error: (error) => {
+            console.error(
+              `Failed to load icon ${iconPath}:`,
+              error.status,
+              error.statusText,
+              error.url,
+            );
+          },
+        });
+    });
+  }
+
+  private getIcon(iconPath: string): SafeHtml {
+    return this.iconCache.get(iconPath) || '';
   }
 
   private checkForNewCards(): void {

@@ -22,11 +22,8 @@ export class AppHeaderComponent implements OnInit {
   userCoin: number | null = null;
   userTicket: number | null = null;
   isMobileMenuOpen: boolean = false;
-  menuIcon: SafeHtml = '';
-  closeIcon: SafeHtml = '';
-  myPageIcon: SafeHtml = '';
-  coinIcon: SafeHtml = '';
-  ticketIcon: SafeHtml = '';
+  private iconCache: Map<string, SafeHtml> = new Map();
+  private readonly CACHE_BUST = new Date().getTime();
 
   constructor(
     private userService: UserService,
@@ -64,58 +61,39 @@ export class AppHeaderComponent implements OnInit {
   }
 
   private loadIcons(): void {
-    this.http.get('assets/icons/menu.svg', { responseType: 'text' }).subscribe({
-      next: (svg) => {
-        this.menuIcon = this.sanitizer.bypassSecurityTrustHtml(svg);
-      },
-      error: (error) => {
-        console.error('Failed to load menu icon:', error);
-      },
+    const iconPaths = [
+      'assets/icons/menu.svg',
+      'assets/icons/close.svg',
+      'assets/icons/user-profile.svg',
+      'assets/icons/coin-gold.svg',
+      'assets/icons/ticket.svg',
+    ];
+
+    iconPaths.forEach((iconPath) => {
+      this.http
+        .get(`${iconPath}?v=${this.CACHE_BUST}`, { responseType: 'text' })
+        .subscribe({
+          next: (svg) => {
+            this.iconCache.set(
+              iconPath,
+              this.sanitizer.bypassSecurityTrustHtml(svg),
+            );
+            this.cdr.markForCheck();
+          },
+          error: (error) => {
+            console.error(
+              `Failed to load icon ${iconPath}:`,
+              error.status,
+              error.statusText,
+              error.url,
+            );
+          },
+        });
     });
+  }
 
-    this.http
-      .get('assets/icons/close.svg', { responseType: 'text' })
-      .subscribe({
-        next: (svg) => {
-          this.closeIcon = this.sanitizer.bypassSecurityTrustHtml(svg);
-        },
-        error: (error) => {
-          console.error('Failed to load close icon:', error);
-        },
-      });
-
-    this.http
-      .get('assets/icons/user-profile.svg', { responseType: 'text' })
-      .subscribe({
-        next: (svg) => {
-          this.myPageIcon = this.sanitizer.bypassSecurityTrustHtml(svg);
-        },
-        error: (error) => {
-          console.error('Failed to load my page icon:', error);
-        },
-      });
-
-    this.http
-      .get('assets/icons/coin-gold.svg', { responseType: 'text' })
-      .subscribe({
-        next: (svg) => {
-          this.coinIcon = this.sanitizer.bypassSecurityTrustHtml(svg);
-        },
-        error: (error) => {
-          console.error('Failed to load coin icon:', error);
-        },
-      });
-
-    this.http
-      .get('assets/icons/ticket.svg', { responseType: 'text' })
-      .subscribe({
-        next: (svg) => {
-          this.ticketIcon = this.sanitizer.bypassSecurityTrustHtml(svg);
-        },
-        error: (error) => {
-          console.error('Failed to load ticket icon:', error);
-        },
-      });
+  getIcon(iconPath: string): SafeHtml {
+    return this.iconCache.get(iconPath) || '';
   }
 
   toggleMobileMenu(): void {

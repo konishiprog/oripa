@@ -1,7 +1,7 @@
 <div class="filter-bar">
   <div class="filter-bar-left">
     <div class="search-input-wrap">
-      <span class="search-icon" [innerHTML]="searchIcon"></span>
+      <span class="search-icon" [innerHTML]="getIcon('assets/icons/search.svg')"></span>
       <input
         type="text"
         class="search-input"
@@ -21,7 +21,7 @@
       [class.has-active-filter]="filterActive"
       (click)="onFilterClick()"
     >
-      <span class="filter-btn-icon" [innerHTML]="filterIcon"></span>
+      <span class="filter-btn-icon" [innerHTML]="getIcon('assets/icons/filter.svg')"></span>
       {{ "common.filter.button" | translate }}
     </button>
   </div>
@@ -38,7 +38,7 @@
         (click)="previousPage()"
         [disabled]="currentPage === 1"
       >
-        <span class="page-btn-icon" [innerHTML]="chevronLeftIcon"></span>
+        <span class="page-btn-icon" [innerHTML]="getIcon('assets/icons/chevron-left.svg')"></span>
       </button>
       <button
         *ngFor="let page of getPageNumbers()"
@@ -54,7 +54,7 @@
         (click)="nextPage()"
         [disabled]="currentPage === getTotalPages()"
       >
-        <span class="page-btn-icon" [innerHTML]="chevronRightIcon"></span>
+        <span class="page-btn-icon" [innerHTML]="getIcon('assets/icons/chevron-right.svg')"></span>
       </button>
     </div>
     <app-pagination-filter

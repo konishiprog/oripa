@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, ChangeDetectorRef } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Router, NavigationEnd } from '@angular/router';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
@@ -21,7 +21,8 @@ export class SidebarComponent implements OnInit {
   @Input() isOpen: boolean = false;
   adminEmail: string = '';
   menuSections: MenuSection[] = SIDEBAR_MENU;
-  iconCache: Map<string, SafeHtml> = new Map();
+  private iconCache: Map<string, SafeHtml> = new Map();
+  private readonly CACHE_BUST = new Date().getTime();
   isAdminAccountActive: boolean = false;
   isLoading: boolean = true;
 
@@ -31,6 +32,7 @@ export class SidebarComponent implements OnInit {
     private sanitizer: DomSanitizer,
     private translateService: TranslateService,
     private sidebarService: SidebarService,
+    private cdr: ChangeDetectorRef,
   ) {}
 
   async ngOnInit(): Promise<void> {
@@ -74,17 +76,25 @@ export class SidebarComponent implements OnInit {
     });
 
     iconPaths.forEach((iconPath) => {
-      this.http.get(iconPath, { responseType: 'text' }).subscribe({
-        next: (svg) => {
-          this.iconCache.set(
-            iconPath,
-            this.sanitizer.bypassSecurityTrustHtml(svg),
-          );
-        },
-        error: (error) => {
-          console.error(`Failed to load icon ${iconPath}:`, error);
-        },
-      });
+      this.http
+        .get(`${iconPath}?v=${this.CACHE_BUST}`, { responseType: 'text' })
+        .subscribe({
+          next: (svg) => {
+            this.iconCache.set(
+              iconPath,
+              this.sanitizer.bypassSecurityTrustHtml(svg),
+            );
+            this.cdr.markForCheck();
+          },
+          error: (error) => {
+            console.error(
+              `Failed to load icon ${iconPath}:`,
+              error.status,
+              error.statusText,
+              error.url,
+            );
+          },
+        });
     });
   }
 

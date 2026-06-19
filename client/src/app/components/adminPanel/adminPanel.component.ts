@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Router, NavigationEnd } from '@angular/router';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
@@ -17,16 +17,16 @@ import { BREADCRUMB_MAP } from '../../config/breadcrumb.config';
 })
 export class AdminPanelComponent implements OnInit {
   breadcrumbTitle: string = '';
-  notificationIcon: SafeHtml = '';
-  searchIcon: SafeHtml = '';
-  menuIcon: SafeHtml = '';
   isSidebarOpen: boolean = false;
+  private iconCache: Map<string, SafeHtml> = new Map();
+  private readonly CACHE_BUST = new Date().getTime();
 
   constructor(
     private router: Router,
     private http: HttpClient,
     private sanitizer: DomSanitizer,
     private translate: TranslateService,
+    private cdr: ChangeDetectorRef,
   ) {}
 
   ngOnInit(): void {
@@ -54,36 +54,37 @@ export class AdminPanelComponent implements OnInit {
   }
 
   private loadIcons(): void {
-    this.http
-      .get('assets/icons/notification.svg', { responseType: 'text' })
-      .subscribe({
-        next: (svg) => {
-          this.notificationIcon = this.sanitizer.bypassSecurityTrustHtml(svg);
-        },
-        error: (error) => {
-          console.error('Failed to load notification icon:', error);
-        },
-      });
+    const iconPaths = [
+      'assets/icons/notification.svg',
+      'assets/icons/search.svg',
+      'assets/icons/menu.svg',
+    ];
 
-    this.http
-      .get('assets/icons/search.svg', { responseType: 'text' })
-      .subscribe({
-        next: (svg) => {
-          this.searchIcon = this.sanitizer.bypassSecurityTrustHtml(svg);
-        },
-        error: (error) => {
-          console.error('Failed to load search icon:', error);
-        },
-      });
-
-    this.http.get('assets/icons/menu.svg', { responseType: 'text' }).subscribe({
-      next: (svg) => {
-        this.menuIcon = this.sanitizer.bypassSecurityTrustHtml(svg);
-      },
-      error: (error) => {
-        console.error('Failed to load menu icon:', error);
-      },
+    iconPaths.forEach((iconPath) => {
+      this.http
+        .get(`${iconPath}?v=${this.CACHE_BUST}`, { responseType: 'text' })
+        .subscribe({
+          next: (svg) => {
+            this.iconCache.set(
+              iconPath,
+              this.sanitizer.bypassSecurityTrustHtml(svg),
+            );
+            this.cdr.markForCheck();
+          },
+          error: (error) => {
+            console.error(
+              `Failed to load icon ${iconPath}:`,
+              error.status,
+              error.statusText,
+              error.url,
+            );
+          },
+        });
     });
+  }
+
+  getIcon(iconPath: string): SafeHtml {
+    return this.iconCache.get(iconPath) || '';
   }
 
   private updateBreadcrumb(): void {

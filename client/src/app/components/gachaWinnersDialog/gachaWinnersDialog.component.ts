@@ -36,6 +36,9 @@ export class GachaWinnersDialogComponent implements OnInit {
   isLoading: boolean = true;
   avatarIcon: SafeHtml = '';
 
+  private iconCache: Map<string, SafeHtml> = new Map();
+  private readonly CACHE_BUST = new Date().getTime();
+
   constructor(
     private cardService: CardService,
     private userService: UserService,
@@ -52,22 +55,28 @@ export class GachaWinnersDialogComponent implements OnInit {
   ngOnInit(): void {
     this.translateService.setDefaultLang('ja');
     this.translateService.use('ja');
-    this.loadAvatarIcon();
+    this.loadIcons();
     this.loadWinners();
   }
 
-  private loadAvatarIcon(): void {
-    this.http
-      .get('assets/icons/user-profile.svg', { responseType: 'text' })
-      .subscribe({
+  private loadIcons(): void {
+    const iconPaths = ['assets/icons/user-profile.svg'];
+    iconPaths.forEach((iconPath) => {
+      this.http.get(`${iconPath}?v=${this.CACHE_BUST}`, { responseType: 'text' }).subscribe({
         next: (svg) => {
-          this.avatarIcon = this.sanitizer.bypassSecurityTrustHtml(svg);
+          this.iconCache.set(iconPath, this.sanitizer.bypassSecurityTrustHtml(svg));
+          this.avatarIcon = this.getIcon(iconPath);
           this.cdr.markForCheck();
         },
         error: (error) => {
-          console.error('Failed to load avatar icon:', error);
+          console.error(`Failed to load icon ${iconPath}:`, error.status, error.statusText, error.url);
         },
       });
+    });
+  }
+
+  private getIcon(iconPath: string): SafeHtml {
+    return this.iconCache.get(iconPath) || '';
   }
 
   private async loadWinners(): Promise<void> {

@@ -6,6 +6,7 @@ import { HttpClient } from '@angular/common/http';
 import { DomSanitizer } from '@angular/platform-browser';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { of, Subject, throwError } from 'rxjs';
+import { NO_ERRORS_SCHEMA } from '@angular/core';
 
 describe('AdminPanelComponent', () => {
   let component: AdminPanelComponent;
@@ -18,8 +19,6 @@ describe('AdminPanelComponent', () => {
   let langChangeSubject: Subject<any>;
 
   beforeEach(async () => {
-    jest.spyOn(console, 'error').mockImplementation(() => {});
-
     routerEventsSubject = new Subject<any>();
     langChangeSubject = new Subject<any>();
 
@@ -51,10 +50,17 @@ describe('AdminPanelComponent', () => {
         { provide: DomSanitizer, useValue: mockSanitizer },
         { provide: TranslateService, useValue: mockTranslateService },
       ],
+      schemas: [NO_ERRORS_SCHEMA],
     }).compileComponents();
 
     fixture = TestBed.createComponent(AdminPanelComponent);
     component = fixture.componentInstance;
+
+    jest.spyOn(console, 'error').mockImplementation(() => {});
+  });
+
+  afterEach(() => {
+    jest.restoreAllMocks();
   });
 
   it('should create', () => {
@@ -63,8 +69,6 @@ describe('AdminPanelComponent', () => {
 
   it('should initialize with empty breadcrumbTitle and icons', () => {
     expect(component.breadcrumbTitle).toBe('');
-    expect(component.notificationIcon).toBe('');
-    expect(component.searchIcon).toBe('');
   });
 
   it('should set language to ja on init', () => {
@@ -77,14 +81,15 @@ describe('AdminPanelComponent', () => {
     component.ngOnInit();
 
     setTimeout(() => {
-      expect(mockHttpClient.get).toHaveBeenCalledWith(
-        'assets/icons/notification.svg',
-        { responseType: 'text' },
+      const calls = mockHttpClient.get.mock.calls;
+      const notificationCall = calls.find((call: any[]) =>
+        call[0].includes('assets/icons/notification.svg')
       );
+      expect(notificationCall).toBeDefined();
+      expect(notificationCall[1]).toEqual({ responseType: 'text' });
       expect(mockSanitizer.bypassSecurityTrustHtml).toHaveBeenCalledWith(
         '<svg></svg>',
       );
-      expect(component.notificationIcon).toBe('<svg></svg>');
       done();
     }, 10);
   });
@@ -93,10 +98,12 @@ describe('AdminPanelComponent', () => {
     component.ngOnInit();
 
     setTimeout(() => {
-      expect(mockHttpClient.get).toHaveBeenCalledWith(
-        'assets/icons/search.svg',
-        { responseType: 'text' },
+      const calls = mockHttpClient.get.mock.calls;
+      const searchCall = calls.find((call: any[]) =>
+        call[0].includes('assets/icons/search.svg')
       );
+      expect(searchCall).toBeDefined();
+      expect(searchCall[1]).toEqual({ responseType: 'text' });
       done();
     }, 10);
   });
@@ -112,10 +119,11 @@ describe('AdminPanelComponent', () => {
     component.ngOnInit();
 
     setTimeout(() => {
-      expect(console.error).toHaveBeenCalledWith(
-        'Failed to load notification icon:',
-        expect.anything(),
+      const calls = (console.error as jest.Mock).mock.calls;
+      const hasIconError = calls.some((call: any[]) =>
+        call[0]?.includes('Failed to load icon')
       );
+      expect(hasIconError).toBe(true);
       done();
     }, 10);
   });
@@ -261,18 +269,19 @@ describe('AdminPanelComponent', () => {
 
     setTimeout(() => {
       expect(mockHttpClient.get).toHaveBeenCalledTimes(3);
-      expect(mockHttpClient.get).toHaveBeenCalledWith(
-        'assets/icons/notification.svg',
-        { responseType: 'text' },
+      const calls = mockHttpClient.get.mock.calls;
+      const hasNotificationIcon = calls.some((call: any[]) =>
+        call[0].includes('assets/icons/notification.svg')
       );
-      expect(mockHttpClient.get).toHaveBeenCalledWith(
-        'assets/icons/search.svg',
-        { responseType: 'text' },
+      const hasSearchIcon = calls.some((call: any[]) =>
+        call[0].includes('assets/icons/search.svg')
       );
-      expect(mockHttpClient.get).toHaveBeenCalledWith(
-        'assets/icons/menu.svg',
-        { responseType: 'text' },
+      const hasMenuIcon = calls.some((call: any[]) =>
+        call[0].includes('assets/icons/menu.svg')
       );
+      expect(hasNotificationIcon).toBe(true);
+      expect(hasSearchIcon).toBe(true);
+      expect(hasMenuIcon).toBe(true);
       expect(mockSanitizer.bypassSecurityTrustHtml).toHaveBeenCalledTimes(3);
       done();
     }, 10);

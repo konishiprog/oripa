@@ -31,11 +31,11 @@ describe('AppLogoComponent', () => {
     const mockSvg = '<svg></svg>';
     fixture.detectChanges();
 
-    const req = httpMock.expectOne('assets/icons/logo.svg');
+    const req = httpMock.expectOne(request => request.url.includes('assets/icons/logo.svg'));
     expect(req.request.method).toBe('GET');
     req.flush(mockSvg);
 
-    expect(component.logoSvg).toBeTruthy();
+    expect(component.getIcon('assets/icons/logo.svg')).toBeTruthy();
   });
 
   it('should set class input correctly', () => {
@@ -43,9 +43,10 @@ describe('AppLogoComponent', () => {
     fixture.detectChanges();
 
     const mockSvg = '<svg></svg>';
-    const req = httpMock.expectOne('assets/icons/logo.svg');
+    const req = httpMock.expectOne(request => request.url.includes('assets/icons/logo.svg'));
     req.flush(mockSvg);
 
+    fixture.detectChanges();
     expect(component.class).toBe('header-logo');
   });
 
@@ -53,7 +54,7 @@ describe('AppLogoComponent', () => {
     const consoleSpy = jest.spyOn(console, 'error').mockImplementation();
     fixture.detectChanges();
 
-    const req = httpMock.expectOne('assets/icons/logo.svg');
+    const req = httpMock.expectOne(request => request.url.includes('assets/icons/logo.svg'));
     req.error(new ErrorEvent('Network error'));
 
     expect(consoleSpy).toHaveBeenCalled();
