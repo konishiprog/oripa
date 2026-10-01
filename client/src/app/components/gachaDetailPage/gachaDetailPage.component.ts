@@ -1,10 +1,14 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
 import { ActivatedRoute, Router } from '@angular/router';
+import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { TranslateService } from '@ngx-translate/core';
 import { GachaService } from '../../service/gacha.service';
 import { CardService } from '../../service/card.service';
 import { UserService } from '../../service/user.service';
 import { GachaDrawService } from '../../common/gacha-draw.service';
+import { CARD_TYPES } from '../createCard/createCard.component';
+import { FEW_LEFT_RATIO } from '../gachaBox/gachaBox.component';
 
 export interface GachaDetail {
   id: string;
@@ -22,15 +26,26 @@ export interface GachaDetail {
   minExchangeCoins: number;
 }
 
-export interface JackpotCard {
-  id: string;
+export interface PrizeCard {
   name: string;
   imageFront: string;
+  count: number;
 }
 
-interface CautionState {
-  isOpen: boolean;
+export interface PrizeGroup {
+  cardType: string;
+  labelKey: string;
+  cards: PrizeCard[];
 }
+
+const CAUTION_NOTE_KEYS = [
+  'gacha-detail.caution-note-1',
+  'gacha-detail.caution-note-2',
+  'gacha-detail.caution-note-3',
+  'gacha-detail.caution-note-4',
+  'gacha-detail.caution-note-5',
+  'gacha-detail.caution-note-6',
+];
 
 @Component({
   selector: 'app-gacha-detail-page',
@@ -43,11 +58,13 @@ interface CautionState {
 })
 export class GachaDetailPageComponent implements OnInit {
   gacha: GachaDetail | null = null;
-  jackpotCards: JackpotCard[] = [];
+  prizeGroups: PrizeGroup[] = [];
+  priceIcon: SafeHtml = '';
+  warningIcon: SafeHtml = '';
   isLoading: boolean = true;
   isDrawing: boolean = false;
   gachaId: string = '';
-  cautionState: CautionState = { isOpen: false };
+  cautionNoteKeys: string[] = CAUTION_NOTE_KEYS;
 
   constructor(
     private route: ActivatedRoute,
@@ -58,6 +75,8 @@ export class GachaDetailPageComponent implements OnInit {
     private translateService: TranslateService,
     private cdr: ChangeDetectorRef,
     private gachaDrawService: GachaDrawService,
+    private http: HttpClient,
+    private sanitizer: DomSanitizer,
   ) {}
 
   ngOnInit(): void {
@@ -75,7 +94,7 @@ export class GachaDetailPageComponent implements OnInit {
         this.gachaService.getGachaById(this.gachaId),
         this.loadCards(),
       ]);
-      this.jackpotCards = toJackpotCards(cards);
+      this.prizeGroups = toPrizeGroups(cards);
       this.gacha = {
         id: data.id,
         name: data.name,
@@ -91,6 +110,16 @@ export class GachaDetailPageComponent implements OnInit {
         isPublic: data.isPublic ?? false,
         minExchangeCoins: getMinExchangeCoins(cards),
       };
+      this.loadIcon(
+        this.usesTicket
+          ? 'assets/icons/ticket.svg'
+          : 'assets/icons/coin-gold.svg',
+        (icon) => (this.priceIcon = icon),
+      );
+      this.loadIcon(
+        'assets/icons/warning.svg',
+        (icon) => (this.warningIcon = icon),
+      );
     } catch (error) {
       console.error('Failed to load gacha detail:', error);
       this.router.navigate(['/userGachaPage']);
@@ -107,6 +136,42 @@ export class GachaDetailPageComponent implements OnInit {
       console.error('Failed to load cards:', error);
       return [];
     }
+  }
+
+  private loadIcon(iconPath: string, onLoad: (icon: SafeHtml) => void): void {
+    this.http.get(iconPath, { responseType: 'text' }).subscribe({
+      next: (svg) => {
+        onLoad(this.sanitizer.bypassSecurityTrustHtml(svg));
+        this.cdr.markForCheck();
+      },
+      error: (error) => {
+        console.error(`Failed to load icon ${iconPath}:`, error.status);
+      },
+    });
+  }
+
+  get usesTicket(): boolean {
+    return this.gacha?.consumptionType === 'TICKET';
+  }
+
+  get isFewLeft(): boolean {
+    if (!this.gacha) return false;
+    return (
+      this.gacha.remainingCount > 0 &&
+      this.gacha.remainingCount < this.gacha.totalCount * FEW_LEFT_RATIO
+    );
+  }
+
+  get remainingPercent(): number {
+    if (!this.gacha || this.gacha.totalCount === 0) return 0;
+    return (this.gacha.remainingCount / this.gacha.totalCount) * 100;
+  }
+
+  get isUnavailable(): boolean {
+    if (!this.gacha) return false;
+    const isExpired =
+      !!this.gacha.publishEnd && new Date() > new Date(this.gacha.publishEnd);
+    return isExpired || this.gacha.remainingCount === 0;
   }
 
   get isLoggedIn(): boolean {
@@ -152,11 +217,6 @@ export class GachaDetailPageComponent implements OnInit {
     this.router.navigate(['/userGachaPage']);
   }
 
-  toggleCaution(): void {
-    this.cautionState.isOpen = !this.cautionState.isOpen;
-    this.cdr.markForCheck();
-  }
-
   navigateToTerms(): void {
     this.router.navigate(['/terms']);
   }
@@ -169,12 +229,27 @@ function getMinExchangeCoins(cards: any[]): number {
   return exchangeCoins.length > 0 ? Math.min(...exchangeCoins) : 0;
 }
 
-function toJackpotCards(cards: any[]): JackpotCard[] {
-  return cards
-    .filter((card: any) => card.cardType === 'SSR')
-    .map((card: any) => ({
-      id: card.id,
-      name: card.name,
-      imageFront: card.imageFront,
-    }));
+function toPrizeGroups(cards: any[]): PrizeGroup[] {
+  return CARD_TYPES.map((cardType) => {
+    const prizeCards = new Map<string, PrizeCard>();
+    cards
+      .filter((card: any) => card.cardType === cardType.value)
+      .forEach((card: any) => {
+        const prizeCard = prizeCards.get(card.name);
+        if (prizeCard) {
+          prizeCard.count += 1;
+          return;
+        }
+        prizeCards.set(card.name, {
+          name: card.name,
+          imageFront: card.imageFront,
+          count: 1,
+        });
+      });
+    return {
+      cardType: cardType.value,
+      labelKey: cardType.labelKey,
+      cards: Array.from(prizeCards.values()),
+    };
+  }).filter((prizeGroup) => prizeGroup.cards.length > 0);
 }

@@ -163,24 +163,62 @@ describe('GachaDetailPageComponent', () => {
     expect(mockCardService.getCardsByGachaId).toHaveBeenCalledWith(
       'test-gacha-id',
     );
-    expect(component.jackpotCards.length).toBe(2);
-    expect(component.jackpotCards[0].name).toBe('Jackpot Card 1');
+    expect(component.prizeGroups.length).toBe(1);
+    expect(component.prizeGroups[0].cardType).toBe('SSR');
+    expect(component.prizeGroups[0].cards[0].name).toBe('Jackpot Card 1');
   });
 
-  it('should filter jackpot cards to only SSR', async () => {
+  it('should group prize cards by card type in order', async () => {
     const allCards = [
-      { id: '1', name: 'SSR Card', cardType: 'SSR', imageFront: 'ssr.jpg', exchangeCoins: 100 },
-      { id: '2', name: 'SR Card', cardType: 'SR', imageFront: 'sr.jpg', exchangeCoins: 50 },
-      { id: '3', name: 'R Card', cardType: 'R', imageFront: 'r.jpg', exchangeCoins: 10 },
+      { id: '1', name: 'R Card', cardType: 'R', imageFront: 'r.jpg', exchangeCoins: 10 },
+      { id: '2', name: 'SSR Card', cardType: 'SSR', imageFront: 'ssr.jpg', exchangeCoins: 100 },
+      { id: '3', name: 'SR Card', cardType: 'SR', imageFront: 'sr.jpg', exchangeCoins: 50 },
     ];
     mockCardService.getCardsByGachaId.mockResolvedValue(allCards);
 
     await component.loadGachaDetail();
     await fixture.whenStable();
 
-    expect(component.jackpotCards.length).toBe(1);
-    expect(component.jackpotCards[0].name).toBe('SSR Card');
-    expect(component.jackpotCards[0].id).toBe('1');
+    expect(
+      component.prizeGroups.map((prizeGroup) => prizeGroup.cardType),
+    ).toEqual(['SSR', 'SR', 'R']);
+  });
+
+  it('should count prize cards with the same name', async () => {
+    const allCards = [
+      { id: '1', name: 'N Card', cardType: 'N', imageFront: 'n.jpg', exchangeCoins: 10 },
+      { id: '2', name: 'N Card', cardType: 'N', imageFront: 'n.jpg', exchangeCoins: 10 },
+      { id: '3', name: 'Other N Card', cardType: 'N', imageFront: 'o.jpg', exchangeCoins: 10 },
+    ];
+    mockCardService.getCardsByGachaId.mockResolvedValue(allCards);
+
+    await component.loadGachaDetail();
+    await fixture.whenStable();
+
+    expect(component.prizeGroups[0].cards).toEqual([
+      { name: 'N Card', imageFront: 'n.jpg', count: 2 },
+      { name: 'Other N Card', imageFront: 'o.jpg', count: 1 },
+    ]);
+  });
+
+  it('isFewLeft should be true when remaining is below 10% of total', async () => {
+    mockGachaService.getGachaById.mockResolvedValue({
+      ...mockGachaData,
+      remainingCount: 49,
+      totalCount: 500,
+    });
+
+    await component.loadGachaDetail();
+
+    expect(component.isFewLeft).toBe(true);
+    expect(component.remainingPercent).toBeCloseTo(9.8);
+  });
+
+  it('isFewLeft should be false when remaining is 10% or more of total', async () => {
+    await component.loadGachaDetail();
+
+    expect(component.isFewLeft).toBe(false);
+    expect(component.remainingPercent).toBe(20);
   });
 
   it('should format date correctly', () => {
@@ -190,14 +228,6 @@ describe('GachaDetailPageComponent', () => {
     expect(formatted).toContain('06');
     expect(formatted).toContain('09');
     expect(formatted).toContain('日');
-  });
-
-  it('should toggle caution state', () => {
-    expect(component.cautionState.isOpen).toBe(false);
-    component.toggleCaution();
-    expect(component.cautionState.isOpen).toBe(true);
-    component.toggleCaution();
-    expect(component.cautionState.isOpen).toBe(false);
   });
 
   it('should navigate back to userGachaPage', () => {

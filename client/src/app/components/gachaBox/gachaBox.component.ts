@@ -20,7 +20,7 @@ export interface GachaBoxData {
   publishEnd: string | null;
 }
 
-const FEW_LEFT_RATIO = 0.1;
+export const FEW_LEFT_RATIO = 0.1;
 
 @Component({
   selector: 'app-gacha-box',

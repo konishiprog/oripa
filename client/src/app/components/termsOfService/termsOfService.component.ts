@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
-import { Router } from '@angular/router';
+import { BackNavigationService } from '../../common/back-navigation.service';
 
 @Component({
   selector: 'app-terms-of-service',
@@ -14,7 +14,7 @@ import { Router } from '@angular/router';
 export class TermsOfServiceComponent implements OnInit {
   constructor(
     private translateService: TranslateService,
-    private router: Router,
+    private backNavigationService: BackNavigationService,
   ) {}
 
   ngOnInit(): void {
@@ -23,6 +23,6 @@ export class TermsOfServiceComponent implements OnInit {
   }
 
   goBack(): void {
-    this.router.navigate(['/userGachaPage']);
+    this.backNavigationService.back();
   }
 }
