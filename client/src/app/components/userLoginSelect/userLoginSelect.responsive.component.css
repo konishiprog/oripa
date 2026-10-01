@@ -1,13 +1,13 @@
 @media (max-width: 600px) {
-  .container {
+  .content {
     padding: 12px 12px 32px;
   }
 
-  .form-wrapper {
+  .login-card {
     padding: 24px 16px 32px;
   }
 
-  h1 {
+  .login-title {
     font-size: 20px;
     margin-bottom: 20px;
   }

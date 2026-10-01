@@ -14,6 +14,8 @@ import { UserGachaPageComponent } from './components/userGachaPage/userGachaPage
 import { GachaDetailPageComponent } from './components/gachaDetailPage/gachaDetailPage.component';
 import { UserManagementComponent } from './components/userManagement/userManagement.component';
 import { UserSignupComponent } from './components/userSignup/userSignup.component';
+import { UserSignupSelectComponent } from './components/userSignupSelect/userSignupSelect.component';
+import { UserLoginSelectComponent } from './components/userLoginSelect/userLoginSelect.component';
 import { EmailVerificationComponent } from './components/emailVerification/emailVerification.component';
 import { EmailChangeVerificationComponent } from './components/emailChangeVerification/emailChangeVerification.component';
 import { SignupEmailSentComponent } from './components/signupEmailSent/signupEmailSent.component';
@@ -48,7 +50,15 @@ const routes: Routes = [
     component: GachaDetailPageComponent,
   },
   {
+    path: 'userLogin',
+    component: UserLoginSelectComponent,
+  },
+  {
     path: 'userSignup',
+    component: UserSignupSelectComponent,
+  },
+  {
+    path: 'userSignup/email',
     component: UserSignupComponent,
   },
   {

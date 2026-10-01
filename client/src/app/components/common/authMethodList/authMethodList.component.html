@@ -1,0 +1,11 @@
+<div class="auth-methods">
+  <button
+    *ngFor="let authMethod of authMethods"
+    class="auth-method-btn"
+    type="button"
+    (click)="selectMethod(authMethod)"
+  >
+    <span class="auth-method-icon" [innerHTML]="getIcon(authMethod.icon)"></span>
+    <span class="auth-method-label">{{ authMethod.labelKey | translate }}</span>
+  </button>
+</div>
