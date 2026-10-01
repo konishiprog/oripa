@@ -10,10 +10,6 @@
     {{ "coin-exchange-rate.page-desc" | translate }}
   </div>
 
-  <div *ngIf="isLoading" class="loading">
-    {{ "common.loading" | translate }}
-  </div>
-
   <div *ngIf="!isLoading" class="content">
     <button class="add-btn" (click)="openCreateDialog()">
       {{ "coin-exchange-rate.add-new" | translate }}
@@ -48,3 +44,5 @@
     </div>
   </div>
 </div>
+
+<app-loading-spinner *ngIf="isLoading"></app-loading-spinner>

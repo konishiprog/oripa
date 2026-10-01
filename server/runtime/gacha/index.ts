@@ -159,6 +159,7 @@ async function getAll(userId?: string) {
         ...gacha,
         cardsCount: notDrawnCards.length,
         remainingCount: notDrawnCards.length,
+        totalCount: cards.length,
         alreadyDrawn: gacha.oncePerUser ? drawnGachaIds.has(gacha.id) : false,
       };
     });
@@ -190,6 +191,7 @@ async function getById(id: string, userId?: string) {
     ...enrichedGacha,
     cardsCount: notDrawnCards.length,
     remainingCount: notDrawnCards.length,
+    totalCount: cards.length,
     alreadyDrawn,
   };
 }

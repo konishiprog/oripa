@@ -8,10 +8,6 @@
     </p>
   </div>
 
-  <div *ngIf="isLoading" class="winners-loading">
-    {{ "gacha-winners.loading" | translate }}
-  </div>
-
   <div *ngIf="!isLoading" class="winners-body">
     <div class="winners-section">
       <div class="section-banner section-banner--ssr">
@@ -50,3 +46,5 @@
     </button>
   </div>
 </div>
+
+<app-loading-spinner *ngIf="isLoading"></app-loading-spinner>

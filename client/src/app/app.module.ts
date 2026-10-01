@@ -51,6 +51,7 @@ import { AppLogoComponent } from './components/common/appLogo/appLogo.component'
 import { AppHeaderComponent } from './components/common/appHeader.component';
 import { TableControlsComponent } from './components/common/tableControls/tableControls.component';
 import { LoadingOverlayComponent } from './components/common/loadingOverlay/loadingOverlay.component';
+import { LoadingSpinnerComponent } from './components/common/loadingSpinner/loadingSpinner.component';
 import { GachaBoxComponent } from './components/gachaBox/gachaBox.component';
 import { GachaDrawResultDialogComponent } from './components/gachaDrawResultDialog/gachaDrawResultDialog.component';
 import { GachaWinnersDialogComponent } from './components/gachaWinnersDialog/gachaWinnersDialog.component';
@@ -114,6 +115,7 @@ import { GachaDrawButtonsComponent } from './common/gachaDrawButtons/gachaDrawBu
     AppHeaderComponent,
     TableControlsComponent,
     LoadingOverlayComponent,
+    LoadingSpinnerComponent,
     GachaBoxComponent,
     GachaDrawResultDialogComponent,
     GachaWinnersDialogComponent,

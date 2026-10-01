@@ -1,40 +1,48 @@
 <div class="app">
   <app-header></app-header>
 
-  <div class="content">
-    <div class="section-header">
-      <div class="section-title">
-        {{ "user-gacha.section-title" | translate }}
+  <nav class="genre-bar">
+    <div class="genre-bar-inner">
+      <div class="genre-slider">
+        <button
+          class="genre-tab"
+          [class.genre-tab--active]="selectedGenreId === ''"
+          (click)="selectGenre('')"
+        >
+          {{ "user-gacha.genre-all" | translate }}
+        </button>
+        <button
+          *ngFor="let genre of genres"
+          class="genre-tab"
+          [class.genre-tab--active]="selectedGenreId === genre.id"
+          (click)="selectGenre(genre.id)"
+        >
+          {{ genre.name }}
+        </button>
       </div>
-      <button class="sort-btn" type="button" (click)="openSortDialog()">
-        {{ "user-gacha.sort-button" | translate }}
-      </button>
-    </div>
-
-    <div class="genre-slider">
-      <button
-        class="genre-tab"
-        [class.genre-tab--active]="selectedGenreId === ''"
-        (click)="selectGenre('')"
+      <select
+        class="sort-select"
+        [value]="sortOrder"
+        (change)="onSortOrderChange($event)"
       >
-        {{ "user-gacha.genre-all" | translate }}
-      </button>
-      <button
-        *ngFor="let genre of genres"
-        class="genre-tab"
-        [class.genre-tab--active]="selectedGenreId === genre.id"
-        (click)="selectGenre(genre.id)"
-      >
-        {{ genre.name }}
-      </button>
+        <option *ngFor="let order of sortOptions" [value]="order">
+          {{ "user-gacha.sort-dialog." + order | translate }}
+        </option>
+      </select>
     </div>
+  </nav>
 
+  <div class="toolbar">
+    <div class="toolbar-inner">
+      <h1 class="section-title">
+        {{ "user-gacha.section-title" | translate }}
+      </h1>
+    </div>
+  </div>
+
+  <div class="content">
     <div class="exchange-guide-banner">
       {{ "gacha-draw-result.exchange-guide" | translate }}
-    </div>
-
-    <div *ngIf="isLoading" class="loading-state">
-      {{ "user-gacha.loading" | translate }}
     </div>
 
     <div *ngIf="!isLoading && gachas.length === 0" class="empty-state">
@@ -51,3 +59,5 @@
 
   <app-footer-links></app-footer-links>
 </div>
+
+<app-loading-spinner *ngIf="isLoading"></app-loading-spinner>

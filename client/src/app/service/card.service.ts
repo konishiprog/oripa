@@ -130,13 +130,18 @@ export class CardService {
   }
 
   /**
-   * Get all cards for a specific gacha (filtered from all cards)
+   * Get all cards for a specific gacha
    * @param {string} gachaId - Gacha id (UUID)
    * @returns {Promise<any[]>} - Array of card objects
    */
   async getCardsByGachaId(gachaId: string): Promise<any[]> {
-    const allCards = await this.getAllCards();
-    return allCards.filter((card: any) => card.gachaId === gachaId);
+    const response = await lastValueFrom(
+      this.http.get<{ message: string; data: any[] }>(
+        `${this.apiConfig.domain}/api/card?gachaId=${encodeURIComponent(gachaId)}`,
+        { headers: this.apiConfig.headers },
+      ),
+    );
+    return response.data || [];
   }
 
   /**

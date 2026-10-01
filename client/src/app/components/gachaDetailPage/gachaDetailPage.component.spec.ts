@@ -156,8 +156,8 @@ describe('GachaDetailPageComponent', () => {
     expect(component.isLoading).toBe(false);
   });
 
-  it('should load jackpot cards on init', async () => {
-    await component.loadJackpotCards();
+  it('should load jackpot cards with gacha detail', async () => {
+    await component.loadGachaDetail();
     await fixture.whenStable();
 
     expect(mockCardService.getCardsByGachaId).toHaveBeenCalledWith(
@@ -175,7 +175,7 @@ describe('GachaDetailPageComponent', () => {
     ];
     mockCardService.getCardsByGachaId.mockResolvedValue(allCards);
 
-    await component.loadJackpotCards();
+    await component.loadGachaDetail();
     await fixture.whenStable();
 
     expect(component.jackpotCards.length).toBe(1);

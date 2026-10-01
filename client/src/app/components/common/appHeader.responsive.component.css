@@ -114,9 +114,17 @@
     display: flex;
   }
 
+  .app-header {
+    padding: 10px 16px;
+  }
+
   .header-btn {
     width: 100%;
     text-align: center;
+  }
+
+  .header-btn-admin {
+    margin-left: 0;
   }
 
   .header-backdrop {

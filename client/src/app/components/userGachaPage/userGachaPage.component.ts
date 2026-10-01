@@ -1,13 +1,9 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
 import { TranslateService } from '@ngx-translate/core';
 import { GachaService } from '../../service/gacha.service';
 import { GenreService, Genre } from '../../service/genre.service';
 import { UserService } from '../../service/user.service';
-import {
-  GachaSortDialogComponent,
-  GachaSortOrder,
-} from '../gachaSortDialog/gachaSortDialog.component';
+import { GachaSortOrder } from '../gachaSortDialog/gachaSortDialog.component';
 
 export interface UserGacha {
   id: string;
@@ -19,6 +15,7 @@ export interface UserGacha {
   oncePerUser: boolean;
   alreadyDrawn: boolean;
   remainingCount: number;
+  totalCount: number;
   isPublic: boolean;
   publishStart: string;
   publishEnd: string | null;
@@ -39,12 +36,18 @@ export class UserGachaPageComponent implements OnInit {
   selectedGenreId: string = '';
   isLoading: boolean = true;
   sortOrder: GachaSortOrder = 'newest';
+  sortOptions: GachaSortOrder[] = [
+    'newest',
+    'cost-high',
+    'cost-low',
+    'remaining-high',
+    'remaining-low',
+  ];
 
   constructor(
     private gachaService: GachaService,
     private genreService: GenreService,
     private userService: UserService,
-    private dialog: MatDialog,
     private cdr: ChangeDetectorRef,
     private translateService: TranslateService,
   ) {}
@@ -72,6 +75,7 @@ export class UserGachaPageComponent implements OnInit {
           oncePerUser: gacha.oncePerUser ?? false,
           alreadyDrawn: gacha.alreadyDrawn ?? false,
           remainingCount: gacha.remainingCount ?? 0,
+          totalCount: gacha.totalCount ?? 0,
           isPublic: gacha.isPublic ?? false,
           publishStart: gacha.publishStart,
           publishEnd: gacha.publishEnd,
@@ -105,17 +109,10 @@ export class UserGachaPageComponent implements OnInit {
     return sortGachas(base, this.sortOrder);
   }
 
-  openSortDialog(): void {
-    const dialogRef = this.dialog.open(GachaSortDialogComponent, {
-      width: '380px',
-      data: { sortOrder: this.sortOrder },
-    });
-    dialogRef.afterClosed().subscribe((result: GachaSortOrder | undefined) => {
-      if (result) {
-        this.sortOrder = result;
-        this.cdr.markForCheck();
-      }
-    });
+  onSortOrderChange(event: Event): void {
+    const target = event.target as HTMLSelectElement;
+    this.sortOrder = target.value as GachaSortOrder;
+    this.cdr.markForCheck();
   }
 }
 

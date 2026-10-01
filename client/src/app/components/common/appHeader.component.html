@@ -58,15 +58,15 @@
     </ng-container>
     <ng-container *ngIf="!isAdminPage">
       <ng-container *ngIf="!isLoggedIn">
+        <button class="header-btn header-btn-primary" (click)="goToSignup()">
+          {{ "common.header.signup" | translate }}
+        </button>
         <button
           class="header-btn header-btn-outline"
           type="button"
           (click)="openLoginDialog()"
         >
           {{ "common.header.login" | translate }}
-        </button>
-        <button class="header-btn header-btn-primary" (click)="goToSignup()">
-          {{ "common.header.signup" | translate }}
         </button>
         <button class="header-btn header-btn-admin" (click)="goToAdminPage()">
           {{ "common.header.admin-page" | translate }}

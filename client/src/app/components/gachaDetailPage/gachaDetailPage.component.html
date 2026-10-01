@@ -2,10 +2,6 @@
   <app-header></app-header>
 
   <div class="content">
-    <div *ngIf="isLoading" class="loading-state">
-      {{ "user-gacha.loading" | translate }}
-    </div>
-
     <div *ngIf="!isLoading && gacha" class="detail-container">
       <div class="detail-header">
         <button class="back-btn" type="button" (click)="goBack()">
@@ -103,3 +99,5 @@
 
   <app-footer-links></app-footer-links>
 </div>
+
+<app-loading-spinner *ngIf="isLoading"></app-loading-spinner>

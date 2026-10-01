@@ -4,3 +4,18 @@
     font-size: 11px;
   }
 }
+
+@media (max-width: 600px) {
+  .box-price-icon {
+    width: 26px;
+    height: 26px;
+  }
+
+  .box-price-value {
+    font-size: 28px;
+  }
+
+  .box-stock-text {
+    font-size: 14px;
+  }
+}

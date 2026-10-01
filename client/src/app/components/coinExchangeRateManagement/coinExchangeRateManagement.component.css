@@ -39,12 +39,6 @@
   margin-bottom: 24px;
 }
 
-.loading {
-  text-align: center;
-  padding: 40px;
-  color: #718096;
-}
-
 .content {
   background: #fff;
   border: 1px solid #e2e8f0;
