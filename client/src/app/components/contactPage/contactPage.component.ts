@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { UserService } from '../../service/user.service';
 import { ContactService } from '../../service/contact.service';
+import { BackNavigationService } from '../../common/back-navigation.service';
 
 @Component({
   selector: 'app-contact-page',
@@ -26,6 +27,7 @@ export class ContactPageComponent implements OnInit {
     private translateService: TranslateService,
     private router: Router,
     private cdr: ChangeDetectorRef,
+    private backNavigationService: BackNavigationService,
   ) {}
 
   ngOnInit(): void {
@@ -71,7 +73,7 @@ export class ContactPageComponent implements OnInit {
   }
 
   goBack(): void {
-    this.router.navigate(['/userGachaPage']);
+    this.backNavigationService.back();
   }
 
   private showSuccess(key: string): void {

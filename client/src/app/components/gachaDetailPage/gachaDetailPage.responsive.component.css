@@ -1,67 +1,78 @@
-@media (min-width: 768px) {
-  .jackpot-cards {
-    grid-template-columns: repeat(4, 1fr);
+@media (max-width: 600px) {
+  .content {
+    padding: 12px 12px 24px;
   }
-}
 
-@media (max-width: 480px) {
-  .detail-header {
+  .detail-info,
+  .prize-section {
     padding: 12px;
-  }
-
-  .back-btn {
-    width: 36px;
-    height: 36px;
-    font-size: 20px;
   }
 
   .detail-title {
+    font-size: 16px;
+  }
+
+  .detail-price-icon {
+    width: 28px;
+    height: 28px;
+  }
+
+  .detail-price-value {
+    font-size: 30px;
+  }
+
+  .detail-stock-text {
     font-size: 14px;
   }
 
-  .header-spacer {
-    width: 36px;
+  .detail-overlay-text {
+    font-size: 28px;
   }
 
-  .info-section {
+  .detail-guarantee-value {
+    font-size: 15px;
+  }
+
+  .prize-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+  }
+
+  .prize-card-name {
+    font-size: 11px;
+  }
+
+  .prize-rate-note {
+    font-size: 12px;
+  }
+
+  .prize-group-label {
+    min-width: 180px;
+    padding: 8px 24px;
+    font-size: 22px;
+  }
+
+  .caution-section {
+    padding: 20px 12px;
+  }
+
+  .caution-heading {
+    font-size: 19px;
+  }
+
+  .caution-alert {
     padding: 12px;
   }
 
-  .deadline-badge {
-    font-size: 12px;
-    padding: 8px 10px;
-    gap: 6px;
+  .caution-alert-text {
+    font-size: 14px;
   }
 
-  .guarantee-badge {
-    font-size: 12px;
-    padding: 8px 12px;
-  }
-
-  .caution-header {
-    padding: 12px;
-    gap: 10px;
-  }
-
-  .caution-header > span:nth-child(2) {
-    font-size: 12px;
-  }
-
-  .caution-content {
-    padding: 0 12px 12px;
-    font-size: 12px;
-  }
-
-  .prize-label {
-    font-size: 24px;
-  }
-
-  .jackpot-card-name {
-    font-size: 10px;
-  }
-
-  .draw-btn {
-    padding: 12px 12px;
+  .caution-note {
     font-size: 13px;
+  }
+
+  .draw-bar-inner {
+    padding: 10px 12px;
   }
 }

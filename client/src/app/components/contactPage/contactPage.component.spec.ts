@@ -4,6 +4,7 @@ import { ContactPageComponent } from './contactPage.component';
 import { UserService } from '../../service/user.service';
 import { ContactService } from '../../service/contact.service';
 import { TranslateService } from '@ngx-translate/core';
+import { BackNavigationService } from '../../common/back-navigation.service';
 
 describe('ContactPageComponent', () => {
   let component: ContactPageComponent;
@@ -142,9 +143,13 @@ describe('ContactPageComponent', () => {
     expect(component.content).toBe('Test content');
   });
 
-  it('should redirect to gacha page on goBack', () => {
+  it('should go back to previous page on goBack', () => {
+    const backNavigationService = TestBed.inject(BackNavigationService);
+    const backSpy = jest
+      .spyOn(backNavigationService, 'back')
+      .mockImplementation(() => {});
     component.goBack();
-    expect(router.navigate).toHaveBeenCalledWith(['/userGachaPage']);
+    expect(backSpy).toHaveBeenCalled();
   });
 
   it('should set isLoading to true during submission', async () => {
