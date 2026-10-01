@@ -52,9 +52,9 @@ describe('UserSignupComponent', () => {
     expect(component.isLoading).toBe(false);
   });
 
-  it('should navigate back', () => {
+  it('should navigate back to signup method selection', () => {
     component.goBack();
-    expect(router.navigate).toHaveBeenCalledWith(['/userGachaPage']);
+    expect(router.navigate).toHaveBeenCalledWith(['/userSignup']);
   });
 
   it('should toggle password visibility', () => {

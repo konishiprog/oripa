@@ -1,14 +1,13 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { Router } from '@angular/router';
-import { MatDialog } from '@angular/material/dialog';
 import { TranslateService, TranslateModule } from '@ngx-translate/core';
 import {
   HttpClientTestingModule,
   HttpTestingController,
 } from '@angular/common/http/testing';
 import { DomSanitizer } from '@angular/platform-browser';
-import { Subject, of, BehaviorSubject } from 'rxjs';
+import { Subject, BehaviorSubject } from 'rxjs';
 import { AppHeaderComponent } from './appHeader.component';
 import { UserService } from '../../service/user.service';
 
@@ -17,7 +16,6 @@ describe('AppHeaderComponent', () => {
   let fixture: ComponentFixture<AppHeaderComponent>;
   let mockUserService: any;
   let mockRouter: any;
-  let mockDialog: any;
   let mockTranslateService: any;
   let mockSanitizer: any;
   let httpMock: HttpTestingController;
@@ -46,9 +44,6 @@ describe('AppHeaderComponent', () => {
       url: '/userGachaPage',
       events: routerEventsSubject.asObservable(),
     };
-    mockDialog = {
-      open: jest.fn(),
-    };
     mockTranslateService = {
       setDefaultLang: jest.fn(),
       use: jest.fn(),
@@ -64,7 +59,6 @@ describe('AppHeaderComponent', () => {
       providers: [
         { provide: UserService, useValue: mockUserService },
         { provide: Router, useValue: mockRouter },
-        { provide: MatDialog, useValue: mockDialog },
         { provide: TranslateService, useValue: mockTranslateService },
         { provide: DomSanitizer, useValue: mockSanitizer },
       ],
@@ -194,19 +188,13 @@ describe('AppHeaderComponent', () => {
     expect(component.isAdminPage).toBe(true);
   });
 
-  it('should open login dialog', () => {
-    const mockDialogRef = {
-      afterClosed: jest.fn().mockReturnValue(of(null)),
-    };
-    mockDialog.open.mockReturnValue(mockDialogRef);
+  it('should navigate to login method selection', () => {
     component.isMobileMenuOpen = true;
 
-    component.openLoginDialog();
+    component.goToLogin();
 
     expect(component.isMobileMenuOpen).toBe(false);
-    expect(mockDialog.open).toHaveBeenCalledWith(expect.any(Function), {
-      width: '420px',
-    });
+    expect(mockRouter.navigate).toHaveBeenCalledWith(['/userLogin']);
   });
 
   it('should navigate to signup page', () => {

@@ -429,6 +429,28 @@
     "error-not-found": "入力された情報に一致するアカウントが見つかりません"
   },
 
+  "user-login-select": {
+    "title": "ログイン",
+    "line": "LINEでログイン",
+    "x": "X（旧Twitter）でログイン",
+    "google": "Googleアカウントでログイン",
+    "email": "メールアドレスでログイン",
+    "coming-soon": "現在準備中です。メールアドレスでログインしてください。"
+  },
+  "user-signup-select": {
+    "title": "新規登録",
+    "line": "LINEで登録",
+    "x": "X（旧Twitter）で登録",
+    "google": "Googleアカウントで登録",
+    "email": "メールアドレスで登録",
+    "coming-soon": "現在準備中です。メールアドレスで登録してください。",
+    "agreement-prefix": "本サービスをご利用いただくには、",
+    "agreement-terms": "利用規約",
+    "agreement-and": "および",
+    "agreement-privacy": "プライバシーポリシー",
+    "agreement-suffix": "を確認のうえ、同意していただく必要があります。",
+    "login-guide": "すでにアカウント登録されている方はこちら"
+  },
   "user-signup": {
     "title": "アカウント作成",
     "email": "メールアドレス",

@@ -2,10 +2,8 @@ import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
-import { MatDialog } from '@angular/material/dialog';
 import { TranslateService } from '@ngx-translate/core';
 import { UserService } from '../../service/user.service';
-import { UserLoginDialogComponent } from '../userLoginDialog/userLoginDialog.component';
 
 @Component({
   selector: 'app-header',
@@ -28,7 +26,6 @@ export class AppHeaderComponent implements OnInit {
   constructor(
     private userService: UserService,
     private router: Router,
-    private dialog: MatDialog,
     private cdr: ChangeDetectorRef,
     private translateService: TranslateService,
     private http: HttpClient,
@@ -108,26 +105,9 @@ export class AppHeaderComponent implements OnInit {
     this.isAdminPage = this.router.url.includes('/adminPanel');
   }
 
-  openLoginDialog(): void {
+  goToLogin(): void {
     this.closeMobileMenu();
-    const dialogRef = this.dialog.open(UserLoginDialogComponent, {
-      width: '420px',
-    });
-
-    dialogRef.afterClosed().subscribe((result) => {
-      if (result?.success) {
-        this.isLoggedIn = true;
-        if (result.data?.coin !== undefined) {
-          this.userService.saveCoin(result.data.coin);
-          this.userCoin = result.data.coin;
-        }
-        if (result.data?.ticket !== undefined) {
-          this.userService.saveTicket(result.data.ticket);
-          this.userTicket = result.data.ticket;
-        }
-        this.cdr.markForCheck();
-      }
-    });
+    this.router.navigate(['/userLogin']);
   }
 
   logout(): void {

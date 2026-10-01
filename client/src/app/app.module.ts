@@ -39,6 +39,9 @@ import { UserDetailDialogComponent } from './components/userDetailDialog/userDet
 import { UserGachaPageComponent } from './components/userGachaPage/userGachaPage.component';
 import { UserManagementComponent } from './components/userManagement/userManagement.component';
 import { UserSignupComponent } from './components/userSignup/userSignup.component';
+import { UserSignupSelectComponent } from './components/userSignupSelect/userSignupSelect.component';
+import { UserLoginSelectComponent } from './components/userLoginSelect/userLoginSelect.component';
+import { AuthMethodListComponent } from './components/common/authMethodList/authMethodList.component';
 import { EmailVerificationComponent } from './components/emailVerification/emailVerification.component';
 import { EmailChangeVerificationComponent } from './components/emailChangeVerification/emailChangeVerification.component';
 import { SignupEmailSentComponent } from './components/signupEmailSent/signupEmailSent.component';
@@ -103,6 +106,9 @@ import { GachaDrawButtonsComponent } from './common/gachaDrawButtons/gachaDrawBu
     UserGachaPageComponent,
     UserManagementComponent,
     UserSignupComponent,
+    UserSignupSelectComponent,
+    UserLoginSelectComponent,
+    AuthMethodListComponent,
     EmailVerificationComponent,
     EmailChangeVerificationComponent,
     SignupEmailSentComponent,

@@ -1,0 +1,13 @@
+@media (max-width: 600px) {
+  .auth-methods {
+    gap: 14px;
+  }
+
+  .auth-method-btn {
+    min-height: 52px;
+  }
+
+  .auth-method-label {
+    font-size: 15px;
+  }
+}

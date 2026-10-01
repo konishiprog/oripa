@@ -1,0 +1,16 @@
+<div class="app">
+  <app-header></app-header>
+
+  <div class="content">
+    <div class="login-card">
+      <h1 class="login-title">{{ "user-login-select.title" | translate }}</h1>
+
+      <app-auth-method-list
+        [authMethods]="loginMethods"
+        (methodSelected)="selectMethod($event)"
+      ></app-auth-method-list>
+    </div>
+  </div>
+
+  <app-footer-links></app-footer-links>
+</div>

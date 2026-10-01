@@ -108,7 +108,7 @@ export class UserSignupComponent implements OnInit {
   }
 
   goBack(): void {
-    this.router.navigate(['/userGachaPage']);
+    this.router.navigate(['/userSignup']);
   }
 
   togglePasswordVisibility(): void {

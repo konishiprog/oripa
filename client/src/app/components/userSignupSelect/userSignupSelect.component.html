@@ -1,0 +1,37 @@
+<div class="app">
+  <app-header></app-header>
+
+  <div class="content">
+    <div class="signup-card">
+      <h1 class="signup-title">{{ "user-signup-select.title" | translate }}</h1>
+
+      <app-auth-method-list
+        [authMethods]="signupMethods"
+        (methodSelected)="selectMethod($event)"
+      ></app-auth-method-list>
+
+      <p class="signup-agreement">
+        {{ "user-signup-select.agreement-prefix" | translate
+        }}<a class="signup-agreement-link" (click)="navigateToTerms()">{{
+          "user-signup-select.agreement-terms" | translate
+        }}</a
+        >{{ "user-signup-select.agreement-and" | translate
+        }}<a class="signup-agreement-link" (click)="navigateToPrivacy()">{{
+          "user-signup-select.agreement-privacy" | translate
+        }}</a
+        >{{ "user-signup-select.agreement-suffix" | translate }}
+      </p>
+
+      <div class="signup-divider"></div>
+
+      <p class="signup-login-text">
+        {{ "user-signup-select.login-guide" | translate }}
+      </p>
+      <button class="signup-login-btn" type="button" (click)="goToLogin()">
+        {{ "common.header.login" | translate }}
+      </button>
+    </div>
+  </div>
+
+  <app-footer-links></app-footer-links>
+</div>
