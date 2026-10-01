@@ -1,7 +1,8 @@
-import { Component, Input, ChangeDetectorRef } from '@angular/core';
+import { Component, Input, OnInit, ChangeDetectorRef } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
+import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { MatDialog } from '@angular/material/dialog';
-import { TranslateService } from '@ngx-translate/core';
 import { UserService } from '../../service/user.service';
 import { GachaWinnersDialogComponent } from '../gachaWinnersDialog/gachaWinnersDialog.component';
 import { GachaDrawService } from '../../common/gacha-draw.service';
@@ -15,8 +16,11 @@ export interface GachaBoxData {
   oncePerUser: boolean;
   alreadyDrawn: boolean;
   remainingCount: number;
+  totalCount: number;
   publishEnd: string | null;
 }
+
+const FEW_LEFT_RATIO = 0.1;
 
 @Component({
   selector: 'app-gacha-box',
@@ -27,18 +31,39 @@ export interface GachaBoxData {
     './gachaBox.responsive.component.css',
   ],
 })
-export class GachaBoxComponent {
+export class GachaBoxComponent implements OnInit {
   @Input() gacha!: GachaBoxData;
   isDrawing: boolean = false;
+  priceIcon: SafeHtml = '';
 
   constructor(
+    private http: HttpClient,
+    private sanitizer: DomSanitizer,
     private userService: UserService,
-    private translateService: TranslateService,
     private dialog: MatDialog,
     private cdr: ChangeDetectorRef,
     private router: Router,
     private gachaDrawService: GachaDrawService,
   ) {}
+
+  ngOnInit(): void {
+    this.loadPriceIcon();
+  }
+
+  private loadPriceIcon(): void {
+    const iconPath = this.usesTicket
+      ? 'assets/icons/ticket.svg'
+      : 'assets/icons/coin-gold.svg';
+    this.http.get(iconPath, { responseType: 'text' }).subscribe({
+      next: (svg) => {
+        this.priceIcon = this.sanitizer.bypassSecurityTrustHtml(svg);
+        this.cdr.markForCheck();
+      },
+      error: (error) => {
+        console.error(`Failed to load icon ${iconPath}:`, error.status);
+      },
+    });
+  }
 
   get isLoggedIn(): boolean {
     return this.userService.isLoggedIn();
@@ -57,14 +82,20 @@ export class GachaBoxComponent {
     return this.gacha.remainingCount === 0;
   }
 
-  get isUnavailable(): boolean {
-    return this.isExpired || this.isSoldOut;
+  get isFewLeft(): boolean {
+    return (
+      this.gacha.remainingCount > 0 &&
+      this.gacha.remainingCount < this.gacha.totalCount * FEW_LEFT_RATIO
+    );
   }
 
-  formatPrice(cost: number): string {
-    const unitKey = this.usesTicket ? 'common.unit.ticket' : 'common.unit.coin';
-    const unit = this.translateService.instant(unitKey);
-    return `${cost.toLocaleString()}${unit}`;
+  get remainingPercent(): number {
+    if (this.gacha.totalCount === 0) return 0;
+    return (this.gacha.remainingCount / this.gacha.totalCount) * 100;
+  }
+
+  get isUnavailable(): boolean {
+    return this.isExpired || this.isSoldOut;
   }
 
   async draw(requested: number): Promise<void> {

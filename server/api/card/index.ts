@@ -542,12 +542,16 @@ module.exports = {
     );
 
     /**
-     * Get all cards
-     * GET /api/card
+     * Get all cards, or cards of a gacha when gachaId is given
+     * GET /api/card?gachaId=
      */
-    router.get("/", async (_req: Request, res: Response) => {
+    router.get("/", async (req: Request, res: Response) => {
       try {
-        const cards = await runtime.card.getAll();
+        const gachaId =
+          typeof req.query.gachaId === "string" ? req.query.gachaId : undefined;
+        const cards = gachaId
+          ? await runtime.card.getByGachaId(gachaId)
+          : await runtime.card.getAll();
         return res.status(200).json({
           message: messages.success.CARDS_RETRIEVED,
           data: cards,

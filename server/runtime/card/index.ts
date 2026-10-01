@@ -134,6 +134,16 @@ async function getAll() {
 }
 
 /**
+ * Get cards belonging to a specific gacha from cache
+ * @param {string} gachaId
+ * @returns {Promise<any[]>}
+ */
+async function getByGachaId(gachaId: string) {
+  const cards = await getAll();
+  return cards.filter((card: any) => card.gachaId === gachaId);
+}
+
+/**
  * Update cards (single detailed update or bulk draw update)
  * For single update: requires name, cardType, exchangeType, and optional images
  * For bulk draw update: pass cardIds array and userId
@@ -244,6 +254,7 @@ module.exports = {
   init,
   create,
   getAll,
+  getByGachaId,
   update,
   deleteById,
   refreshCache,

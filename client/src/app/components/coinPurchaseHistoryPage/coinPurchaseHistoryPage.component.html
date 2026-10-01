@@ -68,6 +68,4 @@
   </div>
 </div>
 
-<div class="loading" *ngIf="isLoading">
-  {{ "common.loading" | translate }}
-</div>
+<app-loading-spinner *ngIf="isLoading"></app-loading-spinner>

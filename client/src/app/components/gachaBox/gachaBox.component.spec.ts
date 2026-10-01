@@ -25,6 +25,7 @@ describe('GachaBoxComponent', () => {
     oncePerUser: false,
     alreadyDrawn: false,
     remainingCount: 5,
+    totalCount: 10,
     publishEnd: null,
   };
 
@@ -75,13 +76,29 @@ describe('GachaBoxComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('formatPrice should format with P suffix and commas', () => {
-    expect(component.formatPrice(12345)).toBe('12,345P');
+  it('isFewLeft should be true when remaining is below 10% of total', () => {
+    component.gacha = { ...baseGacha, remainingCount: 9, totalCount: 100 };
+    expect(component.isFewLeft).toBe(true);
   });
 
-  it('formatPrice should use ticket unit when consumptionType is TICKET', () => {
-    component.gacha = { ...baseGacha, consumptionType: 'TICKET' };
-    expect(component.formatPrice(100)).toBe('100T');
+  it('isFewLeft should be false when remaining is 10% or more of total', () => {
+    component.gacha = { ...baseGacha, remainingCount: 10, totalCount: 100 };
+    expect(component.isFewLeft).toBe(false);
+  });
+
+  it('isFewLeft should be false when sold out', () => {
+    component.gacha = { ...baseGacha, remainingCount: 0, totalCount: 100 };
+    expect(component.isFewLeft).toBe(false);
+  });
+
+  it('remainingPercent should return remaining ratio of total', () => {
+    component.gacha = { ...baseGacha, remainingCount: 30, totalCount: 100 };
+    expect(component.remainingPercent).toBe(30);
+  });
+
+  it('remainingPercent should return 0 when total is 0', () => {
+    component.gacha = { ...baseGacha, remainingCount: 0, totalCount: 0 };
+    expect(component.remainingPercent).toBe(0);
   });
 
   it('isLoggedIn should return value from userService', () => {

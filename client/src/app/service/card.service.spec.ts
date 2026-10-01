@@ -184,23 +184,29 @@ describe('CardService', () => {
     expect(response).toEqual([]);
   });
 
-  it('should filter cards by gacha id', async () => {
-    const mockCards = [
-      mockCard,
-      { ...mockCard, id: 'card-2', gachaId: 'other-gacha' },
-    ];
+  it('should get cards by gacha id', async () => {
+    const result = service.getCardsByGachaId('test-gacha-id');
 
-    jest.spyOn(service, 'getAllCards').mockResolvedValue(mockCards);
+    const req = httpMock.expectOne(
+      'http://localhost:3000/api/card?gachaId=test-gacha-id',
+    );
+    expect(req.request.method).toBe('GET');
+    req.flush({ message: 'Cards retrieved', data: [mockCard] });
 
-    const result = await service.getCardsByGachaId('test-gacha-id');
-    expect(result).toEqual([mockCard]);
+    const response = await result;
+    expect(response).toEqual([mockCard]);
   });
 
   it('should return empty array if no cards match', async () => {
-    jest.spyOn(service, 'getAllCards').mockResolvedValue([]);
+    const result = service.getCardsByGachaId('test-gacha-id');
 
-    const result = await service.getCardsByGachaId('test-gacha-id');
-    expect(result).toEqual([]);
+    const req = httpMock.expectOne(
+      'http://localhost:3000/api/card?gachaId=test-gacha-id',
+    );
+    req.flush({ message: 'Cards retrieved', data: null });
+
+    const response = await result;
+    expect(response).toEqual([]);
   });
 
   it('should filter cards by user id and isDrawn', async () => {

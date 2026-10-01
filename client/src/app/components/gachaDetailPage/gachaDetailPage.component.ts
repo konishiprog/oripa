@@ -66,14 +66,16 @@ export class GachaDetailPageComponent implements OnInit {
     this.route.params.subscribe((params) => {
       this.gachaId = params['id'];
       this.loadGachaDetail();
-      this.loadJackpotCards();
     });
   }
 
   async loadGachaDetail(): Promise<void> {
     try {
-      const data = await this.gachaService.getGachaById(this.gachaId);
-      const minExchangeCoins = await this.getMinExchangeCoins();
+      const [data, cards] = await Promise.all([
+        this.gachaService.getGachaById(this.gachaId),
+        this.loadCards(),
+      ]);
+      this.jackpotCards = toJackpotCards(cards);
       this.gacha = {
         id: data.id,
         name: data.name,
@@ -87,7 +89,7 @@ export class GachaDetailPageComponent implements OnInit {
         publishStart: data.publishStart,
         publishEnd: data.publishEnd,
         isPublic: data.isPublic ?? false,
-        minExchangeCoins: minExchangeCoins,
+        minExchangeCoins: getMinExchangeCoins(cards),
       };
     } catch (error) {
       console.error('Failed to load gacha detail:', error);
@@ -98,34 +100,12 @@ export class GachaDetailPageComponent implements OnInit {
     }
   }
 
-  private async getMinExchangeCoins(): Promise<number> {
+  private async loadCards(): Promise<any[]> {
     try {
-      const cards = await this.cardService.getCardsByGachaId(this.gachaId);
-      if (cards.length === 0) return 0;
-      const exchangeCoins = cards
-        .map((card: any) => card.exchangeCoins ?? 0)
-        .filter((coins: number) => coins > 0);
-      return exchangeCoins.length > 0 ? Math.min(...exchangeCoins) : 0;
+      return await this.cardService.getCardsByGachaId(this.gachaId);
     } catch (error) {
-      console.error('Failed to get minimum exchange coins:', error);
-      return 0;
-    }
-  }
-
-  async loadJackpotCards(): Promise<void> {
-    try {
-      const cards = await this.cardService.getCardsByGachaId(this.gachaId);
-      this.jackpotCards = cards
-        .filter((card: any) => card.cardType === 'SSR')
-        .map((card: any) => ({
-          id: card.id,
-          name: card.name,
-          imageFront: card.imageFront,
-        }));
-    } catch (error) {
-      console.error('Failed to load jackpot cards:', error);
-    } finally {
-      this.cdr.markForCheck();
+      console.error('Failed to load cards:', error);
+      return [];
     }
   }
 
@@ -180,4 +160,21 @@ export class GachaDetailPageComponent implements OnInit {
   navigateToTerms(): void {
     this.router.navigate(['/terms']);
   }
+}
+
+function getMinExchangeCoins(cards: any[]): number {
+  const exchangeCoins = cards
+    .map((card: any) => card.exchangeCoins ?? 0)
+    .filter((coins: number) => coins > 0);
+  return exchangeCoins.length > 0 ? Math.min(...exchangeCoins) : 0;
+}
+
+function toJackpotCards(cards: any[]): JackpotCard[] {
+  return cards
+    .filter((card: any) => card.cardType === 'SSR')
+    .map((card: any) => ({
+      id: card.id,
+      name: card.name,
+      imageFront: card.imageFront,
+    }));
 }

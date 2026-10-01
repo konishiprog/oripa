@@ -11,10 +11,6 @@
       <div class="header-spacer"></div>
     </header>
 
-    <div *ngIf="isLoading" class="loading-state">
-      {{ "my-page.loading" | translate }}
-    </div>
-
     <div *ngIf="!isLoading" class="menu">
       <button
         type="button"
@@ -360,3 +356,5 @@
     <app-footer-links></app-footer-links>
   </div>
 </div>
+
+<app-loading-spinner *ngIf="isLoading"></app-loading-spinner>

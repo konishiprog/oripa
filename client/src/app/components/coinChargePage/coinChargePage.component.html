@@ -10,10 +10,6 @@
     {{ "coin-charge.page-desc" | translate }}
   </div>
 
-  <div *ngIf="isLoading" class="loading">
-    {{ "common.loading" | translate }}
-  </div>
-
   <div *ngIf="!isLoading" class="content">
     <div class="charge-section">
       <mat-form-field class="form-group">
@@ -121,3 +117,5 @@
     </div>
   </div>
 </div>
+
+<app-loading-spinner *ngIf="isLoading"></app-loading-spinner>

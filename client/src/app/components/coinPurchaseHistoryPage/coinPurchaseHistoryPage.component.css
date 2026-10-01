@@ -121,13 +121,6 @@
   white-space: nowrap;
 }
 
-.loading {
-  padding: 20px;
-  text-align: center;
-  font-size: 14px;
-  color: #718096;
-}
-
 .filter-controls {
   display: flex;
   gap: 8px;

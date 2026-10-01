@@ -3,6 +3,14 @@
   [class.box-card--unavailable]="isUnavailable"
   (click)="!isUnavailable && navigateToDetail()"
 >
+  <div class="box-badges">
+    <span class="box-badge box-badge-once" *ngIf="gacha.oncePerUser">
+      {{ "gacha-box.once-per-user-badge" | translate }}
+    </span>
+    <span class="box-badge box-badge-few-left" *ngIf="isFewLeft">
+      {{ "gacha-box.few-left-badge" | translate }}
+    </span>
+  </div>
   <div class="box-thumb">
     <img [src]="gacha.headerImage" [alt]="gacha.name" class="box-image" />
     <div class="box-overlay" *ngIf="isUnavailable">
@@ -12,16 +20,30 @@
     </div>
   </div>
   <div class="box-info">
-    <div class="box-name">{{ gacha.name }}</div>
-    <div class="box-badges" *ngIf="gacha.oncePerUser">
-      <span class="box-badge box-badge-once">
-        {{ "gacha-box.once-per-user-badge" | translate }}
-      </span>
-    </div>
     <div class="box-meta">
-      <span class="box-price" [ngClass]="{ 'box-price-ticket': usesTicket }">
-        {{ formatPrice(gacha.cost) }}
-      </span>
+      <div class="box-price" [ngClass]="{ 'box-price-ticket': usesTicket }">
+        <span class="box-price-icon" [innerHTML]="priceIcon"></span>
+        <span class="box-price-value">{{ gacha.cost.toLocaleString() }}</span>
+        <span class="box-price-per">{{ "gacha-box.per-draw" | translate }}</span>
+      </div>
+      <div class="box-stock">
+        <span class="box-stock-text">
+          {{
+            "gacha-box.remaining"
+              | translate
+                : {
+                    remaining: gacha.remainingCount.toLocaleString(),
+                    total: gacha.totalCount.toLocaleString(),
+                  }
+          }}
+        </span>
+        <div class="box-stock-bar">
+          <div
+            class="box-stock-bar-fill"
+            [style.width.%]="remainingPercent"
+          ></div>
+        </div>
+      </div>
     </div>
     <app-gacha-draw-buttons
       *ngIf="!isUnavailable"

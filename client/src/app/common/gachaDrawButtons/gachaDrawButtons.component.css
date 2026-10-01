@@ -3,9 +3,12 @@
   grid-template-columns: repeat(2, 1fr);
 }
 
+.draw-buttons-wrapper.compact {
+  margin-top: auto;
+}
+
 .draw-buttons-wrapper.compact .draw-buttons {
-  gap: 12px;
-  margin-top: 4px;
+  gap: 8px;
 }
 
 .draw-buttons-wrapper.full .draw-buttons {
@@ -31,29 +34,40 @@
 
 .compact .draw-btn {
   padding: 8px 6px;
-  font-size: 12px;
+  font-size: 13px;
+  font-weight: 800;
+  border: 2px solid transparent;
+  border-radius: 6px;
   color: #fff;
 }
 
 .compact .draw-btn:not(:disabled):hover {
   transform: translateY(-1px);
-  box-shadow: 0 4px 10px rgba(128, 90, 213, 0.3);
+  filter: brightness(1.08);
 }
 
 .compact .draw-btn-single {
-  background: linear-gradient(135deg, #805ad5, #6b46c1);
+  background: linear-gradient(180deg, #ff2d55, #e60033);
+  box-shadow: 0 3px 0 #a30024;
 }
 
 .compact .draw-btn-ten {
-  background: linear-gradient(135deg, #f59e0b, #d97706);
+  background: linear-gradient(180deg, #ffb31a, #f08c00);
+  box-shadow: 0 3px 0 #b36700;
 }
 
-.compact .draw-btn-hundred {
-  background: linear-gradient(135deg, #3b82f6, #2563eb);
-}
-
+.compact .draw-btn-hundred,
 .compact .draw-btn-all {
-  background: linear-gradient(135deg, #10b981, #059669);
+  background: #fff;
+  color: #1a1d29;
+  border-color: #1a1d29;
+}
+
+.compact .draw-btn-hundred:not(:disabled):hover,
+.compact .draw-btn-all:not(:disabled):hover {
+  background: #1a1d29;
+  color: #fff;
+  filter: none;
 }
 
 .full .draw-btn {
