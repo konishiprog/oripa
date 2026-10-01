@@ -2,14 +2,11 @@
   <app-header></app-header>
 
   <div class="page">
-    <header class="page-header">
-      <button type="button" class="back-btn" (click)="goBack()">
-        <span [innerHTML]="chevronSvg" class="back-icon"></span>
-        {{ "my-page.back" | translate }}
-      </button>
-      <h1 class="page-title">{{ "my-page.title" | translate }}</h1>
-      <div class="header-spacer"></div>
-    </header>
+    <button type="button" class="back-btn" (click)="goBack()">
+      <span [innerHTML]="chevronSvg" class="back-icon"></span>
+      {{ "my-page.back" | translate }}
+    </button>
+    <h1 class="page-title">{{ "my-page.title" | translate }}</h1>
 
     <div *ngIf="!isLoading" class="menu">
       <button
@@ -341,20 +338,20 @@
           </button>
         </div>
       </div>
-
-      <div class="delete-account-section">
-        <button
-          type="button"
-          class="delete-account-btn"
-          (click)="openDeleteAccountDialog()"
-        >
-          {{ "my-page.delete-account" | translate }}
-        </button>
-      </div>
     </div>
 
-    <app-footer-links></app-footer-links>
+    <div *ngIf="!isLoading" class="delete-account-section">
+      <button
+        type="button"
+        class="delete-account-btn"
+        (click)="openDeleteAccountDialog()"
+      >
+        {{ "my-page.delete-account" | translate }}
+      </button>
+    </div>
   </div>
+
+  <app-footer-links></app-footer-links>
 </div>
 
 <app-loading-spinner *ngIf="isLoading"></app-loading-spinner>

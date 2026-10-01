@@ -27,30 +27,32 @@ h2 {
 button {
   flex: 1;
   padding: 12px 16px;
-  border: 1px solid #ddd;
-  border-radius: 4px;
+  border: 2px solid transparent;
+  border-radius: 9999px;
+  font-family: inherit;
   font-size: 14px;
-  font-weight: 600;
+  font-weight: 800;
   cursor: pointer;
   transition: all 0.2s;
 }
 
 .cancel-btn {
-  background-color: #f5f5f5;
-  color: #333;
+  background-color: #fff;
+  border-color: #f7d23e;
+  color: #1a1a1a;
 }
 
 .cancel-btn:hover {
-  background-color: #efefef;
+  background-color: #fffbe6;
 }
 
 .delete-btn {
-  background-color: #dc3545;
-  color: white;
-  border-color: #dc3545;
+  background-color: #e0533f;
+  border-color: #e0533f;
+  color: #fff;
 }
 
 .delete-btn:hover {
-  background-color: #c82333;
-  border-color: #bd2130;
+  background-color: #c9432f;
+  border-color: #c9432f;
 }

@@ -4,61 +4,60 @@
   <app-loading-overlay [isLoading]="isLoading"></app-loading-overlay>
 
   <div class="page">
-    <header class="page-header">
-      <button type="button" class="back-btn" (click)="goBack()">
-        <span [innerHTML]="chevronSvg" class="back-icon"></span>
-        {{ "card-history.back" | translate }}
-      </button>
-      <h1 class="page-title">{{ "card-history.title" | translate }}</h1>
-      <div class="header-spacer"></div>
-    </header>
+    <button type="button" class="back-btn" (click)="goBack()">
+      <span [innerHTML]="chevronSvg" class="back-icon"></span>
+      {{ "card-history.back" | translate }}
+    </button>
+    <h1 class="page-title">{{ "card-history.title" | translate }}</h1>
 
-    <div class="nav-tabs">
-      <div
-        class="nav-tab"
-        [class.active]="activeTab === CARD_HISTORY_TABS.UNSELECTED"
-        (click)="selectTab(CARD_HISTORY_TABS.UNSELECTED)"
-      >
-        {{ "card-history.tab-unselected" | translate }}
+    <div class="history-panel">
+      <div class="nav-tabs">
+        <div
+          class="nav-tab"
+          [class.active]="activeTab === CARD_HISTORY_TABS.UNSELECTED"
+          (click)="selectTab(CARD_HISTORY_TABS.UNSELECTED)"
+        >
+          {{ "card-history.tab-unselected" | translate }}
+        </div>
+        <div
+          class="nav-tab"
+          [class.active]="activeTab === CARD_HISTORY_TABS.PENDING"
+          (click)="selectTab(CARD_HISTORY_TABS.PENDING)"
+        >
+          {{ "card-history.tab-pending" | translate }}
+        </div>
+        <div
+          class="nav-tab"
+          [class.active]="activeTab === CARD_HISTORY_TABS.SHIPPED"
+          (click)="selectTab(CARD_HISTORY_TABS.SHIPPED)"
+        >
+          {{ "card-history.tab-shipped" | translate }}
+        </div>
       </div>
-      <div
-        class="nav-tab"
-        [class.active]="activeTab === CARD_HISTORY_TABS.PENDING"
-        (click)="selectTab(CARD_HISTORY_TABS.PENDING)"
-      >
-        {{ "card-history.tab-pending" | translate }}
-      </div>
-      <div
-        class="nav-tab"
-        [class.active]="activeTab === CARD_HISTORY_TABS.SHIPPED"
-        (click)="selectTab(CARD_HISTORY_TABS.SHIPPED)"
-      >
-        {{ "card-history.tab-shipped" | translate }}
-      </div>
-    </div>
 
-    <div
-      class="mode-buttons"
-      *ngIf="activeTab === CARD_HISTORY_TABS.UNSELECTED"
-    >
-      <button
-        type="button"
-        class="mode-btn"
-        [class.active]="mode === 'exchange'"
-        (click)="switchMode('exchange')"
+      <div
+        class="mode-buttons"
+        *ngIf="activeTab === CARD_HISTORY_TABS.UNSELECTED"
       >
-        {{ "card-history.exchange-mode" | translate }}
-      </button>
-      <div class="mode-btn-wrapper">
-        <span class="badge-small" *ngIf="hasNewCards"></span>
         <button
           type="button"
           class="mode-btn"
-          [class.active]="mode === 'shipping'"
-          (click)="switchMode('shipping')"
+          [class.active]="mode === 'exchange'"
+          (click)="switchMode('exchange')"
         >
-          {{ "card-history.shipping-mode" | translate }}
+          {{ "card-history.exchange-mode" | translate }}
         </button>
+        <div class="mode-btn-wrapper">
+          <span class="badge-small" *ngIf="hasNewCards"></span>
+          <button
+            type="button"
+            class="mode-btn"
+            [class.active]="mode === 'shipping'"
+            (click)="switchMode('shipping')"
+          >
+            {{ "card-history.shipping-mode" | translate }}
+          </button>
+        </div>
       </div>
     </div>
 

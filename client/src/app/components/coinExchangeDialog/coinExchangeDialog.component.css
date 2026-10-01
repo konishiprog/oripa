@@ -4,9 +4,9 @@
 
 .dialog-title {
   margin: 0 0 16px 0;
-  font-size: 16px;
-  font-weight: 600;
-  color: #1a202c;
+  font-size: 17px;
+  font-weight: 800;
+  color: #1a1a1a;
 }
 
 .dialog-message {
@@ -23,29 +23,32 @@
 }
 
 .dialog-btn {
-  font-size: 13px;
-  font-weight: 600;
-  padding: 8px 16px;
-  border-radius: 6px;
-  border: none;
+  font-size: 14px;
+  font-weight: 800;
+  padding: 10px 20px;
+  border-radius: 9999px;
+  border: 2px solid transparent;
   cursor: pointer;
   font-family: inherit;
 }
 
 .dialog-btn-cancel {
-  background: #f5f5f5;
-  color: #555;
+  background: #fff;
+  border-color: #f7d23e;
+  color: #1a1a1a;
 }
 
 .dialog-btn-cancel:hover {
-  background: #e8e8e8;
+  background: #fffbe6;
 }
 
 .dialog-btn-confirm {
-  background: linear-gradient(135deg, #805ad5, #6b46c1);
-  color: #fff;
+  background: #f7d23e;
+  border-color: #f7d23e;
+  color: #1a1a1a;
 }
 
 .dialog-btn-confirm:hover {
-  box-shadow: 0 2px 8px rgba(128, 90, 213, 0.3);
+  background: #f2c81c;
+  border-color: #f2c81c;
 }

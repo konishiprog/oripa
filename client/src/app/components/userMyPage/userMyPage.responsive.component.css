@@ -1,3 +1,23 @@
-@media (max-width: 768px) {
-  /* Add responsive styles here */
+@media (max-width: 600px) {
+  .page {
+    padding: 12px 12px 32px;
+  }
+
+  .page-title {
+    font-size: 20px;
+    margin-bottom: 16px;
+  }
+
+  .menu-item {
+    padding: 16px;
+  }
+
+  .menu-detail {
+    padding: 4px 16px 20px;
+  }
+
+  .purchase-history-item {
+    gap: 10px;
+    font-size: 13px;
+  }
 }

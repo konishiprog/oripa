@@ -1,65 +1,47 @@
-:host {
-  display: block;
-  background-color: #cccccc;
-  min-height: 100vh;
-}
-
 .app {
-  width: 100%;
-  background: #fff;
-  min-height: 100vh;
   display: flex;
   flex-direction: column;
-  box-shadow: 0 0 40px rgba(0, 0, 0, 0.18);
+  min-height: 100vh;
+  background: #f2f3f5;
   font-family:
     -apple-system, BlinkMacSystemFont, "Hiragino Sans", "Noto Sans JP",
     sans-serif;
 }
 
 .page {
+  flex: 1;
   width: 100%;
-  max-width: 720px;
+  max-width: 760px;
   margin: 0 auto;
-  background: #fff;
+  padding: 16px 16px 0;
+  box-sizing: border-box;
   display: flex;
   flex-direction: column;
-  font-family:
-    -apple-system, BlinkMacSystemFont, "Hiragino Sans", "Noto Sans JP",
-    sans-serif;
-}
-
-.page-header {
-  background: #fff;
-  border-bottom: 1px solid #f0f0f0;
-  padding: 14px 16px;
-  display: grid;
-  grid-template-columns: 1fr auto 1fr;
-  align-items: center;
 }
 
 .back-btn {
+  align-self: flex-start;
   display: inline-flex;
   align-items: center;
   gap: 4px;
+  padding: 4px 0;
   background: none;
   border: none;
-  color: #6b46c1;
-  font-size: 14px;
-  font-weight: 600;
-  cursor: pointer;
-  padding: 6px 8px;
-  justify-self: start;
   font-family: inherit;
+  font-size: 14px;
+  font-weight: 700;
+  color: #1a1a1a;
+  cursor: pointer;
 }
 
 .back-btn:hover {
-  color: #553c9a;
+  opacity: 0.7;
 }
 
 .back-icon {
   display: inline-flex;
-  width: 16px;
-  height: 16px;
+  width: 14px;
+  height: 14px;
   transform: rotate(180deg);
 }
 
@@ -69,59 +51,83 @@
 }
 
 .page-title {
-  margin: 0;
-  font-size: 16px;
-  font-weight: 700;
-  color: #1a202c;
-  justify-self: center;
+  margin: 12px 0 20px;
+  font-size: 24px;
+  font-weight: 800;
+  color: #1a1a1a;
 }
 
-.header-spacer {
-  width: 1px;
+.history-panel {
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+  overflow: hidden;
+}
+
+.nav-tabs {
+  display: flex;
+  border-bottom: 1px solid #e5e5e5;
+}
+
+.nav-tab {
+  flex: 1;
+  padding: 14px 0 12px;
+  text-align: center;
+  font-size: 15px;
+  font-weight: 500;
+  color: #6b7080;
+  border-bottom: 3px solid transparent;
+  cursor: pointer;
+  transition:
+    color 0.15s,
+    border-color 0.15s;
+}
+
+.nav-tab:hover {
+  color: #1a1a1a;
+}
+
+.nav-tab.active {
+  font-weight: 800;
+  color: #1a1a1a;
+  border-bottom-color: #f7d23e;
 }
 
 .mode-buttons {
   display: flex;
   gap: 8px;
   padding: 12px 16px;
-  border-bottom: 1px solid #f0f0f0;
-  background: #fff;
 }
 
 .mode-btn {
   flex: 1;
   padding: 10px 14px;
-  border: 1px solid #e2e8f0;
-  border-radius: 8px;
   background: #fff;
-  color: #718096;
-  font-size: 13px;
-  font-weight: 600;
+  border: 2px solid #1a1d29;
+  border-radius: 9999px;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 800;
+  color: #1a1d29;
   cursor: pointer;
   transition:
     background 0.15s,
-    color 0.15s,
-    border-color 0.15s;
-  font-family: inherit;
+    color 0.15s;
 }
 
 .mode-btn:hover {
   background: #f7f8fa;
-  color: #1a202c;
-  border-color: #cbd5e0;
 }
 
 .mode-btn.active {
-  background: linear-gradient(135deg, #805ad5, #6b46c1);
+  background: #1a1d29;
   color: #fff;
-  border-color: #805ad5;
 }
 
 .mode-btn-wrapper {
   flex: 1;
   position: relative;
   display: flex;
-  align-items: center;
 }
 
 .mode-btn-wrapper .mode-btn {
@@ -130,108 +136,77 @@
 
 .badge-small {
   position: absolute;
-  top: -8px;
-  right: -8px;
-  width: 20px;
-  height: 20px;
-  background-color: #ef4444;
+  top: -4px;
+  right: -2px;
+  width: 14px;
+  height: 14px;
+  background: #e60033;
+  border: 2px solid #fff;
   border-radius: 50%;
-  z-index: 20;
-}
-
-.nav-tabs {
-  display: flex;
-  border-bottom: 1px solid #f0f0f0;
-  background: #fff;
-}
-
-.nav-tab {
-  flex: 1;
-  padding: 14px 0;
-  text-align: center;
-  font-size: 14px;
-  font-weight: 500;
-  color: #9ca3af;
-  cursor: pointer;
-  border-bottom: 2px solid transparent;
-  transition:
-    color 0.15s,
-    border-color 0.15s;
-}
-
-.nav-tab.active {
-  color: #d97706;
-  border-bottom-color: #d97706;
-  font-weight: 600;
+  z-index: 1;
 }
 
 .content {
   flex: 1;
-  padding: 16px;
+  padding: 16px 0 24px;
 }
 
 .empty-state {
+  padding: 80px 20px;
+  background: #fff;
+  border-radius: 12px;
   text-align: center;
-  padding: 120px 20px;
-  color: #6b7280;
   font-size: 14px;
+  color: #9ca3af;
 }
 
-.card-list-wrapper {
+.card-list-wrapper,
+.card-list {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 10px;
 }
 
 .select-all-section {
   display: flex;
   align-items: center;
-  gap: 8px;
-  padding: 12px;
-  background: #f8f9fa;
-  border: 1px solid #e9ecef;
-  border-radius: 8px;
-  margin-bottom: 8px;
+  gap: 10px;
+  padding: 12px 16px;
+  background: #fff;
+  border-radius: 10px;
 }
 
-.select-all-checkbox {
-  width: 16px;
-  height: 16px;
+.select-all-checkbox,
+.card-checkbox {
+  width: 18px;
+  height: 18px;
+  accent-color: #1a1d29;
   cursor: pointer;
-  accent-color: #6b46c1;
-  flex-shrink: 0;
 }
 
 .select-all-label {
-  font-size: 14px;
-  font-weight: 500;
-  color: #1a202c;
-  cursor: pointer;
   margin: 0;
-}
-
-.card-list {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
+  font-size: 14px;
+  font-weight: 700;
+  color: #1a1a1a;
 }
 
 .card-item {
   display: flex;
   align-items: center;
   gap: 14px;
-  padding: 12px;
+  padding: 12px 16px;
   background: #fff;
-  border: 1px solid #f0f0f0;
   border-radius: 10px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
 }
 
 .card-image {
-  width: 64px;
-  height: 64px;
-  object-fit: cover;
-  border-radius: 6px;
+  width: 56px;
+  aspect-ratio: 63 / 88;
+  object-fit: contain;
+  background: #f2f3f5;
+  border-radius: 4px;
   flex-shrink: 0;
 }
 
@@ -241,22 +216,26 @@
 }
 
 .card-name {
-  font-size: 14px;
-  font-weight: 600;
-  color: #1a202c;
   margin-bottom: 4px;
+  font-size: 15px;
+  font-weight: 700;
+  color: #1a1a1a;
 }
 
 .card-gacha {
   font-size: 12px;
-  color: #6b7280;
+  color: #6b7080;
 }
 
 .card-status {
+  display: inline-block;
+  margin-top: 6px;
+  padding: 2px 10px;
+  border-radius: 9999px;
+  background: #fff4d6;
   font-size: 12px;
-  color: #d97706;
-  font-weight: 500;
-  margin-top: 4px;
+  font-weight: 700;
+  color: #9a6b00;
 }
 
 .checkbox-wrapper {
@@ -273,75 +252,68 @@
   cursor: not-allowed;
 }
 
-.card-checkbox {
-  width: 16px;
-  height: 16px;
-  cursor: pointer;
-  accent-color: #6b46c1;
-}
-
 .card-checkbox:disabled {
   cursor: not-allowed;
 }
 
 .card-exchange-coins {
-  font-size: 14px;
-  font-weight: 600;
-  color: #6b46c1;
   margin-left: auto;
   flex-shrink: 0;
+  font-size: 18px;
+  font-weight: 900;
+  color: #1a1a1a;
 }
 
 .card-tracking-number {
   display: flex;
   flex-direction: column;
   align-items: flex-end;
+  gap: 4px;
   margin-left: auto;
   flex-shrink: 0;
-  gap: 4px;
 }
 
 .tracking-label {
   font-size: 11px;
-  color: #9ca3af;
-  font-weight: 500;
+  font-weight: 700;
+  color: #6b7080;
 }
 
 .tracking-value {
-  font-size: 13px;
-  font-weight: 600;
-  color: #1a202c;
-  word-break: break-word;
   max-width: 140px;
+  font-size: 13px;
+  font-weight: 700;
+  color: #1a1a1a;
   text-align: right;
+  word-break: break-word;
 }
 
 .exchange-footer {
   position: sticky;
   bottom: 0;
+  margin: 0 -16px;
+  padding: 12px 16px;
   background: #fff;
-  padding: 16px;
-  border-top: 1px solid #f0f0f0;
-  display: flex;
-  gap: 8px;
+  border-top: 1px solid #e5e5e5;
+  box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.08);
 }
 
 .exchange-btn {
-  flex: 1;
-  padding: 12px 16px;
-  background: linear-gradient(135deg, #805ad5, #6b46c1);
-  color: #fff;
-  font-size: 14px;
-  font-weight: 600;
+  width: 100%;
+  padding: 14px 16px;
+  background: #f7d23e;
   border: none;
-  border-radius: 8px;
-  cursor: pointer;
+  border-radius: 9999px;
   font-family: inherit;
-  transition: box-shadow 0.15s;
+  font-size: 15px;
+  font-weight: 800;
+  color: #1a1a1a;
+  cursor: pointer;
+  transition: background 0.15s;
 }
 
 .exchange-btn:hover:not(:disabled) {
-  box-shadow: 0 4px 12px rgba(128, 90, 213, 0.4);
+  background: #f2c81c;
 }
 
 .exchange-btn:disabled {
